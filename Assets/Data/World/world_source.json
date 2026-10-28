@@ -10031,6 +10031,90 @@
         "greece:ancient",
         "britain:industrial"
       ]
+    },
+    {
+      "asset": "Rule_Open_D16",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Wilhelmine Germany and Periclean Athens, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "germany:industrial",
+        "greece:ancient"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D17",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "britain:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D18",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "britain:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D19",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Republican Rome and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "italy:ancient",
+        "britain:industrial"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D20",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Republican Rome and Weimar Berlin, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "italy:ancient",
+        "germany:modern"
+      ]
+    },
+    {
+      "asset": "Rule_Open_D21",
+      "type": "OpenDestinations",
+      "description": "OPEN TODAY: Periclean Athens and Victorian Britain, as the Departure Board shows. Refuse any other destination.",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "places": [
+        "greece:ancient",
+        "britain:industrial"
+      ]
     }
   ],
   "days": [
@@ -10120,22 +10204,15 @@
       "asset": "DayPlan_Inv_Day2",
       "day": 2,
       "queue": 10,
-      "bulletin": "NEW: the Entry Ticket. Most travellers hand it over with their Passport; ask for it when one forgets. Its Citizen ID must match the Passport's, and its departure date must be today.",
+      "bulletin": "NOTICE: no new rule today. The world widens: Medieval travellers join the queue, and two more nations, China and Britain, travel through this desk. Hold every Passport to the same checks: the destination open today, its Valid Until against the calendar, its photo against the face.",
       "papers": [
-        "TC-101",
-        "TC-230"
-      ],
-      "introduces": [
-        "field:CitizenId",
-        "field:DepartureDate",
-        "app:internet"
+        "TC-101"
       ],
       "tells": 1,
       "channels": [
         "Papers"
       ],
       "lies": [
-        "DoctoredIdentity",
         "SwappedPhoto"
       ],
       "kinds": [
@@ -10177,7 +10254,6 @@
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
-      "returns": 1,
       "portals": [
         {
           "portal": 1,
@@ -10205,12 +10281,15 @@
       "asset": "DayPlan_Inv_Day3",
       "day": 3,
       "queue": 12,
-      "bulletin": "NEW: the Departure Board. A second destination opens: a traveller may leave only for a route the board shows.",
+      "bulletin": "NEW: the Entry Ticket and the Departure Board. Most travellers hand the ticket over with their Passport; ask for it when one forgets. Its Citizen ID must match the Passport's, and its departure date must be today. A second destination opens: a traveller may leave only for a route the Departure Board shows.",
       "papers": [
         "TC-101",
         "TC-230"
       ],
       "introduces": [
+        "field:CitizenId",
+        "field:DepartureDate",
+        "app:internet",
         "tool:board",
         "app:portals",
         "app:orders"
@@ -10287,14 +10366,10 @@
       "asset": "DayPlan_Inv_Day4",
       "day": 4,
       "queue": 12,
-      "bulletin": "NEW: issuing seals. Every paper's seal must match its office's in the Seal Register, now in your rulebook (the SEALS tab).",
+      "bulletin": "NOTICE: no new rule today. The Industrial age joins the board. A traveller you denied may come back with better papers: check them again from the top.",
       "papers": [
         "TC-101",
         "TC-230"
-      ],
-      "introduces": [
-        "field:Seal",
-        "book:Seal"
       ],
       "tells": 1,
       "channels": [
@@ -10302,8 +10377,7 @@
       ],
       "lies": [
         "DoctoredIdentity",
-        "SwappedPhoto",
-        "ForgedSeal"
+        "SwappedPhoto"
       ],
       "kinds": [
         {
@@ -10393,8 +10467,7 @@
       ],
       "lies": [
         "DoctoredIdentity",
-        "SwappedPhoto",
-        "ForgedSeal"
+        "SwappedPhoto"
       ],
       "kinds": [
         {
@@ -10472,7 +10545,139 @@
       "asset": "DayPlan_Inv_Day6",
       "day": 6,
       "queue": 14,
-      "bulletin": "NEW: the Transponder Card and travel class. A Premium passport travels on a Premium transponder, a Standard passport on an Economy one: hold the Passport's class against the card's.",
+      "bulletin": "NOTICE: no new rule today. Priority arrivals begin: famous travellers from every age come through this desk. Their papers take the same checks as anyone's.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers"
+      ],
+      "lies": [
+        "DoctoredIdentity",
+        "SwappedPhoto"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 1
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D06",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures"
+      ],
+      "premades": [
+        "cleopatra",
+        "saladin",
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
+        "marcopolo",
+        "galileo",
+        "leonardo",
+        "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
+        "kurosawa",
+        "elizabeth",
+        "newton",
+        "shakespeare",
+        "darwin",
+        "turing",
+        "gutenberg",
+        "luther",
+        "beethoven",
+        "marx",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "caesar",
+          "blueprint": ""
+        },
+        {
+          "slot": 8,
+          "premade": "ramesses",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.0,
+      "slipChance": 0.15,
+      "violationChance": 0.05,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "egypt",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "earlymodern"
+        },
+        {
+          "portal": 5,
+          "country": "japan",
+          "era": "modern"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day7",
+      "day": 7,
+      "queue": 14,
+      "bulletin": "NEW: the Transponder Card and travel class. A Premium passport travels on a Premium transponder, a Standard passport on an Economy one: hold the Passport's class against the card's. And issuing seals: every paper's seal must match its office's in the Seal Register, now in your rulebook (the SEALS tab).",
       "papers": [
         "TC-101",
         "TC-230",
@@ -10482,7 +10687,9 @@
       "introduces": [
         "field:AccountStatus",
         "field:TransponderId",
-        "field:TransponderClass"
+        "field:TransponderClass",
+        "field:Seal",
+        "book:Seal"
       ],
       "tells": 1,
       "channels": [
@@ -10532,43 +10739,51 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D06",
+        "Rule_Open_D07",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TravelClass"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
         "kulthum",
         "hammurabi",
         "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
+        "caesar",
+        "marcopolo",
+        "galileo",
         "leonardo",
         "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
         "elizabeth",
+        "newton",
         "shakespeare",
         "darwin",
         "turing",
         "gutenberg",
         "luther",
+        "beethoven",
+        "marx",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "caesar",
-          "blueprint": ""
-        },
-        {
-          "slot": 8,
-          "premade": "ramesses",
-          "blueprint": ""
-        },
-        {
-          "slot": 9,
           "premade": "kurosawa",
           "blueprint": ""
         },
         {
-          "slot": 10,
+          "slot": 8,
           "premade": "saladin",
           "blueprint": ""
         }
@@ -10581,7 +10796,7 @@
       "portals": [
         {
           "portal": 1,
-          "country": "egypt",
+          "country": "greece",
           "era": "ancient"
         },
         {
@@ -10591,7 +10806,7 @@
         },
         {
           "portal": 4,
-          "country": "japan",
+          "country": "china",
           "era": "earlymodern"
         },
         {
@@ -10602,9 +10817,149 @@
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day7",
-      "day": 7,
+      "asset": "DayPlan_Inv_Day8",
+      "day": 8,
       "queue": 14,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
+      "bulletin": "NOTICE: no new rule today. The Bureau extends the hours: from today the desk opens at 13:00 and closes at 21:00. The Drive cannot wait for morning.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "SwappedPhoto",
+        "ForgedSeal"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D08",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures",
+        "Rule_TravelClass"
+      ],
+      "premades": [
+        "ramesses",
+        "saladin",
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
+        "caesar",
+        "marcopolo",
+        "galileo",
+        "leonardo",
+        "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
+        "kurosawa",
+        "elizabeth",
+        "newton",
+        "shakespeare",
+        "darwin",
+        "turing",
+        "gutenberg",
+        "luther",
+        "marx",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "cleopatra",
+          "blueprint": ""
+        },
+        {
+          "slot": 8,
+          "premade": "beethoven",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.0,
+      "slipChance": 0.15,
+      "violationChance": 0.05,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "germany",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "germany",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "iraq",
+          "era": "medieval"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day9",
+      "day": 9,
+      "queue": 14,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
       "bulletin": "NEW: the Stranding Waiver. A Standard passport on an Economy transponder also needs a signed waiver: ask for it. The Bureau issues a UV torch: press it and drag it over a paper to see its hidden marks.",
       "papers": [
         "TC-101",
@@ -10658,7 +11013,7 @@
         },
         {
           "era": "industrial",
-          "weight": 1
+          "weight": 2
         },
         {
           "era": "modern",
@@ -10667,31 +11022,188 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D07",
+        "Rule_Open_D09",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "kulthum",
         "hammurabi",
         "khwarizmi",
+        "aristotle",
+        "socrates",
+        "archimedes",
         "caesar",
+        "marcopolo",
+        "galileo",
         "leonardo",
         "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "hokusai",
         "kurosawa",
         "elizabeth",
+        "newton",
         "shakespeare",
         "darwin",
         "turing",
         "gutenberg",
         "luther",
+        "beethoven",
+        "marx",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "cleopatra",
+          "premade": "nobunaga",
+          "blueprint": ""
+        },
+        {
+          "slot": 8,
+          "premade": "alexander",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.0,
+      "slipChance": 0.15,
+      "violationChance": 0.05,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "egypt",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "italy",
+          "era": "ancient"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "industrial"
+        },
+        {
+          "portal": 5,
+          "country": "greece",
+          "era": "medieval"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day10",
+      "day": 10,
+      "queue": 16,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
+      "bulletin": "NOTICE: no new rule today. Desk 4 is closed for the Drive and its queue joins yours. Expect washed papers: the UV torch shows what was written before.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240",
+        "TC-310"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeWaiver",
+        "SwappedPhoto",
+        "ForgedSeal",
+        "WashedPaper"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Displaced",
+          "weight": 4
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D10",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet"
+      ],
+      "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
+        "caesar",
+        "marcopolo",
+        "galileo",
+        "leonardo",
+        "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "genghis",
+        "nobunaga",
+        "hokusai",
+        "kurosawa",
+        "elizabeth",
+        "newton",
+        "shakespeare",
+        "turing",
+        "gutenberg",
+        "luther",
+        "beethoven",
+        "marx",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "darwin",
           "blueprint": ""
         },
         {
@@ -10703,13 +11215,8 @@
           "dialog": "dlg_pell_1"
         },
         {
-          "slot": 8,
-          "premade": "beethoven",
-          "blueprint": ""
-        },
-        {
-          "slot": 10,
-          "premade": "nobunaga",
+          "slot": 9,
+          "premade": "suntzu",
           "blueprint": ""
         }
       ],
@@ -10726,25 +11233,25 @@
         },
         {
           "portal": 2,
-          "country": "britain",
+          "country": "china",
           "era": "industrial"
         },
         {
           "portal": 4,
-          "country": "china",
-          "era": "earlymodern"
+          "country": "japan",
+          "era": "modern"
         },
         {
           "portal": 5,
-          "country": "japan",
-          "era": "modern"
+          "country": "iraq",
+          "era": "ancient"
         }
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day8",
-      "day": 8,
-      "queue": 14,
+      "asset": "DayPlan_Inv_Day11",
+      "day": 11,
+      "queue": 16,
       "shiftStart": "13:00",
       "shiftEnd": "21:00",
       "bulletin": "NEW: Debt Relief labourers. They carry a registered Work Permit, an Economy transponder and a signed Stranding Waiver. And from today the papers on your desk read the world's language: the Bureau issues you a Translation Lens. Hover a word to read it. Your PC stays in English: scan a paper to read its copy cleanly.",
@@ -10817,47 +11324,53 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D08",
+        "Rule_Open_D11",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
         "Rule_LabourPaperSet"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "kulthum",
         "hammurabi",
         "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
         "caesar",
+        "marcopolo",
+        "galileo",
         "leonardo",
         "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
         "kurosawa",
         "elizabeth",
+        "newton",
         "shakespeare",
+        "darwin",
         "turing",
         "gutenberg",
         "luther",
-        "einstein"
+        "beethoven"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "alexander",
+          "premade": "einstein",
           "blueprint": ""
         },
         {
-          "slot": 4,
-          "premade": "ines",
-          "blueprint": "",
-          "id": "ines"
-        },
-        {
-          "slot": 8,
-          "premade": "darwin",
-          "blueprint": ""
-        },
-        {
-          "slot": 10,
-          "premade": "suntzu",
+          "slot": 9,
+          "premade": "marx",
           "blueprint": ""
         }
       ],
@@ -10869,29 +11382,184 @@
       "portals": [
         {
           "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
           "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "industrial"
+        },
+        {
+          "portal": 5,
+          "country": "italy",
+          "era": "modern"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day12",
+      "day": 12,
+      "queue": 16,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
+      "bulletin": "NOTICE: no new rule today. Reprinted papers are in circulation: a scanned copy's microprint must repeat the holder's Citizen ID.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240",
+        "TC-310",
+        "TC-520"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "ForgedContract",
+        "FakeWaiver",
+        "SwappedPhoto",
+        "ForgedSeal",
+        "WashedPaper",
+        "ReprintedPaper"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D12",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet"
+      ],
+      "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
+        "caesar",
+        "marcopolo",
+        "galileo",
+        "leonardo",
+        "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
+        "kurosawa",
+        "elizabeth",
+        "shakespeare",
+        "darwin",
+        "turing",
+        "gutenberg",
+        "beethoven",
+        "marx",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "luther",
+          "blueprint": ""
+        },
+        {
+          "slot": 4,
+          "premade": "ines",
+          "blueprint": "",
+          "id": "ines"
+        },
+        {
+          "slot": 9,
+          "premade": "newton",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.0,
+      "slipChance": 0.15,
+      "violationChance": 0.05,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "italy",
           "era": "industrial"
         },
         {
           "portal": 2,
           "country": "germany",
-          "era": "industrial"
-        },
-        {
-          "portal": 4,
-          "country": "germany",
           "era": "modern"
         },
         {
+          "portal": 4,
+          "country": "china",
+          "era": "industrial"
+        },
+        {
           "portal": 5,
-          "country": "iraq",
-          "era": "medieval"
+          "country": "japan",
+          "era": "earlymodern"
         }
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day9",
-      "day": 9,
+      "asset": "DayPlan_Inv_Day13",
+      "day": 13,
       "queue": 16,
       "shiftStart": "13:00",
       "shiftEnd": "21:00",
@@ -10965,7 +11633,7 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D09",
+        "Rule_Open_D13",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
@@ -10973,22 +11641,192 @@
         "Rule_DressForDestination"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "kulthum",
         "hammurabi",
         "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
         "caesar",
+        "marcopolo",
+        "galileo",
         "leonardo",
-        "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
         "kurosawa",
         "elizabeth",
+        "newton",
         "shakespeare",
         "darwin",
-        "turing"
+        "gutenberg",
+        "luther",
+        "beethoven",
+        "marx",
+        "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "einstein",
+          "premade": "michelangelo",
+          "blueprint": ""
+        },
+        {
+          "slot": 9,
+          "premade": "turing",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
+      "violationChance": 0.06,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "germany",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 4,
+          "country": "britain",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "germany",
+          "era": "modern"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day14",
+      "day": 14,
+      "queue": 17,
+      "shiftStart": "13:00",
+      "shiftEnd": "21:00",
+      "bulletin": "NOTICE: no new rule today. The queue grows to 17. Hold every traveller to every check in the GUIDE.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240",
+        "TC-310",
+        "TC-520"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "ForgedContract",
+        "FakeWaiver",
+        "SwappedPhoto",
+        "ForgedSeal",
+        "WashedPaper",
+        "ReprintedPaper"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 3
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D14",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet",
+        "Rule_DressForDestination"
+      ],
+      "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
+        "caesar",
+        "marcopolo",
+        "galileo",
+        "leonardo",
+        "michelangelo",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
+        "kurosawa",
+        "elizabeth",
+        "newton",
+        "shakespeare",
+        "darwin",
+        "turing",
+        "luther",
+        "beethoven",
+        "marx",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "confucius",
           "blueprint": ""
         },
         {
@@ -10997,52 +11835,42 @@
           "blueprint": "",
           "id": "gutenberg",
           "dialog": "dlg_gutenberg"
-        },
-        {
-          "slot": 9,
-          "premade": "marx",
-          "blueprint": ""
-        },
-        {
-          "slot": 11,
-          "premade": "luther",
-          "blueprint": ""
         }
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05,
+      "violationChance": 0.06,
       "returns": 1,
       "portals": [
         {
           "portal": 1,
-          "country": "egypt",
-          "era": "industrial"
-        },
-        {
-          "portal": 2,
           "country": "italy",
           "era": "ancient"
         },
         {
-          "portal": 4,
-          "country": "japan",
+          "portal": 2,
+          "country": "britain",
           "era": "industrial"
         },
         {
+          "portal": 4,
+          "country": "japan",
+          "era": "modern"
+        },
+        {
           "portal": 5,
-          "country": "greece",
-          "era": "medieval"
+          "country": "egypt",
+          "era": "industrial"
         }
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day10",
-      "day": 10,
-      "queue": 16,
-      "shiftStart": "13:00",
-      "shiftEnd": "21:00",
+      "asset": "DayPlan_Inv_Day15",
+      "day": 15,
+      "queue": 17,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
       "bulletin": "NEW: debt standing. Citizens in debt depart only on Debt Relief, and a Frozen account may not depart at all.",
       "papers": [
         "TC-101",
@@ -11114,7 +11942,7 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D10",
+        "Rule_Open_D15",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
@@ -11123,33 +11951,46 @@
         "Rule_DebtStanding"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "kulthum",
         "hammurabi",
         "khwarizmi",
+        "alexander",
+        "socrates",
+        "archimedes",
         "caesar",
+        "marcopolo",
+        "galileo",
         "leonardo",
+        "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
         "kurosawa",
         "elizabeth",
+        "newton",
         "shakespeare",
         "darwin",
+        "turing",
         "gutenberg",
         "luther",
+        "beethoven",
+        "marx",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "newton",
+          "premade": "aristotle",
           "blueprint": ""
         },
         {
-          "slot": 9,
-          "premade": "michelangelo",
-          "blueprint": ""
-        },
-        {
-          "slot": 11,
-          "premade": "turing",
+          "slot": 10,
+          "premade": "hokusai",
           "blueprint": ""
         }
       ],
@@ -11166,13 +12007,13 @@
         },
         {
           "portal": 2,
-          "country": "china",
+          "country": "britain",
           "era": "industrial"
         },
         {
           "portal": 4,
-          "country": "japan",
-          "era": "modern"
+          "country": "italy",
+          "era": "ancient"
         },
         {
           "portal": 5,
@@ -11182,11 +12023,171 @@
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day11",
-      "day": 11,
-      "queue": 16,
-      "shiftStart": "13:00",
-      "shiftEnd": "21:00",
+      "asset": "DayPlan_Inv_Day16",
+      "day": 16,
+      "queue": 17,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
+      "bulletin": "NOTICE: no new rule today. Debt Relief labourers now fill most of the queue: hold every Work Permit to the record.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240",
+        "TC-310",
+        "TC-520"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Appearance"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "FakeWaiver",
+        "SwappedPhoto",
+        "ForgedSeal",
+        "WashedPaper",
+        "ReprintedPaper"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 4
+        },
+        {
+          "kind": "Displaced",
+          "weight": 2
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 2
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D16",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet",
+        "Rule_DressForDestination",
+        "Rule_DebtStanding"
+      ],
+      "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
+        "caesar",
+        "marcopolo",
+        "galileo",
+        "leonardo",
+        "michelangelo",
+        "confucius",
+        "suntzu",
+        "nobunaga",
+        "hokusai",
+        "kurosawa",
+        "elizabeth",
+        "newton",
+        "shakespeare",
+        "darwin",
+        "turing",
+        "gutenberg",
+        "luther",
+        "beethoven",
+        "marx",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "genghis",
+          "blueprint": ""
+        },
+        {
+          "slot": 6,
+          "premade": "hollis",
+          "blueprint": "",
+          "id": "hollis",
+          "directive": "Frozen"
+        },
+        {
+          "slot": 10,
+          "premade": "qinshihuang",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
+      "violationChance": 0.06,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "germany",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 4,
+          "country": "britain",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "germany",
+          "era": "modern"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day17",
+      "day": 17,
+      "queue": 18,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
       "bulletin": "NEW: the Driftbox 3 recall. Every Driftbox 3 transponder is grounded: refuse any departure on one. The Bureau issues a chip reader: drop a passport or a card on it to read its chip.",
       "papers": [
         "TC-101",
@@ -11226,7 +12227,7 @@
         },
         {
           "kind": "Labourer",
-          "weight": 3
+          "weight": 4
         },
         {
           "kind": "Displaced",
@@ -11257,7 +12258,7 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D11",
+        "Rule_Open_D17",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
@@ -11267,85 +12268,53 @@
         "Rule_DriftboxRecall"
       ],
       "premades": [
-        "kulthum",
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "hammurabi",
         "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
         "caesar",
-        "leonardo",
+        "marcopolo",
+        "galileo",
         "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
         "kurosawa",
         "elizabeth",
+        "newton",
         "shakespeare",
         "darwin",
         "turing",
         "gutenberg",
         "luther",
+        "beethoven",
+        "marx",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "confucius",
+          "premade": "kulthum",
           "blueprint": ""
         },
         {
-          "slot": 5,
-          "premade": "pell",
-          "blueprint": "",
-          "id": "pell_2",
-          "directive": "Recalled",
-          "dialog": "dlg_pell_2",
-          "intro": "Next! Oh. Step forward, Ms Quimby.",
-          "conditions": [
-            {
-              "type": "FlagSet",
-              "key": "trig:history_pell_turned_away:fired",
-              "threshold": 0
-            },
-            {
-              "type": "FlagNotSet",
-              "key": "premade:pell:accepted",
-              "threshold": 0
-            }
-          ]
-        },
-        {
-          "slot": 5,
-          "premade": "pell",
-          "blueprint": "",
-          "id": "pell_2_first",
-          "directive": "Recalled",
-          "dialog": "dlg_pell_1",
-          "conditions": [
-            {
-              "type": "FlagNotSet",
-              "key": "premade:pell:accepted",
-              "threshold": 0
-            }
-          ]
-        },
-        {
-          "slot": 7,
-          "premade": "rook",
-          "blueprint": "",
-          "id": "rook",
-          "lie": "ForgedContract"
-        },
-        {
-          "slot": 9,
-          "premade": "aristotle",
-          "blueprint": ""
-        },
-        {
-          "slot": 11,
-          "premade": "hokusai",
+          "slot": 10,
+          "premade": "leonardo",
           "blueprint": ""
         }
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.06,
+      "violationChance": 0.08,
       "returns": 1,
       "portals": [
         {
@@ -11371,155 +12340,12 @@
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day12",
-      "day": 12,
-      "queue": 17,
+      "asset": "DayPlan_Inv_Day18",
+      "day": 18,
+      "queue": 18,
       "shiftStart": "16:00",
       "shiftEnd": "24:00",
-      "bulletin": "NEW: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED.",
-      "papers": [
-        "TC-101",
-        "TC-230",
-        "TC-610",
-        "TC-240",
-        "TC-310",
-        "TC-520"
-      ],
-      "tells": 1,
-      "channels": [
-        "Papers",
-        "Appearance"
-      ],
-      "lies": [
-        "PoorPosingAsRich",
-        "DoctoredIdentity",
-        "DebtorPosingAsTourist",
-        "ForgedContract",
-        "FakeWaiver",
-        "SwappedPhoto",
-        "ForgedSeal",
-        "WashedPaper",
-        "ClonedChip",
-        "ReprintedPaper"
-      ],
-      "kinds": [
-        {
-          "kind": "RichTourist",
-          "weight": 2
-        },
-        {
-          "kind": "PoorTourist",
-          "weight": 2
-        },
-        {
-          "kind": "Labourer",
-          "weight": 3
-        },
-        {
-          "kind": "Displaced",
-          "weight": 3
-        }
-      ],
-      "eras": [
-        {
-          "era": "ancient",
-          "weight": 1
-        },
-        {
-          "era": "medieval",
-          "weight": 1
-        },
-        {
-          "era": "earlymodern",
-          "weight": 1
-        },
-        {
-          "era": "industrial",
-          "weight": 2
-        },
-        {
-          "era": "modern",
-          "weight": 2
-        }
-      ],
-      "countries": [],
-      "rules": [
-        "Rule_Open_D12",
-        "Rule_NoModernGermany",
-        "Rule_PaperDates",
-        "Rule_LeisureDepartures",
-        "Rule_TouristWaiverSet",
-        "Rule_LabourPaperSet",
-        "Rule_DressForDestination",
-        "Rule_DebtStanding",
-        "Rule_DriftboxRecall"
-      ],
-      "premades": [
-        "hammurabi",
-        "khwarizmi",
-        "caesar",
-        "leonardo",
-        "michelangelo",
-        "kurosawa",
-        "elizabeth",
-        "shakespeare",
-        "darwin",
-        "turing",
-        "gutenberg",
-        "luther"
-      ],
-      "forced": [
-        {
-          "slot": 3,
-          "premade": "genghis",
-          "blueprint": ""
-        },
-        {
-          "slot": 10,
-          "premade": "qinshihuang",
-          "blueprint": ""
-        },
-        {
-          "slot": 12,
-          "premade": "kulthum",
-          "blueprint": ""
-        }
-      ],
-      "premadeChance": 0.05,
-      "costumeErrorChance": 0.05,
-      "slipChance": 0.15,
-      "violationChance": 0.06,
-      "returns": 1,
-      "portals": [
-        {
-          "portal": 1,
-          "country": "italy",
-          "era": "industrial"
-        },
-        {
-          "portal": 2,
-          "country": "germany",
-          "era": "modern"
-        },
-        {
-          "portal": 4,
-          "country": "china",
-          "era": "industrial"
-        },
-        {
-          "portal": 5,
-          "country": "japan",
-          "era": "earlymodern"
-        }
-      ]
-    },
-    {
-      "asset": "DayPlan_Inv_Day13",
-      "day": 13,
-      "queue": 17,
-      "shiftStart": "16:00",
-      "shiftEnd": "24:00",
-      "bulletin": "NEW: range limit. Economy units no longer reach the Ancient era: refuse poor tourists and labourers bound for it.",
+      "bulletin": "NOTICE: no new rule today. Cloned passport chips are in circulation: read every chip on the reader and hold its Citizen ID to the print.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -11587,49 +12413,98 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D13",
+        "Rule_Open_D18",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
         "Rule_LabourPaperSet",
         "Rule_DressForDestination",
         "Rule_DebtStanding",
-        "Rule_DriftboxRecall",
-        "Rule_NoEconomyAncient"
+        "Rule_DriftboxRecall"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "kulthum",
         "hammurabi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
         "caesar",
+        "marcopolo",
+        "galileo",
+        "leonardo",
         "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
         "kurosawa",
+        "newton",
         "shakespeare",
         "darwin",
         "turing",
         "gutenberg",
         "luther",
+        "beethoven",
+        "marx",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "leonardo",
-          "blueprint": ""
-        },
-        {
-          "slot": 6,
-          "premade": "hollis",
-          "blueprint": "",
-          "id": "hollis",
-          "directive": "Frozen"
-        },
-        {
-          "slot": 10,
           "premade": "elizabeth",
           "blueprint": ""
         },
         {
-          "slot": 12,
+          "slot": 5,
+          "premade": "pell",
+          "blueprint": "",
+          "id": "pell_2",
+          "directive": "Recalled",
+          "dialog": "dlg_pell_2",
+          "intro": "Next! Oh. Step forward, Ms Quimby.",
+          "conditions": [
+            {
+              "type": "FlagSet",
+              "key": "trig:history_pell_turned_away:fired",
+              "threshold": 0
+            },
+            {
+              "type": "FlagNotSet",
+              "key": "premade:pell:accepted",
+              "threshold": 0
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "premade": "pell",
+          "blueprint": "",
+          "id": "pell_2_first",
+          "directive": "Recalled",
+          "dialog": "dlg_pell_1",
+          "conditions": [
+            {
+              "type": "FlagNotSet",
+              "key": "premade:pell:accepted",
+              "threshold": 0
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "premade": "rook",
+          "blueprint": "",
+          "id": "rook",
+          "lie": "ForgedContract"
+        },
+        {
+          "slot": 10,
           "premade": "khwarizmi",
           "blueprint": ""
         }
@@ -11642,29 +12517,29 @@
       "portals": [
         {
           "portal": 1,
-          "country": "germany",
-          "era": "industrial"
-        },
-        {
-          "portal": 2,
           "country": "greece",
           "era": "ancient"
         },
         {
-          "portal": 4,
+          "portal": 2,
           "country": "britain",
-          "era": "modern"
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "china",
+          "era": "industrial"
         },
         {
           "portal": 5,
-          "country": "germany",
-          "era": "modern"
+          "country": "japan",
+          "era": "earlymodern"
         }
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day14",
-      "day": 14,
+      "asset": "DayPlan_Inv_Day19",
+      "day": 19,
       "queue": 18,
       "shiftStart": "16:00",
       "shiftEnd": "24:00",
@@ -11743,12 +12618,12 @@
         },
         {
           "era": "modern",
-          "weight": 0.5
+          "weight": 2
         }
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D14",
+        "Rule_Open_D19",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
@@ -11756,28 +12631,205 @@
         "Rule_DressForDestination",
         "Rule_DebtStanding",
         "Rule_DriftboxRecall",
-        "Rule_NoEconomyAncient",
         "Rule_ReturnHome"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "kulthum",
         "hammurabi",
         "khwarizmi",
+        "alexander",
+        "aristotle",
+        "socrates",
+        "archimedes",
         "caesar",
+        "galileo",
         "leonardo",
         "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
         "kurosawa",
         "elizabeth",
+        "newton",
         "darwin",
         "turing",
         "gutenberg",
         "luther",
+        "beethoven",
+        "marx",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
           "premade": "shakespeare",
+          "blueprint": ""
+        },
+        {
+          "slot": 10,
+          "premade": "marcopolo",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
+      "violationChance": 0.08,
+      "returns": 1,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "italy",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "egypt",
+          "era": "industrial"
+        }
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day20",
+      "day": 20,
+      "queue": 18,
+      "shiftStart": "16:00",
+      "shiftEnd": "24:00",
+      "bulletin": "NOTICE: bans. The Directorate can close a route on the board: today Weimar Berlin is CLOSED. Refuse any departure for a CLOSED route. Auditors are testing the desks this week: any traveller may be one. Every check, every time.",
+      "papers": [
+        "TC-101",
+        "TC-230",
+        "TC-610",
+        "TC-240",
+        "TC-310",
+        "TC-520",
+        "TC-620"
+      ],
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer",
+        "Appearance"
+      ],
+      "lies": [
+        "FalseOrigin",
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FakeDisplaced",
+        "DebtorPosingAsTourist",
+        "ForgedContract",
+        "FakeWaiver",
+        "SwappedPhoto",
+        "ForgedSeal",
+        "WashedPaper",
+        "ClonedChip",
+        "ReprintedPaper"
+      ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 2
+        },
+        {
+          "kind": "Labourer",
+          "weight": 4
+        },
+        {
+          "kind": "Displaced",
+          "weight": 3
+        }
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 2
+        },
+        {
+          "era": "modern",
+          "weight": 2
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_Open_D20",
+        "Rule_NoModernGermany",
+        "Rule_PaperDates",
+        "Rule_LeisureDepartures",
+        "Rule_TouristWaiverSet",
+        "Rule_LabourPaperSet",
+        "Rule_DressForDestination",
+        "Rule_DebtStanding",
+        "Rule_DriftboxRecall",
+        "Rule_ReturnHome"
+      ],
+      "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
+        "kulthum",
+        "hammurabi",
+        "khwarizmi",
+        "alexander",
+        "aristotle",
+        "archimedes",
+        "caesar",
+        "marcopolo",
+        "leonardo",
+        "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
+        "kurosawa",
+        "elizabeth",
+        "newton",
+        "shakespeare",
+        "darwin",
+        "turing",
+        "gutenberg",
+        "luther",
+        "beethoven",
+        "marx",
+        "einstein"
+      ],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "galileo",
           "blueprint": ""
         },
         {
@@ -11815,11 +12867,6 @@
           "lie": "FakeDisplaced"
         },
         {
-          "slot": 10,
-          "premade": "marcopolo",
-          "blueprint": ""
-        },
-        {
           "slot": 11,
           "premade": "socrates",
           "blueprint": ""
@@ -11838,8 +12885,8 @@
         },
         {
           "portal": 2,
-          "country": "britain",
-          "era": "industrial"
+          "country": "germany",
+          "era": "modern"
         },
         {
           "portal": 4,
@@ -11848,18 +12895,18 @@
         },
         {
           "portal": 5,
-          "country": "egypt",
-          "era": "industrial"
+          "country": "iraq",
+          "era": "ancient"
         }
       ]
     },
     {
-      "asset": "DayPlan_Inv_Day15",
-      "day": 15,
+      "asset": "DayPlan_Inv_Day21",
+      "day": 21,
       "queue": 18,
       "shiftStart": "16:00",
       "shiftEnd": "24:00",
-      "bulletin": "NEW: the Return Order. The displaced now carry one, and depart only on its date.",
+      "bulletin": "NEW: the Return Order and the range limit. The displaced now carry a Return Order, and depart only on its date. Economy units no longer reach the Ancient era: refuse poor tourists and labourers bound for it.",
       "papers": [
         "TC-101",
         "TC-230",
@@ -11932,7 +12979,7 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_Open_D15",
+        "Rule_Open_D21",
         "Rule_PaperDates",
         "Rule_LeisureDepartures",
         "Rule_TouristWaiverSet",
@@ -11944,25 +12991,41 @@
         "Rule_ReturnHome"
       ],
       "premades": [
+        "cleopatra",
+        "ramesses",
+        "saladin",
         "kulthum",
         "khwarizmi",
+        "alexander",
+        "aristotle",
         "socrates",
         "caesar",
+        "marcopolo",
+        "galileo",
         "leonardo",
         "michelangelo",
+        "confucius",
+        "qinshihuang",
+        "suntzu",
+        "genghis",
+        "nobunaga",
+        "hokusai",
         "kurosawa",
         "elizabeth",
+        "newton",
         "shakespeare",
         "darwin",
         "turing",
         "gutenberg",
         "luther",
+        "beethoven",
+        "marx",
         "einstein"
       ],
       "forced": [
         {
           "slot": 3,
-          "premade": "galileo",
+          "premade": "archimedes",
           "blueprint": ""
         },
         {
@@ -12001,11 +13064,6 @@
         },
         {
           "slot": 10,
-          "premade": "archimedes",
-          "blueprint": ""
-        },
-        {
-          "slot": 12,
           "premade": "hammurabi",
           "blueprint": ""
         }
@@ -16748,7 +17806,7 @@
       "label": "Currency",
       "prompt": "What will you pay with in {place}?",
       "answer": "I've changed my money into {value}.",
-      "fromDay": 16,
+      "fromDay": 22,
       "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": [
@@ -16773,7 +17831,7 @@
       "label": "Language",
       "prompt": "What language will you speak in {place}?",
       "answer": "I've been practising my {value}.",
-      "fromDay": 14,
+      "fromDay": 19,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller what language they will speak. Check answers against Tongues & Scripts.",
       "conditions": [],
       "overrides": [
@@ -16791,7 +17849,7 @@
       "label": "Device",
       "prompt": "What are you taking with you?",
       "answer": "Just the approved kit: {value}.",
-      "fromDay": 16,
+      "fromDay": 22,
       "announce": "BUREAU NOTICE: from today, desk officers ask every traveller what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": [
@@ -16809,7 +17867,7 @@
       "label": "Capital",
       "prompt": "Which city in {place} are you headed for?",
       "answer": "{value}, like the brochure says.",
-      "fromDay": 14,
+      "fromDay": 19,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
       "conditions": [],
       "overrides": [
@@ -16827,7 +17885,7 @@
       "label": "Ruler",
       "prompt": "Who rules {place} these days?",
       "answer": "{value}, I'm told.",
-      "fromDay": 14,
+      "fromDay": 19,
       "announce": "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
       "conditions": [],
       "overrides": [
@@ -19599,7 +20657,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 6
+            "threshold": 7
           }
         ],
         "edits": [],
@@ -19631,7 +20689,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 11
+            "threshold": 14
           }
         ],
         "edits": [],
@@ -19677,7 +20735,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 8
+            "threshold": 9
           }
         ],
         "edits": [],
@@ -19730,7 +20788,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 8
+            "threshold": 9
           }
         ],
         "edits": [],
@@ -19768,7 +20826,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 9
+            "threshold": 16
           }
         ],
         "edits": [],
@@ -19864,7 +20922,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 12
+            "threshold": 17
           }
         ],
         "edits": [],
@@ -19883,7 +20941,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 12
+            "threshold": 20
           }
         ],
         "edits": [],
@@ -19976,7 +21034,7 @@
       {
         "id": "audit_rook",
         "name": "The audit finds the two hundred",
-        "news": "AUDIT: a forged Work Permit passed Desk 3 on day 11, with 200 cr beside it. It goes on file.",
+        "news": "AUDIT: a forged Work Permit passed Desk 3 on day 18, with 200 cr beside it. It goes on file.",
         "conditions": [
           {
             "type": "FlagSet",
@@ -19988,7 +21046,7 @@
           },
           {
             "type": "DayAtLeast",
-            "threshold": 14
+            "threshold": 20
           }
         ],
         "edits": [],
@@ -20008,7 +21066,7 @@
         "conditions": [
           {
             "type": "DayAtLeast",
-            "threshold": 14
+            "threshold": 20
           }
         ],
         "edits": [],
@@ -20673,13 +21731,13 @@
               "jump": {
                 "link": "FirstUncheckedField"
               },
-              "fromDay": 11
+              "fromDay": 17
             },
             {
               "id": "questions",
               "when": "Asked",
               "hint": "steps.hint.wheel",
-              "fromDay": 11
+              "fromDay": 17
             },
             {
               "id": "answers",
@@ -20688,7 +21746,7 @@
               "jump": {
                 "source": "Transcript"
               },
-              "fromDay": 11
+              "fromDay": 17
             },
             {
               "id": "dress",
@@ -20701,7 +21759,7 @@
               "jump": {
                 "link": "CostumeClaimed"
               },
-              "fromDay": 7
+              "fromDay": 9
             }
           ]
         },
@@ -20751,13 +21809,13 @@
               "jump": {
                 "link": "FirstUncheckedField"
               },
-              "fromDay": 12
+              "fromDay": 19
             },
             {
               "id": "questions",
               "when": "Asked",
               "hint": "steps.hint.wheel",
-              "fromDay": 11
+              "fromDay": 17
             },
             {
               "id": "answers",
@@ -20766,7 +21824,7 @@
               "jump": {
                 "source": "Transcript"
               },
-              "fromDay": 11
+              "fromDay": 17
             },
             {
               "id": "dress",
@@ -20779,7 +21837,7 @@
               "jump": {
                 "link": "CostumeClaimed"
               },
-              "fromDay": 7
+              "fromDay": 9
             },
             {
               "id": "returnOrder",
@@ -20793,7 +21851,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 15
+              "fromDay": 21
             },
             {
               "id": "dates",
@@ -20805,7 +21863,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 14
+              "fromDay": 19
             }
           ]
         },
@@ -20871,7 +21929,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 2
+              "fromDay": 3
             },
             {
               "id": "paperSet",
@@ -20883,7 +21941,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 4
+              "fromDay": 7
             },
             {
               "id": "standing",
@@ -20891,7 +21949,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 9
+              "fromDay": 13
             },
             {
               "id": "facts",
@@ -20905,7 +21963,7 @@
               "jump": {
                 "link": "FirstUncheckedField"
               },
-              "fromDay": 11
+              "fromDay": 17
             },
             {
               "id": "dress",
@@ -20918,7 +21976,7 @@
               "jump": {
                 "link": "CostumeClaimed"
               },
-              "fromDay": 7
+              "fromDay": 9
             },
             {
               "id": "dates",
@@ -20930,7 +21988,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 14
+              "fromDay": 19
             }
           ]
         },
@@ -20952,7 +22010,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 4
+              "fromDay": 7
             },
             {
               "id": "dates",
@@ -20967,7 +22025,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 14
+              "fromDay": 19
             },
             {
               "id": "askMeans",
@@ -20992,7 +22050,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 4
+              "fromDay": 7
             },
             {
               "id": "means",
@@ -21055,7 +22113,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 9
+              "fromDay": 13
             },
             {
               "id": "contract",
@@ -21071,7 +22129,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 8
+              "fromDay": 11
             },
             {
               "id": "paperSet",
@@ -21084,7 +22142,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 8
+              "fromDay": 11
             },
             {
               "id": "waiver",
@@ -21098,7 +22156,7 @@
               "jump": {
                 "link": "PrimaryName"
               },
-              "fromDay": 8
+              "fromDay": 11
             },
             {
               "id": "facts",
@@ -21112,7 +22170,7 @@
               "jump": {
                 "link": "FirstUncheckedField"
               },
-              "fromDay": 11
+              "fromDay": 17
             },
             {
               "id": "dress",
@@ -21125,7 +22183,7 @@
               "jump": {
                 "link": "CostumeClaimed"
               },
-              "fromDay": 7
+              "fromDay": 9
             },
             {
               "id": "dates",
@@ -21136,7 +22194,7 @@
               "jump": {
                 "source": "Documents"
               },
-              "fromDay": 14
+              "fromDay": 19
             }
           ]
         }
@@ -78185,7 +79243,7 @@
     ]
   },
   "translation": {
-    "fromDay": 8,
+    "fromDay": 11,
     "announce": "Budget cuts close the interpreter pool. From the day after tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words. Order Interview Protocols today and a Speech translator tomorrow in Orders: each arrives the morning after it is ordered. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,
@@ -78498,13 +79556,13 @@
         {
           "id": "lens_word",
           "displayName": "Translation Lens",
-          "description": "Issued by the Bureau when the office's language starts following the world (day 8): hover any word printed in the world's language and it flips into English.",
+          "description": "Issued by the Bureau when the office's language starts following the world (day 11): hover any word printed in the world's language and it flips into English.",
           "cost": 0
         },
         {
           "id": "lens_sentence",
           "displayName": "Translation Lens: Sentences",
-          "description": "The lens reads a whole line: hover a word and its whole sentence flips into English. Works with the lens the Bureau issues on day 8.",
+          "description": "The lens reads a whole line: hover a word and its whole sentence flips into English. Works with the lens the Bureau issues on day 11.",
           "cost": 60
         },
         {
@@ -79027,7 +80085,7 @@
     ]
   },
   "guide": {
-    "guidedThroughDay": 7,
+    "guidedThroughDay": 9,
     "basicsTitle": "BASICS",
     "basics": [
       "Left-drag moves a paper: small on the counter, full size on the desk.",

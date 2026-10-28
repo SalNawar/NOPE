@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "Days by each cheat path (Restart, Jump, Skip) from the golden seed: each day's office reached, a still and the probes"
+      "text": "Days by each cheat path (Restart, Jump, Skip) from the golden seed: each day's office reached, a still and the probes; d15 opens week 3 (the night hours), d18 has every machine and a story day, d21 is the last day (no ending at its briefing)"
     },
     {
       "op": "title"
@@ -138,6 +138,38 @@
     {
       "op": "probe",
       "name": "d15_jump"
+    },
+    {
+      "op": "jumpDay",
+      "n": 18
+    },
+    {
+      "op": "waitOffice",
+      "n": 18
+    },
+    {
+      "op": "still",
+      "name": "d18_jump"
+    },
+    {
+      "op": "probe",
+      "name": "d18_jump"
+    },
+    {
+      "op": "jumpDay",
+      "n": 21
+    },
+    {
+      "op": "waitOffice",
+      "n": 21
+    },
+    {
+      "op": "still",
+      "name": "d21_jump"
+    },
+    {
+      "op": "probe",
+      "name": "d21_jump"
     }
   ]
 }

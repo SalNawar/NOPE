@@ -247,7 +247,7 @@ Everything below runs in the NOPE-p5 editor lane by job, after INTEGRATION's reb
      - the EditMode suite green (UnitySkills' known failure aside);
      - the semantic dump differs from main only in UvTorch's BoxCollider size and centre and in `switchTravel`.
 2. **Torch (BUG-2c).** Scenario `tools_torch`:
-   - day 7 (the torch's day) at A2, office view then reading view, P-FAST/P-SLOW/P-WOBBLE over the handed-over papers;
+   - day 9 (the torch's day; day 7 before the three-week progression) at A2, office view then reading view, P-FAST/P-SLOW/P-WOBBLE over the handed-over papers;
    - then A1 in both views.
    - If the reading view does not tilt from the step's mat click, retarget that `click` to a paper.
    - **Pass:**
@@ -255,9 +255,9 @@ Everything below runs in the NOPE-p5 editor lane by job, after INTEGRATION's reb
      - every `*.poolOnDesk` passes: 0 frames of the pool off the desk;
      - `torch_office`/`torch_reading` GIFs at full size: the reveal is never under the body, the pool never floats, there is no pop when the aim changes, and the marks fluoresce in;
      - the camera assertion is clean.
-3. **Clicks (BUG-4b).** Scenario `tools_clicks`: day 12 at A1, then A2.
+3. **Clicks (BUG-4b).** Scenario `tools_clicks`: day 18 (both machines by the plan; the three-week progression) at A1, then A2.
    - **Pass:** `tools.clicks.chipReader` 10/10 and `chipReader_a2` 10/10 on the chip reader; `tools.clicks.uvTorch` 10/10 on the torch.
-4. **Translation lens (BUG-52).** Scenario `tools_lens`: day 8 at A2. The morning paper is swept before the shift (`newspaper`, text "reach"). Then, the PC closed, sweeps over the left two thirds, the desk and the handed-over documents (`documents`, text "reach"). Last, `key Q` opens the PC and two sweeps cross it (`pc_open`, `pc_open_windows`, text "pc"), then Escape.
+4. **Translation lens (BUG-52).** Scenario `tools_lens`: day 11 (the lens's day; the three-week progression) at A2. The morning paper is swept before the shift (`newspaper`, text "reach"). Then, the PC closed, sweeps over the left two thirds, the desk and the handed-over documents (`documents`, text "reach"). Last, `key Q` opens the PC and two sweeps cross it (`pc_open`, `pc_open_windows`, text "pc"), then Escape.
    - Retarget the `newspaper` sweep to the paper's columns, the `documents` sweep to a handed-over paper and the `pc_open*` sweeps to the windows the PC shows, if the run's screens place them elsewhere.
    - Retarget `toolsRevert` to a foreign word found in the run (the rulebook folder's cover label is the default).
    - For the Arabic answer: open the wheel through the intercom on an Arabic speaker's case (`cheat ForceAppearance` with an Arabic tongue), ask a question, and add a `toolsLens` step over the bubble.

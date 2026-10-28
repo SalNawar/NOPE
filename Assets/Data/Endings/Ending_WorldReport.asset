@@ -18,5 +18,5 @@ MonoBehaviour:
   closingCard: "END OF DEMO\nThank you for playing Time Sorter."
   picture: {fileID: 0}
   conditionType: 3
-  threshold: 15
+  threshold: 21
   priority: 10

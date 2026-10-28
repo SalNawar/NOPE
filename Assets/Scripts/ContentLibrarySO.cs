@@ -344,10 +344,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The cheat menu's "unlock everything" copy of the ramp (built the first time it is asked for).</summary>
     [NonSerialized] private Introductions _unlockedIntroductions;
 
-    /// <summary>The ramp's registry as the day plans and the questions write it (built once per load).</summary>
+    /// <summary>The ramp's registry as the day plans and the questions write it (built once per load). The open destinations are left out: the board's places change daily, the check does not (DayPacing.Closures), so a mastery day with its own OpenDestinations rule introduces nothing (GuideContent.Problems).</summary>
     private Introductions Ramp => _introductions ??= new Introductions(
         DayPlans.Where(p => p != null).Select(p => (p.DayNumber, Introductions.DayKeys(
-            p.Papers, p.ActiveTravelRules.Where(r => r != null).Select(r => r.name), p.EnabledLies,
+            p.Papers, p.ActiveTravelRules.Where(r => r != null && r.type != TravelRuleType.OpenDestinations).Select(r => r.name), p.EnabledLies,
             Questions.Where(q => q != null && QuestionDay(q) == p.DayNumber).Select(q => q.question != null ? q.question.id : null),
             p.Introduces))));
 
@@ -377,10 +377,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to endings.</summary>
     public IReadOnlyList<EndingSO> Endings => endings ?? System.Array.Empty<EndingSO>();
 
-    /// <summary>The run's last day's ending: the DayAtLeast ending with the earliest threshold (the "world you made" ending, day 15, whose closing card is the END OF DEMO card); null without one.</summary>
+    /// <summary>The run's last day's ending: the DayAtLeast ending with the earliest threshold (the "world you made" ending, day 21, whose closing card is the END OF DEMO card); null without one.</summary>
     public EndingSO LastDayEnding => Endings.Where(e => e != null && e.conditionType == EndingConditionType.DayAtLeast).OrderBy(e => e.threshold).FirstOrDefault();
 
-    /// <summary>The run's last day: <see cref="LastDayEnding"/>'s threshold (day 15), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
+    /// <summary>The run's last day: <see cref="LastDayEnding"/>'s threshold (day 21: the three-week progression, Saleh 2026-10-28), which every day up to must plan (DayPlans.Unplanned); 0 without one.</summary>
     public int LastDay => LastDayEnding != null ? (int)LastDayEnding.threshold : 0;
 
     /// <summary>Public read-only access to attributes.</summary>

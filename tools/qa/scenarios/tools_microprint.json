@@ -25,11 +25,11 @@
     },
     {
       "op": "jumpDay",
-      "n": 9
+      "n": 18
     },
     {
       "op": "waitOffice",
-      "n": 9
+      "n": 18
     },
     {
       "op": "startShift"

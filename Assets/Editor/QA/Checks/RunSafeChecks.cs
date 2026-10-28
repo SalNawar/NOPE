@@ -84,9 +84,9 @@ public static class RunSafeChecks
     }
 
     /// <summary>The landings of the day_jumps scenario, in order: each one's probe runs at that day's briefing (after its waitOffice step), so a probe's result proves the landing was reached.</summary>
-    private static readonly string[] DayJumpLandings = { "d1_restart", "d5_jump", "d7_jump", "d7_restart", "d8_skip", "d12_jump", "d12_restart", "d15_jump" };
+    private static readonly string[] DayJumpLandings = { "d1_restart", "d5_jump", "d7_jump", "d7_restart", "d8_skip", "d12_jump", "d12_restart", "d15_jump", "d18_jump", "d21_jump" };
 
-    /// <summary>The day_jumps scenario passed at HEAD: Restart d1, Jump d5, d7, Restart, Skip to d8, Jump d12, Restart, Jump d15, each at the day's briefing (every landing's probe present and green) with a clean console (QaJobs.DayJumps).</summary>
+    /// <summary>The day_jumps scenario passed at HEAD: Restart d1, Jump d5, d7, Restart, Skip to d8, Jump d12, Restart, Jump d15 (week 3 opens), d18 (every machine, a story day), d21 (the last day, no ending at its briefing), each at the day's briefing (every landing's probe present and green) with a clean console (QaJobs.DayJumps).</summary>
     [GateCheck("runsafe.play.dayJumps", "RUN-SAFE", GateKind.Play)]
     public static GateResult DayJumps() =>
         All("runsafe.play.dayJumps", RunPatterns("day_jumps").Concat(DayJumpLandings.Select(l => "day_jumps.missingScripts." + l)));

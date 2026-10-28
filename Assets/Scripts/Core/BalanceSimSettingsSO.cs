@@ -17,7 +17,7 @@ public sealed class BalanceSimSettingsSO : ScriptableObject
     /// closes (8 real minutes at about 45 s a traveller: 10). The simulation
     /// plays every style twice, on the whole queue and at this pace (the rest
     /// of the queue goes home, PlayPolicy.Reaches), and reports the world
-    /// each style leaves at day 15 at this pace. 0: the whole queue only.
+    /// each style leaves at the run's last day (21) at this pace. 0: the whole queue only.
     /// </summary>
     [Min(0)] public int travellersPerShift = 10;
 
@@ -32,7 +32,7 @@ public sealed class BalanceSimSettingsSO : ScriptableObject
 
     /// <summary>
     /// The price from which a house upgrade counts as top tier (Saleh's Q6 of
-    /// the Home upgrades spec: a careful clerk should not reach it by day 15,
+    /// the Home upgrades spec: a careful clerk should not reach it by the run's last day (21),
     /// one who takes the bribes one or two): the climber saves for the
     /// cheapest top-tier path and buys nothing else, and the summary counts
     /// the top tier each variant owns by the run's end.

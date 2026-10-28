@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
@@ -23,33 +24,33 @@ public class DayPlansTests
         Assert.AreEqual(expected, DayPlans.Pick(days, day));
     }
 
-    /// <summary>Days 7-15 are authored (days 7-15 A1): each picks its own plan.</summary>
+    /// <summary>Days 7-21 are authored (days 7-15 A1; the three-week progression, Saleh 2026-10-28): each picks its own plan.</summary>
     [Test]
-    public void Pick_Days7To15AreTheirOwn()
+    public void Pick_Days7To21AreTheirOwn()
     {
-        int[] days = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
-        for (int day = 7; day <= 15; day++)
+        int[] days = Enumerable.Range(1, 21).ToArray();
+        for (int day = 7; day <= 21; day++)
             Assert.AreEqual(day - 1, DayPlans.Pick(days, day), $"day {day}");
-        Assert.AreEqual(14, DayPlans.Pick(days, 16), "a day past 15 replays day 15");
+        Assert.AreEqual(20, DayPlans.Pick(days, 22), "a day past 21 replays day 21");
     }
 
     /// <summary>Days 7-15 V1: every day up to the run's last (the last-day ending's day) has a plan of its own; a missing tail is named with the plan it would replay.</summary>
     [Test]
     public void Problems_WarnsAboutADayUpToTheMilestoneWithoutAPlan()
     {
-        List<string> warnings = DayPlans.Unplanned(new[] { 1, 2, 3, 4, 5, 6 }, 15);
+        List<string> warnings = DayPlans.Unplanned(new[] { 1, 2, 3, 4, 5, 6 }, 21);
         Assert.AreEqual(1, warnings.Count);
-        StringAssert.Contains("7..15", warnings[0]);
+        StringAssert.Contains("7..21", warnings[0]);
         StringAssert.Contains("day 6's", warnings[0]);
     }
 
     [Test]
     public void Problems_NoWarningWhenEveryDayIsPlanned()
     {
-        CollectionAssert.IsEmpty(DayPlans.Unplanned(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, 15));
+        CollectionAssert.IsEmpty(DayPlans.Unplanned(Enumerable.Range(1, 21).ToArray(), 21));
         CollectionAssert.IsEmpty(DayPlans.Unplanned(new[] { 1, 2, 3 }, 0), "no milestone: nothing to reach");
         CollectionAssert.IsEmpty(DayPlans.Unplanned(new[] { 1, 2, 3, 4, 5, 6, 16 }, 6), "past the milestone is never played");
-        CollectionAssert.IsEmpty(DayPlans.Unplanned(null, 15), "no plans at all: Gaps' business");
+        CollectionAssert.IsEmpty(DayPlans.Unplanned(null, 21), "no plans at all: Gaps' business");
     }
 
     [Test]

@@ -1349,12 +1349,12 @@ Saleh, 2026-09-29: "Premades with drawn art", and ten new famous travellers of t
 
 | id | Character | Place | Look |
 |---|---|---|---|
-| `pell` | Pell Quimby (2150 story character, days 7, 10, 15) | Periclean Athens, 430 BCE | a cheerful woman of 26 in a cheap tourist's copy of an Athenian chiton and himation, a straw sun hat, a battered transponder on her wrist |
-| `ines` | Ines Varga (2150 story character, day 8) | Victorian Britain, 1843 | a tired woman of 51 in a Victorian mill worker's dress and apron, a Temporal Customs lanyard tucked into her collar |
-| `rook` | Rook Danner (2150 story character, day 11) | Victorian Britain, 1843 | a grinning man of 33 in a too-clean Victorian workman's jacket and flat cap |
-| `ada` | "Ada Lovelace" (a 2150 enthusiast posing as her, day 12) | Victorian Britain, 1843 | a woman of about 28 in a slightly-too-new Victorian day dress and bonnet, a little too pleased with it |
-| `hollis` | Marek Hollis (2150 story character, day 13) | Wilhelmine Germany, 1899 | a gaunt man of 32 in a Wilhelmine collier's jacket and cap |
-| `auditor` | Quill Ferreira, the Directorate's auditor (day 14) | Republican Rome, 50 BCE | a sharp man of 48 in a Roman toga worn over very good 2150 shoes |
+| `pell` | Pell Quimby (2150 story character, days 10, 18, 21) | Periclean Athens, 430 BCE | a cheerful woman of 26 in a cheap tourist's copy of an Athenian chiton and himation, a straw sun hat, a battered transponder on her wrist |
+| `ines` | Ines Varga (2150 story character, day 12) | Victorian Britain, 1843 | a tired woman of 51 in a Victorian mill worker's dress and apron, a Temporal Customs lanyard tucked into her collar |
+| `rook` | Rook Danner (2150 story character, day 18) | Victorian Britain, 1843 | a grinning man of 33 in a too-clean Victorian workman's jacket and flat cap |
+| `ada` | "Ada Lovelace" (a 2150 enthusiast posing as her, day 20) | Victorian Britain, 1843 | a woman of about 28 in a slightly-too-new Victorian day dress and bonnet, a little too pleased with it |
+| `hollis` | Marek Hollis (2150 story character, day 16) | Wilhelmine Germany, 1899 | a gaunt man of 32 in a Wilhelmine collier's jacket and cap |
+| `auditor` | Quill Ferreira, the Directorate's auditor (day 20) | Republican Rome, 50 BCE | a sharp man of 48 in a Roman toga worn over very good 2150 shoes |
 | `tahtawi` | Rifa'a al-Tahtawi (famous, pooled) | Khedivate of Egypt, 1869 | an Egyptian scholar of 67 in a turban and a scholar's robe over a kaftan |
 | `kulthum` | Umm Kulthum (famous, pooled) | Nasser's Egypt, 1962 | an Egyptian singer of 58 in an elegant long evening dress, dark glasses, a handkerchief in her hand |
 | `malaika` | Nazik al-Mala'ika (famous, pooled) | Kingdom of Iraq, 1956 | an Iraqi poet of 33 in a 1950s skirt suit, a book under her arm |

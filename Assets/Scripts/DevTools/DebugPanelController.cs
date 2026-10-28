@@ -51,7 +51,7 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>The name the open overlay holds the InputGate under.</summary>
     private const string GateHolder = "cheat panel";
 
-    /// <summary>The day buttons' names ("1" to "15"), made once (index: the day).</summary>
+    /// <summary>The day buttons' names ("1" to "21", the run's last day; up to 30), made once (index: the day).</summary>
     private static readonly string[] DayNames = Enumerable.Range(0, 31).Select(i => i.ToString()).ToArray();
 
     /// <summary>The time-of-day toggle's names, one per DevCheats.TimeNames choice, made once.</summary>
@@ -387,7 +387,7 @@ public sealed class DebugPanelController : MonoBehaviour
     private void DrawPlayTab(WorldState world, ContentLibrarySO lib)
     {
         GUILayout.Label("Jump to the start of day");
-        int last = Mathf.Clamp(lib != null && lib.LastDay > 0 ? lib.LastDay : 15, 1, DayNames.Length - 1);
+        int last = Mathf.Clamp(lib != null && lib.LastDay > 0 ? lib.LastDay : 21, 1, DayNames.Length - 1);
         for (int first = 1; first <= last; first += 8)
         {
             GUILayout.BeginHorizontal();

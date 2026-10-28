@@ -118,7 +118,7 @@ public class CheatLedgerTests
     {
         WorldState cheat = Fresh();
         EndingSO ending = CheatRoute.Play(ref cheat, RunRoutes.Jump(1, _lib.LastDay, _lib.LastDay, false), _run);
-        Assert.IsNull(ending, $"the jump ended the run on day {cheat.day}: '{ending?.id}' (QA reaches days 8, 12 and 15 by jumps)");
+        Assert.IsNull(ending, $"the jump ended the run on day {cheat.day}: '{ending?.id}' (QA reaches days 8, 12, 15, 18 and 21 by jumps)");
         Assert.AreEqual(_lib.LastDay, cheat.day);
         Assert.AreEqual(RunPhase.Office, cheat.phase);
         Assert.Greater(cheat.accountDays.Count, 0, "the statement has the days played");

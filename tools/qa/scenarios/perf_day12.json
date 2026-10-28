@@ -23,6 +23,11 @@
       "name": "GiveAllItems"
     },
     {
+      "op": "cheat",
+      "name": "UnlockEverything",
+      "n": 1
+    },
+    {
       "op": "jumpDay",
       "n": 12
     },

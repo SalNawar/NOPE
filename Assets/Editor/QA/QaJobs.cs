@@ -36,13 +36,13 @@ public static class QaJobs
     [MenuItem("Time Sorter/QA/Jobs/Aspect Sweep")]
     public static void AspectSweep() => QaPlayHarness.Start(Path.Combine(Scenarios, "aspect_sweep.json"));
 
-    /// <summary>Days 1, 5, 8, 12, 15 by each cheat path (Jump, Skip, Restart).</summary>
+    /// <summary>Days 1, 5, 7, 8, 12, 15, 18, 21 by each cheat path (Jump, Skip, Restart; the three-week progression).</summary>
     [MenuItem("Time Sorter/QA/Jobs/Day Jumps")]
-    public static void DayJumps() => QaPlayHarness.Start(Path.Combine(Scenarios, "day_jumps.json"), QaPlayHarness.TitleScene, 45f);
+    public static void DayJumps() => QaPlayHarness.Start(Path.Combine(Scenarios, "day_jumps.json"), QaPlayHarness.TitleScene, 60f);
 
-    /// <summary>Days 1 to 15 played in sequence (auto-decided shifts, Home, Sleep).</summary>
+    /// <summary>Days 1 to 21 played in sequence (auto-decided shifts, Home, Sleep; the three-week progression).</summary>
     [MenuItem("Time Sorter/QA/Jobs/Day Sequence")]
-    public static void DaySequence() => QaPlayHarness.Start(Path.Combine(Scenarios, "day_sequence.json"), QaPlayHarness.TitleScene, 90f);
+    public static void DaySequence() => QaPlayHarness.Start(Path.Combine(Scenarios, "day_sequence.json"), QaPlayHarness.TitleScene, 130f);
 
     /// <summary>BUG-65a: GC per call site on day 12 with every item (the editor profiler; perf.gcsites).</summary>
     [MenuItem("Time Sorter/QA/Jobs/GC Sites")]

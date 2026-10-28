@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DayPlan_Inv_Day15
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 15
-  visitorsCount: 18
+  visitorsCount: 17
   shiftStartMinute: 960
   shiftEndMinute: 1440
-  bulletin: 'NEW: the Return Order. The displaced now carry one, and depart only
-    on its date.'
+  bulletin: 'NEW: debt standing. Citizens in debt depart only on Debt Relief, and
+    a Frozen account may not depart at all.'
   papers:
   - TC-101
   - TC-230
@@ -25,57 +25,73 @@ MonoBehaviour:
   - TC-240
   - TC-310
   - TC-520
-  - TC-620
-  - TC-630
-  introduces: []
+  introduces:
+  - pc:standing
+  - field:Debt
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
-    weight: 3
+    weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
     weight: 2
     honest: 0
   - blueprint: {fileID: 11400000, guid: baa4a99b576b463cb6e604fe113a409c, type: 2}
-    weight: 4
+    weight: 3
     honest: 0
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
     weight: 2
     honest: 0
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
-    weight: 2
+    weight: 1
   - era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
     weight: 1
   - era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
     weight: 1
   - era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
-    weight: 1
+    weight: 2
   - era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
-    weight: 1
+    weight: 2
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
+  - {fileID: 11400000, guid: 6309579b953c3d0459f52208a2c85a2a, type: 2}
+  - {fileID: 11400000, guid: 1ce7e959819e46f42aeedc2a47a21ef2, type: 2}
+  - {fileID: 11400000, guid: 8c00b508dd0ecce4183e38a008218daf, type: 2}
   - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
+  - {fileID: 11400000, guid: 28a33f99f3083054289db1cae6fe58be, type: 2}
   - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  - {fileID: 11400000, guid: 7747a67786131304d8f3c4761258e888, type: 2}
   - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  - {fileID: 11400000, guid: 8e656a7f1ae5cc747aae53fdaa6216b7, type: 2}
   - {fileID: 11400000, guid: 5462a20958d55a54c9aacbe8fe90559f, type: 2}
+  - {fileID: 11400000, guid: 5832974224219aa4281e38b801a09bd2, type: 2}
+  - {fileID: 11400000, guid: 1c548ab0bb174b5409194e0c4afeeb08, type: 2}
   - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
   - {fileID: 11400000, guid: 34da1b6f2ba1ada479d3174b62a4f942, type: 2}
+  - {fileID: 11400000, guid: 3d0b35350f80e9c42a249487f6ab4d97, type: 2}
+  - {fileID: 11400000, guid: 219dc0de4a7d0154bad36d5135fce807, type: 2}
+  - {fileID: 11400000, guid: 64d961c38e14376408b9065acbb0cf0e, type: 2}
+  - {fileID: 11400000, guid: ac8ed5f30f4a9ae4a9d1468b2f7a4d9e, type: 2}
+  - {fileID: 11400000, guid: 5b25d73b028c9594bab56d31b29a520c, type: 2}
   - {fileID: 11400000, guid: b7390dfdc90a76c4b826895a32a572de, type: 2}
   - {fileID: 11400000, guid: f6dafd30f2d3ff94094352f0d9777481, type: 2}
+  - {fileID: 11400000, guid: dbdebc7551592e847825c7f29e48185c, type: 2}
   - {fileID: 11400000, guid: 102b1a1da431f264789642fcf5bdeddc, type: 2}
   - {fileID: 11400000, guid: 109ef1b03139e1f4c950e732b1c6d37e, type: 2}
   - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
   - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
   - {fileID: 11400000, guid: a93b21ce48a40c940b31991a0450911c, type: 2}
+  - {fileID: 11400000, guid: d67bb98d29d515e49aeaafff33126ec7, type: 2}
+  - {fileID: 11400000, guid: ee10d0a508322f849a760661655397df, type: 2}
   - {fileID: 11400000, guid: d7dac8add03f81b4386aeac31d4655da, type: 2}
   tellCount: 1
-  tellChannels: 000000000100000002000000
+  tellChannels: 0000000002000000
   costumeErrorChance: 0.05
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 000000000100000002000000030000000500000006000000070000000a000000090000000c0000000b0000000d000000
-  violationChance: 0.08
+  lieKinds: 01000000020000000500000006000000070000000a000000090000000c0000000d000000
+  violationChance: 0.06
   activeTravelRules:
   - {fileID: 11400000, guid: 24929adce6f3b644db2fef4a77dceba1, type: 2}
   - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
@@ -84,73 +100,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
-  - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
-  - {fileID: 11400000, guid: 4f2fad0bf98cc0f48975ec34e2e9bb1d, type: 2}
-  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 3
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 1c548ab0bb174b5409194e0c4afeeb08, type: 2}
+    legendary: {fileID: 11400000, guid: c9c54c405e9fbed488a124e496535921, type: 2}
     hasLie: 0
     lie: 0
     directive: 0
     dialogId: 
     introLine: 
     conditions: []
-  - caseIndex1Based: 7
-    id: pell_3
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 6aeaf57f8061d8b498aaefb6f30413e8, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 0
-    dialogId: dlg_pell_3
-    introLine: Next! ...Ms Quimby. Of course it is.
-    conditions:
-    - type: 1
-      key: trig:history_pell_turned_away:fired
-      threshold: 0
-      attribute: {fileID: 0}
-      profile: {fileID: 0}
-      nation: {fileID: 0}
-    - type: 2
-      key: premade:pell:accepted
-      threshold: 0
-      attribute: {fileID: 0}
-      profile: {fileID: 0}
-      nation: {fileID: 0}
-  - caseIndex1Based: 7
-    id: pell_3_first
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 6aeaf57f8061d8b498aaefb6f30413e8, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 0
-    dialogId: dlg_pell_1
-    introLine: 
-    conditions:
-    - type: 2
-      key: premade:pell:accepted
-      threshold: 0
-      attribute: {fileID: 0}
-      profile: {fileID: 0}
-      nation: {fileID: 0}
   - caseIndex1Based: 10
     id: 
     caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 8e656a7f1ae5cc747aae53fdaa6216b7, type: 2}
-    hasLie: 0
-    lie: 0
-    directive: 0
-    dialogId: 
-    introLine: 
-    conditions: []
-  - caseIndex1Based: 12
-    id: 
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 28a33f99f3083054289db1cae6fe58be, type: 2}
+    legendary: {fileID: 11400000, guid: 8e80828596cb1fa4a8c67058f21fc3ac, type: 2}
     hasLie: 0
     lie: 0
     directive: 0

@@ -87,8 +87,8 @@ All Unity runs go through the persistent editor of the worktree, by job file. Ne
 | `QaJobs.SelfTest` | `selftest.json` on an empty scene | `selftest.selftest.<Path>` results |
 | `QaJobs.Smoke` | `smoke_day1.json`: Title, New Run, day 1, the hand-over sequence, one traveller decided, 10 s idle at H2, the probes | `smoke_day1.*` plus the frame analyses |
 | `QaJobs.AspectSweep` | `aspect_sweep.json`: A1-A4 × H1-H5, one still and the probes each | `aspect_sweep.*` |
-| `QaJobs.DayJumps` | `day_jumps.json`: Restart d1, Jump d5, d7 Restart and Skip to d8, Jump d12 and Restart, Jump d15 | `day_jumps.*` |
-| `QaJobs.DaySequence` | `day_sequence.json`: days 1→15 in sequence (AutoDecide, EndShift, report, Go Home, Sleep) | `day_sequence.*` |
+| `QaJobs.DayJumps` | `day_jumps.json`: Restart d1, Jump d5, d7 Restart and Skip to d8, Jump d12 and Restart, Jump d15, d18, d21 (the three-week progression) | `day_jumps.*` |
+| `QaJobs.DaySequence` | `day_sequence.json`: days 1→21 in sequence (AutoDecide, EndShift, report, Go Home, Sleep) | `day_sequence.*` |
 | `QaJobs.GcSites` | `perf_day12.json`: day 12 with every item, GC per call site (editor profiler), drags, call-next frame times | `perf.gcsites` and `gc_sites.tsv` |
 | `QaJobs.Scenario` | The scenario named in `Library/QA/job_scenario.txt` (any track's recipe) | its results |
 | `QaJobs.Gate` / `QaJobs.GateDemo` | The merge or demo gate | `Library/QA/DemoGate/report.md` / `report_demo.md` |
@@ -246,7 +246,7 @@ The pass lines are the plan's. The rig only measures them.
 | **RUN-SAFE** | `day_jumps.json` (owner RUN-SAFE) plus restarts from days 1, 7 and 12; the overlay-block op (cheat panel open, `click` behind it) | Each lands at the day's briefing; console clean (`day_jumps.console`); 0 input behind the overlay |
 | **FLOW** | `frozen` and `cuts` on every transition sequence; `realtime 1` for loads; the last traveller's payoff before the report | No frame held >0.25 s; no single-frame full-screen jump; load ≤1.0 s [BP] |
 | **FEEDBACK** | `QaSignals.Event("audio", cue)` at every cue; `latency --need-cue`; `QaSignals.Event("hitstop", ...)` with the `timeScale` column | Cue on the press frame ±1; hit-stop sum ≤150 ms per case |
-| **CONTENT** | `day_sequence.json` days 1-15 (D21); the guide plate stills | Reachability and teaching coverage (its static checks) |
+| **CONTENT** | `day_sequence.json` days 1-21 (the three-week progression); the guide plate stills | Reachability and teaching coverage (its static checks) |
 | **INTEGRATION** | After each merge: `QaJobs.SelfTest`, `QaJobs.Smoke`, every landed recipe, then `QaJobs.Gate` | The merge gate passes. Known-red entries leave as their owners merge |
 | **Phase B** | §4.0 item 6: the criteria in this vocabulary; their checks name the track, and DemoGate then needs the approval line | Per the approved spec |
 

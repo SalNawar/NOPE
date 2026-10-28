@@ -16,14 +16,12 @@ MonoBehaviour:
   visitorsCount: 12
   shiftStartMinute: -1
   shiftEndMinute: -1
-  bulletin: 'NEW: issuing seals. Every paper''s seal must match its office''s in
-    the Seal Register, now in your rulebook (the SEALS tab).'
+  bulletin: 'NOTICE: no new rule today. The Industrial age joins the board. A traveller
+    you denied may come back with better papers: check them again from the top.'
   papers:
   - TC-101
   - TC-230
-  introduces:
-  - field:Seal
-  - book:Seal
+  introduces: []
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 3
@@ -48,7 +46,7 @@ MonoBehaviour:
   costumeErrorChance: 0
   slipChance: 0.15
   returnsMax: 1
-  lieKinds: 020000000a00000009000000
+  lieKinds: 020000000a000000
   violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: 58b6cb85f30a91842a4f9e6db4e5afe5, type: 2}

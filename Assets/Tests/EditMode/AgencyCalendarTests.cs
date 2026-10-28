@@ -20,6 +20,7 @@ public class AgencyCalendarTests
     {
         Assert.AreEqual("15 Mar 2150", AgencyCalendar.Today(First, 2));
         Assert.AreEqual("28 Mar 2150", AgencyCalendar.Today(First, 15));
+        Assert.AreEqual("3 Apr 2150", AgencyCalendar.Today(First, 21), "the run's last day (the three-week progression)");
     }
 
     [Test]

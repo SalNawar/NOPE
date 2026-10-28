@@ -16,16 +16,13 @@ MonoBehaviour:
   visitorsCount: 10
   shiftStartMinute: -1
   shiftEndMinute: -1
-  bulletin: 'NEW: the Entry Ticket. Most travellers hand it over with their Passport;
-    ask for it when one forgets. Its Citizen ID must match the Passport''s, and its
-    departure date must be today.'
+  bulletin: 'NOTICE: no new rule today. The world widens: Medieval travellers join
+    the queue, and two more nations, China and Britain, travel through this desk.
+    Hold every Passport to the same checks: the destination open today, its Valid
+    Until against the calendar, its photo against the face.'
   papers:
   - TC-101
-  - TC-230
-  introduces:
-  - field:CitizenId
-  - field:DepartureDate
-  - app:internet
+  introduces: []
   kinds:
   - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
     weight: 3
@@ -51,8 +48,8 @@ MonoBehaviour:
   tellChannels: 00000000
   costumeErrorChance: 0
   slipChance: 0.15
-  returnsMax: 1
-  lieKinds: 020000000a000000
+  returnsMax: 0
+  lieKinds: 0a000000
   violationChance: 0.05
   activeTravelRules:
   - {fileID: 11400000, guid: 527256415c2f63843ba5ad109367133b, type: 2}

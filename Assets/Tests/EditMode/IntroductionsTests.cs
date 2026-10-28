@@ -33,9 +33,9 @@ public class IntroductionsTests
         Introductions r = Ramp();
         Assert.IsFalse(r.Has(1, Feature.Paper("TC-230")));
         Assert.IsTrue(r.Has(2, Feature.Paper("TC-230")));
-        Assert.IsTrue(r.Has(15, Feature.Paper("TC-230")), "nothing is withdrawn");
+        Assert.IsTrue(r.Has(21, Feature.Paper("TC-230")), "nothing is withdrawn");
         Assert.IsTrue(r.Has(5, Feature.Book(ClueCategory.Seal)), "a later day need not list it again");
-        Assert.IsFalse(r.Has(15, Feature.Board), "a feature no day lists stays hidden");
+        Assert.IsFalse(r.Has(21, Feature.Board), "a feature no day lists stays hidden");
         Assert.IsFalse(Introductions.None.Has(1, Feature.Calendar));
     }
 
@@ -56,13 +56,13 @@ public class IntroductionsTests
         var r = new Introductions(new (int, IEnumerable<string>)[]
         {
             (1, new[] { Feature.Field(ClueCategory.Name) }),
-            (14, new[] { Feature.Field("TC-620", ClueCategory.Currency) }),
+            (19, new[] { Feature.Field("TC-620", ClueCategory.Currency) }),
         });
         Assert.IsTrue(r.ShowsField(1, "TC-101", ClueCategory.Name));
         Assert.IsTrue(r.ShowsField(1, "TC-230", ClueCategory.Name), "a category key shows it on every form");
-        Assert.IsFalse(r.ShowsField(13, "TC-620", ClueCategory.Currency));
-        Assert.IsTrue(r.ShowsField(14, "TC-620", ClueCategory.Currency));
-        Assert.IsFalse(r.ShowsField(15, "TC-230", ClueCategory.Currency), "a form's key shows it on that form only");
+        Assert.IsFalse(r.ShowsField(18, "TC-620", ClueCategory.Currency));
+        Assert.IsTrue(r.ShowsField(19, "TC-620", ClueCategory.Currency));
+        Assert.IsFalse(r.ShowsField(21, "TC-230", ClueCategory.Currency), "a form's key shows it on that form only");
     }
 
     [TestCase("tool:scanner", true)]
@@ -106,7 +106,7 @@ public class IntroductionsTests
         Assert.IsTrue(all.Has(1, Feature.Paper("TC-230")), "day 2's paper on day 1");
         Assert.IsTrue(all.Has(1, Feature.Scanner), "day 4's tool on day 1");
         Assert.IsTrue(all.Has(1, Feature.Records), "day 5's PC key on day 1");
-        Assert.IsFalse(all.Has(15, Feature.Board), "a feature no day lists stays hidden");
+        Assert.IsFalse(all.Has(21, Feature.Board), "a feature no day lists stays hidden");
         Assert.AreEqual(4, all.FirstDay(Feature.Scanner), "the ramp's first day is kept");
         Assert.IsFalse(all.IsNew(1, Feature.Scanner), "nothing becomes today's new thing");
         CollectionAssert.AreEqual(r.NewOn(2), all.NewOn(2));

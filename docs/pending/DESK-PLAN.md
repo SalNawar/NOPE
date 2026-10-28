@@ -39,7 +39,7 @@ The desk frame is metres right of (x) and away from the chair (y), measured from
 | `rulebookPocket` | -0.88, -0.12 | 0.24 x 0.26 | 0 | 0.03 | reserved (DESK-HOMES) | - | left: look up |
 | `uvTorch` | -0.84, -0.44 | 0.24 x 0.12 | -90 | 0.06 | when owned | - | left, by the mouse |
 | `mouse` | -1.145, -0.58 | 0.19 x 0.28 | 0 | 0.04 | always (the art's `Clean_Mouse`) | - | the PC's |
-| `thumbprint` | 1.16, -0.375 | 0.20 x 0.21 | 0 | 0.05 | later (not in days 1-15) | - | beside the rail |
+| `thumbprint` | 1.16, -0.375 | 0.20 x 0.21 | 0 | 0.05 | later (not in days 1-21) | - | beside the rail |
 | `transponderTuner` | 1.45, -0.43 | 0.28 x 0.26 | 0 | 0.10 | later | - | beside the rail |
 | `boothCamera` | 1.08, 1.225 | 0.36 x 0.45 | 0 | 0.30 | later | - | back right |
 | `xray` | 1.57, 1.225 | 0.50 x 0.45 | 0 | 0.30 | later | - | back right |
@@ -227,9 +227,9 @@ Per CARVE's and CUTS' rule, `docs/FEATURES.md` is not edited here. Rewrite these
    - Steps: order a desk upgrade on sale that day (the Rolodex, else any desk object), then `cheat GiveAllItems` (the shift restarts with it), finish the day and the night, then play the morning.
    - Pass: no crate stands that morning when nothing else was ordered, the object stands once on its home and pops in no second time.
 9. **Concept B fit and contact sheet.**
-   - Steps: `still`s of the office view at A1, day 1 and day 15 (all items), and of the reading view (after `DeskView.TiltIn`).
+   - Steps: `still`s of the office view at A1, day 1 and day 21 (all items), and of the reading view (after `DeskView.TiltIn`).
    - Pass: the layout reads like concept B and desk_simple_1.png: the rail right, ask and look-up left, the counter row at the back. The PC is angled toward the clerk (its screen readable, not edge-on). No riser, shelf or empty bay shows: the ArtSlots placeholder scan reports 0 on the desk.
-   - Send day 1 and day 15 to Saleh with every home labelled; his look is on the day-1 sheet.
+   - Send day 1 and day 21 to Saleh with every home labelled; his look is on the day-1 sheet.
 10. **Rolodex controls.**
     - Steps: right-click the Rolodex; drag it; press Esc mid-drag.
     - Pass: the right-click flicks nothing (the drum angle is unchanged). The drag turns it. Esc lets go and the drum settles on a card, with `HoldRegistry.Desk.IsHolding` false after.

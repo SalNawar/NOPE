@@ -77,7 +77,7 @@ public class NarrativeWorkbookTests
         Assert.IsTrue(faults.Rows.Any(r => r[0] == "TC-101" && r[1] == "Photo" && r[4] == "the traveller at the desk"));
         Assert.IsTrue(Sheet(book, "Lists").Look.Hidden);
         Assert.IsFalse(book[0].Look.Hidden);
-        Assert.AreEqual(15, Sheet(book, "Days").Rows.Count, "one row per day");
+        Assert.AreEqual(21, Sheet(book, "Days").Rows.Count, "one row per day (the three-week progression)");
     }
 
     [Test]
@@ -93,7 +93,7 @@ public class NarrativeWorkbookTests
 
         string[] banner = narrative.Rows.First(r => r[Col(narrative, "narrative")] == "pell");
         Assert.AreEqual("", banner[Col(narrative, "ref")], "the banner row is not bound");
-        StringAssert.Contains("day 7 slot 5", banner[Col(narrative, "when")]);
+        StringAssert.Contains("day 10 slot 5", banner[Col(narrative, "when")]);
         Assert.IsTrue(narrative.Rows.Any(r => r[Col(narrative, "narrative")] == "pell" && r[Col(narrative, "part")] == "story beat pell_departed" && r[Col(narrative, "field")] == "news"),
             "Pell's beat (its condition names her verdict) sits in her block");
         Assert.AreEqual(CellLook.Editable, narrative.Look.Columns[Col(narrative, "text")]);
@@ -324,23 +324,23 @@ public class NarrativeWorkbookTests
         StringAssert.Contains("the clerk's stamp on Pell Quimby", beat[Col(triggers, "depends on")]);
 
         RowTable days = Sheet(book, "Days");
-        string[] day7 = days.Rows.Single(r => r[Col(days, "day")] == "7");
-        StringAssert.Contains("5: Pell Quimby (pell_1", day7[Col(days, "authored slots")]);
+        string[] day10 = days.Rows.Single(r => r[Col(days, "day")] == "10");
+        StringAssert.Contains("5: Pell Quimby (pell_1", day10[Col(days, "authored slots")]);
     }
 
     [Test]
     public void Cases_LayOutTheReferenceRun()
     {
         var context = new NarrativeContext { RunNote = "seed 1" };
-        context.Cases.Add(new NarrativeCase { Seed = 1, Day = 7, Slot = 5, Source = NarrativeCaseSource.Forced, Appearance = "pell_1", Premade = "pell", Name = "Pell Quimby", Claim = "Athens!", IfDenied = "Oh." });
-        context.Events.Add(new NarrativeEvent(1, 7, NarrativeEvent.BeatFired, "pell_departed"));
+        context.Cases.Add(new NarrativeCase { Seed = 1, Day = 10, Slot = 5, Source = NarrativeCaseSource.Forced, Appearance = "pell_1", Premade = "pell", Name = "Pell Quimby", Claim = "Athens!", IfDenied = "Oh." });
+        context.Events.Add(new NarrativeEvent(1, 10, NarrativeEvent.BeatFired, "pell_departed"));
         List<RowTable> book = NarrativeWorkbook.Build(ContentSheetMap.World, Content(), context);
         RowTable cases = Sheet(book, "Cases");
         string[] row = cases.Rows.Single();
         Assert.AreEqual("authored (forced slot)", row[Col(cases, "source")]);
         Assert.AreEqual("Oh.", row[Col(cases, "if denied")]);
         RowTable triggers = Sheet(book, "Triggers");
-        StringAssert.Contains("seed 1: night 7", triggers.Rows.Single(r => r[Col(triggers, "id")] == "pell_departed")[Col(triggers, "reference run")]);
+        StringAssert.Contains("seed 1: night 10", triggers.Rows.Single(r => r[Col(triggers, "id")] == "pell_departed")[Col(triggers, "reference run")]);
         StringAssert.Contains("seed 1: Pell Quimby", triggers.Rows.First(r => r[Col(triggers, "id")] == "pell_1")[Col(triggers, "reference run")]);
     }
 
