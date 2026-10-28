@@ -152,7 +152,7 @@
     },
     {
       "op": "note",
-      "text": "(d) Over DETAIN (Saleh point 2b): grabbed by its lower part and let go with the pointer on the desk, the folder's top lies over DETAIN and the AVAILABLE sign. They stand on the back step, the counter row, whose front draws through a folder laid across it; the desk ends at the counter's near edge. So the least move is just onto the desk, clear of the step, DETAIN and the sign (about 125 px, eased): f 140."
+      "text": "(d) Over DETAIN (Saleh point 2b): grabbed by its lower part and let go with the pointer on the desk, the folder's top lies over DETAIN and the AVAILABLE sign. They stand on the back step (the counter row), whose front draws through a folder laid across it; the desk ends where the step begins (DeskPaintedMap.BackStep). So the least move is just onto the desk, clear of the step, DETAIN and the sign (about 55 px, eased): f 70."
     },
     {
       "op": "drag",
@@ -170,7 +170,7 @@
     {
       "op": "restTrace",
       "name": "d_over_detain",
-      "f": 140
+      "f": 70
     },
     {
       "op": "still",

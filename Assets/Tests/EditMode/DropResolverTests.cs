@@ -156,8 +156,8 @@ public class DropResolverTests
     /// <summary>The same view's corners as the old code took them: in the frame of the office camera's line to the scanner, 27 degrees off (run fold_probe_20261028_233226).</summary>
     private static readonly (float x, float y)[] TurnedCorners = { (-1.017f, -1.189f), (1.090f, -0.105f), (-1.842f, -0.003f), (0.604f, 1.256f) };
 
-    /// <summary>The counter's near edge (DeskCounter.TryNearEdge).</summary>
-    private const float CounterNear = 0.4575f;
+    /// <summary>Where the back step begins (DeskPaintedMap.BackStep): the desk ends there.</summary>
+    private const float BackStep = DeskPaintedMap.BackStep;
 
     /// <summary>The desk a folder's centre may reach (the surface's clamp area grown by the folder).</summary>
     private static DeskRect FolderDesk => new DeskRect(0f, 0f, 1.9925f + FolderW, 1.015f + FolderH);
@@ -182,7 +182,7 @@ public class DropResolverTests
 
     /// <summary>Where the folder let go with its centre at (<paramref name="x"/>, <paramref name="y"/>) rests on day 1's desk.</summary>
     private static (float x, float y) Day1Rest(float x, float y) =>
-        DropResolver.Rest(new DeskRect(x, y, FolderW, FolderH), DropResolver.Area(FolderDesk, CounterNear, ViewCorners), Day1Standing());
+        DropResolver.Rest(new DeskRect(x, y, FolderW, FolderH), DropResolver.Area(FolderDesk, BackStep, ViewCorners), Day1Standing());
 
     [Test]
     public void TheReadingViewsCorners_InTheFrameItIsPosedOn_LeaveTheWholeView_InATurnedFrame_ABandShallowerThanTheFolder()
@@ -193,9 +193,9 @@ public class DropResolverTests
         Assert.Less(turned.Height, FolderH, "in the turned frame the area is a band shallower than the folder");
         Assert.AreEqual(-0.054f, DropResolver.Rest(new DeskRect(-0.7509f, -0.2283f, 0.3184f, 0.3330f), turned, null).y, 1e-3f,
                         "the audit's drag 2 then rested at the band's middle (its measured rest, 125 px from the release)");
-        DeskRect area = DropResolver.Area(FolderDesk, CounterNear, ViewCorners);
+        DeskRect area = DropResolver.Area(FolderDesk, BackStep, ViewCorners);
         Assert.AreEqual(-0.592f, area.CentreY - area.Height / 2f, 1e-4f, "in the desk's frame: from the view's near edge");
-        Assert.AreEqual(CounterNear, area.CentreY + area.Height / 2f, 1e-4f, "to the counter's near edge");
+        Assert.AreEqual(BackStep, area.CentreY + area.Height / 2f, 1e-4f, "to the back step's front");
         Assert.AreEqual(-(1.9925f + FolderW) / 2f, area.CentreX - area.Width / 2f, 1e-4f, "from the drag's clamp on the left (the view reaches further)");
         Assert.AreEqual(0.921f, area.CentreX + area.Width / 2f, 1e-4f, "to the view's right edge");
         Assert.AreEqual(FolderDesk.Width, DropResolver.Area(FolderDesk, 99f, new[] { (5f, 5f), (6f, 5f), (5f, 6f), (6f, 6f) }).Width, 1e-5f,
@@ -227,7 +227,7 @@ public class DropResolverTests
         // Case (d), Saleh point 2b ("folder clipping detain button"): its top over DETAIN and the sign on the back step.
         (float x, float y) = Day1Rest(-0.8301f, 0.5005f);
         Assert.AreEqual(-0.8301f, x, Eps, "no move across");
-        Assert.AreEqual(CounterNear - FolderH / 2f, y, Eps, "just onto the desk: its top on the counter's near edge, the least move");
+        Assert.AreEqual(BackStep - FolderH / 2f, y, Eps, "just onto the desk: its top on the back step's front, the least move (8 cm, about 55 px)");
         Assert.AreEqual(0f, DropResolver.Overlap(new DeskRect(x, y, FolderW, FolderH), Day1Standing()), "clear of DETAIN, the sign and the rest");
     }
 
@@ -252,7 +252,7 @@ public class DropResolverTests
         DeskRect standing = slides.Standing(reader, swept);
         var casing = new DeskRect(0.6963f, -0.4010f, 0.2600f, 0.2620f);
         var folder = new DeskRect(0.4273f, -0.3885f, FolderW, FolderH);
-        DeskRect area = DropResolver.Area(FolderDesk, CounterNear, ViewCorners);
+        DeskRect area = DropResolver.Area(FolderDesk, BackStep, ViewCorners);
         Assert.AreEqual(reader.Footprint.CentreX, standing.CentreX, Eps, "the reader stands on its own footprint");
         Assert.AreEqual(reader.Footprint.Width, standing.Width, Eps);
         Assert.AreEqual((0.4273f, -0.3885f), DropResolver.Rest(folder, area, new List<DeskRect> { casing, standing }), "rests where let go");

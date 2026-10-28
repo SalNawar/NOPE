@@ -100,10 +100,10 @@ public static class DropResolver
     /// <summary>
     /// The area a thing on the desk rests wholly inside (FOLD-01), in the
     /// frame the reading view is posed on: <paramref name="desk"/> (its centre
-    /// anywhere a drag may take it), short of <paramref name="counterNear"/>
-    /// (the counter's near edge: the counter row stands on the back step,
-    /// whose front draws through a paper laid across it; positive infinity
-    /// for none), and the rectangle inside the reading view's four corners on
+    /// anywhere a drag may take it), short of <paramref name="far"/> (where the
+    /// back step begins: the counter row stands on it, and its front draws
+    /// through a paper laid across it; positive infinity for none), and the
+    /// rectangle inside the reading view's four corners on
     /// the desk (<paramref name="view"/>: near left, near right, far left, far
     /// right; null for no view). Where they leave nothing, <paramref name="desk"/>.
     /// The corners must be taken in the frame the view is posed on: in a frame
@@ -111,10 +111,11 @@ public static class DropResolver
     /// off) the rectangle inside them shrank to a band 10 cm deep, and every
     /// rest's depth was put at its middle.
     /// </summary>
-    public static DeskRect Area(DeskRect desk, float counterNear, IReadOnlyList<(float x, float y)> view)
+    public static DeskRect Area(DeskRect desk, float far, IReadOnlyList<(float x, float y)> view)
     {
         float left = desk.CentreX - desk.Width / 2f, right = desk.CentreX + desk.Width / 2f;
-        float near = desk.CentreY - desk.Height / 2f, far = Math.Min(desk.CentreY + desk.Height / 2f, counterNear);
+        float near = desk.CentreY - desk.Height / 2f;
+        far = Math.Min(desk.CentreY + desk.Height / 2f, far);
         if (view != null && view.Count >= 4)
         {
             left = Math.Max(left, Math.Max(view[0].x, view[2].x));

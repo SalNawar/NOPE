@@ -249,6 +249,14 @@ public static class DeskPaintedMap
     public const float WellFloorY = 1.05f;
 
     /// <summary>
+    /// Where the painted desk's back step begins (metres away from the chair in the desk's frame): desk_layout_v3.json's
+    /// "desk" ends and its "step" (y 0.55 to 1.0, 7 cm high) begins there; the counter row (DETAIN, the AVAILABLE sign, the
+    /// deal tray, the bell, the glasses) stands on it. A thing resting on the desk lies short of it, because the step's
+    /// front draws through a paper laid across it (FOLD-01: DeskLayout.TryBackStep, DeskController.RestArea).
+    /// </summary>
+    public const float BackStep = 0.55f;
+
+    /// <summary>
     /// The well floor's two rectangles (world x and z, m: x0, z0, x1, z1). The shell's mat well is wider than the mat (gaps of 1 to
     /// 7 cm at its far edge and both sides) and the desk top has holes behind the PC and in the paper slot; from above the camera
     /// looked through them to its clear colour. The main rectangle spans the desk top from just inside its front edge (z -0.84) to

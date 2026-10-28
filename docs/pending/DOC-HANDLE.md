@@ -85,7 +85,7 @@ Sources:
   - the scanner's hidden area (`ScannerClearance.Blocked`);
   - for a counter refusal, the counter from its near edge on (`DeskCounter.TryNearEdge`, new).
   - for the folder and every desk paper (Saleh's playtest 2026-10-28, points 4 and 2b; FOLD-01): every object of DESK-PLAN's registry at its own footprint (`DeskLayout.Standing`: DETAIN, the AVAILABLE sign, the bell, the glasses, the stamp rack, the pocket, the painted rail's trays). The folder's footprint is its own box (`DeskRulebook.TryBoxCorners`: the board's side alone while shut), not the bounds of its renderers.
-- The area is the desk (centres anywhere the drag may take them) ∩ what the reading view shows (`DeskConfigSO.restViewport`, new) ∩ the desk short of the counter's near edge (FOLD-01) for a desk paper and the folder (`DropResolver.Area`).
+- The area is the desk (centres anywhere the drag may take them) ∩ what the reading view shows (`DeskConfigSO.restViewport`, new) ∩ the desk short of the back step (FOLD-01: `DeskLayout.TryBackStep`, `DeskPaintedMap.BackStep`, 0.55 m) for a desk paper and the folder (`DropResolver.Area`).
 
 **Deleted:**
 - `ClearOfBlockers`, `CarryFloor` and `DeskDocument.SetCarryFloor` / `_carryFloor`.
@@ -129,7 +129,7 @@ Saleh: "You move the folder and it snaps somewhere else." Papers, Please: a thin
 
 **The rule now (`DeskController.RestOf`, `DropResolver`):**
 - The frame is the desk's own (`RestRight`, `RestForward`: `DeskLayout.Frame`, the axes the reading view is posed on). `SetScannerView` keeps the scanner's line for the scanner's shadow and the chip reader's upright face only.
-- The area (`DropResolver.Area`): the drag's clamp, the reading view (`restViewport`) and, for a thing on the desk, the desk short of the counter's near edge. The counter row stands on the back step, and the step's front draws through a thing laid across it.
+- The area (`DropResolver.Area`): the drag's clamp, the reading view (`restViewport`) and, for a thing on the desk, the desk short of the back step (`DeskLayout.TryBackStep`: `DeskPaintedMap.BackStep`, 0.55 m in the desk's frame, from desk_layout_v3.json's "desk" and "step"). The counter row (DETAIN, the sign, the deal tray, the bell, the glasses) stands on the back step, 7 cm high, and the step's front draws through a thing laid across it. The counter strip in front of the step (where the handed papers lie) is still desk: a paper may lie over it, as papers lie over papers. The art desk knows no step and keeps no such edge.
 - Partly out of the area: the least move inward.
 - The keep-outs, for a paper and the folder alike: DOC-HANDLE's registry (the machines' casings, the torch's cradle), DESK-PLAN's objects at their own footprints (`DeskLayout.Standing`, `DeskSlides.Standing`), the painted rail's two trays (the scanner's and the chip reader's homes, even before the machine is owned), the scanner's hidden shadow, and the counter for a refusal.
 - A slider's swept strip is not a keep-out any more (see below).

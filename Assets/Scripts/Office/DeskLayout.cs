@@ -371,6 +371,13 @@ public static class DeskLayout
     /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants), or null (unbound, or no such home).</summary>
     public static DeskHome HomeOf(string id) => _settings != null ? _settings.HomeOf(id) : null;
 
+    /// <summary>Where the desk's back step begins in the frame (metres away from the chair): the painted desk's (DeskPaintedMap.BackStep); false unbound or on a desk with no step known (the art desk).</summary>
+    public static bool TryBackStep(out float y)
+    {
+        y = DeskPaintedMap.BackStep;
+        return Bound && PaintedShown;
+    }
+
     /// <summary>True while the bound desk is the painted one (DeskLayoutSettings.PaintedShown).</summary>
     public static bool PaintedShown => _settings != null && _settings.PaintedShown;
 

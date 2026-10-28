@@ -1276,7 +1276,8 @@ public sealed class DeskController : MonoBehaviour
     /// not lie over, and then the least it can, eased (the carry):
     /// <list type="bullet">
     /// <item>out of what the reading view shows or off the desk (RestArea;
-    /// <paramref name="onDesk"/>: the view counts for a thing on the desk);</item>
+    /// <paramref name="onDesk"/>: the view and the back step count for a
+    /// thing on the desk);</item>
     /// <item>off a machine or an object standing on the desk that would draw
     /// through it: DOC-HANDLE's registry (the machines' casings, the torch's
     /// cradle) and, <paramref name="onDesk"/>, DESK-PLAN's (DETAIN, the stamp
@@ -1368,11 +1369,11 @@ public sealed class DeskController : MonoBehaviour
     /// frame) lies wholly inside: the desk's (its centre anywhere a drag may
     /// take it: DeskSurface's clamp area, grown by its size). A thing on the
     /// desk (<paramref name="onDesk"/>) also lies wholly on the desk, short of
-    /// the counter's near edge (DeskCounter.TryNearEdge: the counter row
-    /// stands on the back step, whose front draws through a paper laid across
-    /// it; FOLD-01, the folder let go with its top over DETAIN), and wholly in
-    /// what the reading view shows (DeskConfigSO.restViewport: BUG-6). Where
-    /// those leave nothing, the desk's alone.
+    /// the back step (DeskLayout.TryBackStep: the counter row stands on it,
+    /// and its front draws through a paper laid across it; FOLD-01, the folder
+    /// let go with its top over DETAIN), and wholly in what the reading view
+    /// shows (DeskConfigSO.restViewport: BUG-6). Where those leave nothing,
+    /// the desk's alone.
     /// </summary>
     private DeskRect RestArea(DeskRect footprint, bool onDesk)
     {
@@ -1386,18 +1387,18 @@ public sealed class DeskController : MonoBehaviour
         }
         if (!onDesk)
             return desk;
-        float counterNear = counter != null && counter.TryNearEdge(out float near) ? near : float.PositiveInfinity;
+        float step = DeskLayout.TryBackStep(out float stepY) ? InViewFrame(new[] { DeskLayout.Frame.Point(new Vector2(0f, stepY)) }).CentreY : float.PositiveInfinity;
         Rect v = config.restViewport;
         float h = surface.transform.position.y;
         if (deskView == null || !deskView.TryViewPoint(new Vector2(v.xMin, v.yMin), h, out Vector3 bl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMin), h, out Vector3 br)
             || !deskView.TryViewPoint(new Vector2(v.xMin, v.yMax), h, out Vector3 tl) || !deskView.TryViewPoint(new Vector2(v.xMax, v.yMax), h, out Vector3 tr))
-            return DropResolver.Area(desk, counterNear, null);
+            return DropResolver.Area(desk, step, null);
         DeskRect a = InViewFrame(new[] { bl }), b = InViewFrame(new[] { br }), c = InViewFrame(new[] { tl }), d = InViewFrame(new[] { tr });
         _viewCorners[0] = (a.CentreX, a.CentreY);
         _viewCorners[1] = (b.CentreX, b.CentreY);
         _viewCorners[2] = (c.CentreX, c.CentreY);
         _viewCorners[3] = (d.CentreX, d.CentreY);
-        return DropResolver.Area(desk, counterNear, _viewCorners);
+        return DropResolver.Area(desk, step, _viewCorners);
     }
 
     /// <summary>The four world corners of a rectangle in the desk's frame (DeskLayout.Frame), into a reused buffer.</summary>
