@@ -62,12 +62,9 @@ MonoBehaviour:
     reducedFadeSeconds: 0.12
     paperTiltMax: 7
     paperTiltPerSpeed: 14
-    paperDropSquash: 0.06
     stampLift: 0.025
     stampRiseSeconds: 0.07
-    stampSlamSeconds: 0.05
     stampSquash: 0.16
-    inkBloomSeconds: 0.08
     paperFeel: 3
     stampFeel: 0
     deskMoveFeel: 0

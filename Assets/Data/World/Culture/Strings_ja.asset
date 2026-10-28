@@ -31,10 +31,6 @@ MonoBehaviour:
     text: "\u8A2D\u5B9A"
     gloss: 0
     tier: 0
-  - key: startmenu.screenOff
-    text: "\u753B\u9762\u30AA\u30D5"
-    gloss: 0
-    tier: 0
   - key: startmenu.quit
     text: "\u30B2\u30FC\u30E0\u7D42\u4E86"
     gloss: 0
@@ -1509,20 +1505,12 @@ MonoBehaviour:
     text: "\u7A0E\u95A2\u7DCF\u5C40"
     gloss: 0
     tier: 0
-  - key: mail.from.times
-    text: "\u6642\u7A7A\u65B0\u5831"
-    gloss: 0
-    tier: 0
   - key: mail.from.integrity
     text: "\u6642\u9593\u7DDA\u4FDD\u5168\u5C40"
     gloss: 0
     tier: 0
   - key: mail.subject.memo
     text: "\u672C\u65E5\u306E\u6307\u4EE4"
-    gloss: 0
-    tier: 0
-  - key: mail.subject.times
-    text: "\u6642\u7A7A\u65B0\u5831 {0}\u65E5\u76EE"
     gloss: 0
     tier: 0
   - key: mail.subject.citation
@@ -1533,24 +1521,12 @@ MonoBehaviour:
     text: "\u672C\u65E5\u306E\u6E21\u822A\u6307\u4EE4\u306F\u3042\u308A\u307E\u305B\u3093\u3002"
     gloss: 0
     tier: 0
-  - key: mail.body.times
-    text: "\u672C\u65E5\u306E\u7248\u306F\u30CB\u30E5\u30FC\u30B9\u30B5\u30A4\u30C8\u306B\u3042\u308A\u307E\u3059\u3002"
-    gloss: 0
-    tier: 0
-  - key: mail.body.timesArchived
-    text: "\u3053\u306E\u7248\u306F\u30CB\u30E5\u30FC\u30B9\u30B5\u30A4\u30C8\u306E\u30A2\u30FC\u30AB\u30A4\u30D6\u306B\u4FDD\u7BA1\u3055\u308C\u3066\u3044\u307E\u3059\u3002"
-    gloss: 0
-    tier: 0
   - key: mail.body.citation
     text: "\u3042\u306A\u305F\u304C\u4E86\u627F\u3057\u305F\u9055\u53CD\u901A\u77E5\u306E\u5199\u3057:"
     gloss: 0
     tier: 0
   - key: mail.link.rules
     text: "\u6307\u4EE4\u3092\u958B\u304F >"
-    gloss: 0
-    tier: 0
-  - key: mail.link.news
-    text: "\u30CB\u30E5\u30FC\u30B9\u30B5\u30A4\u30C8\u3067\u8AAD\u3080 >"
     gloss: 0
     tier: 0
   - key: account.form.title
@@ -3069,6 +3045,38 @@ MonoBehaviour:
     tier: 0
   - key: portals.footer
     text: "\u8DEF\u7DDA\u306F\u7DCF\u5C40\u304C\u6C7A\u3081\u307E\u3059\u3002\u5E30\u9084\u30B2\u30FC\u30C8\u304C\u4FEE\u7406\u3055\u308C\u308B\u307E\u3067\u3001\u6F02\u6D41\u8005\u306F\u30DD\u30FC\u30BF\u30EB{0}\u304B\u3089\u51FA\u767A\u3057\u307E\u3059\u3002"
+    gloss: 0
+    tier: 0
+  - key: switchboard.hint
+    text: "\u30E9\u30F3\u30D7\u304C\u70B9\u6EC5\u3057\u305F\u3089\uFF1A\u30E2\u30B8\u30E5\u30FC\u30EB\u3092\u3064\u306A\u304E\u3001\u96FB\u6E90\u3092\u5165\u308C\u3001MASTER\u3092\u5F15\u304F"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.pull
+    text: "\u5F15\u304F"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.power
+    text: "\u96FB\u6E90"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.open
+    text: "\u958B\u901A"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.done
+    text: "\u5B8C\u4E86"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.fuse
+    text: "\u30D2\u30E5\u30FC\u30BA"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.closed
+    text: "\u9589\u9396"
+    gloss: 0
+    tier: 0
+  - key: switchboard.sent
+    text: "+{0} \u9001\u51FA"
     gloss: 0
     tier: 0
   - key: home.title
@@ -5974,3 +5982,21 @@ MonoBehaviour:
     english: reduce
   - native: "\u5F93\u3044"
     english: follow
+  - native: "\u30E9\u30F3\u30D7"
+    english: lamp
+  - native: "\u3057\u305F\u3089"
+    english: when
+  - native: "\u30E2\u30B8\u30E5\u30FC\u30EB"
+    english: module
+  - native: "\u3064\u306A\u304E"
+    english: connect
+  - native: "\u96FB\u6E90"
+    english: power
+  - native: "\u5165\u308C"
+    english: put in
+  - native: MASTER
+    english: MASTER
+  - native: "\u5F15\u304F"
+    english: pull
+  - native: "\u9001\u51FA"
+    english: sent

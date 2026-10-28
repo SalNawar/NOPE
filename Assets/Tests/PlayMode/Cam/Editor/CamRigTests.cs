@@ -56,7 +56,9 @@ public class CamRigTests
         CollectionAssert.IsEmpty(CamOps.ShownBy(1, string.Empty));
         CollectionAssert.IsEmpty(CamOps.ShownBy(1, null));
         Assert.Throws<InvalidOperationException>(() => CamOps.ShownBy(1, "loupe"), "a typo must not drop the expectation silently");
-        Assert.Throws<InvalidOperationException>(() => CamOps.ShownBy(3, null), "no such step");
+        CollectionAssert.AreEqual(new[] { CamOps.ShowsHeld }, CamOps.ShownBy(3, "held"), "n = 3 adds the keys of a half the desk may lack (the held decoration, passed over on the painted desk)");
+        Assert.Throws<InvalidOperationException>(() => CamOps.ShownBy(3, "loupe"), "n = 3 refuses an unknown key too");
+        Assert.Throws<InvalidOperationException>(() => CamOps.ShownBy(4, null), "no such step");
         Assert.Throws<InvalidOperationException>(() => CamOps.ShownBy(0, null), "n = 0 ends a leg and shows nothing");
     }
 

@@ -31,10 +31,6 @@ MonoBehaviour:
     text: "\u8BBE\u7F6E"
     gloss: 0
     tier: 0
-  - key: startmenu.screenOff
-    text: "\u5173\u95ED\u5C4F\u5E55"
-    gloss: 0
-    tier: 0
   - key: startmenu.quit
     text: "\u9000\u51FA\u6E38\u620F"
     gloss: 0
@@ -1500,20 +1496,12 @@ MonoBehaviour:
     text: "\u6D77\u5173\u603B\u7F72"
     gloss: 0
     tier: 0
-  - key: mail.from.times
-    text: "\u65F6\u95F4\u65F6\u62A5"
-    gloss: 0
-    tier: 0
   - key: mail.from.integrity
     text: "\u65F6\u95F4\u7EBF\u5B8C\u6574\u6027\u529E\u516C\u5BA4"
     gloss: 0
     tier: 0
   - key: mail.subject.memo
     text: "\u4ECA\u65E5\u6307\u4EE4"
-    gloss: 0
-    tier: 0
-  - key: mail.subject.times
-    text: "\u65F6\u95F4\u65F6\u62A5\uFF0C\u7B2C{0}\u5929"
     gloss: 0
     tier: 0
   - key: mail.subject.citation
@@ -1524,24 +1512,12 @@ MonoBehaviour:
     text: "\u4ECA\u65E5\u65E0\u51FA\u884C\u6307\u4EE4\u3002"
     gloss: 0
     tier: 0
-  - key: mail.body.times
-    text: "\u4ECA\u65E5\u7248\u89C1\u65B0\u95FB\u7F51\u7AD9\u3002"
-    gloss: 0
-    tier: 0
-  - key: mail.body.timesArchived
-    text: "\u672C\u671F\u5B58\u653E\u4E8E\u65B0\u95FB\u7F51\u7AD9\u7684\u5B58\u6863\u4E2D\u3002"
-    gloss: 0
-    tier: 0
   - key: mail.body.citation
     text: "\u4F60\u5DF2\u77E5\u6089\u7684\u8FDD\u89C4\u901A\u77E5\u526F\u672C\uFF1A"
     gloss: 0
     tier: 0
   - key: mail.link.rules
     text: "\u6253\u5F00\u6307\u4EE4 >"
-    gloss: 0
-    tier: 0
-  - key: mail.link.news
-    text: "\u5728\u65B0\u95FB\u7F51\u7AD9\u9605\u8BFB >"
     gloss: 0
     tier: 0
   - key: account.form.title
@@ -3047,6 +3023,39 @@ MonoBehaviour:
   - key: portals.footer
     text: "\u8DEF\u7EBF\u7531\u603B\u7F72\u8BBE\u5B9A\u3002\u8FD4\u7A0B\u95E8\u4FEE\u590D\u524D\uFF0C\u6D41\u79BB\u8005\u7ECF\u7531
       {0} \u53F7\u4F20\u9001\u95E8\u79BB\u5F00\u3002"
+    gloss: 0
+    tier: 0
+  - key: switchboard.hint
+    text: "\u6307\u793A\u706F\u95EA\u70C1\uFF1A\u63A5\u4E0A\u4E00\u4E2A\u6A21\u5757\uFF0C\u63A5\u901A\u7535\u6E90\uFF0C\u62C9\u4E0B
+      MASTER"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.pull
+    text: "\u62C9\u4E0B"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.power
+    text: "\u7535\u6E90"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.open
+    text: "\u5F00\u901A"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.done
+    text: "\u5B8C\u6210"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.fuse
+    text: "\u4FDD\u9669\u4E1D"
+    gloss: 0
+    tier: 0
+  - key: switchboard.display.closed
+    text: "\u5173\u95ED"
+    gloss: 0
+    tier: 0
+  - key: switchboard.sent
+    text: "+{0} \u5DF2\u9001\u51FA"
     gloss: 0
     tier: 0
   - key: home.title
@@ -5923,3 +5932,23 @@ MonoBehaviour:
     english: vertical sync
   - native: "\u51CF\u5C11"
     english: reduce
+  - native: "\u6307\u793A\u706F"
+    english: lamp
+  - native: "\u63A5\u4E0A"
+    english: connect
+  - native: "\u6A21\u5757"
+    english: module
+  - native: "\u63A5\u901A"
+    english: switch on
+  - native: "\u7535\u6E90"
+    english: power
+  - native: "\u62C9\u4E0B"
+    english: pull
+  - native: MASTER
+    english: MASTER
+  - native: "\u5DF2\u9001\u51FA"
+    english: sent
+  - native: "\u5F00\u901A"
+    english: open
+  - native: "\u4FDD\u9669\u4E1D"
+    english: fuse

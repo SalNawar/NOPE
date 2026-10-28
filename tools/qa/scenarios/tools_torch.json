@@ -174,8 +174,8 @@
       "y2": 0.55
     },
     {
-      "op": "key",
-      "key": "Escape"
+      "op": "call",
+      "target": "DeskView.Return"
     },
     {
       "op": "wait",

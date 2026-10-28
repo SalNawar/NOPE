@@ -173,6 +173,9 @@ public sealed class DeskLayoutSettings
     /// <summary>The homes in use: the painted desk's map while it shows (UsePainted), else <see cref="homes"/>.</summary>
     public DeskHome[] Homes => _paintedHomes ?? homes;
 
+    /// <summary>True while the painted desk's map is in use (UsePainted with a map; the office binder installs the painted desk then): the QA rig's ops read it to judge a home the painted desk draws or dresses differently (DeskPaintedMap.NotShownReason).</summary>
+    public bool PaintedShown => _paintedHomes != null;
+
     /// <summary>The fixed art in use: the painted desk's while it shows, else <see cref="fixedArt"/>.</summary>
     public DeskHome[] FixedArt => _paintedFixedArt ?? fixedArt;
 
@@ -367,6 +370,9 @@ public static class DeskLayout
 
     /// <summary>The home <paramref name="id"/> (DeskHomeMap's constants), or null (unbound, or no such home).</summary>
     public static DeskHome HomeOf(string id) => _settings != null ? _settings.HomeOf(id) : null;
+
+    /// <summary>True while the bound desk is the painted one (DeskLayoutSettings.PaintedShown).</summary>
+    public static bool PaintedShown => _settings != null && _settings.PaintedShown;
 
     /// <summary>The world pose of the home <paramref name="id"/>: its centre on the desk's top and its facing; false when unbound or there is no such home.</summary>
     public static bool TryPose(string id, out Vector3 position, out Quaternion rotation)

@@ -96,6 +96,12 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
     /// <summary>The readout's text as shown (the probes read it).</summary>
     public string Shown => _shown;
 
+    /// <summary>The green readout's live text (the painted desk re-shows it on the painted reader's top: DeskPainted.WearReadout; Show writes it, the one source).</summary>
+    public TMP_Text Readout => readout;
+
+    /// <summary>The readout's click box (the painted desk re-fits it over the readout line).</summary>
+    public Clickable ReadoutClick => readoutClick;
+
     /// <summary>Wires it to its machines' hub (DeskHardware) and makes its cycle from the desk tuning.</summary>
     public void Bind(DeskHardware hardware)
     {

@@ -218,6 +218,19 @@ public static class DeskPaintedMap
     public static readonly string[] Booth = { BoothWallLeft, BoothBackWall, BoothFrame, BoothWallRight, BoothBars };
 
     /// <summary>
+    /// How far the booth's front leans back (degrees from the vertical, the
+    /// top away from the chair; the bake's D4, accepted): the painter drew
+    /// every vertical of the booth vertical on screen while the office
+    /// camera looks 9 degrees down, so the front lies in a plane parallel to
+    /// the image plane. The lean is in the meshes (anchors.json's
+    /// booth.frame.up_unity, (0, 0.988, 0.156), is the office camera's up;
+    /// the bars' tops stand 0.27 m behind their feet). The importer adds no
+    /// turn and checks the bars against this, so the lean is never added
+    /// twice (DeskPaintedImporter.CheckBooth).
+    /// </summary>
+    public const float BoothLeanDegrees = 9f;
+
+    /// <summary>
     /// The live hall's layers the booth's left wall closes off (desk v3
     /// round 13; the v3 bake's README, Unity import step 5, "hide the left
     /// city panorama"): the anime hall's living city over its left glass
@@ -351,11 +364,14 @@ public static class DeskPaintedMap
     /// old model, so the painted desk never takes an invisible click from the
     /// old geometry (the code review of round 6). STAMP's daters' side
     /// buttons ("Button", the re-ink: the painted daters have none; STAMP's
-    /// art request) and the chip reader's readout ("ReadoutClick": the
-    /// painted reader has no live readout yet; DESK-PLAN's machines).
+    /// art request). The chip reader's readout ("ReadoutClick") was dead
+    /// while the painted reader had no readout; since the night of
+    /// 2026-10-28 (seam D) the painted reader shows the old reader's readout
+    /// line on its top and the box is re-fitted over it
+    /// (DeskPainted.WearReadout, PaintedReadout).
     /// </summary>
     public static string[] DeadClicks(string home) =>
-        home == DeskHomeMap.StampRack ? new[] { "Button" } : home == DeskHomeMap.ChipReader ? new[] { "ReadoutClick" } : Array.Empty<string>();
+        home == DeskHomeMap.StampRack ? new[] { "Button" } : Array.Empty<string>();
 
     /// <summary>
     /// The gameplay objects the painted desk draws nothing of and takes no
@@ -600,6 +616,35 @@ public static class DeskPaintedMap
 
     /// <summary>DESK-PLAN's homes the painted desk moves (metres in the desk's frame): the supply crate's spot 3 cm right, its click box clear of desk v3's scanner tray (its right edge at x 1.30); the decor zone 12 cm right, clear of desk v3's stamp rack (its right edge at x 1.11; DESK-PLAN's 74a9d93 moved the zone to x 1.00 for the camera's line to the RING SERVICE panel, which the painted booth wall hides, and the painted desk shows no decorations in it).</summary>
     public static readonly (string id, float dx, float dy)[] Moved = { (DeskHomeMap.Crate, 0.03f, 0f), (DeskHomeMap.Decor, 0.12f, 0f) };
+
+    /// <summary>
+    /// Why the gameplay object on the home <paramref name="home"/> shows no
+    /// renderer of its own on the painted desk, or null when it should (a
+    /// real miss): the deal tray is part of the painted shell (ShellHomes),
+    /// an insert's stand-in is built for its click box but drawn by nothing
+    /// (Inserts, DrawnStandIns: the shell carries the home as painted), the
+    /// RING SERVICE panel shows nothing (Unshown), a dropped home has no
+    /// object there (Dropped), and the decor zone's decorations are cut
+    /// (CutParts). The QA rig reads it (DeskPlanOps: "not applicable on the
+    /// painted desk", a pass with this detail, never a silent skip; the
+    /// night of 2026-10-28, seams B and C).
+    /// </summary>
+    public static string NotShownReason(string home)
+    {
+        if (home == null)
+            return null;
+        if (Array.IndexOf(ShellHomes, home) >= 0)
+            return $"the painted shell carries the {home} home (DeskPaintedMap.ShellHomes: the papers come in over the painted tray)";
+        if (Array.IndexOf(Inserts, home) >= 0 && !StandInDrawn(home))
+            return $"the painted shell carries the {home} insert as painted; its stand-in is built for its click box and drawn by nothing (DeskPaintedMap.Inserts, DrawnStandIns; desk v3 round 12)";
+        if (Array.IndexOf(Unshown, home) >= 0)
+            return $"the {home} home's object shows nothing on the painted desk (DeskPaintedMap.Unshown: the painted booth wall carries the painting's switchboard)";
+        if (Array.IndexOf(Dropped, home) >= 0)
+            return $"the {home} home is dropped on the painted desk (DeskPaintedMap.Dropped)";
+        if (home == DeskHomeMap.Decor)
+            return "the decorations are cut on the painted desk (DESK-V3; DeskPaintedMap.CutParts), so the decor zone holds nothing to drag";
+        return null;
+    }
 
     /// <summary>The id desk v3's layout (layout.HOMES, desk_layout_v3.json) gives the home <paramref name="home"/>: the AVAILABLE sign is its "available".</summary>
     public static string LayoutId(string home) => home == DeskHomeMap.Sign ? "available" : home;

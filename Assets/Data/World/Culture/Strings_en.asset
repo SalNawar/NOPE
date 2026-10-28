@@ -24,15 +24,27 @@ MonoBehaviour:
     gloss: 1
     tier: 1
   - key: taskbar.start
-    text: Menu
+    text: Start
     gloss: 0
     tier: 1
+  - key: taskbar.moreHint
+    text: More windows
+    gloss: 0
+    tier: 0
+  - key: startmenu.quitForfeit
+    text: Quit? Today's shift is forfeit. Click again
+    gloss: 0
+    tier: 0
+  - key: app.orders.closed
+    text: 'Orders are closed today: nothing would arrive'
+    gloss: 0
+    tier: 0
+  - key: notes.daysNone
+    text: Pages from earlier days show here.
+    gloss: 0
+    tier: 0
   - key: startmenu.settings
     text: Settings
-    gloss: 0
-    tier: 1
-  - key: startmenu.screenOff
-    text: Turn off screen
     gloss: 0
     tier: 1
   - key: startmenu.quit
@@ -373,15 +385,15 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: app.side.left
-    text: Left
+    text: Left page
     gloss: 0
     tier: 1
   - key: app.side.right
-    text: Right
+    text: Right page
     gloss: 0
     tier: 1
   - key: app.pane.shelfHere
-    text: Opens here
+    text: Links open here
     gloss: 0
     tier: 1
   - key: app.search.open
@@ -1403,8 +1415,9 @@ MonoBehaviour:
     tier: 1
   - key: keys.escape
     text: 'Right-click or Esc: close a menu, this card or the search drawer; clear
-      the search; leave a text field; let go of a held value; close the Menu or cancel
-      a drag. With none of those, back to the desk'
+      the search; leave a text field; let go of a held value; close the Start menu
+      or cancel a drag. With none of those, Esc opens Settings. Q or a click on the
+      bezel leaves the PC'
     gloss: 0
     tier: 1
   - key: keys.help
@@ -1525,8 +1538,8 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: keys.desk.back
-    text: 'Back out: a drag, the wheel, the PC, a held value, inspect mode, the stamp
-      bar, the city, the reading view'
+    text: 'Back out: a drag, the wheel, a held value, inspect mode, the stamp bar,
+      the city, the reading view'
     gloss: 0
     tier: 1
   - key: keys.desk.city
@@ -1629,20 +1642,12 @@ MonoBehaviour:
     text: Customs Directorate
     gloss: 0
     tier: 1
-  - key: mail.from.times
-    text: The Temporal Times
-    gloss: 0
-    tier: 1
   - key: mail.from.integrity
     text: Timeline Integrity Office
     gloss: 0
     tier: 1
   - key: mail.subject.memo
     text: Today's directives
-    gloss: 0
-    tier: 1
-  - key: mail.subject.times
-    text: The Temporal Times, day {0}
     gloss: 0
     tier: 1
   - key: mail.subject.citation
@@ -1653,24 +1658,12 @@ MonoBehaviour:
     text: No travel directives today.
     gloss: 0
     tier: 1
-  - key: mail.body.times
-    text: Today's edition is on the News site.
-    gloss: 0
-    tier: 1
-  - key: mail.body.timesArchived
-    text: This edition is kept in the News site's archive.
-    gloss: 0
-    tier: 1
   - key: mail.body.citation
     text: 'A copy of the citation slip you acknowledged:'
     gloss: 0
     tier: 1
   - key: mail.link.rules
     text: Open the directives >
-    gloss: 0
-    tier: 1
-  - key: mail.link.news
-    text: Read it on the News site >
     gloss: 0
     tier: 1
   - key: account.form.title
@@ -3313,6 +3306,42 @@ MonoBehaviour:
       displaced leave through Portal {0}.
     gloss: 0
     tier: 1
+  - key: switchboard.hint
+    text: 'A lamp blinks: plug a module to it, give it power, pull MASTER'
+    gloss: 0
+    tier: 1
+  - key: switchboard.display.pull
+    text: PULL
+    gloss: 0
+    tier: 1
+  - key: switchboard.display.power
+    text: POWER
+    gloss: 0
+    tier: 1
+  - key: switchboard.display.open
+    text: OPEN
+    gloss: 0
+    tier: 1
+  - key: switchboard.display.done
+    text: DONE
+    gloss: 0
+    tier: 1
+  - key: switchboard.display.fuse
+    text: FUSE
+    gloss: 0
+    tier: 1
+  - key: switchboard.display.closed
+    text: CLOSED
+    gloss: 0
+    tier: 1
+  - key: switchboard.sent
+    text: +{0} SENT
+    gloss: 0
+    tier: 1
+  - key: switchboard.bonus
+    text: +{0} {1}
+    gloss: 0
+    tier: 0
   - key: home.title
     text: "Day {0} \u2014 Home"
     gloss: 0

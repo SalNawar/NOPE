@@ -111,7 +111,7 @@ public static class QaGame
         return typeof(Object).IsAssignableFrom(type) ? Object.FindAnyObjectByType(type, FindObjectsInactive.Include) : null;
     }
 
-    /// <summary>A loaded GameObject by its hierarchy path ("Office/Desk") or, failing that, its name (active ones first).</summary>
+    /// <summary>A loaded GameObject by its hierarchy path ("Office/Desk"; at each step the first active child of that name, else the first: several papers share "PaperTemplate(Clone)") or, failing that, its name (active ones first).</summary>
     public static GameObject GameObjectAt(string pathOrName)
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -126,7 +126,7 @@ public static class QaGame
                 string prefix = root.name + "/";
                 if (pathOrName.StartsWith(prefix, StringComparison.Ordinal))
                 {
-                    Transform t = root.transform.Find(pathOrName.Substring(prefix.Length));
+                    Transform t = FindPreferActive(root.transform, pathOrName.Substring(prefix.Length));
                     if (t != null)
                         return t.gameObject;
                 }
@@ -135,6 +135,29 @@ public static class QaGame
         IEnumerable<Transform> all = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include);
         Transform named = all.Where(t => t.name == pathOrName).OrderByDescending(t => t.gameObject.activeInHierarchy).FirstOrDefault();
         return named != null ? named.gameObject : throw new InvalidOperationException($"No object '{pathOrName}' is loaded.");
+    }
+
+    /// <summary>The child of <paramref name="root"/> at <paramref name="path"/> ("Desk/Papers/PaperTemplate(Clone)"): at each step the first active child of that name, else the first (Transform.Find takes the first, active or not); null when a step has none.</summary>
+    private static Transform FindPreferActive(Transform root, string path)
+    {
+        Transform at = root;
+        foreach (string name in path.Split('/'))
+        {
+            Transform first = null, active = null;
+            for (int i = 0; i < at.childCount && active == null; i++)
+            {
+                Transform child = at.GetChild(i);
+                if (child.name != name)
+                    continue;
+                first = first ?? child;
+                if (child.gameObject.activeInHierarchy)
+                    active = child;
+            }
+            at = active ?? first;
+            if (at == null)
+                return null;
+        }
+        return at;
     }
 
     /// <summary>The camera the office's pointer raycasts through (a PhysicsRaycaster's), else the main camera.</summary>
@@ -249,6 +272,19 @@ public static class QaGame
     {
         Scene g = SceneManager.GetSceneByName(OfficeScenes.GameplaySceneName);
         return g.IsValid() && g.isLoaded && OfficeScenes.ArtScene.IsValid() && Find<GameManager>() != null;
+    }
+
+    /// <summary>
+    /// True while a scene change's veil (TransitShutter, FLOW) still takes
+    /// the pointer: from its first frame down until it has rolled all the way
+    /// up over the new scene (TransitShutter.BlocksClicks). A press sent
+    /// meanwhile lands on its ClickBlocker, so every op that waits for a
+    /// scene also waits for this to clear (QaRunner.ClicksFree).
+    /// </summary>
+    public static bool ShutterBlocks()
+    {
+        TransitShutter veil = Find<TransitShutter>();
+        return veil != null && veil.BlocksClicks;
     }
 
     /// <summary>Today's morning paper (the briefing) when it shows, else null.</summary>

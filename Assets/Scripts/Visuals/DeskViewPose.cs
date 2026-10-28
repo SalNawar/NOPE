@@ -9,8 +9,11 @@ using System.Collections.Generic;
 /// view looks down at a fixed pitch with its own field of view, and its
 /// distance and aim are solved per aspect (LensFit.Reading) so the mat, the
 /// stamp rack and the intercom whole, the inner strips of the other homes
-/// beside the mat and the deal tray fit inside the screen's margins, below
-/// the overlay's top band of chrome; it blends in and out over its seconds.
+/// beside the mat and the deal tray's strip nearest it fit inside the
+/// screen's margins, below the overlay's top band of chrome; it blends in and
+/// out over its seconds. The homes come from the desk home map in use
+/// (DeskLayoutSettings.Homes): the painted desk's measured map while it
+/// shows, else the plan's.
 /// </summary>
 [Serializable]
 public sealed class DeskViewTuning
@@ -42,13 +45,13 @@ public sealed class DeskViewTuning
     /// <summary>The screen kept clear left and right of the framed desk (a share of the half screen; the pull tabs hide in the reading view, so no chrome stands in it).</summary>
     public float sideMargin = 0.04f;
 
-    /// <summary>How much of a framed home beside the mat the reading view shows (metres, its strip along the edge nearest the mat; the desk plan's "≥ 8 x 8 cm of 2, 3, 7, 8 and 9"), unless it is framed whole.</summary>
+    /// <summary>How much of a framed home beside the mat (left or right of it, or beyond its far edge) the reading view shows (metres, its strip along the edge nearest the mat; the desk plan's "≥ 8 x 8 cm of 2, 3, 7, 8 and 9"), unless it is framed whole. The plan's 6 cm deal tray is whole within it; the painted desk's tray is a 60 cm slot under the counter, framed by its near strip.</summary>
     public float sideReach = 0.08f;
 
     /// <summary>How high above the desk the papers' stack is framed (metres).</summary>
     public float paperLift = 0.03f;
 
-    /// <summary>The homes the reading view frames (DeskHomeMap ids): the rail's machines and the left column, by their inner strips beside the mat unless framed whole, and the deal tray whole.</summary>
+    /// <summary>The homes the reading view frames (DeskHomeMap ids): the rail's machines and the left column, by their inner strips beside the mat unless framed whole, and the deal tray by its strip nearest the mat (the plan's tray, 6 cm deep, whole).</summary>
     public string[] homes =
     {
         DeskHomeMap.ChipReader, DeskHomeMap.Scanner, DeskHomeMap.StampRack,
@@ -123,17 +126,24 @@ public static class DeskViewPose
     /// What the reading pose frames, as points in the desk's frame (x metres
     /// right, y metres away from the chair, z metres above the desk): the
     /// <paramref name="mat"/>'s corners on the desk and at the papers' lift;
-    /// and each of the knobs' homes found in <paramref name="homes"/>, its
-    /// footprint's top and bottom corners: a home beside the mat (wholly left
-    /// or right of it) only by the strip <see cref="DeskViewTuning.sideReach"/>
-    /// deep along its edge nearest the mat unless the knobs frame it whole
-    /// (<see cref="DeskViewTuning.whole"/>), any other home whole.
+    /// and each of the knobs' homes found in <paramref name="homes"/> (the
+    /// map in use: the painted desk's measured homes while it shows, else the
+    /// plan's), its footprint's top and bottom corners: a home beside the mat
+    /// (wholly left or right of it, or wholly beyond its far edge or before
+    /// its near one) only by the strip <see cref="DeskViewTuning.sideReach"/>
+    /// deep along its edge nearest the mat (<see cref="Strip"/>) unless the
+    /// knobs frame it whole (<see cref="DeskViewTuning.whole"/>), any other
+    /// home whole. The plan's deal tray (6 cm deep, at the mat's far edge) is
+    /// whole within the strip; the painted desk's is a 60 cm slot under the
+    /// counter (its far 20 cm behind the counter's wall), framed by its
+    /// mouth: whole, it would halve the papers.
     /// </summary>
     public static List<(float x, float y, float z)> Targets(DeskViewTuning tuning, DeskRect mat, IReadOnlyList<DeskHome> homes)
     {
         var points = new List<(float x, float y, float z)>();
         float matLeft = mat.CentreX - mat.Width / 2f, matRight = mat.CentreX + mat.Width / 2f;
-        Box(points, matLeft, matRight, mat.CentreY - mat.Height / 2f, mat.CentreY + mat.Height / 2f, Math.Max(0f, tuning.paperLift));
+        float matNear = mat.CentreY - mat.Height / 2f, matFar = mat.CentreY + mat.Height / 2f;
+        Box(points, matLeft, matRight, matNear, matFar, Math.Max(0f, tuning.paperLift));
         if (homes == null || tuning.homes == null)
             return points;
         float reach = Math.Max(0f, tuning.sideReach);
@@ -144,16 +154,35 @@ public static class DeskViewPose
                 continue;
             DeskRect f = home.Footprint;
             float x0 = f.CentreX - f.Width / 2f, x1 = f.CentreX + f.Width / 2f;
+            float y0 = f.CentreY - f.Height / 2f, y1 = f.CentreY + f.Height / 2f;
             if (!IsWhole(tuning, id))
-            {
-                if (x0 >= matRight)
-                    x1 = Math.Min(x1, x0 + reach);
-                else if (x1 <= matLeft)
-                    x0 = Math.Max(x0, x1 - reach);
-            }
-            Box(points, x0, x1, f.CentreY - f.Height / 2f, f.CentreY + f.Height / 2f, Math.Max(0f, home.height));
+                (x0, x1, y0, y1) = Strip(x0, x1, y0, y1, matLeft, matRight, matNear, matFar, reach);
+            Box(points, x0, x1, y0, y1, Math.Max(0f, home.height));
         }
         return points;
+    }
+
+    /// <summary>
+    /// The part of the footprint <paramref name="x0"/>..<paramref name="x1"/>
+    /// by <paramref name="y0"/>..<paramref name="y1"/> the reading view
+    /// frames when the home is not framed whole: the whole footprint over the
+    /// mat; beside it (wholly right of <paramref name="matRight"/>, left of
+    /// <paramref name="matLeft"/>, beyond <paramref name="matFar"/> or before
+    /// <paramref name="matNear"/>, in that order for a corner home) only the
+    /// strip <paramref name="reach"/> deep along its edge nearest the mat.
+    /// The camframe check (CamOps) measures the same strip.
+    /// </summary>
+    public static (float x0, float x1, float y0, float y1) Strip(float x0, float x1, float y0, float y1, float matLeft, float matRight, float matNear, float matFar, float reach)
+    {
+        if (x0 >= matRight)
+            x1 = Math.Min(x1, x0 + reach);
+        else if (x1 <= matLeft)
+            x0 = Math.Max(x0, x1 - reach);
+        else if (y0 >= matFar)
+            y1 = Math.Min(y1, y0 + reach);
+        else if (y1 <= matNear)
+            y0 = Math.Max(y0, y1 - reach);
+        return (x0, x1, y0, y1);
     }
 
     /// <summary>True when the knobs frame the home <paramref name="id"/> whole wherever it stands (<see cref="DeskViewTuning.whole"/>).</summary>

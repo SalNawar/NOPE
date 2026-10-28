@@ -1,9 +1,11 @@
 #if UNITY_EDITOR || TIMEDESK_QA
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// DESK-PLAN's QA rig op (docs/pending/QA-RIG.md §4 "Tracks' own ops";
@@ -24,7 +26,8 @@ using UnityEngine.Rendering;
 /// (DeskLayout.HomeIdOf), measured by Physics.ComputePenetration and judged
 /// by DeskArrangement.ClickBoxClashes. <c>deskexpect</c> asserts a bool
 /// member reads true (the intercom's wheel open with the reading view still
-/// on).
+/// on). <c>deskhomeshown</c> passes a leg over on the painted desk when its
+/// home's object is not there to act on (HomeShown).
 /// Registered at load in the editor and at play start in the QA player.
 /// </summary>
 public static class DeskPlanOps
@@ -45,6 +48,36 @@ public static class DeskPlanOps
         QaRunner.RegisterOp("deskvisible", Visible);
         QaRunner.RegisterOp("deskexpect", Expect);
         QaRunner.RegisterOp("deskclickboxes", ClickBoxes);
+        QaRunner.RegisterOp("deskhomeshown", HomeShown);
+    }
+
+    /// <summary>
+    /// <c>deskhomeshown</c> (target = a home id, DeskHomeMap's constants;
+    /// name = the assertion's name, the target when empty; n = the steps
+    /// that follow which only make sense when the home's object shows):
+    /// asserts <c>shown.&lt;name&gt;</c>. On the painted desk a home the
+    /// painted map draws or dresses differently (DeskPaintedMap.
+    /// NotShownReason: the decor zone's decorations are cut, the RING
+    /// SERVICE panel shows nothing, the deal tray is the shell's) passes as
+    /// "not applicable on the painted desk" with that reason, and the next
+    /// n steps are passed over (QaRunner.Skip: the decoration drags of
+    /// desk_plan_decor and cam_chrome, the breaker click of desk_plan_homes
+    /// and cam_desk); elsewhere it passes as "in play" and the steps run.
+    /// The night of 2026-10-28, seams B and C.
+    /// </summary>
+    private static IEnumerator HomeShown(QaRunner runner, QaStep step)
+    {
+        string home = step.target ?? string.Empty;
+        string name = "shown." + (string.IsNullOrEmpty(step.name) ? home : step.name);
+        string reason = DeskLayout.PaintedShown ? DeskPaintedMap.NotShownReason(home) : null;
+        if (reason != null)
+        {
+            runner.Assert(name, Owner, true, "not applicable on the painted desk", reason + $"; the next {step.n} step(s) are passed over");
+            runner.Skip(step.n, $"{home}: {reason}");
+        }
+        else
+            runner.Assert(name, Owner, true, "in play", $"the {home} home's object is in play on the {(DeskLayout.PaintedShown ? "painted" : "art")} desk; the next {step.n} step(s) run");
+        yield break;
     }
 
     /// <summary>How high over the desk's top a click box's centre may stand and still count as the desk's (metres): the PC and the lamp, not the hall.</summary>
@@ -119,9 +152,15 @@ public static class DeskPlanOps
         float least = step.f > 0f ? step.f : 0.9f;
         string name = string.IsNullOrEmpty(step.name) ? go.name : step.name;
         List<Renderer> own = Own(go);
+        if (own.Count == 0 && DeskLayout.PaintedShown && DeskPaintedMap.NotShownReason(HomeOf(go)) is string reason)
+        {
+            // The painted desk draws or dresses this home differently (seam B, 2026-10-28): a pass that says so, never a silent skip.
+            runner.Assert("visible." + name, Owner, true, "not applicable on the painted desk", reason);
+            yield break;
+        }
         if (cam == null || own.Count == 0)
         {
-            runner.Assert("visible." + name, Owner, false, "not measured", cam == null ? "no pointer camera" : $"{step.target} has no renderer showing");
+            runner.Assert("visible." + name, Owner, false, "not measured", cam == null ? "no pointer camera" : $"{step.target} has no renderer showing (its own, its Clickables' outlines, or the painted look it wears)");
             yield break;
         }
         Shader shader = Shader.Find("Hidden/Internal-Colored");
@@ -149,8 +188,11 @@ public static class DeskPlanOps
             int total = WhitePixels(Draw(cam, rt, null, black, own, white), read);
             int seen = WhitePixels(Draw(cam, rt, others, black, own, white), read);
             float share = total > 0 ? (float)seen / total : 0f;
-            runner.Assert("visible." + name, Owner, total > 0 && share >= least, $"{share * 100f:0.0}% seen ({seen} of {total} px at {w}x{h})",
-                          $"least {least * 100f:0}% (BUG-4a); {others.Count} opaque renderer(s) could cover it");
+            bool pass = total > 0 && share >= least;
+            // Under the floor: name what covers it (each occluder left out in turn; the pixels it gave back are its cover).
+            string covering = pass || total == 0 ? string.Empty : "; covered most by: " + Covering(cam, rt, read, others, black, own, white, seen);
+            runner.Assert("visible." + name, Owner, pass, $"{share * 100f:0.0}% seen ({seen} of {total} px at {w}x{h})",
+                          $"least {least * 100f:0}% (BUG-4a); {others.Count} opaque renderer(s) could cover it{covering}");
         }
         finally
         {
@@ -161,13 +203,48 @@ public static class DeskPlanOps
         }
     }
 
-    /// <summary>The object's own renderers that show: under it, else those its Clickable outlines (an art prop's click box).</summary>
+    /// <summary>
+    /// The object's own renderers that show: under it (the painted look it
+    /// wears rides under it: DeskPainted.Reskin), else those its Clickables
+    /// outline (an art prop's click box; a stand-in's host, whose clicks
+    /// outline the stand-in: the Clickables under it too, not only its own).
+    /// </summary>
     private static List<Renderer> Own(GameObject go)
     {
         var own = go.GetComponentsInChildren<Renderer>(false).Where(r => r.enabled).ToList();
-        if (own.Count == 0 && go.TryGetComponent(out Clickable click))
-            own = click.Outline.Where(r => r != null && r.enabled && r.gameObject.activeInHierarchy).ToList();
+        if (own.Count == 0)
+            own = go.GetComponentsInChildren<Clickable>(true).SelectMany(click => click.Outline)
+                    .Where(r => r != null && r.enabled && r.gameObject.activeInHierarchy).Distinct().ToList();
         return own;
+    }
+
+    /// <summary>The home id the target stands on: the tracked object it is under (DeskLayout.HomeIdOf), else the home whose tracked object is under it (the target named above its tracked part), else null.</summary>
+    private static string HomeOf(GameObject go)
+    {
+        string id = DeskLayout.HomeIdOf(go.transform);
+        if (id != null)
+            return id;
+        foreach (DeskHome home in DeskHomeMap.Approved())
+        {
+            Transform tracked = DeskLayout.ObjectOf(home.id);
+            if (tracked != null && tracked.IsChildOf(go.transform))
+                return home.id;
+        }
+        return null;
+    }
+
+    /// <summary>The three occluders that cover the most of the object's pixels (each drawn away in turn; "name +px"), for a failed share's detail.</summary>
+    private static string Covering(Camera cam, RenderTexture rt, Texture2D read, List<Renderer> others, Material black, List<Renderer> own, Material white, int seen)
+    {
+        var gains = new List<(int px, string name)>();
+        for (int i = 0; i < others.Count; i++)
+        {
+            List<Renderer> without = others.Where((r, j) => j != i).ToList();
+            int gained = WhitePixels(Draw(cam, rt, without, black, own, white), read) - seen;
+            if (gained > 0)
+                gains.Add((gained, Path(others[i].transform)));
+        }
+        return gains.Count == 0 ? "no single renderer (several together, or its own parts)" : string.Join(", ", gains.OrderByDescending(g => g.px).Take(3).Select(g => $"{g.name} {g.px} px"));
     }
 
     /// <summary>True for a mesh the camera draws as opaque geometry.</summary>

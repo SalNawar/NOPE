@@ -378,7 +378,7 @@ public static partial class OfficeSceneUIBuilder
         Prop("Till", OfficeAnchorId.Till, EnsureDeskReaction("Reaction_Till", ReactionKind.Pulse, "tooltip.credits", 0.08f), OfficeAnchorId.ReadoutCredits, null);
         Prop("StabilityMonitor", OfficeAnchorId.StabilityMonitor, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), null, null);
         Prop("Calendar", OfficeAnchorId.Calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "tooltip.day"), OfficeAnchorId.ReadoutDay, null);
-        Prop("Clock", OfficeAnchorId.Clock, EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "tooltip.value"), OfficeAnchorId.ReadoutClock, null);
+        Prop("Clock", OfficeAnchorId.Clock, EnsureDeskReaction("Reaction_Clock", ReactionKind.None, ""), OfficeAnchorId.ReadoutClock, null); // no tooltip: it copied the readout and went stale as the minute moved (BUG-70b, FLOW's flow.clock.tooltip; DeskReactionTests)
         // The calculator, the pen pot and the stapler are cut (Saleh 2026-10-20, the desk home map): a scene built before keeps no click box for them.
         DestroyChildIfPresent(propsRoot, "Calculator");
         DestroyChildIfPresent(propsRoot, "PenPot");
