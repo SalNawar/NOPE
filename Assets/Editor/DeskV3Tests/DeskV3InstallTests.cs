@@ -85,7 +85,11 @@ public class DeskV3InstallTests
             Assert.AreEqual(faceTop + PaintedReadout.Lift, readout.transform.position.y, 1e-4f, "on the painted reader's top face");
             Assert.AreEqual(1f, Vector3.Dot(readout.transform.forward, Vector3.down), 1e-4f, "facing up (a TextMeshPro shows on its -Z)");
             Assert.Less(readout.transform.position.z, painted.transform.position.z, "on the near third, toward the chair");
-            Assert.AreEqual(Vector3.one, readout.transform.lossyScale);
+            // Unit world scale under the painted mesh's own scale (Pose): to a tolerance, since Unity's lossyScale is a float decomposition of the world matrix.
+            Vector3 lossy = readout.transform.lossyScale;
+            Assert.AreEqual(1f, lossy.x, 1e-5f, "the line's metres are the desk's");
+            Assert.AreEqual(1f, lossy.y, 1e-5f);
+            Assert.AreEqual(1f, lossy.z, 1e-5f);
             Assert.IsTrue(readoutBox.enabled, "the readout's box is live again");
             Assert.IsTrue(readoutClick.enabled && readoutClick.Interactable);
             Assert.AreEqual(LayerMask.NameToLayer(OfficeLayers.Interactable), readoutClick.gameObject.layer);
@@ -398,9 +402,12 @@ public class DeskV3InstallTests
     public void APaperCarriedOverAMachinesSweptStrip_KeepsOverIt_BeyondItsRestFootprint()
     {
         // The code review (round 3, 5; round 6: no SweptBoxes.Add, a carry floor without TrySweptTop and empty strips all survived).
+        // Since DOC-HANDLE's one held size (a32a806; NIGHT_ALL_MERGE.md section 4, clash 7) the carry reads no floor per position:
+        // a held paper is drawn in front of every swept box at its peak (DeskLayout.SweptPeak through DeskController.HeldRatio),
+        // and a paper let go keeps clear of each track's strip (SweptStrips).
         var settings = new DeskLayoutSettings();
         var frame = new DeskFrame(new Vector3(0f, 1f, 0f), Vector3.forward);
-        GameObject scanner = null, deskObject = null;
+        GameObject scanner = null, deskObject = null, eye = null;
         try
         {
             DeskLayout.Bind(frame, settings.mat.Rect, settings);
@@ -409,18 +416,26 @@ public class DeskV3InstallTests
             DeskLayout.Track(DeskHomeMap.Scanner, scanner.transform);
             DeskLayout.RefreshObstacles();
 
+            DeskRect f = home.Footprint;
+            Vector3 inStrip = frame.Point(new Vector2(f.CentreX - f.Width / 2f - 0.01f, f.CentreY), 0.001f);
+            Assert.IsTrue(DeskLayout.TrySweptTop(inStrip, 0f, out float top), "the strip the scanner slides into, beyond its rest footprint, is swept");
+            Assert.AreEqual(1.12f, top, 1e-4f, "to the scanner's top, as at its peak");
+            Assert.AreEqual(0.12f, DeskLayout.SweptPeak(), 1e-4f, "the tallest swept box over the desk: a held paper is drawn in front of it");
+            Vector3 away = frame.Point(new Vector2(-0.3f, -0.3f), 0.001f);
+            Assert.IsFalse(DeskLayout.TrySweptTop(away, 0f, out _), "over the bare mat: no swept box");
+            Assert.IsNotEmpty(DeskLayout.SweptStrips(), "a paper let go has the scanner's strip to keep clear of");
+
             deskObject = new GameObject("Desk");
             var desk = deskObject.AddComponent<DeskController>();
             var config = ScriptableObject.CreateInstance<DeskConfigSO>();
             typeof(DeskController).GetField("config", Private).SetValue(desk, config);
-            MethodInfo carry = typeof(DeskController).GetMethod("CarryFloor", Private);
-            DeskRect f = home.Footprint;
-            Vector3 inStrip = frame.Point(new Vector2(f.CentreX - f.Width / 2f - 0.01f, f.CentreY), 0.001f);
-            float floor = (float)carry.Invoke(desk, new object[] { inStrip, 0f, 0.001f });
-            Assert.AreEqual(1.12f + config.dockClearance + 0.001f - inStrip.y, floor, 1e-4f, "over the strip the scanner slides into: over its box, as at its peak");
-            Vector3 away = frame.Point(new Vector2(-0.3f, -0.3f), 0.001f);
-            Assert.AreEqual(0f, (float)carry.Invoke(desk, new object[] { away, 0f, 0.001f }), 1e-6f, "over the bare mat: on it");
-            Assert.IsNotEmpty(DeskLayout.SweptStrips(), "a paper let go has the scanner's strip to keep clear of");
+            eye = new GameObject("Eye", typeof(Camera));
+            eye.transform.position = new Vector3(0f, 2f, -0.5f); // 1 m over the desk
+            MethodInfo held = typeof(DeskController).GetMethod("HeldRatio", Private);
+            float ratio = (float)held.Invoke(desk, new object[] { eye.GetComponent<Camera>(), frame.Origin.y });
+            float clear = Mathf.Max(Mathf.Max(DeskObstacles.Desk.MaxHeight, DeskLayout.SweptPeak()), config.heldClearance);
+            Assert.AreEqual(HeldOnTop.Ratio(1f, clear, config.heldLeastRatio), ratio, 1e-6f, "one held size a carry: in front of the desk's tallest obstacle and the swept peak, at least the held clearance");
+            Assert.LessOrEqual(ratio, 1f - DeskLayout.SweptPeak() + 1e-6f, "nearer the eye than any ray the scanner's top at its peak can meet");
             Object.DestroyImmediate(config);
         }
         finally
@@ -430,6 +445,8 @@ public class DeskV3InstallTests
                 Object.DestroyImmediate(scanner);
             if (deskObject != null)
                 Object.DestroyImmediate(deskObject);
+            if (eye != null)
+                Object.DestroyImmediate(eye);
         }
     }
 

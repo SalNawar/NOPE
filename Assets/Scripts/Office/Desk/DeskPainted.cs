@@ -603,13 +603,21 @@ public sealed class DeskPainted : MonoBehaviour
         return click;
     }
 
-    /// <summary>A click box on the Interactable layer around the bake's <paramref name="name"/> (a painted slider no gameplay object stands for: the slide-in ranks the silhouettes under the cursor by these boxes), riding its slide; the importer makes them for its sliders, and this makes one the prefab lacks.</summary>
+    /// <summary>A click box on the Interactable layer around the bake's <paramref name="name"/> (a painted slider no gameplay object stands for: the slide-in ranks the silhouettes under the cursor by these boxes), riding its slide; the importer makes them for its sliders, and this makes one the prefab lacks. A box the mesh already carries is put on the layer too: off it, a box takes no office click (the camera's raycaster reads the Interactable layer).</summary>
     public void EnsureClickBox(string name)
     {
         Transform mesh = Mesh(name);
-        if (mesh == null || mesh.GetComponent<Collider>() != null || !mesh.TryGetComponent(out MeshFilter filter) || filter.sharedMesh == null)
+        if (mesh == null)
             return;
         int layer = LayerMask.NameToLayer(OfficeLayers.Interactable);
+        if (mesh.GetComponent<Collider>() != null)
+        {
+            if (layer >= 0)
+                mesh.gameObject.layer = layer;
+            return;
+        }
+        if (!mesh.TryGetComponent(out MeshFilter filter) || filter.sharedMesh == null)
+            return;
         if (layer >= 0)
             mesh.gameObject.layer = layer;
         var box = mesh.gameObject.AddComponent<BoxCollider>();
@@ -760,17 +768,30 @@ public sealed class DeskPainted : MonoBehaviour
             click.Interactable = true;
             click.SetOutline(RenderersOf(name));
         }
+        Physics.SyncTransforms(); // the re-fitted box is where physics looks for it at once: a ray or a bounds read this frame meets it over the line, not where it stood
         return true;
     }
 
     private static Vector3 V((float x, float y, float z) p) => new Vector3(p.x, p.y, p.z);
 
-    /// <summary>Puts <paramref name="t"/> at <paramref name="local"/> in this desk's frame, turned by <paramref name="turn"/> from the desk's facing, at unit world scale.</summary>
+    /// <summary>Puts <paramref name="t"/> at <paramref name="local"/> in this desk's frame, turned by <paramref name="turn"/> from the desk's facing, at unit world scale: each of its axes is scaled back by the parent's scale along the parent axis the turn lays it on (a parent scaled unevenly, turned under by a right angle, as the readout line is: exact; any other turn, the nearest).</summary>
     private void Pose(Transform t, Vector3 local, Quaternion turn)
     {
         t.SetPositionAndRotation(transform.TransformPoint(local), transform.rotation * turn);
-        Vector3 parentScale = t.parent != null ? t.parent.lossyScale : Vector3.one;
-        t.localScale = new Vector3(1f / Mathf.Max(1e-6f, parentScale.x), 1f / Mathf.Max(1e-6f, parentScale.y), 1f / Mathf.Max(1e-6f, parentScale.z));
+        if (t.parent == null)
+        {
+            t.localScale = Vector3.one;
+            return;
+        }
+        Vector3 parentScale = t.parent.lossyScale;
+        Quaternion under = t.localRotation;
+        var scale = Vector3.one;
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 axis = under * (i == 0 ? Vector3.right : i == 1 ? Vector3.up : Vector3.forward);
+            scale[i] = 1f / Mathf.Max(1e-6f, Vector3.Scale(axis, parentScale).magnitude);
+        }
+        t.localScale = scale;
     }
 
     /// <summary>The bounds of <paramref name="mesh"/> (its meshes and its children's) in this desk's frame (x across, y up, z away from the chair); false without a mesh.</summary>
