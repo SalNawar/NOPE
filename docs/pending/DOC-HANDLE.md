@@ -85,7 +85,7 @@ Sources:
   - the scanner's hidden area (`ScannerClearance.Blocked`);
   - for a counter refusal, the counter from its near edge on (`DeskCounter.TryNearEdge`, new).
   - for the folder and every desk paper (Saleh's playtest 2026-10-28, points 4 and 2b; FOLD-01): every object of DESK-PLAN's registry at its own footprint (`DeskLayout.Standing`: DETAIN, the AVAILABLE sign, the bell, the glasses, the stamp rack, the pocket, the painted rail's trays). The folder's footprint is its own box (`DeskRulebook.TryBoxCorners`: the board's side alone while shut), not the bounds of its renderers.
-- The area is the desk (centres anywhere the drag may take them) ∩ what the reading view shows (`DeskConfigSO.restViewport`, new) ∩ the desk short of the back step (FOLD-01: `DeskLayout.TryBackStep`, `DeskPaintedMap.BackStep`, 0.55 m) for a desk paper and the folder (`DropResolver.Area`).
+- The area is the desk (centres anywhere the drag may take them) ∩ what the reading view shows (`DeskConfigSO.restViewport`, new) ∩ the desk short of the back step's lip (FOLD-01: `DeskLayout.TryBackStep`, `DeskPaintedMap.BackStep`, 0.54 m since round 2) for a desk paper and the folder (`DropResolver.Area`).
 
 **Deleted:**
 - `ClearOfBlockers`, `CarryFloor` and `DeskDocument.SetCarryFloor` / `_carryFloor`.
@@ -129,7 +129,7 @@ Saleh: "You move the folder and it snaps somewhere else." Papers, Please: a thin
 
 **The rule now (`DeskController.RestOf`, `DropResolver`):**
 - The frame is the desk's own (`RestRight`, `RestForward`: `DeskLayout.Frame`, the axes the reading view is posed on). `SetScannerView` keeps the scanner's line for the scanner's shadow and the chip reader's upright face only.
-- The area (`DropResolver.Area`): the drag's clamp, the reading view (`restViewport`) and, for a thing on the desk, the desk short of the back step (`DeskLayout.TryBackStep`: `DeskPaintedMap.BackStep`, 0.55 m in the desk's frame, from desk_layout_v3.json's "desk" and "step"). The counter row (DETAIN, the sign, the deal tray, the bell, the glasses) stands on the back step, 7 cm high, and the step's front draws through a thing laid across it. The counter strip in front of the step (where the handed papers lie) is still desk: a paper may lie over it, as papers lie over papers. The art desk knows no step and keeps no such edge.
+- The area (`DropResolver.Area`): the drag's clamp, the reading view (`restViewport`) and, for a thing on the desk, the desk short of the back step (`DeskLayout.TryBackStep`: `DeskPaintedMap.BackStep`, 0.55 m in the desk's frame from desk_layout_v3.json's "desk" and "step"; 0.54 m since round 2, at the step's brass lip). The counter row (DETAIN, the sign, the deal tray, the bell, the glasses) stands on the back step, 7 cm high, and the step's front draws through a thing laid across it. The counter strip in front of the step (where the handed papers lie) is still desk: a paper may lie over it, as papers lie over papers. The art desk knows no step and keeps no such edge.
 - Partly out of the area: the least move inward.
 - The keep-outs, for a paper and the folder alike: DOC-HANDLE's registry (the machines' casings, the torch's cradle), DESK-PLAN's objects at their own footprints (`DeskLayout.Standing`, `DeskSlides.Standing`), the painted rail's two trays (the scanner's and the chip reader's homes, even before the machine is owned), the scanner's hidden shadow, and the counter for a refusal.
 - A slider's swept strip is not a keep-out any more (see below).
@@ -152,6 +152,39 @@ Saleh: "You move the folder and it snaps somewhere else." Papers, Please: a thin
 - Gate: `doc.play.rests` (Play, DOC-HANDLE, `Assets/Editor/QA/Checks/DocHandleChecks.cs`) reads fold_rest's `drop`, `restTrace` and `slideClear` results and its last probe, at HEAD on a clean tree. The battery must run `fold_rest`.
 
 **Tests:** `DropResolverTests` (the FOLD-01 cases on the desk the scenario measured, the turned frame's band, the nearest-place rule, the slide strip), `SlideRoomTests`, `RestFrameTests` (NeedsEditor: the rest's frame is the desk's).
+
+### FOLD-01 round 2 (the verifier's F1 to F4)
+
+The verifier's report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01_VERIFY.md. The fixer's: FOLD01.md, "Round 2".
+
+**F1 (S1): nothing rests under what the shell draws.**
+- The cause: the keep-out of a rail tray was its home's footprint only. The bake draws each tray with its slide track cut toward the mat and a brass rim 3 to 5 cm high round it, the lamps' bezels at the rail's edge and bolts along it. The intercom's track frame reaches 6 cm past its footprint. A thing let go there rested under them.
+- The fix: `DeskPaintedMap.ShellStanding`, measured on the bake's meshes (DeskShell and the lamps: every part more than 3.5 mm over the mat, from the view's near edge to the back step): the whole machine rail (x 0.7375 to 1.45 m) and the tool pods' column (x -1.12 to -0.7325 m). `DeskLayout.Standing` adds them to every rest's keep-outs while the painted desk shows.
+- The back step's brass lip stands 8 mm in front of the step, 5.8 cm over the mat, so `BackStep` is 0.54 m.
+- Why keep-outs, not "resting things drawn above the rail": a resting paper drawn toward the camera would draw over the dater as it stamps it, over the UV torch's light and over the glasses' lens. The rule "it rests where let go" holds everywhere but over the rail and the pods, where a thing could only lie across raised brass.
+- `ShellStandingTests` (NeedsEditor) measures the bake again. It fails when a part of the shell stands outside the keep-outs, or when the mat is not free.
+- No thing can rest in a slide strip now: the strips lie over the rail and the pods. The sliders' stop-short (`SlideRoom`) stays as a guard.
+
+**F2 (S2): the drag's lift comes off eased.**
+- The folder's lift was set at once (`DeskRulebook.SetLift`), so every release dropped its picture 8 to 11 px in one frame. It now goes on and off on `DeskLiftEase`: a smootherstep over 0.2 s, of which the release's frame takes 3.5%. A reorder of the stack still shows at once.
+- A paper's set-down eases its spring's target the same way (`DeskDocument.SetLift`). Its spring alone moved the picture up to 1.7 px in the release's frame.
+
+**F3 (S2): the drag holds the thing where it may rest.**
+- `DeskDraggable.Bound`: the owner keeps the held origin so that the footprint lies wholly in `RestArea` (`DeskController.FolderBound`: the folder at its full size; `PaperBound`: a paper at the size it shows). The pointer goes on; the thing stops at the edge, as Papers, Please holds a paper on the desk.
+- Machines and props are not out of the area: a paper is still dragged onto the scanner and the chip reader. Let go over one, it takes the least move clear (F1, F4).
+
+**F4 (S3): a move off a machine slides along the desk.**
+- The folder (`DeskRulebook.RestAt`, `Refused`) and a paper (`DeskDocument.CarryOnTop`, from `DeskController.Slide`) go straight to their rest. On the way they stay drawn above every prop as they were held (HeldOnTop through the drag's camera, the picture unchanged).
+- Before, over a casing's height the folder hopped toward the camera, a quarter bigger, and through a tray's rim it went under the rim for two frames.
+- `DeskRulebook.TryBoxCorners` gives the box where the folder lies, not where it is drawn.
+
+**QA:**
+- The `drop` op (QaRunner) asserts `drop.<name>.jump` and `drop.<name>.covered`. The op `covered` serves a `drag` (QA-RIG's op table).
+- `DropPicture.Covered` reads non-readable meshes back from the GPU (`Mesh.GetVertexBuffer`; `mesh.vertices` logs an error in play mode). It keeps its points to the thing's own click boxes, because a shader cuts the shut folder's left board away.
+- A control run with the shell's keep-outs switched off failed `covered` on the verifier's F1 releases (8 to 27% hidden by DeskShell and the lamps) and passed the others. The check sees what the rest's own trace could not.
+- `fold_rest` adds the folder half over the scanner's tray and the passport over the intercom (day 1), and checks `covered` after the drags. Its day 12 slide-strip cases now rest clear of the rail.
+
+**Tests:** `DropResolverTests` (the rail and the pods), `DeskLiftEaseTests`, `ShellStandingTests` and `DropPictureTests` (NeedsEditor).
 
 ### BUG-8: no shared obstacle model
 

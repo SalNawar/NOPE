@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "FOLD-01 (Saleh's playtest of 2026-10-28, point 4: 'You move the folder and it snaps somewhere else'; Papers, Please: a thing let go lies where it is let go). Day 1 and day 12, 1920x1080, the reading view and the office view. Each drop op asserts that the dropped thing's screen centre moves 8 px or less at 1080p after the release (more only where the step says why: a release over DETAIN or partly off the view). Each restTrace step writes the rest's keep-outs to rests.tsv (DropTrace) and asserts the rule's own move in px at 1080p. Screen fractions are from the bottom-left (QaRunner.Frac); rests.tsv and the stills are top-left."
+      "text": "FOLD-01 (Saleh's playtest of 2026-10-28, point 4: 'You move the folder and it snaps somewhere else'; Papers, Please: a thing let go lies where it is let go). Day 1 and day 12, 1920x1080, the reading view and the office view. Each drop op asserts that the dropped thing's screen centre moves 8 px or less at 1080p after the release (more only where the step says why: a release over DETAIN or partly off the view). Each restTrace step writes the rest's keep-outs to rests.tsv (DropTrace) and asserts the rule's own move in px at 1080p. Screen fractions are from the bottom-left (QaRunner.Frac); rests.tsv and the stills are top-left. Round 2 (the verifier's F1 to F4): the drag holds a held thing wholly where it may rest (the reading view and the desk short of the back step's lip), so a release past the view's edge or over the back step rests where it is let go; a thing let go over the machine rail, its trays and tracks, or the tool pods on the left takes the least move clear of them (DeskPaintedMap.ShellStanding), eased and drawn above every prop on the way; each drop op also asserts drop.<name>.jump (the picture moves 1 px or less at the release) and drop.<name>.covered (nothing drawn hides 0.5% or more of the thing at rest)."
     },
     {
       "op": "title"
@@ -54,7 +54,7 @@
     },
     {
       "op": "note",
-      "text": "The audit's drag 1: from the red book (the folder comes out under the pointer) to the mat's bottom left. Its bottom edge lies 16 px past the reading view's rest margin (DeskConfigSO.restViewport, 98% of the height), so it takes the least move inward (about 15 px, eased): f 20."
+      "text": "The audit's drag 1: from the red book (the folder comes out under the pointer) to the mat's bottom left. Round 1: its bottom edge lay 16 px past the reading view's rest margin and it slid 15 px after the release. Round 2: the drag holds it inside the view (DeskDraggable.Bound, F3), so it rests where it is let go: f 8."
     },
     {
       "op": "track",
@@ -73,12 +73,12 @@
       "target": "Rulebook",
       "x2": 0.4,
       "y2": 0.1,
-      "f": 20
+      "f": 8
     },
     {
       "op": "restTrace",
       "name": "d1_pocket_to_bottom",
-      "f": 20
+      "f": 8
     },
     {
       "op": "still",
@@ -152,7 +152,7 @@
     },
     {
       "op": "note",
-      "text": "(d) Over DETAIN (Saleh point 2b): grabbed by its lower part and let go with the pointer on the desk, the folder's top lies over DETAIN and the AVAILABLE sign. They stand on the back step (the counter row), whose front draws through a folder laid across it; the desk ends where the step begins (DeskPaintedMap.BackStep). So the least move is just onto the desk, clear of the step, DETAIN and the sign (about 55 px, eased): f 70."
+      "text": "(d) Toward DETAIN (Saleh point 2b): grabbed by its lower part and dragged with the pointer on the desk toward DETAIN and the AVAILABLE sign. They stand on the back step (the counter row), whose lip draws over a folder laid across it. Round 2: the drag holds the folder's top at the lip (DeskPaintedMap.BackStep 0.54 m, F3), so it never lies over them and rests where it is let go: f 8; covered asserts nothing hides it."
     },
     {
       "op": "drag",
@@ -170,7 +170,12 @@
     {
       "op": "restTrace",
       "name": "d_over_detain",
-      "f": 70
+      "f": 8
+    },
+    {
+      "op": "covered",
+      "name": "d_over_detain",
+      "target": "Rulebook"
     },
     {
       "op": "still",
@@ -181,7 +186,7 @@
     },
     {
       "op": "note",
-      "text": "(d2) Let go with the pointer on DETAIN itself: that is the counter (the traveller's side), which refuses the folder (BUG-6b). It shakes its no and lies just off the counter's near edge, on the desk, clear of DETAIN: the least move off the counter (about 125 px, eased), not the 8 px rule."
+      "text": "(d2) Let go with the pointer on DETAIN itself: that is the counter (the traveller's side), which refuses the folder (BUG-6b). It shakes its no and lies just off the counter's near edge, on the desk, clear of DETAIN: the least move off the counter, eased, not the 8 px rule. Round 2: the drag holds the folder's top at the back step's lip, so the move is about 60 px (round 1: 125 px): f 80."
     },
     {
       "op": "drop",
@@ -191,12 +196,12 @@
       "target": "Rulebook",
       "x2": 0.29,
       "y2": 0.86,
-      "f": 150
+      "f": 80
     },
     {
       "op": "restTrace",
       "name": "d2_on_detain_counter",
-      "f": 150
+      "f": 80
     },
     {
       "op": "still",
@@ -204,7 +209,7 @@
     },
     {
       "op": "note",
-      "text": "(e) Partly off the reading view's bottom edge: the drag holds the folder's centre on the desk's clamp (0.5075 m from the centre), its bottom edge then lies past the view's rest margin; the least move inward (about 37 px, eased): f 40."
+      "text": "(e) Toward past the reading view's bottom edge: round 1 let the folder's bottom edge lie past the view's rest margin and slid it 37 px inward after the release. Round 2: the drag holds it inside the view (F3), so it rests where it is let go: f 8."
     },
     {
       "op": "drop",
@@ -214,16 +219,39 @@
       "target": "Rulebook",
       "x2": 0.62,
       "y2": 0.075,
-      "f": 40
+      "f": 8
     },
     {
       "op": "restTrace",
       "name": "e_off_bottom",
-      "f": 40
+      "f": 8
     },
     {
       "op": "still",
       "name": "e_off_bottom"
+    },
+    {
+      "op": "note",
+      "text": "(r) Round 2, the verifier's F1 (a15): the folder let go half over the scanner's empty tray on the machine rail. The rail's trays, their track cuts, the lamps' bezels and the bolts stand there from day 1; kept clear of the tray's home alone it rested under the tray's rim. It takes the least move clear of the whole rail (about 150 px, eased, drawn above every prop on the way: F4): f 170; drop.r_half_scanner_tray.covered asserts nothing hides it."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "r_half_scanner_tray",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.8225,
+      "y2": 0.4383,
+      "f": 170
+    },
+    {
+      "op": "restTrace",
+      "name": "r_half_scanner_tray",
+      "f": 170
+    },
+    {
+      "op": "still",
+      "name": "r_half_scanner_tray"
     },
     {
       "op": "note",
@@ -296,6 +324,43 @@
       "f": 8
     },
     {
+      "op": "note",
+      "text": "(q) Round 2, the verifier's F1 (b05): the passport let go over the intercom rested with its left part under the intercom's track frame (the intercom's footprint ends 6 cm short of the frame the shell draws round it). It takes the least move clear of the tool pods (about 105 px, eased): f 125. Then it goes back to the mat's top right."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "q_passport_over_intercom",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.141,
+      "y2": 0.6509,
+      "f": 125
+    },
+    {
+      "op": "restTrace",
+      "name": "q_passport_over_intercom",
+      "f": 125
+    },
+    {
+      "op": "still",
+      "name": "q_passport_over_intercom"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "q_passport_back_to_mat_top",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.66,
+      "y2": 0.55
+    },
+    {
+      "op": "restTrace",
+      "name": "q_passport_back_to_mat_top",
+      "f": 8
+    },
+    {
       "op": "still",
       "name": "papers_and_folder"
     },
@@ -339,7 +404,7 @@
     },
     {
       "op": "note",
-      "text": "Day 12 (every item): the machines stand on the right rail and slide toward the mat. A folder let go in the scanner's slide strip stays; the scanner stops short of it when the cursor nears it."
+      "text": "Day 12 (every item): the machines stand on the right rail and slide toward the mat over its tracks. Round 2: a folder let go over a machine's track or casing takes the least move clear of the whole rail (F1), eased along the desk and drawn above every prop on the way, never hopping over the casing toward the camera (F4). No thing can rest in a slide strip now (the strips lie over the rail), so slideClear sees each machine slide out in full and never over a resting thing."
     },
     {
       "op": "cheat",
@@ -407,7 +472,7 @@
     },
     {
       "op": "note",
-      "text": "(h) Day 12: the folder let go beside the scanner, its right edge 5 mm from the scanner's casing (the casing keeps a resting thing off it) and so inside the 4.9 cm the scanner slides toward the mat, stays there. A plain drag: the reading camera leans toward the scanner as the cursor nears it (CAM's SlideInFocus), so a screen measure would count the camera's lean; restTrace measures the rule's move on the desk. The cursor then waits just above the scanner (near it, not on it), and slideClear asserts the scanner never lies over the folder (it stops about 7 mm short)."
+      "text": "(h) Day 12: the folder let go over the scanner's track, its right edge near the scanner's casing (round 1 rested it there, partly under the tray's rim). It takes the least move clear of the rail (about 43 px; restTrace measures the rule's move on the desk, as the reading camera leans toward the scanner when the cursor nears it: CAM's SlideInFocus): f 60; covered asserts nothing hides it. The cursor then waits just above the scanner, and slideClear asserts the scanner never lies over the folder."
     },
     {
       "op": "track",
@@ -433,7 +498,12 @@
     {
       "op": "restTrace",
       "name": "h_d12_scanner_strip",
-      "f": 8
+      "f": 60
+    },
+    {
+      "op": "covered",
+      "name": "h_d12_scanner_strip",
+      "target": "Rulebook"
     },
     {
       "op": "still",
@@ -466,7 +536,7 @@
     },
     {
       "op": "note",
-      "text": "(i) Day 12: the folder let go in the chip reader's slide strip (its right edge 2.5 cm from the reader, inside the 4.3 cm the reader slides) stays there; the cursor near the reader (just above it) slides it out only as far as the folder (it stops short: MachineSlideIn.Room), and slideClear asserts it never lies over the folder. (The intercom's strip, left of the mat, lies past where the drag can take the folder.)"
+      "text": "(i) Day 12: the folder let go over the chip reader's track (round 1: in its slide strip, 2.5 cm from the reader). It takes the least move clear of the rail (about 63 px): f 80; covered asserts nothing hides it. The cursor near the reader slides it out, and slideClear asserts it never lies over the folder. (The intercom's strip, left of the mat, lies inside the tool pods' keep-out.)"
     },
     {
       "op": "drag",
@@ -483,7 +553,12 @@
     {
       "op": "restTrace",
       "name": "i_d12_reader_strip",
-      "f": 8
+      "f": 80
+    },
+    {
+      "op": "covered",
+      "name": "i_d12_reader_strip",
+      "target": "Rulebook"
     },
     {
       "op": "still",
