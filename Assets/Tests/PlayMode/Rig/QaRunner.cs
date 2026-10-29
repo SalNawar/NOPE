@@ -518,6 +518,18 @@ public sealed class QaRunner : MonoBehaviour
     /// 30 fps game step (Time.captureFramerate, as a recording does): the
     /// P-* speeds (QaPaths, in px per second at 30 fps) and the settle's
     /// seconds hold at any real frame rate, in the editor and the player.
+    /// The drop op also measures the thing's picture (DropPicture.Of, every
+    /// frame at its end; FOLD-01 round 2, the verifier's F2) and asserts
+    /// <c>drop.&lt;name&gt;.jump</c>: from the last held frame to the first
+    /// released one the picture moves at most 1 px at 1080p against its root
+    /// (DOC-HANDLE: "a frame diff at the press and release frames ≤1 px"; a
+    /// lift set at once dropped it 8 to 11 px), for every path but P-FAST,
+    /// P-FLICK and P-OFF (released moving, they settle visibly by design) and
+    /// a thing carried to its rest (the place assertions judge that move). A
+    /// thing that then lies on the desk (not docked, not carried, not in its
+    /// pocket) is asserted <c>drop.&lt;name&gt;.covered</c>: at most 0.5% of
+    /// its face is hidden by anything else drawn opaque (DropPicture.Covered;
+    /// the verifier's F1: a folder rested under a tray's rim).
     /// </summary>
     private IEnumerator Drag(QaStep s, Action<string> note, bool checkRest)
     {
@@ -530,6 +542,7 @@ public sealed class QaRunner : MonoBehaviour
         QaPath path = QaPaths.Drag(kind, from, to, new Vector2(Screen.width, Screen.height));
         int pressFrame = 0, releaseFrame = 0;
         Rect? atRelease = null;
+        Vector3? rootAtRelease = null;
         bool byRoot = checkRest && string.Equals((s.text ?? string.Empty).Trim(), "root", StringComparison.OrdinalIgnoreCase);
         bool fixedHere = Time.captureFramerate != SeqRecorder.Fps;
         if (fixedHere)
@@ -537,6 +550,11 @@ public sealed class QaRunner : MonoBehaviour
             _dragRestoreRate = Time.captureFramerate;
             Time.captureFramerate = SeqRecorder.Fps;
         }
+        // The picture against the root on every frame (at the frame's end, as it is drawn), from before the press to the settle's end.
+        var pictures = new Dictionary<int, (Vector2 picture, Vector2 root)>();
+        bool sampling = checkRest;
+        if (sampling)
+            StartCoroutine(SamplePictures(dragged, pictures, () => sampling));
         yield return Input.Play(path, i =>
         {
             // The sample queued on this frame is seen by the game on the next one.
@@ -545,6 +563,7 @@ public sealed class QaRunner : MonoBehaviour
             {
                 releaseFrame = Time.frameCount + 1;
                 atRelease = dragged != null ? Measure(dragged, byRoot) : null;
+                rootAtRelease = dragged != null ? dragged.transform.position : (Vector3?)null;
             }
         });
         string name = Safe(string.IsNullOrEmpty(s.name) ? "drag" : s.name);
@@ -554,6 +573,7 @@ public sealed class QaRunner : MonoBehaviour
         note($"{kind} from {F(path.Start.x)},{F(path.Start.y)} released at {F(path.End.x)},{F(path.End.y)}");
         if (checkRest)
             yield return QaGame.Frames(s.n > 0 ? s.n : 45);
+        sampling = false;
         if (fixedHere)
         {
             Time.captureFramerate = _dragRestoreRate ?? 0;
@@ -563,6 +583,14 @@ public sealed class QaRunner : MonoBehaviour
             yield break;
         Rect? rest = Measure(dragged, byRoot);
         float limit = s.f > 0f ? s.f : 8f;
+        if (byRoot && rootAtRelease != null && rest != null)
+        {
+            // Both places through the camera of now (DOC-HANDLE 5(a): one camera for the release and the rest), so a camera that
+            // leaned meanwhile (CAM's SlideInFocus near a machine) moves neither.
+            Camera camera = QaGame.PointerCamera();
+            Vector3 was = camera != null ? camera.WorldToScreenPoint(rootAtRelease.Value) : Vector3.back;
+            atRelease = was.z > 0f ? new Rect(was.x, was.y, 0f, 0f) : (Rect?)null;
+        }
         if (atRelease == null || rest == null)
         {
             Assert($"drop.{name}", Scenario.owner, false, "not on screen", $"{dragged.name} was not on the screen at the release or at rest ({kind}).");
@@ -570,7 +598,103 @@ public sealed class QaRunner : MonoBehaviour
         }
         float moved = QaCameraMoves.To1080((rest.Value.center - atRelease.Value.center).magnitude, Screen.height);
         Assert($"drop.{name}", Scenario.owner, moved <= limit, $"{moved:0.0} px after the release (max {limit:0.#})",
-            $"{dragged.name} ({kind}): released with its centre at {atRelease.Value.center}, at rest at {rest.Value.center}");
+            $"{dragged.name} ({kind}): released with its centre at {atRelease.Value.center}, at rest at {rest.Value.center}{(byRoot ? " (its root, both through the camera of now)" : string.Empty)}");
+        bool carried = rootAtRelease != null && dragged != null && (dragged.transform.position - rootAtRelease.Value).magnitude > 0.001f;
+        AssertJump(name, kind, dragged, pictures, pressFrame, releaseFrame, note, carried);
+        AssertCovered("drop." + name + ".covered", dragged, 0.005f, note);
+    }
+
+    /// <summary>Records <paramref name="go"/>'s picture (DropPicture.Of) and its root's screen point at the end of every frame while <paramref name="on"/> says so.</summary>
+    private static IEnumerator SamplePictures(GameObject go, Dictionary<int, (Vector2 picture, Vector2 root)> into, Func<bool> on)
+    {
+        var end = new WaitForEndOfFrame();
+        while (on())
+        {
+            yield return end;
+            Camera camera = QaGame.PointerCamera();
+            Rect? picture = DropPicture.Of(go, camera);
+            if (picture == null || camera == null || go == null)
+                continue;
+            Vector3 root = camera.WorldToScreenPoint(go.transform.position);
+            into[Time.frameCount] = (picture.Value.center, new Vector2(root.x, root.y));
+        }
+    }
+
+    /// <summary>
+    /// <c>drop.&lt;name&gt;.jump</c> (see Drag): the picture's move against its
+    /// root from the frame before the release to the release's frame, in px
+    /// at 1080p (at most 1); the press's frame, the picture's whole move from
+    /// the last held frame to the settle's end and its largest step are
+    /// reported. Not asserted (noted) for P-FAST, P-FLICK and P-OFF, or for a
+    /// thing <paramref name="carried"/> to its rest.
+    /// </summary>
+    private void AssertJump(string name, QaPathKind kind, GameObject dragged, Dictionary<int, (Vector2 picture, Vector2 root)> pictures, int pressFrame, int releaseFrame, Action<string> note, bool carried)
+    {
+        float Step(int frame) =>
+            pictures.TryGetValue(frame, out var now) && pictures.TryGetValue(frame - 1, out var was)
+                ? QaCameraMoves.To1080(((now.picture - now.root) - (was.picture - was.root)).magnitude, Screen.height) : float.NaN;
+        float release = Step(releaseFrame), press = Step(pressFrame);
+        float whole = float.NaN, largest = 0f;
+        int last = pictures.Count > 0 ? pictures.Keys.Max() : 0;
+        if (pictures.TryGetValue(releaseFrame - 1, out var held) && pictures.TryGetValue(last, out var end))
+            whole = QaCameraMoves.To1080((end.picture - held.picture).magnitude, Screen.height);
+        for (int f = releaseFrame; f <= last; f++)
+            if (pictures.TryGetValue(f, out var a) && pictures.TryGetValue(f - 1, out var b))
+                largest = Mathf.Max(largest, QaCameraMoves.To1080((a.picture - b.picture).magnitude, Screen.height));
+        string measured = float.IsNaN(release)
+            ? "no picture at the release"
+            : FormattableString.Invariant($"{release:0.00} px at the release (max 1); press {press:0.00} px; the picture moved {whole:0.0} px in all, its largest step {largest:0.0} px");
+        string detail = $"{(dragged != null ? dragged.name : "?")} ({kind}): the picture (what it draws opaque, DropPicture.Of) against its root, frames {releaseFrame - 1} to {releaseFrame}; {pictures.Count} frames measured";
+        if (kind == QaPathKind.Fast || kind == QaPathKind.Flick || kind == QaPathKind.Off)
+        {
+            note($"drop.{name}.jump (not asserted: {kind} is released moving): {measured}");
+            return;
+        }
+        if (carried)
+        {
+            // Carried to its rest (a limit's least move): its root moves on the desk's eased carry from the release's frame, and the
+            // picture's place against a moving root changes with the view's perspective; the place assertions and the frames judge it.
+            note($"drop.{name}.jump (not asserted: carried to its rest): {measured}");
+            return;
+        }
+        Assert($"drop.{name}.jump", Scenario.owner, !float.IsNaN(release) && release <= 1f, measured, detail);
+    }
+
+    /// <summary>
+    /// Asserts <paramref name="id"/>: at most <paramref name="most"/> (a share)
+    /// of the face of the paper or folder <paramref name="go"/> belongs to is
+    /// hidden by anything else drawn opaque (DropPicture.Covered), when it
+    /// lies on the desk. A docked or carried paper, or the folder carried or
+    /// in its pocket, is only noted (a machine holds it, or it has not landed).
+    /// </summary>
+    public void AssertCovered(string id, GameObject go, float most, Action<string> note = null)
+    {
+        GameObject thing = go;
+        DeskDocument paper = go != null ? go.GetComponentInParent<DeskDocument>() ?? go.GetComponentInChildren<DeskDocument>() : null;
+        DeskRulebook book = paper == null && go != null ? go.GetComponentInParent<DeskRulebook>() ?? go.GetComponentInChildren<DeskRulebook>() : null;
+        string skip = null;
+        if (paper != null)
+        {
+            thing = paper.gameObject;
+            if (paper.IsDocked || paper.IsSliding)
+                skip = paper.IsDocked ? "docked in a machine" : "still carried";
+        }
+        else if (book != null)
+        {
+            thing = book.gameObject;
+            if (book.Pocketed || book.Carrying)
+                skip = book.Pocketed ? "in its pocket" : "still carried";
+        }
+        if (skip != null)
+        {
+            note?.Invoke($"{id} (not asserted: {skip})");
+            return;
+        }
+        Camera camera = QaGame.PointerCamera();
+        (float? share, int points, string by, int unread) = DropPicture.Covered(thing, camera);
+        Assert(id, Scenario.owner, share != null && share.Value <= most && unread == 0,
+               share != null ? FormattableString.Invariant($"{share.Value * 100f:0.00}% of its face hidden (max {most * 100f:0.#}%){(unread > 0 ? $", {unread} meshes unread" : string.Empty)}") : "nothing of it shows",
+               $"{(thing != null ? thing.name : "?")}: {points} points over its face; hidden by {by}");
     }
 
     /// <summary>Where <paramref name="go"/> is on the screen for the drop op: its bounds' screen rect, or with <paramref name="root"/> its root's screen point (a rect of no size; null behind the camera).</summary>

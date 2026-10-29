@@ -24,7 +24,8 @@ using UnityEngine;
 /// one rest was recorded, none moved more than <c>f</c> pixels at 1080p from
 /// its release (DOC-HANDLE D1's 8 px), and each lies wholly in its area and
 /// over no keep-out. <c>slideClear</c> asserts that no track slider of the
-/// desk's slide-in lies over a resting thing (SlideClearOp).
+/// desk's slide-in lies over a resting thing (SlideClearOp). <c>covered</c>
+/// asserts that nothing drawn hides a resting thing (CoveredOp).
 /// </summary>
 public static class RestTraceOps
 {
@@ -36,6 +37,24 @@ public static class RestTraceOps
     {
         QaRunner.RegisterOp("restTrace", RestTraceOp);
         QaRunner.RegisterOp("slideClear", SlideClearOp);
+        QaRunner.RegisterOp("covered", CoveredOp);
+    }
+
+    /// <summary>
+    /// <c>covered</c> (FOLD-01 round 2, the verifier's F1: a folder rested
+    /// under a tray's rim, and the rest's trace could not see it): asserts
+    /// <c>covered.&lt;name&gt;</c>, at most <c>f</c> percent (default 0.5) of
+    /// the face of <c>target</c> (a paper or the folder lying on the desk) is
+    /// hidden by anything else drawn opaque (DropPicture.Covered: rays from
+    /// the camera against the meshes as drawn, not the keep-outs). The drop op
+    /// asserts the same after each drop; this op serves a drag step.
+    /// </summary>
+    private static IEnumerator CoveredOp(QaRunner runner, QaStep step)
+    {
+        yield return null;
+        string name = QaRunner.Safe(string.IsNullOrEmpty(step.name) ? "thing" : step.name);
+        GameObject go = string.IsNullOrEmpty(step.target) ? null : QaGame.GameObjectAt(step.target);
+        runner.AssertCovered("covered." + name, go, (step.f > 0f ? step.f : 0.5f) / 100f);
     }
 
     /// <summary>
