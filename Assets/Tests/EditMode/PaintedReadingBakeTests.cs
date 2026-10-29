@@ -7,13 +7,14 @@ using NUnit.Framework;
 
 /// <summary>
 /// DESK-01 (Saleh's playtest of 2026-10-28, point 3: "textures are terrible
-/// when you go overhead, visual glitches everywhere"): bake v4 of the
-/// painted desk (E:\unity\NOPE-tools\design\desk\pipeline\export\v4). A
-/// painted plate of the reading view repaints what the office painting
-/// never saw or saw at a graze, the shell's level faces get their own 4096
-/// texture (DeskShellTop, the shell's second material slot), the mat goes
-/// to 4096, the scanner, chip reader, stamp rack and PC to 2048, and two
-/// level strips close the mat's side gaps (DESK-02). These checks read the
+/// when you go overhead, visual glitches everywhere"): bake v5 of the
+/// painted desk (E:\unity\NOPE-tools\design\desk\pipeline\export\v5,
+/// round 2). Painted plates of the reading views (16:9, 5:4, 21:9) repaint
+/// only what no office camera sees and the audit's faults; every other
+/// texel keeps v3's paint, at v3's size, so the office view does not
+/// change. The shell's level faces keep their own 4096 texture
+/// (DeskShellTop, the shell's second material slot), and two level strips
+/// close the mat's side gaps (DESK-02). These checks read the
 /// installed data, the importer, the material and the prefab as text (the
 /// house runner runs them outside Unity). Each fails when its part is
 /// reverted.
@@ -76,9 +77,10 @@ public class PaintedReadingBakeTests
     {
         var sizes = new Dictionary<string, int>
         {
-            ["Desk_Mat_Paint"] = 4096, ["DeskShellTop_Paint"] = 4096, ["DeskShell_Paint"] = 4096,
-            ["Desk_Scanner_Paint"] = 2048, ["Desk_ChipReader_Paint"] = 2048, ["Desk_StampRack_Paint"] = 2048, ["Desk_PC_Paint"] = 2048,
-            ["Desk_Detain_Paint"] = 512, ["Desk_GlassesStand_Paint"] = 256,
+            // round 2: v3's sizes (an upsampled v3 texel samples otherwise through the office view's mips), but the new DeskShellTop
+            ["Desk_Mat_Paint"] = 2048, ["DeskShellTop_Paint"] = 4096, ["DeskShell_Paint"] = 4096,
+            ["Desk_Scanner_Paint"] = 1024, ["Desk_ChipReader_Paint"] = 1024, ["Desk_StampRack_Paint"] = 1024, ["Desk_PC_Paint"] = 1024,
+            ["Desk_Detain_Paint"] = 256, ["Desk_GlassesStand_Paint"] = 128,
         };
         foreach (KeyValuePair<string, int> kv in sizes)
         {
@@ -105,7 +107,10 @@ public class PaintedReadingBakeTests
     public void OnThePaintedDesk_TheCountersStrip_LiesUnderTheMat_OverTheWellFloor()
     {
         const float Pad = 1.075f;   // the painted desk's pad (the importer's log: "the pad at 1.0750 m"), the mat's top
+        const float GapStrips = 1.0688f;   // the shell's level strips in the gaps beside the mat (bake v4, DESK-02)
         Assert.Less(DeskPaintedMap.CounterStripLift, 0f, "under the pad");
+        Assert.Less(Pad + DeskPaintedMap.CounterStripLift, GapStrips - 0.001f,
+            "under the gap strips: at 1.072 m its right end showed in the gap beside the mat as a blue block (DESK-01 round 2)");
         Assert.Greater(Pad + DeskPaintedMap.CounterStripLift, DeskPaintedMap.WellFloorY, "over the well floor");
         string binder = Read("Assets/Scripts/Office/OfficeSceneBinder.cs");
         StringAssert.Contains("counter.Bind(_office.transform.forward, DeskPaintedMap.CounterStripLift);", binder, "the binder sinks it on the painted desk");
