@@ -69,7 +69,13 @@ public sealed class DeskCounter : MonoBehaviour
     public Transform Strip => zone != null ? zone.transform : transform;
 
     /// <summary>Lays the counter along the office view's level <paramref name="levelForward"/> (the office binder, once the desk and the reading view are placed).</summary>
-    public void Bind(Vector3 levelForward)
+    public void Bind(Vector3 levelForward) => Bind(levelForward, ZoneLift);
+
+    /// <summary>
+    /// Lays the counter as <see cref="Bind(Vector3)"/> does, its strip and label <paramref name="lift"/> metres over the desk
+    /// plane (ZoneLift; the painted desk passes DeskPaintedMap.CounterStripLift, under its mat: DESK-04).
+    /// </summary>
+    public void Bind(Vector3 levelForward, float lift)
     {
         Vector3 forward = Vector3.ProjectOnPlane(levelForward, Vector3.up);
         if (forward.sqrMagnitude < 1e-6f)
@@ -79,7 +85,7 @@ public sealed class DeskCounter : MonoBehaviour
         if (zone == null || !Edges(out float far, out float left, out float right, out float middle))
             return;
         float depth = config.counterDepth;
-        Vector3 centre = surface.transform.position + _right * middle + _forward * (far - depth / 2f) + Vector3.up * ZoneLift;
+        Vector3 centre = surface.transform.position + _right * middle + _forward * (far - depth / 2f) + Vector3.up * lift;
         zone.transform.SetPositionAndRotation(centre, Quaternion.LookRotation(_forward, Vector3.up));
         if (strip != null)
             strip.transform.localScale = new Vector3(2f * Mathf.Min(middle - left, right - middle), depth, 1f);

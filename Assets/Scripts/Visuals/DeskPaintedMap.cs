@@ -249,6 +249,15 @@ public static class DeskPaintedMap
     public const float WellFloorY = 1.05f;
 
     /// <summary>
+    /// How far the counter's strip and label lie over the desk plane on the painted desk (metres; DeskCounter.Bind): 3 mm under
+    /// it, so under the mat's top (the pad) and over the well floor (WellFloorY). DESK-04 (the audit of 2026-10-28): at the
+    /// classic lift (+0.4 mm) the strip stood under the painted counter strip (1.081 m) everywhere but in front of its bevel's
+    /// foot, where it drew a 2 px slate-blue hairline along the paper slot across the reading view. Its hand-back cue never showed
+    /// on the painted desk (the painted strip covered it); the counter's zone, spots and drops do not read its height.
+    /// </summary>
+    public const float CounterStripLift = -0.003f;
+
+    /// <summary>
     /// Where the painted desk's back step begins (metres away from the chair in the desk's frame): desk_layout_v3.json's
     /// "desk" ends and its "step" (y 0.55 to 1.0, 7 cm high) begins there; the counter row (DETAIN, the AVAILABLE sign, the
     /// deal tray, the bell, the glasses) stands on it. A thing resting on the desk lies short of it, because the step's
