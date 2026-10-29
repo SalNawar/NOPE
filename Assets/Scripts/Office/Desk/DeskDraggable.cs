@@ -93,7 +93,10 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// rest (DeskController.PaperBound, FolderBound; FOLD-01 round 2, the
     /// verifier's F3: Papers, Please keeps a held paper on the desk, so a
     /// release never slides after). The pointer goes on; the object stops at
-    /// the edge and follows again as the pointer comes back.
+    /// the edge and follows again as the pointer comes back. A paper is kept
+    /// there only once it has lain wholly there in this drag (FOLD-01 round
+    /// 3): one pulled from the counter follows the pointer one to one onto the
+    /// desk and is never held back at the back step's lip on its way.
     /// </summary>
     public Func<Vector3, Vector3> Bound { get; set; }
 
@@ -122,7 +125,20 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
             proxy.enabled = raycastable;
     }
 
-    /// <summary>Records the pick-up position and the grab offset (with an anchor, the offset from the anchor to the object's origin: the anchor goes over the pointer), turns the proxy off and holds it in the desk's hold registry (the left button only; another hold is let go first).</summary>
+    /// <summary>
+    /// Records the pick-up position and the grab offset (with an anchor, the
+    /// offset from the anchor to the object's origin: the anchor goes over the
+    /// pointer), turns the proxy off and holds it in the desk's hold registry
+    /// (the left button only; another hold is let go first). The grab offset
+    /// is taken where the button went down (the press's point on the desk),
+    /// not where the drag begins: the EventSystem begins a drag only once the
+    /// pointer has moved past its drag threshold, and an offset taken there
+    /// kept the held point that far from the pointer for the whole drag
+    /// (FOLD-01 round 3: in the office view about 9 cm on the desk at the
+    /// counter, and GrabScale grows it with a paper's size, so a passport
+    /// pulled from the counter hung 19 cm past the pointer). Papers, Please:
+    /// the point pressed stays under the pointer.
+    /// </summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left)
@@ -135,7 +151,7 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         _pointer = eventData.position;
         if (_surface != null && _anchor != null)
             _grabOffset = Vector3.ProjectOnPlane(transform.position - _anchor.position, _surface.transform.up);
-        else if (_surface != null && _surface.TryProject(_camera, _pointer, out Vector3 point))
+        else if (_surface != null && _surface.TryProject(_camera, eventData.pressPosition, out Vector3 point))
             _grabOffset = Vector3.ProjectOnPlane(transform.position - point, _surface.transform.up);
         if (proxy != null)
             proxy.enabled = false;

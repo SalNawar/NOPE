@@ -325,15 +325,28 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>Raised on a left-click while the paper takes input: the paper and, in inspect mode, the box under the pointer (-1: none, or not inspecting).</summary>
     public event Action<DeskDocument, int> Clicked;
 
-    /// <summary>The paper is drawn again every time its drag moves it (after the move: the held paper's place toward the camera follows the root that frame).</summary>
+    /// <summary>The paper is drawn again every time its drag moves it (after the move: the held paper's place toward the camera follows the root that frame), and a pick-up takes note of its size (Grabbed).</summary>
     private void Awake()
     {
         if (drag != null)
+        {
             drag.Dragged += Followed;
+            drag.DragBegan += Grabbed;
+        }
     }
 
     /// <summary>Its drag moved it: drawn again where it now is.</summary>
     private void Followed(DeskDraggable dragged, Vector3 point) => ShowFeel();
+
+    /// <summary>
+    /// Its drag began: the size it was grabbed at, which the grab offset grows
+    /// from (DeskDraggable.GrabScale). Taken when the drag begins, before the
+    /// desk sizes it for the zone under the pointer: Feel, in the next Update,
+    /// took it after the size's first eased step, so a paper pulled from the
+    /// counter grew its grab offset by 2.1 times while it grew 3.4 times, and
+    /// the held point slid 4 cm off the pointer (FOLD-01 round 3).
+    /// </summary>
+    private void Grabbed(DeskDraggable dragged) => _sizeAtGrab = _sizeNow;
 
     /// <summary>Each frame: its feel, the ease of a change of size (the grab offset growing with it while held), and the carry along a way (its done callback on landing).</summary>
     private void Update()
@@ -346,7 +359,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
             _sizeNow = eased >= 1f ? _sizeTarget : Mathf.LerpUnclamped(_sizeFrom, _sizeTarget, UiMotion.Ease(eased, UiMotion.Knobs.deskMoveFeel, seconds));
             _feelDirty = true;
         }
-        Feel(Time.unscaledDeltaTime); // a pick-up takes note of its size first
+        Feel(Time.unscaledDeltaTime);
         if (drag != null && drag.IsDragging)
             drag.GrabScale = PaperSizes.GrabRatio(_sizeAtGrab, _sizeNow);
         _carry.Step(transform, Time.deltaTime);
@@ -358,7 +371,10 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     private void OnDestroy()
     {
         if (drag != null)
+        {
             drag.Dragged -= Followed;
+            drag.DragBegan -= Grabbed;
+        }
         foreach (MeshFilter filter in new[] { fills, lines })
             if (filter != null && filter.sharedMesh != null)
                 Destroy(filter.sharedMesh);
@@ -755,10 +771,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         MotionAmount amount = UiMotion.Amount;
         bool picked = dragged && !_wasDragged, dropped = !dragged && _wasDragged;
         if (picked)
-        {
-            _sizeAtGrab = _sizeNow;
-            _lastPosition = position;
-        }
+            _lastPosition = position; // its size at the grab: Grabbed
         if (dragged)
         {
             Vector3 held = transform.InverseTransformDirection(-drag.GrabOffset);

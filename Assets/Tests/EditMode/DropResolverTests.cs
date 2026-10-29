@@ -333,4 +333,40 @@ public class DropResolverTests
         (float ox, _) = DropResolver.Rest(paper, area, Day1Standing().GetRange(0, 13));
         Assert.Less(ox - w / 2f, podsRight - 0.05f, "kept clear of the intercom's home alone, its left part lay under the frame");
     }
+
+    [Test]
+    public void APaperPulledFromTheCounter_FollowsThePointerOverTheLip_TheBoundHoldsItOnlyOnceItLiesWhollyOnTheDesk()
+    {
+        // FOLD-01 round 3 (cam_views' day 12; the round 2 verifier's O3): the pointer has just crossed the counter's edge, 8 cm in
+        // front of the back step's lip, so the paper, now at its desk size, still lies over the back step. Round 2's bound held its
+        // top at the lip for 9 to 10 frames while the pointer moved on. Papers, Please: it follows the pointer one to one.
+        const float w = 0.26f, h = 0.18f, x = -0.2f;
+        DeskRect area = DropResolver.Area(new DeskRect(0f, 0f, 1.9925f + w, 1.015f + h), BackStep, ViewCorners);
+        float start = BackStep - 0.08f;
+        (_, float oldY) = DropResolver.Inside(new DeskRect(x, start, w, h), area);
+        Assert.Less(oldY, start - 0.005f, "round 2's bound (Inside from the first frame) held it back at the lip");
+
+        bool holding = false;
+        int heldFrom = -1;
+        float y = start;
+        for (int frame = 0; frame < 8; frame++, y -= 0.02f)
+        {
+            (float px, float py, bool now) = DropResolver.Held(new DeskRect(x, y, w, h), area, holding);
+            Assert.AreEqual(x, px, Eps, $"frame {frame}: where the pointer takes it");
+            Assert.AreEqual(y, py, Eps, $"frame {frame}: never held back while it leaves the counter");
+            if (now && !holding)
+                heldFrom = frame;
+            holding = now;
+        }
+        Assert.AreEqual(1, heldFrom, "the bound holds it from the frame its top is in front of the lip (y 0.44 + 0.09 < 0.54)");
+
+        // Held from then on: dragged back toward the counter, its top stops at the lip (round 2's F3 stays).
+        (_, float backY, bool still) = DropResolver.Held(new DeskRect(x, BackStep, w, h), area, true);
+        Assert.IsTrue(still);
+        Assert.AreEqual(BackStep - h / 2f, backY, Eps, "its top at the lip");
+
+        // A paper picked up wholly on the desk is held from its first frame.
+        (_, _, bool atOnce) = DropResolver.Held(new DeskRect(0f, 0f, w, h), area, false);
+        Assert.IsTrue(atOnce, "a desk paper: the bound holds it at once");
+    }
 }

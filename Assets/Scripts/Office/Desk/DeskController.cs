@@ -369,15 +369,19 @@ public sealed class DeskController : MonoBehaviour
 
     /// <summary>
     /// Where a held paper's root may go (its drag's Bound; F3): its footprint
-    /// at the size it shows now wholly inside the area it may rest in for its
-    /// zone (RestArea), as FolderBound. Allocates nothing.
+    /// at the size it rests at in its zone wholly inside the area it may rest
+    /// in (RestArea), as FolderBound, but only once it has lain wholly there
+    /// in this drag and zone (DropResolver.Held; FOLD-01 round 3): a paper
+    /// pulled from the counter follows the pointer one to one onto the desk,
+    /// never held back at the back step's lip while it leaves the counter
+    /// (Papers, Please). Allocates nothing.
     /// </summary>
     private Vector3 PaperBound(DeskDocument paper, Vector3 at)
     {
         if (config == null || surface == null || paper == null)
             return at;
         paper.RestCorners(new Vector3(at.x, surface.transform.position.y, at.z), _boundCorners);
-        return Inward(RestRect(_boundCorners, 4), at, paper.Zone == DeskZone.Desk);
+        return Inward(RestRect(_boundCorners, 4), at, paper.Zone == DeskZone.Desk, true);
     }
 
     /// <summary>PaperBound's buffer (a paper's four corners).</summary>
@@ -386,20 +390,28 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>
     /// <paramref name="at"/> moved the least so that <paramref name="footprint"/>
     /// (the rest's frame, with its root at <paramref name="at"/>) lies wholly
-    /// inside the area it may rest in (RestArea). The area is taken at each
-    /// pick-up and again only when the held thing's size or zone changes (at
-    /// the counter's edge), so a drag frame allocates nothing.
+    /// inside the area it may rest in (RestArea). With
+    /// <paramref name="onceInside"/> (a paper) it is not moved until it has
+    /// lain wholly inside in this drag and zone (DropResolver.Held). The area
+    /// is taken at each pick-up and again only when the held thing's size or
+    /// zone changes (at the counter's edge), so a drag frame allocates nothing.
     /// </summary>
-    private Vector3 Inward(DeskRect footprint, Vector3 at, bool onDesk)
+    private Vector3 Inward(DeskRect footprint, Vector3 at, bool onDesk, bool onceInside = false)
     {
         if (!_heldAreaSet || onDesk != _heldAreaOnDesk || Mathf.Abs(footprint.Width - _heldAreaSize.x) > 1e-4f || Mathf.Abs(footprint.Height - _heldAreaSize.y) > 1e-4f)
         {
+            if (!_heldAreaSet || onDesk != _heldAreaOnDesk)
+                _heldHolding = false; // a pick-up, or the counter's edge crossed: free until it lies wholly where it may rest
             _heldArea = RestArea(footprint, onDesk);
             _heldAreaSet = true;
             _heldAreaOnDesk = onDesk;
             _heldAreaSize = new Vector2(footprint.Width, footprint.Height);
         }
-        (float x, float y) = DropResolver.Inside(footprint, _heldArea);
+        float x, y;
+        if (onceInside)
+            (x, y, _heldHolding) = DropResolver.Held(footprint, _heldArea, _heldHolding);
+        else
+            (x, y) = DropResolver.Inside(footprint, _heldArea);
         if (Mathf.Approximately(x, footprint.CentreX) && Mathf.Approximately(y, footprint.CentreY))
             return at;
         return at + RestRight * (x - footprint.CentreX) + RestForward * (y - footprint.CentreY);
@@ -409,6 +421,9 @@ public sealed class DeskController : MonoBehaviour
     private DeskRect _heldArea;
     private bool _heldAreaSet, _heldAreaOnDesk;
     private Vector2 _heldAreaSize;
+
+    /// <summary>True once the held paper has lain wholly in its area in this drag and zone: the bound holds it there from then on (DropResolver.Held).</summary>
+    private bool _heldHolding;
 
     /// <summary>The rectangle enclosing the first <paramref name="count"/> of <paramref name="corners"/> in the rest's frame (InViewFrame's measure; allocates nothing).</summary>
     private DeskRect RestRect(Vector3[] corners, int count)

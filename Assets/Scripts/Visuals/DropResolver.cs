@@ -137,6 +137,28 @@ public static class DropResolver
     public static (float x, float y) Inside(DeskRect paper, DeskRect area) =>
         (Axis(paper.CentreX, paper.Width, area.CentreX, area.Width), Axis(paper.CentreY, paper.Height, area.CentreY, area.Height));
 
+    /// <summary>
+    /// A held paper's bound (the drag's Bound; FOLD-01 round 3, Papers,
+    /// Please: a paper pressed on the counter follows the pointer one to one
+    /// onto the desk): where <paramref name="held"/>'s centre goes, and
+    /// whether the bound holds it from now on. Until it has lain wholly inside
+    /// <paramref name="area"/> in this drag and zone (<paramref name="holding"/>
+    /// false), it goes where the pointer takes it: a paper pulled from the
+    /// counter is never held back at the back step's lip while it leaves the
+    /// counter (round 2 held it there for 9 to 10 frames while the pointer
+    /// moved on). Once it has lain wholly inside, the bound keeps it there
+    /// (<see cref="Inside"/>, the least move inward), so a release never
+    /// slides after (FOLD-01 round 2, F3).
+    /// </summary>
+    public static (float x, float y, bool holding) Held(DeskRect held, DeskRect area, bool holding)
+    {
+        (float x, float y) = Inside(held, area);
+        if (holding)
+            return (x, y, true);
+        bool inside = Math.Abs(x - held.CentreX) < 1e-6f && Math.Abs(y - held.CentreY) < 1e-6f;
+        return inside ? (x, y, true) : (held.CentreX, held.CentreY, false);
+    }
+
     /// <summary>The total area <paramref name="at"/> shares with the keep-outs (square metres; 0 when clear or with none).</summary>
     public static float Overlap(DeskRect at, IReadOnlyList<DeskRect> keepOut)
     {
