@@ -130,7 +130,7 @@ public class PaintedReadingBakeTests
 
         ContentNode shell = ContentJson.Parse(Read(Art + "Data/anchors.json")).Get("objects").Get(DeskPaintedMap.Shell);
         Assert.IsNull(shell.Get("texture_slots"), "v3's shell: one material slot");
-        Assert.AreEqual("3836", shell.Get("tris").Text, "v3's 3836 triangles (no gap strips in the shell)");
+        Assert.AreEqual("5285", shell.Get("tris").Text, "v3's anchors.json (bake v4's shell had 3840: its n-gons triangulated, the gap strips added)");
         Assert.IsFalse(File.Exists(Path.Combine(Root(), Art + "Materials/DeskPainted_ShellTop.mat")), "no second shell material");
     }
 
