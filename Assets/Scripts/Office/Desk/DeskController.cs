@@ -112,6 +112,9 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>True while the rulebook is dragged (it lifts above the stack).</summary>
     private bool _rulebookDragged;
 
+    /// <summary>Whether the rulebook's lift was last set for a drag (ApplyStack: a change eases its lift).</summary>
+    private bool _rulebookLiftDragged;
+
     /// <summary>The case's papers by index (null until handed over).</summary>
     private readonly List<DeskDocument> _papers = new List<DeskDocument>();
 
@@ -1540,7 +1543,12 @@ public sealed class DeskController : MonoBehaviour
             }
         }
         if (rulebook != null)
-            rulebook.SetLift(_rulebookDragged ? top + rulebook.Thickness + config.dragLift : LiftOf(RulebookId, lifts));
+        {
+            // Its drag's lift goes on at the pick-up and off at the drop eased (DeskLiftEase: FOLD-01 round 2, F2), a reorder at once.
+            bool picked = _rulebookDragged != _rulebookLiftDragged;
+            _rulebookLiftDragged = _rulebookDragged;
+            rulebook.SetLift(_rulebookDragged ? top + rulebook.Thickness + config.dragLift : LiftOf(RulebookId, lifts), picked);
+        }
     }
 
     /// <summary>The thicknesses of the stack, bottom first (reused).</summary>

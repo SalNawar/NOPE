@@ -25,15 +25,59 @@ public sealed partial class DeskRulebook
             transform.SetPositionAndRotation(at, rotation);
     }
 
-    /// <summary>Lifts the booklet <paramref name="height"/> metres off the desk plane (its place in the papers' stack, or the drag's lift: DeskController).</summary>
-    public void SetLift(float height)
+    /// <summary>
+    /// Lifts the booklet <paramref name="height"/> metres off the desk plane
+    /// (its place in the papers' stack, or the drag's lift: DeskController).
+    /// With <paramref name="eased"/> (the drag's lift going on at the pick-up
+    /// or off at the drop) it moves there from where it shows on
+    /// DeskLiftEase, so its picture never jumps (FOLD-01 round 2, the
+    /// verifier's F2: set at once, every release dropped the picture 8 to
+    /// 11 px in one frame). Else at once (a reorder of the stack), unless an
+    /// ease runs: that ease goes on to the new height. At once too under
+    /// Reduced Motion.
+    /// </summary>
+    public void SetLift(float height, bool eased = false)
     {
-        _height = height;
+        if (eased && _liftPlaced && !UiMotion.Amount.Still && !Mathf.Approximately(height, _height))
+        {
+            _liftFrom = _height;
+            _liftTo = height;
+            _liftElapsed = 0f;
+            _lifting = true;
+            return;
+        }
+        if (_lifting && !eased)
+        {
+            _liftTo = height;
+            return;
+        }
+        _liftPlaced = true;
+        _lifting = false;
+        _height = _liftTo = height;
         ShowMotion();
     }
 
-    /// <summary>The booklet's height in the stack (SetLift).</summary>
+    /// <summary>The booklet's height in the stack as it shows (SetLift).</summary>
     private float _height;
+
+    /// <summary>The lift's ease (SetLift, StepLift): from where, to where, how far along, whether it runs, and whether a lift was ever set (the first is set at once).</summary>
+    private float _liftFrom, _liftTo, _liftElapsed;
+    private bool _lifting, _liftPlaced;
+
+    /// <summary>Steps the lift's ease (Update, on the carry's clock); true while it moves.</summary>
+    private bool StepLift(float dt)
+    {
+        if (!_lifting)
+            return false;
+        _liftElapsed += dt;
+        _height = DeskLiftEase.At(_liftFrom, _liftTo, _liftElapsed);
+        if (_liftElapsed >= DeskLiftEase.Seconds)
+        {
+            _height = _liftTo;
+            _lifting = false;
+        }
+        return true;
+    }
 
     /// <summary>Its hop when dropped.</summary>
     private Spring _hop;
@@ -117,7 +161,8 @@ public sealed partial class DeskRulebook
         }
         _carry.Step(transform, Time.deltaTime);
         bool sizing = StepPocket(Time.deltaTime); // on the carry's clock: in or out of the pocket the size and the way end together
-        if (_physics.Moving || !_hop.AtRest || held || _heldRatio < 1f || sizing)
+        bool lifting = StepLift(Time.deltaTime);
+        if (_physics.Moving || !_hop.AtRest || held || _heldRatio < 1f || sizing || lifting)
             ShowMotion();
     }
 

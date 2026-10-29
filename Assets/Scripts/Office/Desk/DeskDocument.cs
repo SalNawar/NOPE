@@ -305,7 +305,10 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     public PaperKind Kind => _kind;
 
     /// <summary>Where the paper's way starts from: its root where it shows now, lifted by how far it is still held up over its place (a dropped paper is carried from where it hangs).</summary>
-    public Vector3 CarriedFrom => transform.position + Vector3.up * Mathf.Max(0f, _lift.Value - _lift.Target);
+    public Vector3 CarriedFrom => transform.position + Vector3.up * Mathf.Max(0f, _lift.Value - LiftPlace);
+
+    /// <summary>Where the lift is going: the set-down's end while it eases (SetLift), else the spring's target.</summary>
+    private float LiftPlace => _lowering ? _lowerTo : _lift.Target;
 
     /// <summary>The zone the paper is sized for (DeskController sets it as it lies, and as a held paper's pointer crosses the counter's edge).</summary>
     public DeskZone Zone { get; private set; }
@@ -701,14 +704,33 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         if (!_liftPlaced || instant || UiMotion.Amount.Still)
         {
             _liftPlaced = true;
+            _lowering = false;
             _lift.Snap(height);
             _settling = false;
             ShowFeel();
             return;
         }
+        if (_lowering && Mathf.Approximately(height, _lowerTo))
+            return; // already coming down there
         _settling = height < _lift.Target; // set down: its spring never sinks it below its place (the paper under it, the desk)
+        if (_settling)
+        {
+            // Set down: its spring's target comes down on DeskLiftEase from where it shows, so the frame of the release moves its
+            // picture under a pixel (FOLD-01 round 2, the verifier's F2; DOC-HANDLE: "≤1 px" at the release frame); the spring follows.
+            _lowerFrom = Mathf.Max(_lift.Value, height);
+            _lowerTo = height;
+            _lowerElapsed = 0f;
+            _lowering = true;
+            _lift.Target = _lowerFrom;
+            return;
+        }
+        _lowering = false;
         _lift.Target = height;
     }
+
+    /// <summary>The set-down's ease of the lift's target (SetLift, Feel): from where, to where, how far along, whether it runs.</summary>
+    private float _lowerFrom, _lowerTo, _lowerElapsed;
+    private bool _lowering;
 
     /// <summary>
     /// The paper's feel (Saleh 2026-10-07: every touch reads as physical): a
@@ -765,7 +787,14 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         else
             _tiltX.Target = _tiltZ.Target = 0f;
         _lastPosition = position;
-        bool resting = _lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && !_physics.Moving;
+        if (_lowering)
+        {
+            _lowerElapsed += dt;
+            _lift.Target = DeskLiftEase.At(_lowerFrom, _lowerTo, _lowerElapsed);
+            if (_lowerElapsed >= DeskLiftEase.Seconds)
+                _lowering = false;
+        }
+        bool resting = _lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && !_physics.Moving && !_lowering;
         if (resting && !dragged && !_feelDirty && _shownRatio == 1f)
         {
             if (bent)
@@ -801,9 +830,11 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         float lift = _settling ? Mathf.Max(_lift.Value, _lift.Target) : _lift.Value;
         float half = _sizeNow / 2f;
         lift += PaperLayers.TiltDrop(Size.x * half, Size.y * half, _tiltX.Value, _tiltZ.Value);
-        // a bend's drooping ends never pass through what lies under the paper (a held one has its drag's lift of room)
+        // a bend's drooping ends never pass through what lies under the paper (a held one has its drag's lift of room; one just
+        // let go, as much as its lift still stands over its place, so the release's frame does not lift a drooping paper at once:
+        // FOLD-01 round 2, F2)
         bool held = drag != null && drag.IsDragging;
-        float room = held && _config != null ? _config.dragLift : 0f;
+        float room = held ? (_config != null ? _config.dragLift : 0f) : Mathf.Max(0f, _lift.Value - LiftPlace);
         lift += Mathf.Max(0f, _bend.Lowest(Size.x, Size.y) - room);
         (float ox, float oz) = PaperPhysics.PivotOffset(_pivot.x, _pivot.y, _physics.Yaw);
         Vector3 local = new Vector3(ox + _physics.ShakeX, lift, oz);
@@ -865,6 +896,11 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// </summary>
     public void Carry(IReadOnlyList<Vector3> way, Quaternion facing, float seconds, Action done, Action cut = null)
     {
+        if (_lowering)
+        {
+            _lift.Target = _lowerTo;
+            _lowering = false;
+        }
         float raised = Mathf.Max(0f, _lift.Value - _lift.Target);
         if (raised > 0f)
         {
