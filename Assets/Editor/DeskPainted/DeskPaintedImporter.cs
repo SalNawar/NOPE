@@ -75,7 +75,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     private const float PivotTolerance = 0.001f;
 
     /// <summary>Bumped when the import settings change, so Unity imports the folder again.</summary>
-    public override uint GetVersion() => 5;
+    public override uint GetVersion() => 4;
 
     private void OnPreprocessTexture()
     {
@@ -97,7 +97,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         importer.anisoLevel = 16;
         // Round 12 (the concept-vs-game review, item 10: the mat and the desk read softer than the painting): the two big static
         // surfaces, seen 3 to 6 texels to a screen pixel, keep more of their line work with Kaiser mips and a -0.5 bias.
-        bool sharp = name == "Desk_Mat_Paint" || name == "DeskShell_Paint" || name == "DeskShellTop_Paint";
+        bool sharp = name == "Desk_Mat_Paint" || name == "DeskShell_Paint";
         importer.mipmapFilter = sharp ? TextureImporterMipFilter.KaiserFilter : TextureImporterMipFilter.BoxFilter;
         importer.mipMapBias = sharp ? -0.5f : 0f;
         importer.maxTextureSize = 4096;
@@ -346,16 +346,9 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         mesh.localScale = source.lossyScale;
 
         Material material = MaterialFor(source.name, anchors, materials);
-        Material[] slots = SlotMaterialsFor(source.name, anchors, materials);
         foreach (Renderer r in mesh.GetComponentsInChildren<Renderer>(true))
         {
-            if (slots != null && r.transform == mesh)
-            {
-                if (r.sharedMaterials.Length != slots.Length)
-                    throw new System.InvalidOperationException($"[DeskPainted] {source.name} has {r.sharedMaterials.Length} material slots; anchors.json's texture_slots names {slots.Length}.");
-                r.sharedMaterials = slots;
-            }
-            else if (material != null)
+            if (material != null)
                 r.sharedMaterials = Enumerable.Repeat(material, Mathf.Max(1, r.sharedMaterials.Length)).ToArray();
             // Round 12: nothing painted casts (the paint holds every object's shadow; the hall's daylight cast them the wrong way). DeskPainted.CastNoShadows does the same at install.
             r.shadowCastingMode = ShadowCastingMode.Off;
@@ -396,30 +389,6 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         box.size = b.size + Vector3.one * (2f * ClickPad);
     }
 
-    /// <summary>The paint of the shell's level faces in the reading frames (bake v4, DESK-01): DeskShell's second material slot.</summary>
-    public const string DeskShellTop = "DeskShellTop";
-
-    /// <summary>
-    /// One material per slot of the bake's <paramref name="name"/> when
-    /// anchors.json lists its slots' textures (texture_slots; bake v4: the
-    /// shell's slot 1 is DeskShellTop, its level faces in the reading frames
-    /// at 1177 texels a metre), else null (every slot takes MaterialFor's).
-    /// </summary>
-    private static Material[] SlotMaterialsFor(string name, ContentNode anchors, Dictionary<string, Material> materials)
-    {
-        ContentNode list = Entry(anchors, name)?.Get("texture_slots");
-        if (list == null || list.Items.Count == 0)
-            return null;
-        var slots = new Material[list.Items.Count];
-        for (int i = 0; i < slots.Length; i++)
-        {
-            string key = Path.GetFileNameWithoutExtension(list.Items[i].Text);
-            if (!materials.TryGetValue(key, out slots[i]))
-                throw new FileNotFoundException($"[DeskPainted] {name}'s slot {i} needs {key}.png, which did not import.");
-        }
-        return slots;
-    }
-
     /// <summary>The material of the bake's <paramref name="name"/>: its texture's (anchors.json; DeskShell and DeskMat their own, the glass the sheen's, the booth's walls and frame Desk_Booth's, its bars their own Desk_BoothBars).</summary>
     private static Material MaterialFor(string name, ContentNode anchors, Dictionary<string, Material> materials)
     {
@@ -446,7 +415,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
             var mask = AssetDatabase.LoadAssetAtPath<Texture2D>($"{TextureFolder}/{baseName}_Mask.png");
             if (paint == null)
                 throw new FileNotFoundException($"[DeskPainted] {path} did not import.");
-            string materialName = baseName == "DeskShell" ? "DeskPainted_Shell" : baseName == DeskShellTop ? "DeskPainted_ShellTop" : baseName == "Desk_Mat" ? "DeskPainted_Mat" : baseName;
+            string materialName = baseName == "DeskShell" ? "DeskPainted_Shell" : baseName == "Desk_Mat" ? "DeskPainted_Mat" : baseName;
             bool locked = baseName == "Desk_BabelHome" || baseName == "Desk_RolodexHome" || baseName == "Desk_CardsHome";
             made[key] = EnsureMaterial(materialName, PaintedShader, m =>
             {

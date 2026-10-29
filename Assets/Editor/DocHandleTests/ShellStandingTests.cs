@@ -121,10 +121,7 @@ public class ShellStandingTests
         for (int k = 0; k <= n; k++)
         {
             Vector3 p = Vector3.Lerp(a, b, k / (float)n);
-            // An edge lying on a cell's boundary belongs to the cell past it (2.5 um of grace): the back step's lip runs exactly
-            // along y = BackStep, and float rounding of the imported mesh (0.539999 or 0.540001, DESK-01's bake v4 bakes the
-            // shell in the DeskFrame where v3 kept it turned) must not move it into the row before the step.
-            int i = Mathf.FloorToInt((p.x - X0) / Cell + 1e-3f), j = Mathf.FloorToInt((p.z - Y0) / Cell + 1e-3f);
+            int i = Mathf.FloorToInt((p.x - X0) / Cell), j = Mathf.FloorToInt((p.z - Y0) / Cell);
             if (i >= 0 && j >= 0 && i < nx && j < ny)
                 Mark(top, nx, i, j, p.y);
         }

@@ -554,15 +554,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
 
         // The counter lies along the desk's far edge in the office view's frame, ending where the desk view shows the desk (Papers, Please's zones).
-        // On the painted desk the strip lies under the mat (DESK-04): at the pad's height it stood under the mat's painted counter strip
-        // (1.081 m) but in front of its bevel's foot, a 2 px slate-blue hairline along the paper slot in the reading view.
         if (counter != null && _office != null)
-        {
-            if (_painted)
-                counter.Bind(_office.transform.forward, DeskPaintedMap.CounterStripLift);
-            else
-                counter.Bind(_office.transform.forward);
-        }
+            counter.Bind(_office.transform.forward);
         // Everything else stands on its home (the desk home map, DeskLayoutSettings): the stamp rack at the back of the rail by the counter, its daters front to back; DETAIN left of the AVAILABLE sign; the machines and the upgrades' objects, each first-day note over its machine; the deal tray right above the mat; the intercom is the art's phone on its home (a stand-in is built when the art has none).
         Transform standIn = null;
         if (_hasFrame)

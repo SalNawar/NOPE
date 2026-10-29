@@ -206,7 +206,7 @@ public class PaintedBoothTests
     {
         string importer = Read(ImporterPath);
         StringAssert.Contains("importer.anisoLevel = 16;", importer, "the importer sets the most anisotropic taps");
-        StringAssert.Contains("public override uint GetVersion() => 5;", importer, "and its version moved, so the folder imports again (5: bake v4, DESK-01)");
+        StringAssert.Contains("public override uint GetVersion() => 4;", importer, "and its version moved, so the folder imports again");
         string[] metas = Directory.GetFiles(Path.Combine(Root(), Art + "Textures"), "*.png.meta");
         Assert.That(metas.Length, Is.GreaterThanOrEqualTo(50), "the painted textures and their masks");
         foreach (string path in metas)
