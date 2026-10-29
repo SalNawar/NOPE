@@ -544,8 +544,13 @@
     0.0
    ],
    "parent": null,
-   "tris": 5285,
-   "texture": "DeskShell_Paint.png"
+   "tris": 3840,
+   "texture": "DeskShell_Paint.png",
+   "texture_slots": [
+    "DeskShell_Paint.png",
+    "DeskShellTop_Paint.png"
+   ],
+   "note_v4": "bake v4 (DESK-01): the shell has two material slots; slot 1 (DeskPainted_ShellTop, DeskShellTop_Paint.png) holds its level faces in the reading frames and the two strips that close the mat's side gaps"
   },
   "DeskMat": {
    "pivot_frame": [
