@@ -200,7 +200,7 @@ The fixer's report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01.md, "Round
 **The fix:**
 - `DeskDraggable.OnBeginDrag` takes the grab offset from the point the press met on the thing (`PressPoint`: the raycaster's hit on its click box), else the press on the desk plane. `GrabHeight` is that point's height over the desk; the drag follows the pointer on the plane at that height (`AtGrabHeight`). The pressed point comes to rest under the pointer.
 - `DeskDocument.Grabbed` (on `DragBegan`) takes the size at the grab, before the desk sizes the paper for the zone under the pointer.
-- `DropResolver.Held`: a paper's bound holds it only once it has lain wholly where it may rest in this drag and zone. Until then it goes where the pointer takes it. The folder's bound is round 2's.
+- `DropResolver.Held`: a paper's bound holds it only once it has lain wholly where it may rest in this drag and zone. Where it lay at the pick-up, or as it crossed the counter's edge, counts (`DeskController.Inward`), so a desk paper is held from its first frame. A paper leaving the counter goes where the pointer takes it until it lies wholly on the desk. The folder's bound is round 2's.
 
 **The rig:**
 - DOC-HANDLE's op `counterDrag` (`Assets/Tests/PlayMode/DocHandle/Rig/CounterDragOps.cs`) asserts `counterDrag.<name>.follow` and `.rest` (8 px at 1080p), scenario `counter_drag` (day 1 office; day 12 reading, office, reading).
