@@ -252,9 +252,28 @@ public static class DeskPaintedMap
     /// Where the painted desk's back step begins (metres away from the chair in the desk's frame): desk_layout_v3.json's
     /// "desk" ends and its "step" (y 0.55 to 1.0, 7 cm high) begins there; the counter row (DETAIN, the AVAILABLE sign, the
     /// deal tray, the bell, the glasses) stands on it. A thing resting on the desk lies short of it, because the step's
-    /// front draws through a paper laid across it (FOLD-01: DeskLayout.TryBackStep, DeskController.RestArea).
+    /// front draws through a paper laid across it (FOLD-01: DeskLayout.TryBackStep, DeskController.RestArea). The step's
+    /// brass lip stands 8 mm in front of it, 5.8 cm over the mat (the bake's DeskShell: raised from y 0.540), so the desk
+    /// ends at the lip (FOLD-01 round 2; ShellStandingTests measures it on the meshes).
     /// </summary>
-    public const float BackStep = 0.55f;
+    public const float BackStep = 0.54f;
+
+    /// <summary>
+    /// What the painted desk's shell draws standing beside the mat, in the desk's frame (metres: x0, y0, x1, y1), with its
+    /// tallest part over the mat (metres): the machine rail on the right (its brass base 6 mm over the mat, the scanner's and
+    /// the chip reader's trays with their slide tracks cut toward the mat, the rims 3 to 5 cm high, the lamps' bezels at its
+    /// left edge and its bolts) and the column of tool pods on the left (the intercom's, the BABEL tuner's, the pocket's and
+    /// the UV torch's frames, 2 to 4.6 cm high). FOLD-01 round 2 (the verifier's F1; Saleh's playtest of 2026-10-28, point
+    /// 4): the rest kept clear of each home's footprint only, so a folder or a paper let go over a tray lay under its rim, a
+    /// lamp's bezel or the intercom's track frame. Measured on the bake's meshes (DeskShell and the lamps: every part more
+    /// than 3.5 mm over the mat, from the view's near edge to the back step); ShellStandingTests checks that the meshes
+    /// still lie inside them. DeskLayout.Standing adds them to every rest's keep-outs while the painted desk shows.
+    /// </summary>
+    public static readonly (string id, float x0, float y0, float x1, float y1, float height)[] ShellStanding =
+    {
+        ("shell.rail", 0.7375f, -0.6025f, 1.45f, BackStep, 0.058f),
+        ("shell.pods", -1.12f, -0.5925f, -0.7325f, 0.4825f, 0.046f),
+    };
 
     /// <summary>
     /// The well floor's two rectangles (world x and z, m: x0, z0, x1, z1). The shell's mat well is wider than the mat (gaps of 1 to

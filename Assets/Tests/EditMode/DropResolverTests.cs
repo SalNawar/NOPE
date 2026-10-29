@@ -162,23 +162,40 @@ public class DropResolverTests
     /// <summary>The desk a folder's centre may reach (the surface's clamp area grown by the folder).</summary>
     private static DeskRect FolderDesk => new DeskRect(0f, 0f, 1.9925f + FolderW, 1.015f + FolderH);
 
-    /// <summary>What stands on the desk on day 1 (DeskLayout.Standing: each object at its own footprint, the painted trays of the machine rail).</summary>
-    private static List<DeskRect> Day1Standing() => new List<DeskRect>
+    /// <summary>The desk's frame (DeskLayout.Frame, the bake's) to the rest's frame: the desk surface's centre lies 0.27375 m right of the art mat's centre (the stamp rack at 0.9625 in the bake, 0.6888 here).</summary>
+    private const float FrameToRest = -0.27375f;
+
+    /// <summary>What stands on the desk on day 1 (DeskLayout.Standing: each object at its own footprint, the painted trays of the machine rail, what the shell draws beside the mat).</summary>
+    private static List<DeskRect> Day1Standing()
     {
-        new DeskRect(-0.6188f, 0.6900f, 0.2300f, 0.1800f), // the AVAILABLE sign
-        new DeskRect(-1.7988f, 0.1500f, 0.6500f, 0.5400f), // the PC
-        new DeskRect(-1.8038f, -0.4000f, 0.6200f, 0.2400f), // the keyboard
-        new DeskRect(-1.4992f, -0.2766f, 0.1938f, 0.4569f), // the PC's mouse
-        new DeskRect(0.6888f, 0.4375f, 0.2950f, 0.2150f), // the stamp rack
-        new DeskRect(-0.8538f, 0.7300f, 0.2000f, 0.2600f), // DETAIN
-        new DeskRect(-0.2738f, 0.9000f, 0.4200f, 0.6000f), // the deal tray
-        new DeskRect(-1.2188f, 0.3500f, 0.2900f, 0.2200f), // the intercom
-        new DeskRect(-1.1138f, 0.7400f, 0.2400f, 0.2400f), // the glasses
-        new DeskRect(0.0763f, 0.7400f, 0.2000f, 0.2000f), // the bell
-        new DeskRect(-1.2188f, -0.1950f, 0.3100f, 0.2100f), // the red book's pocket
-        new DeskRect(0.6963f, -0.4000f, 0.2600f, 0.2600f), // the chip reader's tray
-        new DeskRect(0.7963f, -0.0200f, 0.4600f, 0.2400f), // the scanner's tray
-    };
+        var standing = new List<DeskRect>
+        {
+            new DeskRect(-0.6188f, 0.6900f, 0.2300f, 0.1800f), // the AVAILABLE sign
+            new DeskRect(-1.7988f, 0.1500f, 0.6500f, 0.5400f), // the PC
+            new DeskRect(-1.8038f, -0.4000f, 0.6200f, 0.2400f), // the keyboard
+            new DeskRect(-1.4992f, -0.2766f, 0.1938f, 0.4569f), // the PC's mouse
+            new DeskRect(0.6888f, 0.4375f, 0.2950f, 0.2150f), // the stamp rack
+            new DeskRect(-0.8538f, 0.7300f, 0.2000f, 0.2600f), // DETAIN
+            new DeskRect(-0.2738f, 0.9000f, 0.4200f, 0.6000f), // the deal tray
+            new DeskRect(-1.2188f, 0.3500f, 0.2900f, 0.2200f), // the intercom
+            new DeskRect(-1.1138f, 0.7400f, 0.2400f, 0.2400f), // the glasses
+            new DeskRect(0.0763f, 0.7400f, 0.2000f, 0.2000f), // the bell
+            new DeskRect(-1.2188f, -0.1950f, 0.3100f, 0.2100f), // the red book's pocket
+            new DeskRect(0.6963f, -0.4000f, 0.2600f, 0.2600f), // the chip reader's tray
+            new DeskRect(0.7963f, -0.0200f, 0.4600f, 0.2400f), // the scanner's tray
+        };
+        standing.AddRange(Shell());
+        return standing;
+    }
+
+    /// <summary>What the shell draws beside the mat (DeskPaintedMap.ShellStanding: the machine rail, the tool pods), in the rest's frame.</summary>
+    private static List<DeskRect> Shell()
+    {
+        var shell = new List<DeskRect>();
+        foreach (var (_, x0, y0, x1, y1, _) in DeskPaintedMap.ShellStanding)
+            shell.Add(new DeskRect((x0 + x1) / 2f + FrameToRest, (y0 + y1) / 2f, x1 - x0, y1 - y0));
+        return shell;
+    }
 
     /// <summary>Where the folder let go with its centre at (<paramref name="x"/>, <paramref name="y"/>) rests on day 1's desk.</summary>
     private static (float x, float y) Day1Rest(float x, float y) =>
@@ -281,5 +298,39 @@ public class DropResolverTests
         // With nothing better anywhere it stays where it was let go (moved inside the area only).
         var everything = new List<DeskRect> { new DeskRect(0f, 0f, 1.2f, 0.8f) };
         Assert.AreEqual((-0.3f, 0f), DropResolver.Rest(paper, Area, everything));
+    }
+
+    // ---------------- FOLD-01 round 2 (the verifier's F1): what the shell draws beside the mat ----------------
+
+    [Test]
+    public void LetGoHalfOverTheScannersTray_ItRestsClearOfTheWholeRail_NotUnderTheTraysRim()
+    {
+        // The verifier's a15 (1920x1080, day 1): the folder half over the scanner's tray. Kept clear of the tray's home alone, it
+        // lay 5 to 6 cm under the tray's rim (its track cut toward the mat) and beside a lamp's bezel that drew over it.
+        DeskRect rail = Shell()[0];
+        float railLeft = rail.CentreX - rail.Width / 2f;
+        (float x, float y) = Day1Rest(0.50f, -0.02f);
+        Assert.AreEqual(railLeft - DropResolver.Gap - FolderW / 2f, x, Eps, "just left of the rail: the least move clear of its rims, lamps and bolts");
+        Assert.AreEqual(-0.02f, y, Eps, "no move along the rail");
+        List<DeskRect> homesOnly = Day1Standing().GetRange(0, 13);
+        (float ox, _) = DropResolver.Rest(new DeskRect(0.50f, -0.02f, FolderW, FolderH), DropResolver.Area(FolderDesk, BackStep, ViewCorners), homesOnly);
+        Assert.Greater(ox + FolderW / 2f, railLeft + 0.05f, "kept clear of the tray's home alone, its right edge lay over the rail: under the rim");
+    }
+
+    [Test]
+    public void APaperLetGoOverTheIntercomsTrackFrame_RestsClearOfTheToolPods()
+    {
+        // The verifier's b05 and e21: a passport let go over the intercom rested with its left part under the intercom's track frame
+        // (the intercom's footprint ends 6 cm left of the frame the shell draws round it).
+        const float w = 0.26f, h = 0.18f;
+        DeskRect area = DropResolver.Area(new DeskRect(0f, 0f, 1.9925f + w, 1.015f + h), BackStep, ViewCorners);
+        var paper = new DeskRect(-0.99f, 0.35f, w, h);
+        DeskRect pods = Shell()[1];
+        float podsRight = pods.CentreX + pods.Width / 2f;
+        (float x, float y) = DropResolver.Rest(paper, area, Day1Standing());
+        Assert.AreEqual(podsRight + DropResolver.Gap + w / 2f, x, Eps, "just right of the pods' frames");
+        Assert.AreEqual(0.35f, y, Eps);
+        (float ox, _) = DropResolver.Rest(paper, area, Day1Standing().GetRange(0, 13));
+        Assert.Less(ox - w / 2f, podsRight - 0.05f, "kept clear of the intercom's home alone, its left part lay under the frame");
     }
 }

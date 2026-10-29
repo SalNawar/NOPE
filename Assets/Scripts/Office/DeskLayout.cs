@@ -520,7 +520,10 @@ public static class DeskLayout
     /// height, in the desk's frame; and on the painted desk each machine
     /// rail's tray (the scanner's and the chip reader's homes) even before its
     /// machine is owned: the painting's tray and its brass rim stand there
-    /// from day 1. Each list is cleared first; nothing while unbound.
+    /// from day 1, and what the shell draws standing beside the mat (the
+    /// whole machine rail and the tool pods' column, as measured on the
+    /// bake: DeskPaintedMap.ShellStanding). Each list is cleared first;
+    /// nothing while unbound.
     /// </summary>
     public static void Standing(List<DeskRect> into, List<string> ids, List<float> heights)
     {
@@ -545,6 +548,14 @@ public static class DeskLayout
             into.Add(home.Footprint);
             ids.Add(home.id + ".tray");
             heights.Add(0f);
+        }
+        // What the shell itself draws beside the mat (FOLD-01 round 2): the machine rail with its trays' rims, track cuts,
+        // lamps and bolts, and the tool pods' frames. A home's footprint alone left a thing under a rim.
+        foreach ((string id, float x0, float y0, float x1, float y1, float height) in DeskPaintedMap.ShellStanding)
+        {
+            into.Add(new DeskRect((x0 + x1) / 2f, (y0 + y1) / 2f, x1 - x0, y1 - y0));
+            ids.Add(id);
+            heights.Add(height);
         }
     }
 
