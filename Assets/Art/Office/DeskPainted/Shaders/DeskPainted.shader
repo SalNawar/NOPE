@@ -12,8 +12,16 @@
 // the hour's relight a texel takes), B the locked-home desaturation (scaled by _Locked, set per
 // insert). Without a mask: no glow, the full relight, nothing locked. Hover outlines are
 // HoverHull.shader's; papers are not drawn with this shader.
+// Two texture sets (DESK-01 round 3, the director's decision of 2026-10-29): _BaseMap is the
+// office set (v3's paint, painted through the office camera) and _ReadingMap the reading set
+// (the overhead plates, in the same UVs). The paint is lerp(office, reading, b), where b is
+// _DeskReadingBlend * _Reading: the global follows the Tab tilt (DeskView: 0 in the office
+// pose, 1 in the reading pose; a cut under Reduced Motion, as the camera cuts) and _Reading
+// is 1 on a material that has a reading paint. At b = 0 the reading paint is not sampled, so
+// the office view is v3's exactly. _ReadingOnly (the DESK-02 gap strips) draws a material only
+// in the reading blend: its alpha is b, and at b = 0 it is clipped in every pass.
 // Passes: DeskPaintedForward (UniversalForwardOnly), ShadowCaster and DepthOnly, on one
-// UnityPerMaterial buffer (SRP Batcher compatible), as DeskAnime's.
+// UnityPerMaterial buffer (SRP Batcher compatible; the global is outside it, as _Time is), as DeskAnime's.
 Shader "NOPE/Desk Painted"
 {
     Properties
@@ -34,6 +42,12 @@ Shader "NOPE/Desk Painted"
         _Locked("Locked home", Range(0, 1)) = 0
         _LockedDim("Locked home value", Range(0.3, 1)) = 0.8
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 2
+        [NoScaleOffset] _ReadingMap("Reading paint (the overhead plates, UV bake)", 2D) = "black" {}
+        _Reading("Has the reading paint", Range(0, 1)) = 0
+        _ReadingOnly("Drawn only in the reading blend", Range(0, 1)) = 0
+        [HideInInspector] _SrcBlend("Source blend", Float) = 1
+        [HideInInspector] _DstBlend("Destination blend", Float) = 0
+        [HideInInspector] _ZWrite("Depth write", Float) = 1
     }
     SubShader
     {
@@ -44,13 +58,26 @@ Shader "NOPE/Desk Painted"
 
         TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
         TEXTURE2D(_MaskMap); SAMPLER(sampler_MaskMap);
+        TEXTURE2D(_ReadingMap); SAMPLER(sampler_ReadingMap);
 
         CBUFFER_START(UnityPerMaterial)
             float4 _BaseMap_ST;
             half4 _BaseColor, _ShadowTint, _GlowColor;
             float4 _RefLightDir;
             half _Relight, _ShadeValue, _BandThreshold, _BandSoftness, _ShadowReception, _Glow, _Locked, _LockedDim;
+            half _Reading, _ReadingOnly;
         CBUFFER_END
+
+        // The Tab tilt's share of the reading view (DeskView.ReadingBlend, set once a frame): global, not per material.
+        float _DeskReadingBlend;
+
+        // A reading-only material (the gap strips) draws nothing while the view is in the office pose: in every pass, so no
+        // depth of it reaches the depth prepass or the shadow map.
+        void ClipReadingOnly()
+        {
+            if (_ReadingOnly > 0.5h)
+                clip(_DeskReadingBlend - 0.001);
+        }
 
         struct Attributes
         {
@@ -92,6 +119,8 @@ Shader "NOPE/Desk Painted"
             Name "DeskPaintedForward"
             Tags { "LightMode" = "UniversalForwardOnly" }
             Cull [_Cull]
+            Blend [_SrcBlend] [_DstBlend]
+            ZWrite [_ZWrite]
 
             HLSLPROGRAM
             #pragma target 3.5
@@ -116,7 +145,16 @@ Shader "NOPE/Desk Painted"
             {
                 UNITY_SETUP_INSTANCE_ID(i);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
-                half3 paint = (SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv) * _BaseColor).rgb;
+                ClipReadingOnly();
+                half3 paint = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv).rgb;
+                // The reading set: sampled only while the tilt is under way or done (a uniform branch; explicit gradients, so
+                // the sample is legal inside it), lerped in by the tilt's share.
+                half reading = (half)saturate(_DeskReadingBlend) * _Reading;
+                float2 uvDx = ddx(i.uv), uvDy = ddy(i.uv);
+                UNITY_BRANCH
+                if (reading > 0.0h)
+                    paint = lerp(paint, SAMPLE_TEXTURE2D_GRAD(_ReadingMap, sampler_ReadingMap, i.uv, uvDx, uvDy).rgb, reading);
+                paint *= _BaseColor.rgb;
                 half4 mask = half4(0, 1, 0, 0);
                 #if defined(_MASKMAP)
                     mask = SAMPLE_TEXTURE2D(_MaskMap, sampler_MaskMap, i.uv);
@@ -145,7 +183,8 @@ Shader "NOPE/Desk Painted"
                 half grey = dot(color, half3(0.2126h, 0.7152h, 0.0722h)) * _LockedDim;
                 color = lerp(color, grey.xxx, saturate(_Locked * mask.b));
 
-                return half4(MixFog(color, i.fog), 1);
+                half alpha = _ReadingOnly > 0.5h ? (half)saturate(_DeskReadingBlend) : 1.0h;
+                return half4(MixFog(color, i.fog), alpha);
             }
             ENDHLSL
         }
@@ -180,6 +219,7 @@ Shader "NOPE/Desk Painted"
             half4 ShadowFrag(Varyings i) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(i);
+                ClipReadingOnly();
                 return 0;
             }
             ENDHLSL
@@ -199,6 +239,7 @@ Shader "NOPE/Desk Painted"
             half4 DepthFrag(Varyings i) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(i);
+                ClipReadingOnly();
                 return i.positionCS.z;
             }
             ENDHLSL

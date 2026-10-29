@@ -110,6 +110,79 @@ public sealed class DeskPainted : MonoBehaviour
         transform.SetPositionAndRotation(frame.Point(Vector2.zero, -paperPlane), frame.Facing(0f));
         CastNoShadows();
         CloseDealTraySlot();
+        CloseGapStrips();
+    }
+
+    /// <summary>The DESK-02 gap strips' material (Resources; DeskPaintedImporter builds it) and their reading paint's texture.</summary>
+    public const string GapStripsMaterial = "DeskGapStrips", GapStripsTexture = "DeskGapStrips_Read";
+
+    /// <summary>The gap strips' name under the desk (one object, two quads).</summary>
+    public const string GapStripsName = "DeskGapStrips";
+
+    /// <summary>
+    /// The two gaps beside the mat (the prefab's frame, metres: x from, x to; bake v4's strips): between the mat's edge and the
+    /// trays' rims on the left, the brass rail on the right, from under the mat's near edge (z -0.530) to its far edge (0.5194).
+    /// </summary>
+    public static readonly Vector2[] GapStripsX = { new Vector2(-0.7425f, -0.7295f), new Vector2(0.7295f, 0.7455f) };
+
+    /// <summary>The gap strips' near and far ends (the prefab's z, metres) and their height (0.2 mm under the mat's lowest point, over the well floor).</summary>
+    public const float GapStripsNear = -0.530f, GapStripsFar = 0.5194f, GapStripsY = 1.0688f;
+
+    /// <summary>
+    /// Closes the gaps beside the mat in the reading view (DESK-02, the audit of 2026-10-28: "a flat black slit at the
+    /// mat's right edge"): the 1.2 to 1.5 cm gaps between the mat and the rail and trays meet no desk mesh, so the hall
+    /// showed through them from above. Two level quads close them, painted from the overhead plates (the bake v6 reading
+    /// set's DeskGapStrips_Read.png: the left strip's UVs u 0.02 to 0.48, the right one's 0.52 to 0.98, v from near to
+    /// far). Their material draws only in the reading blend (NOPE/Desk Painted's _ReadingOnly): clipped in the office
+    /// pose, so the office view stays v3's exactly, and faded in with the Tab tilt. Idempotent; none without the material.
+    /// </summary>
+    private void CloseGapStrips()
+    {
+        if (transform.Find(GapStripsName) != null)
+            return;
+        var material = Resources.Load<Material>(GapStripsMaterial);
+        if (material == null)
+            return;
+        var strips = new GameObject(GapStripsName, typeof(MeshFilter), typeof(MeshRenderer));
+        strips.layer = gameObject.layer;
+        strips.transform.SetParent(transform, false);
+        strips.GetComponent<MeshFilter>().sharedMesh = GapStripsMesh();
+        var renderer = strips.GetComponent<MeshRenderer>();
+        renderer.sharedMaterial = material;
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+    }
+
+    /// <summary>The gap strips' mesh in the prefab's frame (two level quads facing up, UVs as the bake laid them).</summary>
+    public static Mesh GapStripsMesh()
+    {
+        var vertices = new Vector3[8];
+        var uvs = new Vector2[8];
+        var triangles = new int[12];
+        for (int i = 0; i < 2; i++)
+        {
+            float u0 = i * 0.5f + 0.02f, u1 = i * 0.5f + 0.48f;
+            Vector2 x = GapStripsX[i];
+            int v = 4 * i;
+            vertices[v] = new Vector3(x.x, GapStripsY, GapStripsNear);
+            vertices[v + 1] = new Vector3(x.x, GapStripsY, GapStripsFar);
+            vertices[v + 2] = new Vector3(x.y, GapStripsY, GapStripsFar);
+            vertices[v + 3] = new Vector3(x.y, GapStripsY, GapStripsNear);
+            uvs[v] = new Vector2(u0, 0f);
+            uvs[v + 1] = new Vector2(u0, 1f);
+            uvs[v + 2] = new Vector2(u1, 1f);
+            uvs[v + 3] = new Vector2(u1, 0f);
+            // clockwise seen from above: Unity's front face
+            triangles[6 * i] = v;
+            triangles[6 * i + 1] = v + 1;
+            triangles[6 * i + 2] = v + 2;
+            triangles[6 * i + 3] = v;
+            triangles[6 * i + 4] = v + 2;
+            triangles[6 * i + 5] = v + 3;
+        }
+        var mesh = new Mesh { name = "Desk gap strips (runtime)", vertices = vertices, uv = uvs, triangles = triangles };
+        mesh.normals = new[] { Vector3.up, Vector3.up, Vector3.up, Vector3.up, Vector3.up, Vector3.up, Vector3.up, Vector3.up };
+        mesh.RecalculateBounds();
+        return mesh;
     }
 
     /// <summary>The back of the deal tray's slot (the prefab's frame: centre and size, metres; a quad facing the chair).</summary>

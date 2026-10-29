@@ -32,18 +32,27 @@ Material:
         m_Texture: {fileID: 2800000, guid: 485e25219963301458d7031166840e2e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ReadingMap:
+        m_Texture: {fileID: 2800000, guid: 23bf8419f59a5474d8de4deb859433bd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BandSoftness: 0.08
     - _BandThreshold: 0.05
     - _Cull: 2
+    - _DstBlend: 0
     - _Glow: 1
     - _Locked: 0
     - _LockedDim: 0.8
+    - _Reading: 1
+    - _ReadingOnly: 0
     - _Relight: 0.7
     - _ShadeValue: 0.55
     - _ShadowReception: 1
+    - _SrcBlend: 1
     - _UseMask: 1
+    - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlowColor: {r: 1, g: 0.86, b: 0.6, a: 1}

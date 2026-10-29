@@ -74,8 +74,18 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     /// <summary>The largest pivot error the build accepts against anchors.json (metres).</summary>
     private const float PivotTolerance = 0.001f;
 
-    /// <summary>Bumped when the import settings change, so Unity imports the folder again.</summary>
-    public override uint GetVersion() => 4;
+    /// <summary>Bumped when the import settings change, so Unity imports the folder again (6: the reading set, DESK-01 round 3).</summary>
+    public override uint GetVersion() => 6;
+
+    /// <summary>
+    /// The reading set's suffix (DESK-01 round 3): <c>name_Read.png</c> beside <c>name_Paint.png</c>, the same UVs painted
+    /// from the overhead plates (E:\unity\NOPE-tools\design\desk\pipeline\export\v6). NOPE/Desk Painted lerps it in by
+    /// the Tab tilt (_DeskReadingBlend); the office set (_Paint) is v3's, unchanged.
+    /// </summary>
+    public const string ReadingSuffix = "_Read";
+
+    /// <summary>The DESK-02 gap strips' material (Resources, so DeskPainted.Align finds it at install): drawn only in the reading blend.</summary>
+    public const string GapStripsMaterial = Folder + "/Resources/" + DeskPainted.GapStripsMaterial + ".mat";
 
     private void OnPreprocessTexture()
     {
@@ -97,14 +107,16 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         importer.anisoLevel = 16;
         // Round 12 (the concept-vs-game review, item 10: the mat and the desk read softer than the painting): the two big static
         // surfaces, seen 3 to 6 texels to a screen pixel, keep more of their line work with Kaiser mips and a -0.5 bias.
-        bool sharp = name == "Desk_Mat_Paint" || name == "DeskShell_Paint";
+        bool sharp = name == "Desk_Mat_Paint" || name == "DeskShell_Paint" || name == "Desk_Mat" + ReadingSuffix || name == "DeskShell" + ReadingSuffix;
         importer.mipmapFilter = sharp ? TextureImporterMipFilter.KaiserFilter : TextureImporterMipFilter.BoxFilter;
         importer.mipMapBias = sharp ? -0.5f : 0f;
-        importer.maxTextureSize = 4096;
+        // A reading paint may be larger than its office paint (the same UVs, more texels where the reading view needs them).
+        int max = name.EndsWith(ReadingSuffix) ? 8192 : 4096;
+        importer.maxTextureSize = max;
         importer.textureCompression = TextureImporterCompression.CompressedHQ;
         TextureImporterPlatformSettings standalone = importer.GetPlatformTextureSettings("Standalone");
         standalone.overridden = true;
-        standalone.maxTextureSize = 4096;
+        standalone.maxTextureSize = max;
         standalone.format = TextureImporterFormat.BC7;
         importer.SetPlatformTextureSettings(standalone);
     }
@@ -140,6 +152,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         EnsureFolder(MaterialFolder);
         EnsureFolder(Folder + "/Prefabs");
         Dictionary<string, Material> materials = BuildMaterials();
+        BuildGapStrips();
 
         // Rebuilt inside the existing prefab when there is one, so its root and its DeskPainted keep their ids (the gameplay scene's binder points at that component).
         bool existing = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath) != null;
@@ -428,6 +441,7 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
                     m.DisableKeyword("_MASKMAP");
                 m.SetFloat("_Locked", locked ? 1f : 0f);
                 m.SetFloat("_Glow", DeskPaintedMap.Glow(baseName)); // 1, the AVAILABLE sign's 0.35 (the review of the Unity capture)
+                Reading(m, AssetDatabase.LoadAssetAtPath<Texture2D>($"{TextureFolder}/{baseName}{ReadingSuffix}.png"));
             });
         }
         made["Glass_Sheen"] = EnsureMaterial("Desk_Glass", UnlitShader, m => Blended(m, AssetDatabase.LoadAssetAtPath<Texture2D>($"{TextureFolder}/Glass_Sheen.png"), Color.white));
@@ -438,6 +452,68 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
             m.SetColor("_BaseColor", new Color(0.02f, 0.03f, 0.03f, 1f));
         });
         return made;
+    }
+
+    /// <summary>
+    /// The reading set on a painted material (DESK-01 round 3): its reading paint and _Reading 1, or none and 0 (the
+    /// material then shows its office paint in every pose).
+    /// </summary>
+    private static void Reading(Material m, Texture2D reading)
+    {
+        m.SetTexture("_ReadingMap", reading);
+        m.SetFloat("_Reading", reading != null ? 1f : 0f);
+        m.SetFloat("_ReadingOnly", 0f);
+    }
+
+    /// <summary>
+    /// The DESK-02 gap strips' material (Resources/DeskGapStrips.mat): NOPE/Desk Painted on the strips' reading paint, drawn
+    /// only in the reading blend (_ReadingOnly: its alpha is the tilt's share, clipped in the office pose), blended over
+    /// what is behind it, writing depth, after the opaque desk (queue 2450) and before the transparent counter strip.
+    /// </summary>
+    private static void BuildGapStrips()
+    {
+        var paint = AssetDatabase.LoadAssetAtPath<Texture2D>($"{TextureFolder}/{DeskPainted.GapStripsTexture}.png");
+        if (paint == null)
+            throw new FileNotFoundException($"[DeskPainted] {TextureFolder}/{DeskPainted.GapStripsTexture}.png did not import.");
+        EnsureFolder(Folder + "/Resources");
+        var material = AssetDatabase.LoadAssetAtPath<Material>(GapStripsMaterial);
+        Shader s = Shader.Find(PaintedShader);
+        if (material == null)
+        {
+            material = new Material(s) { name = DeskPainted.GapStripsMaterial };
+            AssetDatabase.CreateAsset(material, GapStripsMaterial);
+        }
+        material.shader = s;
+        material.SetTexture("_BaseMap", paint);
+        material.SetTexture("_MaskMap", null);
+        material.SetFloat("_UseMask", 0f);
+        material.DisableKeyword("_MASKMAP");
+        material.SetFloat("_Locked", 0f);
+        material.SetFloat("_Glow", 0f);
+        material.SetTexture("_ReadingMap", paint);
+        material.SetFloat("_Reading", 1f);
+        material.SetFloat("_ReadingOnly", 1f);
+        material.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+        material.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+        material.SetFloat("_ZWrite", 1f);
+        material.SetFloat("_Cull", (float)CullMode.Off);
+        material.renderQueue = (int)RenderQueue.AlphaTest;
+        EditorUtility.SetDirty(material);
+    }
+
+    /// <summary>
+    /// Builds only the materials (the reading set's maps among them) and the gap strips' material, not the prefab
+    /// (Tools > TimeDesk > Import Painted Desk Materials; the job runner's DeskPaintedImporter.BuildMaterialsOnly).
+    /// </summary>
+    [MenuItem("Tools/TimeDesk/Import Painted Desk Materials")]
+    public static void BuildMaterialsOnly()
+    {
+        EnsureFolder(MaterialFolder);
+        Dictionary<string, Material> materials = BuildMaterials();
+        BuildGapStrips();
+        AssetDatabase.SaveAssets();
+        int reading = materials.Values.Count(m => m != null && m.HasProperty("_Reading") && m.GetFloat("_Reading") > 0.5f);
+        Debug.Log($"[DeskPainted] {materials.Count} materials, {reading} with a reading paint, and {GapStripsMaterial}.");
     }
 
     /// <summary>An unlit material showing <paramref name="texture"/> tinted <paramref name="tint"/>, alpha blended over what is behind it.</summary>

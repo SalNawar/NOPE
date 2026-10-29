@@ -64,6 +64,7 @@ public sealed class DeskCounter : MonoBehaviour
     private MaterialPropertyBlock _block;
     private bool _handBack;
     private bool _hover;
+    private bool _fadeInReading;
 
     /// <summary>The strip papers are handed back on, where Bind lays it (the guide's "counter" arrow points here; this object itself stays where the builder put it).</summary>
     public Transform Strip => zone != null ? zone.transform : transform;
@@ -120,11 +121,40 @@ public sealed class DeskCounter : MonoBehaviour
     /// <summary>Prints the strip's words in the reading language as the scene starts (the builder's are English).</summary>
     private void Start() => Reprint();
 
-    /// <summary>Follows a change of the labels' language.</summary>
-    private void OnEnable() => CultureThemeService.LabelsChanged += Reprint;
+    /// <summary>Follows a change of the labels' language, and of the reading view's share (FadeInReading).</summary>
+    private void OnEnable()
+    {
+        CultureThemeService.LabelsChanged += Reprint;
+        DeskView.ReadingBlendChanged += HandleReadingBlend;
+    }
 
-    /// <summary>Stops following it.</summary>
-    private void OnDisable() => CultureThemeService.LabelsChanged -= Reprint;
+    /// <summary>Stops following them.</summary>
+    private void OnDisable()
+    {
+        CultureThemeService.LabelsChanged -= Reprint;
+        DeskView.ReadingBlendChanged -= HandleReadingBlend;
+    }
+
+    /// <summary>
+    /// Fades the strip out with the reading view, or not (the office binder: on the painted desk; DESK-01 round 3, DESK-04).
+    /// The strip lies under the painted counter strip but in front of its bevel's foot, where it drew a slate-blue hairline
+    /// along the paper slot in the reading view (and a blue block over the gap strip at its right end). Its tint's alpha
+    /// takes (1 - DeskView.ReadingBlend): as at 32c54e8 in the office pose, gone in the reading pose, faded with the tilt (no
+    /// motion of its own). Its hand-back cue never showed on the painted desk (the painted strip covers it); the zone, its
+    /// spots and the drops do not read the tint.
+    /// </summary>
+    public void FadeInReading(bool fade)
+    {
+        _fadeInReading = fade;
+        Tint();
+    }
+
+    /// <summary>The reading view's share changed: the faded strip follows it.</summary>
+    private void HandleReadingBlend(float share)
+    {
+        if (_fadeInReading)
+            Tint();
+    }
 
     /// <summary>Shows the strip (<paramref name="shown"/>: a traveller is at the desk) with the counter's name, or "▲ HAND BACK ▲" brighter (<paramref name="handBack"/>: the passport carries its verdict); lit while a dragged paper's pointer is over it (<paramref name="hover"/>), reading "STAMP THE PASSPORT FIRST" before the verdict.</summary>
     public void Show(bool shown, bool handBack, bool hover = false)
@@ -137,13 +167,21 @@ public sealed class DeskCounter : MonoBehaviour
         _hover = hover;
         if (label != null)
             label.text = UiText.Get(handBack ? "stamp.zone.handBack" : hover ? "stamp.zone.stampFirst" : "desk.counter");
-        if (strip != null)
-        {
-            _block ??= new MaterialPropertyBlock();
-            strip.GetPropertyBlock(_block);
-            _block.SetColor(BaseColorId, hover ? (handBack ? hoverHandBackTint : hoverRefusedTint) : handBack ? handBackTint : plainTint);
-            strip.SetPropertyBlock(_block);
-        }
+        Tint();
+    }
+
+    /// <summary>The strip's tint for its state (Show), its alpha faded by the reading view's share when FadeInReading is on.</summary>
+    private void Tint()
+    {
+        if (strip == null)
+            return;
+        Color tint = _hover ? (_handBack ? hoverHandBackTint : hoverRefusedTint) : _handBack ? handBackTint : plainTint;
+        if (_fadeInReading)
+            tint.a *= 1f - DeskView.ReadingBlend;
+        _block ??= new MaterialPropertyBlock();
+        strip.GetPropertyBlock(_block);
+        _block.SetColor(BaseColorId, tint);
+        strip.SetPropertyBlock(_block);
     }
 
     /// <summary>The counter's far edge along the office view (the desk's clamp area's far edge, or nearer: as far as the reading view shows, ViewTop), the desk's left and right ends and the counter's middle across (the reading view's centre line, else the desk's), in metres from the desk's centre; false without a desk.</summary>

@@ -74,6 +74,18 @@ public sealed class DeskViewTuning
 /// </summary>
 public static class DeskViewPose
 {
+    /// <summary>
+    /// The reading view's share of a camera blend (DESK-01 round 3, the painted desk's two texture sets): its share of the
+    /// blend's first camera, <paramref name="shareOfA"/>, and of its second, <paramref name="shareOfB"/>, mixed by the
+    /// blend's eased <paramref name="weight"/> (0 the first, 1 the second), kept in 0..1. DeskView sets it on the shaders
+    /// once a frame (_DeskReadingBlend): 0 in the office pose, 1 in the reading pose.
+    /// </summary>
+    public static float BlendShare(float weight, float shareOfA, float shareOfB)
+    {
+        float w = Math.Max(0f, Math.Min(1f, weight));
+        return Math.Max(0f, Math.Min(1f, (1f - w) * shareOfA + w * shareOfB));
+    }
+
     /// <summary>The steepest pitch, in degrees below the horizon (straight down would lose the view's yaw).</summary>
     public const float MaxPitch = 89f;
 
