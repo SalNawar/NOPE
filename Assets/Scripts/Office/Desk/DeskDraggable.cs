@@ -49,6 +49,12 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     private bool _dragging;
     private bool _raycastable = true;
 
+    /// <summary>How high over the desk plane the point the press met lies (metres; 0 for a press on the desk plane or a drag by its anchor): the pointer is followed on the plane at that height, so that point, not the desk plane under it, stays under the pointer.</summary>
+    private float _grabHeight;
+
+    /// <summary>The highest grab height taken (metres): a press hit higher than this (no desk thing is) falls back to the desk plane.</summary>
+    private const float MaxGrabHeight = 0.12f;
+
     /// <summary>The camera and the screen point of the drag's last pointer move: the drag re-projects them every frame.</summary>
     private Camera _camera;
     private Vector2 _pointer;
@@ -80,8 +86,11 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>How much the grab offset is scaled now (1 at the grab): its owner sets it while the held thing changes size under the cursor (a paper crossing the counter's edge), so the held point stays under the cursor.</summary>
     public float GrabScale { get; set; } = 1f;
 
-    /// <summary>The held object's origin from the pointer's point on the desk now (world, on the desk plane; the grab offset times GrabScale): the held point is the origin minus this.</summary>
+    /// <summary>The held object's origin from the pointer's point now (world, along the desk plane; the grab offset times GrabScale): the held point is the origin minus this.</summary>
     public Vector3 GrabOffset => _grabOffset * GrabScale;
+
+    /// <summary>How high over the desk plane the point the press met lies (metres; 0 for a press on the desk plane or a drag by its anchor): the pointer's point is taken on the plane at this height (FOLD-01 round 3).</summary>
+    public float GrabHeight => _grabHeight;
 
     /// <summary>The camera the drag is seen through (the press's; null before a drag).</summary>
     public Camera DragCamera => _camera;
@@ -130,14 +139,16 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// offset from the anchor to the object's origin: the anchor goes over the
     /// pointer), turns the proxy off and holds it in the desk's hold registry
     /// (the left button only; another hold is let go first). The grab offset
-    /// is taken where the button went down (the press's point on the desk),
+    /// is taken from the point the press met on the object itself (PressPoint),
     /// not where the drag begins: the EventSystem begins a drag only once the
     /// pointer has moved past its drag threshold, and an offset taken there
     /// kept the held point that far from the pointer for the whole drag
     /// (FOLD-01 round 3: in the office view about 9 cm on the desk at the
     /// counter, and GrabScale grows it with a paper's size, so a passport
     /// pulled from the counter hung 19 cm past the pointer). Papers, Please:
-    /// the point pressed stays under the pointer.
+    /// the point pressed stays under the pointer. The pointer is then followed
+    /// on the plane at that point's height (GrabHeight), so the point pressed,
+    /// lying as high as it lay when pressed, comes to rest under the pointer.
     /// </summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -146,17 +157,60 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         _dragging = true;
         PickUpPosition = transform.position;
         _grabOffset = Vector3.zero;
+        _grabHeight = 0f;
         GrabScale = 1f;
         _camera = eventData.pressEventCamera;
         _pointer = eventData.position;
         if (_surface != null && _anchor != null)
             _grabOffset = Vector3.ProjectOnPlane(transform.position - _anchor.position, _surface.transform.up);
-        else if (_surface != null && _surface.TryProject(_camera, eventData.pressPosition, out Vector3 point))
+        else if (_surface != null && PressPoint(eventData, out Vector3 point))
+        {
             _grabOffset = Vector3.ProjectOnPlane(transform.position - point, _surface.transform.up);
+            float height = Vector3.Dot(point - _surface.transform.position, _surface.transform.up);
+            _grabHeight = height > 0f && height <= MaxGrabHeight ? height : 0f;
+        }
         if (proxy != null)
             proxy.enabled = false;
         HoldRegistry.Desk.Begin(this);
         DragBegan?.Invoke(this);
+    }
+
+    /// <summary>
+    /// The point the press met on the object (the raycaster's hit on its
+    /// click box: the paper's sheet as it is drawn), else where the press
+    /// meets the desk plane. The desk plane alone was wrong at the counter:
+    /// in the office view the counter is seen at a grazing angle, so a sheet a
+    /// few millimetres high is met 3.4 cm in front of where the press's ray
+    /// meets the desk plane, and GrabScale grew that to 11.5 cm at the desk
+    /// size: a passport pressed at its middle came to rest with the pointer
+    /// near its top edge (FOLD-01 round 3, counter_drag).
+    /// </summary>
+    private bool PressPoint(PointerEventData eventData, out Vector3 point)
+    {
+        RaycastResult hit = eventData.pointerPressRaycast;
+        if (hit.isValid && hit.gameObject != null && hit.gameObject.transform.IsChildOf(transform) && hit.worldPosition != Vector3.zero)
+        {
+            point = hit.worldPosition;
+            return true;
+        }
+        return _surface.TryProject(eventData.pressEventCamera, eventData.pressPosition, out point);
+    }
+
+    /// <summary>
+    /// Where the pointer's ray meets the plane at the grab height (the height
+    /// of the point the press met), given where it meets the desk plane
+    /// (<paramref name="onDesk"/>, returned without a grab height). In the
+    /// office view a paper a few millimetres high, followed on the desk plane,
+    /// came to rest 2 cm past the pointer (FOLD-01 round 3).
+    /// </summary>
+    private Vector3 AtGrabHeight(Vector3 onDesk)
+    {
+        if (_grabHeight <= 0f || _camera == null)
+            return onDesk;
+        Ray ray = _camera.ScreenPointToRay(_pointer);
+        Vector3 up = _surface.transform.up;
+        var plane = new Plane(up, _surface.transform.position + up * _grabHeight);
+        return plane.Raycast(ray, out float enter) ? ray.GetPoint(enter) : onDesk;
     }
 
     /// <summary>Takes the pointer's new place and follows it (nothing once the drag was cut short).</summary>
@@ -192,7 +246,7 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         _followedScale = GrabScale;
         if (_surface == null || !_surface.TryProject(_camera, _pointer, out Vector3 point))
             return;
-        Vector3 at = _surface.Clamp(Aimed(point) + GrabOffset);
+        Vector3 at = _surface.Clamp(Aimed(AtGrabHeight(point)) + GrabOffset);
         if (Bound != null)
             at = Bound(at);
         transform.position = at + _surface.transform.up * _height;
