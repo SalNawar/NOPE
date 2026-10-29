@@ -339,6 +339,51 @@ public static class QaGame
             yield return null;
     }
 
+    /// <summary>
+    /// Waits (real time, at most <paramref name="timeout"/> s) until the
+    /// pointer camera stands still: the desk view's blend at an end (0 the
+    /// office pose, 1 the reading pose) and the camera's pose and field of
+    /// view unchanged for 3 frames in a row; then tells <paramref name="done"/>
+    /// whether it did (no throw). A view key's turn blends over about 16
+    /// frames, and under a recording's fixed 30 fps step a frame can take
+    /// 70 ms of real time, so a fixed wait in real time can end mid-turn: a
+    /// screen point taken then is stale (FOLD-01 round 3: cam_views' day 12
+    /// pressed 37 px above the counter paper it meant, after its 1 s wait).
+    /// </summary>
+    public static IEnumerator UntilCameraStill(float timeout, Action<bool> done = null)
+    {
+        float end = Time.realtimeSinceStartup + timeout;
+        int steady = 0;
+        Vector3 was = Vector3.zero;
+        Quaternion turned = Quaternion.identity;
+        float fov = -1f;
+        while (steady < 3)
+        {
+            if (Time.realtimeSinceStartup > end)
+            {
+                done?.Invoke(false);
+                yield break;
+            }
+            yield return null;
+            Camera camera = PointerCamera();
+            if (camera == null)
+            {
+                steady = 0;
+                fov = -1f;
+                continue;
+            }
+            Transform eye = camera.transform;
+            float blend = DeskView.ReadingBlend;
+            bool atEnd = blend <= 1e-3f || blend >= 1f - 1e-3f;
+            bool same = fov >= 0f && (eye.position - was).sqrMagnitude < 1e-10f && Quaternion.Angle(eye.rotation, turned) < 1e-3f && Mathf.Abs(camera.fieldOfView - fov) < 1e-4f;
+            steady = atEnd && same ? steady + 1 : 0;
+            was = eye.position;
+            turned = eye.rotation;
+            fov = camera.fieldOfView;
+        }
+        done?.Invoke(true);
+    }
+
     /// <summary>Every loaded GameObject with a missing script, as "scene: path".</summary>
     public static List<string> MissingScripts()
     {

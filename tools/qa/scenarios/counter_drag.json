@@ -1,0 +1,132 @@
+{
+  "name": "counter_drag",
+  "owner": "DOC-HANDLE",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "FOLD-01 round 3 (Papers, Please 1:1): a paper pressed on the counter follows the pointer one to one onto the desk, in the office view and the reading view (day 1: the passport in the office view; day 12: three papers, the reading view, the office view, the reading view), and rests with the point that was pressed under the pointer. Each counterDrag step turns the view as its text says, waits until the camera is still, presses the first counter paper the pointer reaches at its middle and drags it with the rig's normal drag (P-PLAIN, about 600 px/s at 30 fps) to the mat's middle or to (x2, y2) (screen fractions, y from the bottom). counterDrag.<name>.follow: the held point stays 8 px or less at 1080p from the pointer on every held frame. counterDrag.<name>.rest: the paper lies on the desk and its held point rests 8 px or less from where the pointer let it go. counterdrag.tsv lists every frame (how far the drag's bound held the paper back, heldBack_mm)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "recStart",
+      "name": "d1_counter"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_office",
+      "text": "office"
+    },
+    {
+      "op": "still",
+      "name": "d1_office"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "cheat",
+      "name": "UnlockEverything",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "recStart",
+      "name": "d12_counter"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_reading",
+      "text": "reading",
+      "x2": 0.45,
+      "y2": 0.35
+    },
+    {
+      "op": "still",
+      "name": "d12_reading"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_office",
+      "text": "office",
+      "x2": 0.52,
+      "y2": 0.17
+    },
+    {
+      "op": "still",
+      "name": "d12_office"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_reading_2",
+      "text": "reading"
+    },
+    {
+      "op": "still",
+      "name": "d12_reading_2"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}

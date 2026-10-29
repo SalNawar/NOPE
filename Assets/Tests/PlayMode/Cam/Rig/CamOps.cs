@@ -1514,12 +1514,15 @@ public static class CamOps
         DeskScanner scanner = QaGame.Find<DeskScanner>();
 
         // Back to the office view (a view key), as a player turns: the drop tilt's start, and a home the reading view shows too little of.
+        // Then until the camera stands still: the turn blends over about 16 frames, and under the recording's fixed 30 fps step 1 s of
+        // real time ended mid-turn, so the next press point was stale (FOLD-01 round 3: day 12 pressed 37 px above the counter paper).
         IEnumerator Office()
         {
             if (view != null && view.IsOn)
             {
                 view.Return();
                 yield return new WaitForSecondsRealtime(1f);
+                yield return QaGame.UntilCameraStill(5f);
             }
         }
 
@@ -1541,6 +1544,7 @@ public static class CamOps
                 break;
             if (drops % 2 == 0)
                 yield return Office();
+            yield return QaGame.UntilCameraStill(5f); // the last drop's tilt into the reading view ends first: the paper's screen point is taken on a still camera
             (float x, float y) spot = mat.PointAt(0.3f + 0.13f * (drops % 4), 0.35f + 0.15f * (drops / 4 % 2));
             Vector3 onMat = DeskLayout.Frame.Point(new Vector2(spot.x, spot.y));
             Vector2? from = QaGame.ScreenPoint(counter[0].gameObject), to = ScreenOf(onMat);
