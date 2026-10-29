@@ -365,8 +365,13 @@ public class DropResolverTests
         Assert.IsTrue(still);
         Assert.AreEqual(BackStep - h / 2f, backY, Eps, "its top at the lip");
 
-        // A paper picked up wholly on the desk is held from its first frame.
-        (_, _, bool atOnce) = DropResolver.Held(new DeskRect(0f, 0f, w, h), area, false);
-        Assert.IsTrue(atOnce, "a desk paper: the bound holds it at once");
+        // A paper picked up wholly on the desk is held from its first frame (DeskController.Inward asks Held where it lies at the
+        // pick-up): the round 2 verifier's b06 at 1280x1024, a passport 2 cm short of the lip whose first follow (the drag threshold's
+        // catch-up) went 3 cm past it, was never held in round 3's first build and rested 50 px off DETAIN.
+        float lyingY = BackStep - h / 2f - 0.02f;
+        (_, _, bool atOnce) = DropResolver.Held(new DeskRect(x, lyingY, w, h), area, false);
+        Assert.IsTrue(atOnce, "a desk paper: the bound holds it from where it lies");
+        (_, float firstY, _) = DropResolver.Held(new DeskRect(x, lyingY + 0.05f, w, h), area, atOnce);
+        Assert.AreEqual(BackStep - h / 2f, firstY, Eps, "its first frame past the lip: held with its top at the lip");
     }
 }
