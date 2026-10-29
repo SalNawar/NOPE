@@ -17,15 +17,18 @@ using UnityEngine;
 /// counter paper the pointer can reach at its middle, and drags it with the
 /// rig's normal drag (P-PLAIN, about 600 px/s at 30 fps) to (x2, y2), screen
 /// fractions with y from the bottom, or to the mat's middle when both are 0.
-/// The held point is where the press met the desk plane, kept as a share of
-/// the paper's size (a paper grows from its counter size to its desk size
-/// under the cursor). Every frame from the press to the settle's end goes to
-/// the run's counterdrag.tsv: the pointer, the paper's zone and size, its
-/// root, the root the pointer asks for (the pointer's point plus the grab
-/// offset), how far the drag's bound held it back, and the held point's
-/// distance from the pointer on the screen (the held point on the desk plane,
-/// so a held paper's lift does not count; drawn_px1080 gives the same point
-/// as the sheet is drawn, its lift and swing included, reported only).
+/// The held point is the point of the paper the press met (the press's ray
+/// on the sheet's plane as it lies on the counter: at the counter's grazing
+/// angle in the office view a sheet a few millimetres high is met centimetres
+/// in front of where the ray meets the desk plane), kept as a share of the
+/// paper's size (a paper grows from its counter size to its desk size under
+/// the cursor). Every frame from the press to the settle's end goes to the
+/// run's counterdrag.tsv: the pointer, the paper's zone and size, its root,
+/// the root the pointer asks for (the pointer's point plus the grab offset),
+/// how far the drag's bound held it back, and the held point's distance from
+/// the pointer on the screen (the held point at the height it was pressed at,
+/// so the drag's lift does not count; drawn_px1080 gives the same point as
+/// the sheet is drawn, its lift and swing included, reported only).
 /// Asserts:
 /// <list type="bullet">
 /// <item><c>counterDrag.&lt;name&gt;.follow</c>: while the drag runs, the held
@@ -33,9 +36,11 @@ using UnityEngine;
 /// from the pointer on every frame.</item>
 /// <item><c>counterDrag.&lt;name&gt;.rest</c>: after <c>n</c> settle frames
 /// (default 45) the paper lies on the desk (its zone the desk's, not
-/// docked, not sliding), and its held point lies at most <c>f</c> px at 1080p
-/// from where the pointer let it go (both through the camera of now: a drop
-/// on the desk tilts the reading view in, D1).</item>
+/// docked, not sliding), and the point it was pressed at, as the sheet lies,
+/// is at most <c>f</c> px at 1080p from where the release's ray (the pointer
+/// through the camera of the last held frame) meets the sheet: the spot under
+/// the pointer, on the screen it was let go on. The same through the camera
+/// of now is reported (a drop on the desk tilts the reading view in, D1).</item>
 /// </list>
 /// The drag plays at the fixed 30 fps step, as the drop op's does.
 /// </summary>
@@ -113,20 +118,20 @@ public static class CounterDragOps
             to = new Vector2(s.x, s.y);
         }
 
-        // The held point: where the press meets the desk plane, as a share of the paper's size in its root's frame.
+        // The held point: the point of the paper the press met (the press's ray on the sheet's plane), as a share of the paper's size in its root's frame.
         float size = SizeNow(paper);
-        if (surface == null || !OnPlane(surface, camera, from, out Vector3 pressed) || size <= 0f)
+        Ray pressRay = camera.ScreenPointToRay(from);
+        if (surface == null || size <= 0f || !new Plane(surface.transform.up, paper.Sheet.position).Raycast(pressRay, out float enter))
         {
-            Fail(runner, follow, rest, "no desk plane", "The paper's drag has no desk surface, or the press does not meet its plane.");
+            Fail(runner, follow, rest, "no desk plane", "The paper's drag has no desk surface, or the press does not meet its sheet.");
             yield break;
         }
-        Vector3 local = Quaternion.Inverse(paper.transform.rotation) * (pressed - paper.transform.position);
-        var share = new Vector2(local.x / size, local.z / size);
-        // The same point on the sheet as it is drawn (its lift, swing and the held drawing toward the camera included): reported only.
-        Ray pressRay = camera.ScreenPointToRay(from);
-        var sheetPlane = new Plane(surface.transform.up, paper.Sheet.position);
-        Vector3 onSheet = sheetPlane.Raycast(pressRay, out float enter) ? pressRay.GetPoint(enter) : pressed;
+        Vector3 onSheet = pressRay.GetPoint(enter);
         Vector3 sheetLocal = paper.Sheet.InverseTransformPoint(onSheet);
+        Vector3 local = Quaternion.Inverse(paper.transform.rotation) * (onSheet - paper.transform.position);
+        var share = new Vector2(local.x / size, local.z / size);
+        float pressGap = OnPlane(surface, camera, from, out Vector3 pressedOnDesk) ? Vector3.ProjectOnPlane(pressedOnDesk - onSheet, Vector3.up).magnitude : float.NaN;
+        float pressHeight = Vector3.Dot(onSheet - surface.transform.position, surface.transform.up);
 
         QaPath path = QaPaths.Drag(QaPathKind.Plain, from, to, new Vector2(Screen.width, Screen.height));
         bool fixedHere = Time.captureFramerate != SeqRecorder.Fps;
@@ -139,7 +144,8 @@ public static class CounterDragOps
             rows.AppendLine("step\ti\tframe\tptrX\tptrY_top\tdown\tdragging\tzone\tsize\tgrabScale\trootX_m\trootY_m\twantX_m\twantY_m\theldBack_mm\tpointerX_m\tpointerY_m\theldX_m\theldY_m\terr_px1080\tdrawn_px1080");
         float worst = 0f, atRelease = float.NaN, drawnWorst = 0f, drawnAtRelease = float.NaN;
         int worstFrame = -1, dragFrames = 0, firstDrag = -1;
-        Vector3? releasedAt = null;
+        Ray? releaseRay = null;
+        Matrix4x4 releaseView = Matrix4x4.identity;
         var end = new WaitForEndOfFrame();
         bool sampling = true;
         int index = 0;
@@ -154,9 +160,10 @@ public static class CounterDragOps
                 Vector2 pointer = input.Mouse.position.ReadValue();
                 bool down = input.Mouse.leftButton.isPressed, dragging = paper.Drag != null && paper.Drag.IsDragging;
                 float sizeNow = SizeNow(paper);
-                Vector3 held = Held(paper, share, sizeNow);
+                Vector3 held = Held(paper, share, sizeNow) + surface.transform.up * pressHeight;
                 bool onPlane = OnPlane(surface, eye, pointer, out Vector3 point);
-                Vector3 want = onPlane && paper.Drag != null ? point + paper.Drag.GrabOffset : paper.transform.position;
+                Vector3 grabbedAt = paper.Drag != null ? AtHeight(surface, eye, pointer, paper.Drag.GrabHeight, point) : point;
+                Vector3 want = onPlane && paper.Drag != null ? grabbedAt + paper.Drag.GrabOffset : paper.transform.position;
                 Vector3 root = paper.transform.position;
                 float back = Vector3.ProjectOnPlane(root - want, Vector3.up).magnitude;
                 float err = float.NaN, drawn = float.NaN;
@@ -180,8 +187,11 @@ public static class CounterDragOps
                     drawnAtRelease = drawn;
                     if (!float.IsNaN(drawn))
                         drawnWorst = Mathf.Max(drawnWorst, drawn);
-                    if (onPlane)
-                        releasedAt = point;
+                    if (eye != null)
+                    {
+                        releaseRay = eye.ScreenPointToRay(pointer);
+                        releaseView = eye.projectionMatrix * eye.worldToCameraMatrix;
+                    }
                 }
                 Vector2 r = DeskLayout.Frame.Local(root), w = DeskLayout.Frame.Local(want), pd = DeskLayout.Frame.Local(point), hd = DeskLayout.Frame.Local(held);
                 rows.Append(name).Append('\t').Append(index).Append('\t').Append(Time.frameCount).Append('\t').Append(F1(pointer.x)).Append('\t').Append(F1(Screen.height - pointer.y))
@@ -201,24 +211,30 @@ public static class CounterDragOps
             Time.captureFramerate = rate;
         File.AppendAllText(tsv, rows.ToString());
 
-        string how = FormattableString.Invariant($"{paper.name} (paper {paper.Index}), the {(reading ? "reading" : "office")} view{(still ? string.Empty : " (the camera never stood still for 3 frames in 10 s)")}: pressed at {from.x:0},{from.y:0}, let go at {path.End.x:0},{path.End.y:0} (screen px, y from the bottom), the held point {share.x:0.00},{share.y:0.00} of its size from its centre; counterdrag.tsv has every frame");
+        string how = FormattableString.Invariant($"{paper.name} (paper {paper.Index}), the {(reading ? "reading" : "office")} view{(still ? string.Empty : " (the camera never stood still for 3 frames in 10 s)")}: pressed at {from.x:0},{from.y:0}, let go at {path.End.x:0},{path.End.y:0} (screen px, y from the bottom), the held point {share.x:0.00},{share.y:0.00} of its size from its centre (the press met the desk plane {pressGap * 100f:0.0} cm past it); counterdrag.tsv has every frame");
         runner.Assert(follow, Owner, dragFrames > 0 && worst <= limit,
                       dragFrames > 0 ? FormattableString.Invariant($"the held point {worst:0.0} px from the pointer at worst (frame {worstFrame}), {atRelease:0.0} px on the last held frame (max {limit:0.#}); {dragFrames} frames held from frame {firstDrag}; as drawn (the drag's lift and swing, not asserted) {drawnWorst:0.0} px at worst, {drawnAtRelease:0.0} px on the last held frame") : "the drag never began",
                       how);
 
         Camera now = QaGame.PointerCamera();
-        float restPx = float.NaN;
-        if (now != null && releasedAt != null && paper != null)
+        float restPx = float.NaN, restNowPx = float.NaN, restHeight = float.NaN;
+        if (now != null && releaseRay != null && paper != null && new Plane(surface.transform.up, paper.Sheet.position).Raycast(releaseRay.Value, out float at))
         {
-            Vector3 a = now.WorldToScreenPoint(releasedAt.Value), b = now.WorldToScreenPoint(Held(paper, share, SizeNow(paper)));
+            // The spot under the pointer (the release's ray on the sheet as it lies) and the point the paper was pressed at, as it lies:
+            // on the screen the release was seen on (the camera of the last held frame), and through the camera of now (a drop on the
+            // desk tilts the reading view in, D1, which shows the desk larger).
+            Vector3 spot = releaseRay.Value.GetPoint(at), pressedNow = paper.Sheet.TransformPoint(sheetLocal);
+            restPx = QaCameraMoves.To1080((ScreenOf(releaseView, spot) - ScreenOf(releaseView, pressedNow)).magnitude, Screen.height);
+            Vector3 a = now.WorldToScreenPoint(spot), b = now.WorldToScreenPoint(pressedNow);
             if (a.z > 0f && b.z > 0f)
-                restPx = QaCameraMoves.To1080(new Vector2(b.x - a.x, b.y - a.y).magnitude, Screen.height);
+                restNowPx = QaCameraMoves.To1080(new Vector2(b.x - a.x, b.y - a.y).magnitude, Screen.height);
+            restHeight = Vector3.Dot(pressedNow - surface.transform.position, surface.transform.up);
         }
         bool onDesk = paper != null && paper.Zone == DeskZone.Desk && !paper.IsDocked && !paper.IsSliding;
         runner.Assert(rest, Owner, onDesk && !float.IsNaN(restPx) && restPx <= limit,
                       paper == null ? "the paper is gone" : !onDesk ? $"it lies in the {paper.Zone} zone{(paper.IsDocked ? ", docked" : string.Empty)}{(paper.IsSliding ? ", still sliding" : string.Empty)}, not on the desk"
-                      : FormattableString.Invariant($"its held point rests {restPx:0.0} px from where the pointer let it go (max {limit:0.#})"),
-                      how + "; both places through the camera of now");
+                      : FormattableString.Invariant($"the point it was pressed at rests {restPx:0.0} px from the spot under the pointer that let it go, on the screen it was let go on (max {limit:0.#}); {restNowPx:0.0} px through the camera of now; the sheet lay {pressHeight * 1000f:0.0} mm over the desk where pressed, {restHeight * 1000f:0.0} mm at rest"),
+                      how + "; the release's ray met on the sheet as it lies");
     }
 
     /// <summary>Both of a step's assertions red with the same reason.</summary>
@@ -231,9 +247,28 @@ public static class CounterDragOps
     /// <summary>The paper's sheet scale now (its shown size over its size).</summary>
     private static float SizeNow(DeskDocument paper) => paper.Size.x > 0f ? paper.ShownSize.x / paper.Size.x : 0f;
 
-    /// <summary>The held point on the desk plane: <paramref name="share"/> of the paper's size at <paramref name="size"/> from its root, in its root's frame (the sheet's lift, swing and the held drawing toward the camera left out).</summary>
+    /// <summary>The held point straight over the root's plane: <paramref name="share"/> of the paper's size at <paramref name="size"/> from its root, in its root's frame (the sheet's lift, swing and the held drawing toward the camera left out).</summary>
     private static Vector3 Held(DeskDocument paper, Vector2 share, float size) =>
         paper.transform.position + paper.transform.rotation * new Vector3(share.x * size, 0f, share.y * size);
+
+    /// <summary>The screen point (pixels, y from the bottom) of <paramref name="world"/> through the view-projection <paramref name="viewProjection"/> (a camera's pose at an earlier frame).</summary>
+    private static Vector2 ScreenOf(Matrix4x4 viewProjection, Vector3 world)
+    {
+        Vector4 c = viewProjection * new Vector4(world.x, world.y, world.z, 1f);
+        if (Mathf.Abs(c.w) < 1e-6f)
+            return new Vector2(float.NaN, float.NaN);
+        return new Vector2((c.x / c.w * 0.5f + 0.5f) * Screen.width, (c.y / c.w * 0.5f + 0.5f) * Screen.height);
+    }
+
+    /// <summary>Where <paramref name="screen"/> meets the plane <paramref name="height"/> over the desk through <paramref name="camera"/> (<paramref name="onDesk"/> for none, or when it does not meet it).</summary>
+    private static Vector3 AtHeight(DeskSurface surface, Camera camera, Vector2 screen, float height, Vector3 onDesk)
+    {
+        if (height <= 0f || camera == null)
+            return onDesk;
+        Ray ray = camera.ScreenPointToRay(screen);
+        Vector3 up = surface.transform.up;
+        return new Plane(up, surface.transform.position + up * height).Raycast(ray, out float enter) ? ray.GetPoint(enter) : onDesk;
+    }
 
     /// <summary>Where <paramref name="screen"/> meets the desk plane through <paramref name="camera"/>.</summary>
     private static bool OnPlane(DeskSurface surface, Camera camera, Vector2 screen, out Vector3 point)

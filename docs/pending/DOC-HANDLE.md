@@ -194,10 +194,11 @@ The fixer's report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01.md, "Round
 - The grab offset was taken where the drag began, not where the button went down. The EventSystem begins a drag only past its drag threshold, about 25 px at 1080p. In the office view that is 9 cm on the desk at the counter.
 - The size the offset grows from was taken one frame late, after the size's first eased step. A passport grew 3.4 times while its offset grew 2.1 times.
 - Round 2's `PaperBound` held a paper pulled from the counter at the back step's lip while its desk-size footprint still lay over the step.
+- The press was taken on the desk plane, not on the paper. The office view sees the counter at a grazing angle, and a counter paper's sheet lies 8 to 14 mm over the desk plane. The press's ray met the desk plane 3.4 cm past the point it pressed, and the growth made that 11.5 cm.
 - Together: a passport let go on the mat in the office view rested 19 cm past the pointer (77 px at 1080p, held; 239 px at rest in the reading view that the drop brings).
 
 **The fix:**
-- `DeskDraggable.OnBeginDrag` takes the grab offset at the press's point on the desk (`pressPosition`).
+- `DeskDraggable.OnBeginDrag` takes the grab offset from the point the press met on the thing (`PressPoint`: the raycaster's hit on its click box), else the press on the desk plane. `GrabHeight` is that point's height over the desk; the drag follows the pointer on the plane at that height (`AtGrabHeight`). The pressed point comes to rest under the pointer.
 - `DeskDocument.Grabbed` (on `DragBegan`) takes the size at the grab, before the desk sizes the paper for the zone under the pointer.
 - `DropResolver.Held`: a paper's bound holds it only once it has lain wholly where it may rest in this drag and zone. Until then it goes where the pointer takes it. The folder's bound is round 2's.
 
@@ -206,7 +207,9 @@ The fixer's report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01.md, "Round
 - `QaGame.UntilCameraStill`: camplay (CAM's `cam_views`) takes a press point only on a still camera. Its 1 s real-time wait ended mid-turn under the recording's fixed step, and the press missed the counter paper by 37 px ("paper 2 stayed on the counter after its drop").
 - The drop op's jump assert passes a release step no larger than the held step before it (`QaRunner.JumpPasses`; the round 2 verifier's N1).
 
-**Tests:** `DropResolverTests.APaperPulledFromTheCounter_FollowsThePointerOverTheLip_TheBoundHoldsItOnlyOnceItLiesWhollyOnTheDesk`, `QaPathsTests.TheDropJump_FailsAMoveTheReleaseAdds_NotAPaperStillSettlingFromItsDragTilt`.
+- The drag's lift (`dragLift`, 2 cm) still shows: while held, the pressed point is drawn up to 13 to 19 px from the pointer in the office view on a still pointer (2 to 3 px in the reading view). It lands under the pointer. counter_drag reports it (`drawn_px1080`) and does not assert it.
+
+**Tests:** `DropResolverTests.APaperPulledFromTheCounter_FollowsThePointerOverTheLip_TheBoundHoldsItOnlyOnceItLiesWhollyOnTheDesk`, `QaPathsTests.TheDropJump_FailsAMoveTheReleaseAdds_NotAPaperStillSettlingFromItsDragTilt`. Scenarios retuned for the true landing place: `fold_rest` (the folder over the passport's lower part, the day 12 scanner strip f 80) and `doclook_print` (the folder over the passport's right part).
 
 ### BUG-8: no shared obstacle model
 
