@@ -521,8 +521,9 @@ public sealed class QaRunner : MonoBehaviour
     /// The drop op also measures the thing's picture (DropPicture.Of, every
     /// frame at its end; FOLD-01 round 2, the verifier's F2) and asserts
     /// <c>drop.&lt;name&gt;.jump</c>: from the last held frame to the first
-    /// released one the picture moves at most 1 px at 1080p against its root
-    /// (DOC-HANDLE: "a frame diff at the press and release frames ≤1 px"; a
+    /// released one the picture moves at most 1 px at 1080p against its root,
+    /// or no more than in the held frame before it (JumpPasses; FOLD-01 round
+    /// 3, N1) (DOC-HANDLE: "a frame diff at the press and release frames ≤1 px"; a
     /// lift set at once dropped it 8 to 11 px), for every path but P-FAST,
     /// P-FLICK and P-OFF (released moving, they settle visibly by design) and
     /// a thing carried to its rest (the place assertions judge that move). A
@@ -623,17 +624,23 @@ public sealed class QaRunner : MonoBehaviour
     /// <summary>
     /// <c>drop.&lt;name&gt;.jump</c> (see Drag): the picture's move against its
     /// root from the frame before the release to the release's frame, in px
-    /// at 1080p (at most 1); the press's frame, the picture's whole move from
-    /// the last held frame to the settle's end and its largest step are
-    /// reported. Not asserted (noted) for P-FAST, P-FLICK and P-OFF, or for a
-    /// thing <paramref name="carried"/> to its rest.
+    /// at 1080p: at most 1, or at most the held frame's step before it (the
+    /// release adds no motion: a held paper can still settle from its drag
+    /// tilt when the path lets go, and its picture then moves a little on
+    /// every frame, held or not; FOLD-01 round 3, the round 2 verifier's N1:
+    /// b08 read 1.36 px with the held frame before it moving as much, so the
+    /// gate went red by chance). The press's frame, the held step, the
+    /// picture's whole move from the last held frame to the settle's end and
+    /// its largest step are reported. Not asserted (noted) for P-FAST,
+    /// P-FLICK and P-OFF, or for a thing <paramref name="carried"/> to its
+    /// rest.
     /// </summary>
     private void AssertJump(string name, QaPathKind kind, GameObject dragged, Dictionary<int, (Vector2 picture, Vector2 root)> pictures, int pressFrame, int releaseFrame, Action<string> note, bool carried)
     {
         float Step(int frame) =>
             pictures.TryGetValue(frame, out var now) && pictures.TryGetValue(frame - 1, out var was)
                 ? QaCameraMoves.To1080(((now.picture - now.root) - (was.picture - was.root)).magnitude, Screen.height) : float.NaN;
-        float release = Step(releaseFrame), press = Step(pressFrame);
+        float release = Step(releaseFrame), press = Step(pressFrame), heldStep = Step(releaseFrame - 1);
         float whole = float.NaN, largest = 0f;
         int last = pictures.Count > 0 ? pictures.Keys.Max() : 0;
         if (pictures.TryGetValue(releaseFrame - 1, out var held) && pictures.TryGetValue(last, out var end))
@@ -643,7 +650,7 @@ public sealed class QaRunner : MonoBehaviour
                 largest = Mathf.Max(largest, QaCameraMoves.To1080((a.picture - b.picture).magnitude, Screen.height));
         string measured = float.IsNaN(release)
             ? "no picture at the release"
-            : FormattableString.Invariant($"{release:0.00} px at the release (max 1); press {press:0.00} px; the picture moved {whole:0.0} px in all, its largest step {largest:0.0} px");
+            : FormattableString.Invariant($"{release:0.00} px at the release (max 1, or the held step before it: {heldStep:0.00} px); press {press:0.00} px; the picture moved {whole:0.0} px in all, its largest step {largest:0.0} px");
         string detail = $"{(dragged != null ? dragged.name : "?")} ({kind}): the picture (what it draws opaque, DropPicture.Of) against its root, frames {releaseFrame - 1} to {releaseFrame}; {pictures.Count} frames measured";
         if (kind == QaPathKind.Fast || kind == QaPathKind.Flick || kind == QaPathKind.Off)
         {
@@ -657,8 +664,17 @@ public sealed class QaRunner : MonoBehaviour
             note($"drop.{name}.jump (not asserted: carried to its rest): {measured}");
             return;
         }
-        Assert($"drop.{name}.jump", Scenario.owner, !float.IsNaN(release) && release <= 1f, measured, detail);
+        Assert($"drop.{name}.jump", Scenario.owner, JumpPasses(release, heldStep), measured, detail);
     }
+
+    /// <summary>
+    /// The drop op's jump rule (pure, QaRigTests): the release frame's step
+    /// (px at 1080p, against the root) is at most 1, or at most the held
+    /// frame's step before it (<paramref name="heldStep"/>), so the release
+    /// adds no motion. No step measured at the release fails.
+    /// </summary>
+    public static bool JumpPasses(float release, float heldStep) =>
+        !float.IsNaN(release) && (release <= 1f || (!float.IsNaN(heldStep) && release <= heldStep));
 
     /// <summary>
     /// Asserts <paramref name="id"/>: at most <paramref name="most"/> (a share)

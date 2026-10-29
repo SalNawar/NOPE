@@ -112,4 +112,16 @@ public class QaPathsTests
         Assert.AreEqual(QaPathKind.Wobble, QaRunner.ParseKind("wobble"));
         Assert.AreEqual(QaPathKind.Plain, QaRunner.ParseKind(""));
     }
+
+    [Test]
+    public void TheDropJump_FailsAMoveTheReleaseAdds_NotAPaperStillSettlingFromItsDragTilt()
+    {
+        // FOLD-01 round 3 (the round 2 verifier's N1): b08's picture moved about as much in the last held frame as at the release.
+        Assert.IsTrue(QaRunner.JumpPasses(0.4f, 0f), "under 1 px");
+        Assert.IsTrue(QaRunner.JumpPasses(1.36f, 1.5f), "the held frame before it moved more: the release adds nothing");
+        Assert.IsFalse(QaRunner.JumpPasses(1.36f, 0.3f), "the release adds the motion");
+        Assert.IsFalse(QaRunner.JumpPasses(9.5f, 0.1f), "round 1's lift set at once (8 to 11 px)");
+        Assert.IsFalse(QaRunner.JumpPasses(float.NaN, 0f), "no picture at the release");
+        Assert.IsFalse(QaRunner.JumpPasses(1.36f, float.NaN), "over 1 px with no held step to weigh it against");
+    }
 }
