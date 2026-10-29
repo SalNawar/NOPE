@@ -524,7 +524,10 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// cut left board, a whole board's width of folder the player never saw,
     /// so a drop near a keep-out or the view's edge jumped by it). Taken from
     /// the box's own centre and size, so a drag, which turns the box off,
-    /// changes nothing. False without the box.
+    /// changes nothing. Where it lies, not where it is drawn: while it is
+    /// drawn toward the camera (held, or carried to its rest above every
+    /// prop: HeldOnTop) the box is scaled back from the eye (FOLD-01 round 2).
+    /// False without the box.
     /// </summary>
     public bool TryBoxCorners(Vector3[] corners)
     {
@@ -534,6 +537,37 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         Vector3 c = _cardBox.center, h = _cardBox.size / 2f;
         for (int i = 0; i < 8; i++)
             corners[i] = t.TransformPoint(c + new Vector3((i & 1) == 0 ? -h.x : h.x, (i & 2) == 0 ? -h.y : h.y, (i & 4) == 0 ? -h.z : h.z));
+        if (_heldEye != null && _heldRatio > 0f && _heldRatio < 1f)
+        {
+            Vector3 eye = _heldEye.transform.position;
+            for (int i = 0; i < 8; i++)
+                corners[i] = eye + (corners[i] - eye) / _heldRatio;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// The folder's eight box corners (as TryBoxCorners) at its full size: out
+    /// of its pocket it grows as it is dragged, so the box it will rest at is
+    /// the shrunk box grown back about the booklet's place (the drag's clamp:
+    /// DeskController, FOLD-01 round 2). False without the box.
+    /// </summary>
+    public bool TryFullBoxCorners(Vector3[] corners)
+    {
+        if (!TryBoxCorners(corners))
+            return false;
+        float size = PocketSize;
+        if (size > 1e-4f && size < 1f - 1e-4f && booklet != null)
+        {
+            Vector3 origin = booklet.position;
+            if (_heldEye != null && _heldRatio > 0f && _heldRatio < 1f)
+            {
+                Vector3 eye = _heldEye.transform.position;
+                origin = eye + (origin - eye) / _heldRatio;
+            }
+            for (int i = 0; i < 8; i++)
+                corners[i] = origin + (corners[i] - origin) / size;
+        }
         return true;
     }
 

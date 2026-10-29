@@ -225,6 +225,7 @@ public sealed class DeskController : MonoBehaviour
             rulebook.Drag.Dragged += RulebookDragged;
             rulebook.Drag.DragEnded += RulebookDropped;
             rulebook.Drag.DragCancelled += RulebookLifted;
+            rulebook.Drag.Bound = FolderBound;
         }
         ResetStack();
         if (config != null)
@@ -273,13 +274,16 @@ public sealed class DeskController : MonoBehaviour
         _ranks.Clear();
     }
 
-    /// <summary>The rulebook's drag begins (lifted above the stack, drawn above every prop) or is cut short (back on top of it).</summary>
+    /// <summary>The rulebook's drag begins (lifted above the stack, drawn above every prop) or is cut short (back on top of it). A folder carried to its rest stays drawn above every prop until it lands (DeskRulebook.RestAt).</summary>
     private void RulebookLifted(DeskDraggable drag)
     {
         _rulebookDragged = drag.IsDragging;
         if (_rulebookDragged)
+        {
             MeasureMachines();
-        else
+            _heldAreaSet = false;
+        }
+        else if (!rulebook.Carrying)
             rulebook.ShowHeld(null, 1f);
         _stack.BringToFront(RulebookId);
         if (config != null)
@@ -307,6 +311,8 @@ public sealed class DeskController : MonoBehaviour
     private void RulebookDropped(DeskDraggable drag, Vector3 released)
     {
         _rulebookDragged = false;
+        Camera eye = drag.DragCamera;
+        float ratio = config != null ? HeldRatio(eye, rulebook.transform.position.y) : 1f;
         rulebook.ShowHeld(null, 1f);
         if (config != null && surface != null && TryFolderFootprint(out DeskRect folder))
         {
@@ -326,21 +332,99 @@ public sealed class DeskController : MonoBehaviour
             // rack, the pocket...; Saleh's playtest of 2026-10-28, point 2: "folder clipping detain button"), as DOC-HANDLE keeps
             // it clear of the machines: a folder let go half over the back step lay through what stands there.
             Vector3 rest = RestOf(folder, at, counter != null && counter.Contains(released), true, "folder");
-            List<Vector3> way = (rest - at).sqrMagnitude > 1e-8f ? Way(at, rest, RulebookGrow()) : null;
-            float seconds = way != null ? WaySeconds(at, way) : 0f;
+            // Along the desk, drawn above every prop as it was held (DeskRulebook.RestAt; FOLD-01 round 2, F4): over a casing's
+            // height it hopped toward the camera, a quarter bigger, and through a tray's rim it went under it.
+            List<Vector3> way = (rest - at).sqrMagnitude > 1e-8f ? new List<Vector3> { rest } : null;
+            float seconds = way != null ? DeskCarry.Seconds(Vector3.Distance(at, rest), config.dockSpeed, config.paperSlideSeconds) : 0f;
             if (refused)
             {
                 dock.Refuse();
-                rulebook.Refused(way, seconds);
+                rulebook.Refused(way, seconds, eye, ratio);
             }
             else
-                rulebook.RestAt(way, seconds);
+                rulebook.RestAt(way, seconds, eye, ratio);
         }
         RulebookLifted(drag);
     }
 
-    /// <summary>Half the rulebook's diagonal on the desk (metres): how far its edges reach from its root.</summary>
-    private float RulebookGrow() => TryFolderFootprint(out DeskRect folder) ? Mathf.Sqrt(folder.Width * folder.Width + folder.Height * folder.Height) / 2f : 0.2f;
+    /// <summary>
+    /// Where the held folder's root may go (its drag's Bound; FOLD-01 round
+    /// 2, the verifier's F3): its footprint at its full size wholly inside
+    /// the area it may rest in (RestArea: the reading view and the desk short
+    /// of the back step), so it is kept there as it is dragged, as Papers,
+    /// Please keeps a held paper on the desk, and a release never slides
+    /// after. What it may not lie over (a machine, a prop) still moves it
+    /// clear at the release (RestOf). Allocates nothing.
+    /// </summary>
+    private Vector3 FolderBound(Vector3 at)
+    {
+        if (config == null || surface == null || rulebook == null || !rulebook.TryFullBoxCorners(_folderCorners))
+            return at;
+        // The box was taken where the root is now; the footprint goes with the root to at.
+        DeskRect box = RestRect(_folderCorners, 8);
+        Vector3 shift = at - rulebook.transform.position;
+        var footprint = new DeskRect(box.CentreX + Vector3.Dot(shift, RestRight), box.CentreY + Vector3.Dot(shift, RestForward), box.Width, box.Height);
+        return Inward(footprint, at, true);
+    }
+
+    /// <summary>
+    /// Where a held paper's root may go (its drag's Bound; F3): its footprint
+    /// at the size it shows now wholly inside the area it may rest in for its
+    /// zone (RestArea), as FolderBound. Allocates nothing.
+    /// </summary>
+    private Vector3 PaperBound(DeskDocument paper, Vector3 at)
+    {
+        if (config == null || surface == null || paper == null)
+            return at;
+        paper.RestCorners(new Vector3(at.x, surface.transform.position.y, at.z), _boundCorners);
+        return Inward(RestRect(_boundCorners, 4), at, paper.Zone == DeskZone.Desk);
+    }
+
+    /// <summary>PaperBound's buffer (a paper's four corners).</summary>
+    private readonly Vector3[] _boundCorners = new Vector3[4];
+
+    /// <summary>
+    /// <paramref name="at"/> moved the least so that <paramref name="footprint"/>
+    /// (the rest's frame, with its root at <paramref name="at"/>) lies wholly
+    /// inside the area it may rest in (RestArea). The area is taken at each
+    /// pick-up and again only when the held thing's size or zone changes (at
+    /// the counter's edge), so a drag frame allocates nothing.
+    /// </summary>
+    private Vector3 Inward(DeskRect footprint, Vector3 at, bool onDesk)
+    {
+        if (!_heldAreaSet || onDesk != _heldAreaOnDesk || Mathf.Abs(footprint.Width - _heldAreaSize.x) > 1e-4f || Mathf.Abs(footprint.Height - _heldAreaSize.y) > 1e-4f)
+        {
+            _heldArea = RestArea(footprint, onDesk);
+            _heldAreaSet = true;
+            _heldAreaOnDesk = onDesk;
+            _heldAreaSize = new Vector2(footprint.Width, footprint.Height);
+        }
+        (float x, float y) = DropResolver.Inside(footprint, _heldArea);
+        if (Mathf.Approximately(x, footprint.CentreX) && Mathf.Approximately(y, footprint.CentreY))
+            return at;
+        return at + RestRight * (x - footprint.CentreX) + RestForward * (y - footprint.CentreY);
+    }
+
+    /// <summary>The area Inward last took (RestArea) and the size and zone it was taken for; unset at each pick-up (the view's shape may have changed since).</summary>
+    private DeskRect _heldArea;
+    private bool _heldAreaSet, _heldAreaOnDesk;
+    private Vector2 _heldAreaSize;
+
+    /// <summary>The rectangle enclosing the first <paramref name="count"/> of <paramref name="corners"/> in the rest's frame (InViewFrame's measure; allocates nothing).</summary>
+    private DeskRect RestRect(Vector3[] corners, int count)
+    {
+        Vector3 origin = surface.transform.position, right = RestRight, forward = RestForward;
+        float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
+        for (int i = 0; i < count; i++)
+        {
+            float x = Vector3.Dot(corners[i] - origin, right), y = Vector3.Dot(corners[i] - origin, forward);
+            minX = Mathf.Min(minX, x);
+            maxX = Mathf.Max(maxX, x);
+            minY = Mathf.Min(minY, y);
+            maxY = Mathf.Max(maxY, y);
+        }
+        return new DeskRect((minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY);
+    }
 
     /// <summary>The folder's eight box corners (TryFolderFootprint's buffer: no allocation per drop).</summary>
     private readonly Vector3[] _folderCorners = new Vector3[8];
@@ -662,6 +746,7 @@ public sealed class DeskController : MonoBehaviour
         drag.Dragged += HandleDragged;
         drag.DragEnded += HandleDragEnded;
         drag.DragCancelled += HandleDragCancelled;
+        drag.Bound = at => PaperBound(paper, at); // held inside where it may rest (FOLD-01 round 2, F3)
         paper.Clicked += HandlePaperClicked;
 
         _papers[i] = paper;
@@ -810,6 +895,7 @@ public sealed class DeskController : MonoBehaviour
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = paper.Index;
+        _heldAreaSet = false;
         if (_state != null)
             _state.Lift(paper.Index);
         MeasureMachines();
@@ -1486,12 +1572,31 @@ public sealed class DeskController : MonoBehaviour
             ApplyLive(paper);
     }
 
-    /// <summary>Slides a paper, turning it to lie at <paramref name="facing"/> on the way (eased with the slide): from where it shows, over every machine's casing it comes over (DockPath.Over: never through one); it is inert while sliding and its liveness is re-applied when it lands.</summary>
+    /// <summary>
+    /// Slides a paper, turning it to lie at <paramref name="facing"/> on the
+    /// way (eased with the slide); it is inert while sliding and its liveness
+    /// is re-applied when it lands. A paper its drag let go goes straight
+    /// along the desk, drawn above every prop as it was held (HeldOnTop
+    /// through the drag's camera, its picture unchanged: DeskDocument.CarryOnTop;
+    /// FOLD-01 round 2, F4: a release over a casing moves along the desk, it
+    /// does not hop over the casing toward the camera). Else (no camera yet)
+    /// from where it shows over every machine's casing it comes over
+    /// (DockPath.Over: never through one).
+    /// </summary>
     private void Slide(DeskDocument paper, Vector3 target, Quaternion facing)
     {
         Vector3 from = paper.CarriedFrom;
-        List<Vector3> way = Way(from, target, Grow(paper));
-        paper.Carry(way, facing, WaySeconds(from, way), () => ApplyLive(paper));
+        Camera eye = paper.Drag != null ? paper.Drag.DragCamera : null;
+        if (eye != null)
+        {
+            float seconds = DeskCarry.Seconds(Vector3.Distance(from, target), config.dockSpeed, config.paperSlideSeconds);
+            paper.CarryOnTop(new List<Vector3> { target }, facing, seconds, eye, HeldRatio(eye, target.y), () => ApplyLive(paper));
+        }
+        else
+        {
+            List<Vector3> way = Way(from, target, Grow(paper));
+            paper.Carry(way, facing, WaySeconds(from, way), () => ApplyLive(paper));
+        }
         ApplyLive(paper);
     }
 

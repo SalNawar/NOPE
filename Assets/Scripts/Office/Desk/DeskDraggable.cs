@@ -86,6 +86,17 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>The camera the drag is seen through (the press's; null before a drag).</summary>
     public Camera DragCamera => _camera;
 
+    /// <summary>
+    /// Where its owner keeps the held object's origin, or null: given the
+    /// origin the pointer asks for (already in the desk's area), the origin it
+    /// takes. The desk keeps a held paper or the folder wholly where it may
+    /// rest (DeskController.PaperBound, FolderBound; FOLD-01 round 2, the
+    /// verifier's F3: Papers, Please keeps a held paper on the desk, so a
+    /// release never slides after). The pointer goes on; the object stops at
+    /// the edge and follows again as the pointer comes back.
+    /// </summary>
+    public Func<Vector3, Vector3> Bound { get; set; }
+
     /// <summary>Takes note of where the object lies now as its pick-up point: the scanner feeding itself a paper (the Auto-Feed Scanner) sends it back here after the scan, as a dragged paper goes back to where it was picked up.</summary>
     public void RememberPosition() => PickUpPosition = transform.position;
 
@@ -165,7 +176,10 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         _followedScale = GrabScale;
         if (_surface == null || !_surface.TryProject(_camera, _pointer, out Vector3 point))
             return;
-        transform.position = _surface.Clamp(Aimed(point) + GrabOffset) + _surface.transform.up * _height;
+        Vector3 at = _surface.Clamp(Aimed(point) + GrabOffset);
+        if (Bound != null)
+            at = Bound(at);
+        transform.position = at + _surface.transform.up * _height;
         Dragged?.Invoke(this, point);
     }
 

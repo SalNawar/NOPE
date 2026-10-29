@@ -350,6 +350,8 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         if (drag != null && drag.IsDragging)
             drag.GrabScale = PaperSizes.GrabRatio(_sizeAtGrab, _sizeNow);
         _carry.Step(transform, Time.deltaTime);
+        if (_onTopEye != null)
+            ShowFeel(); // carried above every prop (CarryOnTop): drawn toward the camera from where the carry put it this frame
     }
 
     /// <summary>The paper's printed meshes go with it (they were built for this paper alone).</summary>
@@ -842,12 +844,15 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         Quaternion turn = _tiltX.Value == 0f && _tiltZ.Value == 0f && _physics.Yaw == 0f
             ? _sheetRest.Value
             : Quaternion.Euler(0f, _physics.Yaw, 0f) * Quaternion.Euler(_tiltX.Value, 0f, _tiltZ.Value) * _sheetRest.Value;
-        float s = held ? HeldRatio() : 1f;
-        if (s < 1f)
+        Camera eyeCamera = held ? drag.DragCamera : _onTopEye;
+        float s = held ? HeldRatio() : _onTopEye != null ? _onTopRatio : 1f;
+        if (s < 1f && eyeCamera != null)
         {
-            Vector3 eye = transform.InverseTransformPoint(drag.DragCamera.transform.position);
+            Vector3 eye = transform.InverseTransformPoint(eyeCamera.transform.position);
             local = eye + (local - eye) * s;
         }
+        else
+            s = 1f;
         _shownRatio = s;
         sheet.localPosition = local;
         sheet.localRotation = turn;
@@ -911,6 +916,36 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         }
         _carry.Start(transform, way, facing, seconds, done, cut);
     }
+
+    /// <summary>
+    /// Carries the paper as Carry does, drawn above every prop on the way as
+    /// it was held (HeldOnTop: toward <paramref name="eye"/> by
+    /// <paramref name="ratio"/>, its picture unchanged) until it lands: a
+    /// paper let go over a machine or a prop slides along the desk to its
+    /// rest beside it, over what it was let go on, never hopping over a
+    /// casing toward the camera (FOLD-01 round 2, the verifier's F4). Without
+    /// an eye it is drawn where it lies.
+    /// </summary>
+    public void CarryOnTop(IReadOnlyList<Vector3> way, Quaternion facing, float seconds, Camera eye, float ratio, Action done)
+    {
+        Carry(way, facing, seconds, () =>
+        {
+            _onTopEye = null;
+            ShowFeel();
+            done?.Invoke();
+        }, () =>
+        {
+            _onTopEye = null;
+            _feelDirty = true;
+        });
+        _onTopEye = eye;
+        _onTopRatio = Mathf.Clamp01(ratio);
+        ShowFeel();
+    }
+
+    /// <summary>The camera a paper carried to its rest is drawn toward and the ratio (CarryOnTop; null while not).</summary>
+    private Camera _onTopEye;
+    private float _onTopRatio = 1f;
 
     /// <summary>The paper's quad and its collider at <paramref name="size"/> (metres): the sheet the form is laid out on.</summary>
     private void Resize(Vector2 size)

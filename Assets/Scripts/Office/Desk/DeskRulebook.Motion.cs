@@ -106,12 +106,15 @@ public sealed partial class DeskRulebook
         ShowMotion();
     }
 
-    /// <summary>A machine refused the folder (it scans and reads only the traveller's papers): it shakes its "no" in place and is carried along <paramref name="way"/> (the short way to where it rests, just clear of the machine; empty: it rests where it is) in <paramref name="seconds"/>.</summary>
-    public void Refused(IReadOnlyList<Vector3> way, float seconds)
+    /// <summary>A machine refused the folder (it scans and reads only the traveller's papers): it shakes its "no" in place and is carried along <paramref name="way"/> (the short way to where it rests, just clear of the machine; empty: it rests where it is) in <paramref name="seconds"/>, drawn toward <paramref name="eye"/> by <paramref name="ratio"/> on the way (RestAt).</summary>
+    public void Refused(IReadOnlyList<Vector3> way, float seconds, Camera eye = null, float ratio = 1f)
     {
         ShakeNo();
-        RestAt(way, seconds);
+        RestAt(way, seconds, eye, ratio);
     }
+
+    /// <summary>True while the folder is carried (to its rest, out of its pocket or into it).</summary>
+    public bool Carrying => _carry.Running;
 
     /// <summary>The folder's "no": it shakes in place (PaperPhysics.Shake, the desk's refusal shake: UseConfig).</summary>
     private void ShakeNo()
@@ -122,11 +125,32 @@ public sealed partial class DeskRulebook
         _physics.Shake(_shakeConfig.refuseShakeDistance, _shakeConfig.refuseShakeSeconds, _shakeConfig.refuseShakeCycles);
     }
 
-    /// <summary>The folder goes along <paramref name="way"/> (the short way to where it rests; empty: it stays) in <paramref name="seconds"/>: a drop that left it on the counter or over a prop (DeskController, DropResolver).</summary>
-    public void RestAt(IReadOnlyList<Vector3> way, float seconds)
+    /// <summary>
+    /// The folder goes along <paramref name="way"/> (the short way to where it
+    /// rests, along the desk; empty: it stays) in <paramref name="seconds"/>:
+    /// a drop that left it on the counter or over a prop (DeskController,
+    /// DropResolver). On the way it stays drawn above every prop as it was
+    /// held (HeldOnTop: toward <paramref name="eye"/> by
+    /// <paramref name="ratio"/>, its picture unchanged), so it slides along
+    /// the desk over what it was let go on and lands on the desk as it shows
+    /// (FOLD-01 round 2, the verifier's F4: carried over a casing's height it
+    /// hopped toward the camera, a quarter bigger; carried through a tray's
+    /// rim it went under it for two frames). With no eye it is drawn where it
+    /// lies.
+    /// </summary>
+    public void RestAt(IReadOnlyList<Vector3> way, float seconds, Camera eye = null, float ratio = 1f)
     {
         if (way != null && way.Count > 0)
-            _carry.Start(transform, way, transform.rotation, seconds, null);
+        {
+            ShowHeld(eye, ratio);
+            _carry.Start(transform, way, transform.rotation, seconds, () => ShowHeld(null, 1f), () =>
+            {
+                if (drag == null || !drag.IsDragging)
+                    ShowHeld(null, 1f);
+            });
+        }
+        else
+            ShowHeld(null, 1f);
         ShowMotion();
     }
 
