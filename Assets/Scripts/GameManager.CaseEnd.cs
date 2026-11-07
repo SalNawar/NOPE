@@ -151,7 +151,7 @@ public sealed partial class GameManager
         }
         else
         {
-            Debug.LogError("[GameManager] Ending reached but no RunManager instance — cannot load title scene.");
+            Debug.LogError("[GameManager] Ending reached but no RunManager instance: cannot load title scene.");
         }
     }
 }

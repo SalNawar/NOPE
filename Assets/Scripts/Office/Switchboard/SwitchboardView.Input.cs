@@ -44,6 +44,17 @@ public sealed partial class SwitchboardView
             if (!mouse.leftButton.isPressed)
                 ReleaseLever();
         }
+        else if (Dialer)
+        {
+            if (!DialHolding && mouse.leftButton.wasPressedThisFrame && OnHandle(p))
+            {
+                _leverHeld = true;
+                _leverThrow = MasterThrow.None;
+                _leverGrab = _lever.Value - _layout.Master.PullOf(p);
+            }
+            else
+                DialHand(mouse, p);
+        }
         else if (_held != null)
         {
             MoveHeld(p);
@@ -330,11 +341,17 @@ public sealed partial class SwitchboardView
     {
         bool show = false;
         Vector2 at = Vector2.zero, size = Vector2.zero;
-        if (_held != null || _leverHeld)
+        if (_held != null || _leverHeld || DialHolding)
         {
             show = true;
             at = Local(p);
             size = new Vector2(160f, 160f);
+        }
+        else if (Dialer && DialGrabArea(p) is BoardRect area)
+        {
+            show = true;
+            at = Local(area.Centre);
+            size = Size(area);
         }
         else if (OnHandle(p))
         {
@@ -343,7 +360,7 @@ public sealed partial class SwitchboardView
             at = Local(r.Centre);
             size = Size(r);
         }
-        else
+        else if (!Dialer)
         {
             Cord c = Grabbable(p);
             if (c != null)

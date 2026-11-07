@@ -15,7 +15,7 @@ public class EveningEditionTests
         cold = new List<string> { "{name} is warm.", "{name} is cold." },
         boredom = new List<string> { "{name} is content.", "{name} is bored." },
         sickness = new List<string> { "{name} is healthy.", "{name} is sick." },
-        paperWelfare = "ANIMAL WELFARE: inspectors took a {kind} called {name} from Block C."
+        paperWelfare = "ANIMAL WELFARE: inspectors are asking after a {kind} called {name} in Block C."
     };
 
     private static PetState Biscuit() => new PetState { kind = PetKind.Dog, name = "Biscuit" };
@@ -50,13 +50,27 @@ public class EveningEditionTests
         StringAssert.DoesNotContain("3", EveningEdition.PetFate(pet, Words(), 3), "never a number");
     }
 
+    /// <summary>A taken pet has no fate line: the Welfare Office's own story tells it, and the paper's line (paperWelfare, "inspectors are asking after a dog called Biscuit") is the warning of a night at the worst, which reads as if the pet were still at home (qa-endings-saves, 2026-11-07).</summary>
     [Test]
-    public void PetFate_ATakenPet_IsTheWelfareOfficesLine_AndNoPetSaysNothing()
+    public void PetFate_ATakenPet_SaysNothing_TheStoryTellsIt_AndNoPetSaysNothing()
     {
         PetState pet = Biscuit();
         pet.taken = true;
-        Assert.AreEqual("ANIMAL WELFARE: inspectors took a dog called Biscuit from Block C.", EveningEdition.PetFate(pet, Words(), 3));
+        pet.hunger = 3;
+        pet.welfareNights = 2;
+        Assert.AreEqual(string.Empty, EveningEdition.PetFate(pet, Words(), 3), "taken: the Welfare Office's story is the fate");
         Assert.AreEqual(string.Empty, EveningEdition.PetFate(new PetState(), Words(), 3), "never adopted");
         Assert.AreEqual(string.Empty, EveningEdition.PetFate(Biscuit(), null, 3));
+    }
+
+    [Test]
+    public void Compose_ATakenPet_PrintsTheWelfareStory_AndNoWarningLine()
+    {
+        PetState pet = Biscuit();
+        pet.taken = true;
+        EveningEditionPage page = EveningEdition.Compose("M", "Edition of day 4", "The Welfare Office", "The End",
+                                                         "{name} the {kind} has been rehomed.", null, pet, Words(), 3);
+        Assert.AreEqual("Biscuit the dog has been rehomed.", page.Body);
+        Assert.AreEqual(string.Empty, page.PetLine);
     }
 }

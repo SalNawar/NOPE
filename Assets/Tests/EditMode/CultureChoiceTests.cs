@@ -74,7 +74,7 @@ public class CultureChoiceTests
 
     [TestCase("ANNEHMEN", false)]
     [TestCase("ΕΓΚΡΙΣΗ", false, Description = "Greek: the Latin fallback draws it")]
-    [TestCase("SHIFT LEDGER — EVENING EDITION", false, Description = "general punctuation")]
+    [TestCase("SHIFT LEDGER \u2022 EVENING EDITION", false, Description = "general punctuation (a bullet)")]
     [TestCase("قبول", true)]
     [TestCase("批准", true)]
     [TestCase("稳定度：{0:0}%", true)]

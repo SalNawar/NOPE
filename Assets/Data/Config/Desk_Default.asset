@@ -21,6 +21,7 @@ MonoBehaviour:
   cloneResolution: {x: 1024, y: 768}
   cloneBrightness: 1
   cloneFill: 0.92
+  pcModel: {fileID: 919132149155446097, guid: 50a93fd826f74178a23c48d06c33400a, type: 3}
   scanSeconds: 0.8
   scanHintKey: desk.scanHint
   scanHintUntilDay: 5

@@ -5,7 +5,7 @@ using UnityEngine;
 
 /// <summary>
 /// Runtime-only developer cheat state (Phase 6). Never serialized into
-/// WorldState/SaveSystem — these are session-local overrides used by the
+/// WorldState/SaveSystem: these are session-local overrides used by the
 /// debug panel to influence generation/scoring for testing (force the next
 /// legendary, force the timeline leader, force a costume error, force the
 /// strandings, force a personality; the cheat menu's auto-decide, unlock

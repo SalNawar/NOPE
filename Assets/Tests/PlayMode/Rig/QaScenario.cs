@@ -141,6 +141,14 @@ public sealed class QaAssertion
 
     /// <summary>What was checked and what failed.</summary>
     public string detail;
+
+    /// <summary>
+    /// True when the check did not apply here (n/a: the painted desk draws no
+    /// such object): a neutral result, written with <see cref="pass"/> true so
+    /// it is never red, which the gate lists and counts in neither pass nor
+    /// fail (GATE-12 of 2026-10-28: 32 such lines passed as green).
+    /// </summary>
+    public bool na;
 }
 
 /// <summary>A whole run's report (run.json in the run's folder).</summary>
@@ -226,5 +234,8 @@ public sealed class QaGateResult
 
     /// <summary>True when measured on a built player ([BP]).</summary>
     public bool builtPlayer;
+
+    /// <summary>True when the check did not apply (n/a, <see cref="QaAssertion.na"/>): neutral, counted in neither pass nor fail (GateResults.Judge).</summary>
+    public bool na;
 }
 #endif

@@ -20,17 +20,17 @@ public class LensTextTests
     public void Split_ArabicLabel_WordsAndTheRest()
     {
         var g = Glossary("اليوم", "Day", "الإحاطة", "Briefing", "الصباحية", "Morning");
-        List<LensSegment> s = LensWords.Split("اليوم 8 — الإحاطة الصباحية", "Day 8 — Morning Briefing", g);
+        List<LensSegment> s = LensWords.Split("اليوم 8: الإحاطة الصباحية", "Day 8: Morning Briefing", g);
         var words = s.FindAll(x => x.IsWord).ConvertAll(x => x.English);
         CollectionAssert.AreEqual(new[] { "Day", "Briefing", "Morning" }, words);
-        Assert.IsFalse(s.Exists(x => !x.IsWord && x.English != null), "the digit and the dash are never words");
+        Assert.IsFalse(s.Exists(x => !x.IsWord && x.English != null), "the digit and the colon are never words");
     }
 
     [Test]
     public void Split_Japanese_CutAtTheGlossaryWords_LongestFirst()
     {
         var g = Glossary("朝", "morning", "朝の", "Morning", "ブリーフィング", "Briefing", "日目", "day");
-        List<LensSegment> s = LensWords.Split("8日目 — 朝のブリーフィング", "Day 8 — Morning Briefing", g);
+        List<LensSegment> s = LensWords.Split("8日目: 朝のブリーフィング", "Day 8: Morning Briefing", g);
         var words = s.FindAll(x => x.IsWord).ConvertAll(x => x.English);
         CollectionAssert.AreEqual(new[] { "day", "Morning", "Briefing" }, words, "朝の wins over 朝");
     }

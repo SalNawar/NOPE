@@ -1,5 +1,15 @@
 using UnityEngine;
 
+/// <summary>How the switchboard makes a connection (SwitchboardConfigSO.look). Serialized: append only.</summary>
+public enum SwitchboardLook
+{
+    /// <summary>LOOP_v5 on the v3 board: PLACE, PERIOD and power cords plugged by hand.</summary>
+    Classic = 0,
+
+    /// <summary>The Stargate dialer (Saleh 2026-11-07; the director's D1): a dial per portal, its ring turned to the emblem and the era, power cells carried to its cradle.</summary>
+    Stargate = 1
+}
+
 /// <summary>
 /// The portal switchboard's knobs (LOOP_v5; Saleh's numbers where he gave
 /// them, ours otherwise, see docs/pending/SWITCHBOARD.md): the rules'
@@ -15,6 +25,10 @@ public sealed class SwitchboardConfigSO : ScriptableObject
     /// <summary>Where the view loads the asset from (Resources).</summary>
     public const string ResourcePath = "SwitchboardConfig";
 
+    [Header("Look")]
+    /// <summary>How a connection is made: Stargate, the dialer (Saleh 2026-11-07: "a switchboard that is intresting ( my friends suggested something based on stargate)"); Classic, LOOP_v5's cords. One knob reverts the board.</summary>
+    public SwitchboardLook look = SwitchboardLook.Stargate;
+
     [Header("Rules")]
     /// <summary>Real seconds a locked-in route calibrates while powered (Saleh: 20 s, real seconds).</summary>
     public float calibrationSeconds = 20f;
@@ -25,7 +39,7 @@ public sealed class SwitchboardConfigSO : ScriptableObject
     /// <summary>Credits per extra traveller in one group sent (small).</summary>
     public int bonusPerExtraTraveller = 5;
 
-    /// <summary>How many power cords the board has (Saleh: power is the cable you keep moving).</summary>
+    /// <summary>How many power cords the Classic board has (Saleh: power is the cable you keep moving).</summary>
     public int powerCords = 2;
 
     /// <summary>A fresh call's blink rate (blinks a second).</summary>
@@ -88,6 +102,34 @@ public sealed class SwitchboardConfigSO : ScriptableObject
     /// <summary>A held plug's size (lifted toward the eye).</summary>
     public float heldScale = 1.12f;
 
+    [Header("Dialer (look Stargate)")]
+    /// <summary>The power cells in the rack (D1's "Move the units"; 4, the count Saleh picked on 2026-10-25: with 2 an Ancient route, 3 bars, could never open).</summary>
+    public int powerCells = 4;
+
+    /// <summary>The slots of a dial's cradle: one cell a slot, one bar a cell.</summary>
+    public int cradleSlots = 3;
+
+    /// <summary>The bars a route of each era needs (Ancient, Medieval, Early modern, Industrial, Modern: D1's 3, 2, 2, 1, 1).</summary>
+    public int[] eraBars = { 3, 2, 2, 1, 1 };
+
+    /// <summary>Seconds the ring takes to ease into its detent once let go (D1: a 120 to 200 ms spring; it follows the hand on the same spring).</summary>
+    [Range(0.05f, 0.4f)] public float ringSettleSeconds = 0.16f;
+
+    /// <summary>Seconds a let-go cell takes to seat in its cradle slot.</summary>
+    public float cellSeatSeconds = 0.12f;
+
+    /// <summary>How far a seated cell settles into its slot (plate pixels: D1's 2 px).</summary>
+    public float cellSettlePixels = 2f;
+
+    /// <summary>Seconds an engaged chevron's flash takes to fade to its steady light (the calibration's strobe; none under Reduced Motion).</summary>
+    public float chevronFlashSeconds = 0.45f;
+
+    /// <summary>The red flicker of a failed lock (a wrong era) while the fuse is out (blinks a second; under 2, the flicker rule).</summary>
+    public float fuseFlickerHz = 1.5f;
+
+    /// <summary>The open gate's horizon (the hub fills with it as the route goes live).</summary>
+    public Color horizonColour = new Color(0.62f, 0.86f, 1f, 1f);
+
     [Header("MASTER")]
     /// <summary>How far down MASTER must be let go for the pull to count (the portals spec: before 80 % it does nothing).</summary>
     [Range(0.5f, 1f)] public float masterCommitAt = 0.8f;
@@ -107,16 +149,23 @@ public sealed class SwitchboardConfigSO : ScriptableObject
     /// <summary>The board's shake when a fuse pops (plate pixels).</summary>
     public float fuseShake = 7f;
 
-    /// <summary>The rules from the knobs.</summary>
+    /// <summary>True when the board is the dialer (look Stargate).</summary>
+    public bool Dialer => look == SwitchboardLook.Stargate;
+
+    /// <summary>The rules from the knobs: the dialer's cells, cradle, era bars, MASTER as the final lock and one dial per route; else the Classic board's cords.</summary>
     public SwitchboardRules Rules() => new SwitchboardRules
     {
         CalibrationSeconds = calibrationSeconds,
         FuseSeconds = fuseSeconds,
         BonusPerExtraTraveller = bonusPerExtraTraveller,
-        PowerCords = powerCords,
+        PowerCords = Dialer ? powerCells : powerCords,
         BlinkHz = blinkHz,
         BlinkHzMax = blinkHzMax,
         BlinkRampSeconds = blinkRampSeconds,
         ModuleFromDay = moduleFromDay != null ? (int[])moduleFromDay.Clone() : new int[0],
+        PeriodBars = Dialer && eraBars != null ? (int[])eraBars.Clone() : new int[0],
+        CellsPerModule = Dialer ? Mathf.Max(1, cradleSlots) : 1,
+        MasterNeedsPower = Dialer,
+        PlaceTakesOnePlug = !Dialer,
     };
 }

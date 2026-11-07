@@ -96,7 +96,10 @@ public sealed class OfficeReadouts : MonoBehaviour
 
         if (_hasLast && world.money > _lastMoney &&
             creditsDing != null && creditsDing.clip != null)
+        {
             creditsDing.Play();
+            QaSignals.Sound(creditsDing.clip); // the QA rig's press-to-sound check (GATE-13): the ding is outside the sound bank
+        }
 
         _lastMoney = world.money;
         _hasLast = true;

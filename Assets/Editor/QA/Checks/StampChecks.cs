@@ -6,6 +6,17 @@ public static class StampChecks
     public static GateResult Aim() => GateResults.Require("stamp.aim", "STAMP", "stamp_aim.aim.*");
 
     /// <summary>
+    /// Every case of stamp_aim.json was laid out as asked (StampRig's setup
+    /// lines: the rulebook over the passport's edge with no fault under it,
+    /// the 3-paper stacks, a pressable point on each aimed paper). A set-up
+    /// failure is its own red line, never an aim miss (GATE-20 of 2026-10-28:
+    /// set-up failures were reported as aim misses, and the rulebook's
+    /// push-back and the reading view going off were stepped around).
+    /// </summary>
+    [GateCheck("stamp.setup", "STAMP", GateKind.Play)]
+    public static GateResult Setup() => GateResults.Require("stamp.setup", "STAMP", "stamp_aim.setup.*");
+
+    /// <summary>
     /// The carried dater never passes through a prop: no part of it below the
     /// top of the prop under its footprint in any frame from the press to the
     /// seat (stamp_aim.json, StampRig's letGoCarry lines, R4 (d)'s literal

@@ -96,9 +96,10 @@ public static class DeskPlanOps
     /// asserts <c>shown.&lt;name&gt;</c>. On the painted desk a home the
     /// painted map draws or dresses differently (DeskPaintedMap.
     /// NotShownReason: the decor zone's decorations are cut, the RING
-    /// SERVICE panel shows nothing, the deal tray is the shell's) passes as
-    /// "not applicable on the painted desk" with that reason, and the next
-    /// n steps are passed over (QaRunner.Skip: the decoration drags of
+    /// SERVICE panel shows nothing, the deal tray is the shell's) is n/a,
+    /// "not applicable on the painted desk" with that reason (QaRunner.
+    /// NotApplicable: neutral, never counted as a pass; GATE-12), and the
+    /// next n steps are passed over (QaRunner.Skip: the decoration drags of
     /// desk_plan_decor and cam_chrome, the breaker click of desk_plan_homes
     /// and cam_desk); elsewhere it passes as "in play" and the steps run.
     /// The night of 2026-10-28, seams B and C.
@@ -110,7 +111,7 @@ public static class DeskPlanOps
         string reason = DeskLayout.PaintedShown ? DeskPaintedMap.NotShownReason(home) : null;
         if (reason != null)
         {
-            runner.Assert(name, Owner, true, "not applicable on the painted desk", reason + $"; the next {step.n} step(s) are passed over");
+            runner.NotApplicable(name, Owner, "not applicable on the painted desk", reason + $"; the next {step.n} step(s) are passed over");
             runner.Skip(step.n, $"{home}: {reason}");
         }
         else
@@ -192,8 +193,9 @@ public static class DeskPlanOps
         List<Renderer> own = Own(go);
         if (own.Count == 0 && DeskLayout.PaintedShown && DeskPaintedMap.NotShownReason(HomeOf(go)) is string reason)
         {
-            // The painted desk draws or dresses this home differently (seam B, 2026-10-28): a pass that says so, never a silent skip.
-            runner.Assert("visible." + name, Owner, true, "not applicable on the painted desk", reason);
+            // The painted desk draws or dresses this home differently (seam B, 2026-10-28): an n/a line that says so, never a silent
+            // skip and never a pass (GATE-12).
+            runner.NotApplicable("visible." + name, Owner, "not applicable on the painted desk", reason);
             yield break;
         }
         if (cam == null || own.Count == 0)

@@ -13,8 +13,9 @@ using UnityEngine.UI;
 /// window does not drag. The restored rect and the maximised state are
 /// remembered while the window lives (the office session; never saved).
 /// The window keeps inside the window layer (KeepInside, RectClamp.Window:
-/// its title bar always reachable): each time it shows and while it is
-/// dragged. Its place is set through UiAppear.Place, so a maximise or a
+/// its title bar always reachable, never wider than the layer): each time it
+/// shows and while it is dragged; its open motion never carries it past the
+/// glass either (UiAppear.Within). Its place is set through UiAppear.Place, so a maximise or a
 /// drag during its open motion lands where it should.
 /// Attach to the window root and wire the title-bar buttons; WindowDrag sits
 /// on the title bar.
@@ -119,9 +120,10 @@ public sealed class DesktopWindow : MonoBehaviour
 
     /// <summary>
     /// Moves the window inside the window layer (RectClamp.Window): a window
-    /// past an edge comes back just inside, one taller than the layer keeps
-    /// its title bar on the layer's top, so the title bar can always be
-    /// dragged. Runs on the rest place (UiAppear.Place).
+    /// past an edge comes back just inside, one wider than the layer shrinks
+    /// to its width (its close button stays on the glass), one taller than
+    /// the layer keeps its title bar on the layer's top, so the title bar can
+    /// always be dragged. Runs on the rest place (UiAppear.Place).
     /// </summary>
     public void KeepInside()
     {
@@ -133,6 +135,8 @@ public sealed class DesktopWindow : MonoBehaviour
     private void ClampToLayer()
     {
         Rect bounds = ((RectTransform)window.parent).rect;
+        if (window.rect.width > bounds.width)
+            window.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, bounds.width); // never wider than the layer: its close button stays on the glass
         Rect own = window.rect;
         Vector3 at = window.localPosition;
         (float dx, float dy) = RectClamp.Window(new DeskRect(at.x + own.center.x, at.y + own.center.y, own.width, own.height),

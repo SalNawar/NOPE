@@ -298,6 +298,7 @@ public sealed class QaRunner : MonoBehaviour
             case "sign":
             {
                 var sign = (Component)QaGame.Field(QaGame.Find<GameManager>(), "readySign");
+                yield return HeldStill(sign.gameObject, note);
                 yield return ClickObject(sign.gameObject, s, note);
                 break;
             }
@@ -481,6 +482,44 @@ public sealed class QaRunner : MonoBehaviour
         Unreached(step, go.name, top, "click event sent", note);
         ExecuteEvents.Execute(go, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
         yield return null;
+    }
+
+    /// <summary>The frames in a row <see cref="HeldStill"/> needs with the target moved at most <see cref="StillPixels"/>.</summary>
+    private const int StillFrames = 4;
+
+    /// <summary>How far (pixels) the target may move in one frame and still count as held still.</summary>
+    private const float StillPixels = 0.5f;
+
+    /// <summary>How long (real seconds) <see cref="HeldStill"/> waits at most before it lets the press go anyway.</summary>
+    private const float StillSeconds = 3f;
+
+    /// <summary>
+    /// Waits until <paramref name="go"/> holds still on the screen
+    /// (<see cref="StillFrames"/> frames in a row, each moved at most
+    /// <see cref="StillPixels"/>), at most <see cref="StillSeconds"/>: a press
+    /// aimed while the camera moves lands where the target was, and the
+    /// release, frames later, misses it, so no click is raised (a guided
+    /// day's Start Shift tilts into the reading view for the rulebook's new
+    /// page, GuideDirector.BeginShift; cheats_all's D7 step lost the AVAILABLE
+    /// sign's click so). Notes a wait, or a target that never held still.
+    /// </summary>
+    private static IEnumerator HeldStill(GameObject go, Action<string> note)
+    {
+        Vector2? last = QaGame.ScreenPoint(go);
+        int calm = 0, frames = 0;
+        float end = Time.realtimeSinceStartup + StillSeconds;
+        while (calm < StillFrames && Time.realtimeSinceStartup < end)
+        {
+            yield return null;
+            frames++;
+            Vector2? now = QaGame.ScreenPoint(go);
+            calm = now.HasValue && last.HasValue && Vector2.Distance(now.Value, last.Value) <= StillPixels ? calm + 1 : 0;
+            last = now;
+        }
+        if (calm < StillFrames)
+            note($"{go.name} still moved on the screen after {frames} frames ({StillSeconds} s): pressed where it is now");
+        else if (frames > StillFrames)
+            note($"{go.name} held still after {frames - StillFrames} frame(s) of a camera move");
     }
 
     /// <summary>Records a press the virtual mouse could not deliver: blocked (fails <c>presses</c>) unless the step allows it with <see cref="QaStep.direct"/>.</summary>
@@ -813,6 +852,18 @@ public sealed class QaRunner : MonoBehaviour
     public void Assert(string id, string owner, bool pass, string measured, string detail)
     {
         _assertions.Add(new QaAssertion { id = $"{Scenario.name}.{id}", owner = string.IsNullOrEmpty(owner) ? Scenario.owner : owner, pass = pass, measured = measured, detail = detail });
+    }
+
+    /// <summary>
+    /// Records "&lt;scenario&gt;.&lt;id&gt;" as not applicable here (n/a,
+    /// <see cref="QaAssertion.na"/>): a neutral line that says why
+    /// (<paramref name="measured"/>, <paramref name="detail"/>), never red and
+    /// never counted as a pass (GATE-12: "not applicable on the painted desk"
+    /// lines passed as green).
+    /// </summary>
+    public void NotApplicable(string id, string owner, string measured, string detail)
+    {
+        _assertions.Add(new QaAssertion { id = $"{Scenario.name}.{id}", owner = string.IsNullOrEmpty(owner) ? Scenario.owner : owner, pass = true, na = true, measured = measured, detail = detail });
     }
 
     private void Finish()

@@ -1546,6 +1546,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The painted PC (the painted desk shows): the desktop's clone on its screen quad, its click box on the CRT, the power knob's where the clone's frame puts it, in front of the CRT's box.</summary>
     private void BindPaintedPc(Camera office)
     {
+        // The Blender PC (retro sci-fi 80s anime, cyberpunk twist) over the painted CRT and keyboard, first: the outline takes it in.
+        PaintedPcModel.Wear(paintedDesk, config != null ? config.pcModel : null);
         // The CRT face, the casing's recess and the glass's scanlines (desk v3 round 12), before the clone measures the glass.
         Vector2 visible = PaintedCrt.Fit(paintedDesk.Screen, config != null ? config.cloneFill : 1f);
         if (screenClone != null)

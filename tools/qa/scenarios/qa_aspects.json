@@ -1,0 +1,474 @@
+{
+  "name": "qa_aspects",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "Four aspects (qa-endings-saves, 2026-11-07): the Title, the office (the briefing, a traveller at the desk, the day's report) and Home (the bills, then each panel through Sleep at 1280x1024) at 1920x1080 (A1), 1280x1024 (A4), 2560x1080 (A3) and 1920x1200 (A5): a still and every text read at each (qaTexts n 0: reported in texts_report.txt and the tsv files; the endings' pages are asserted in qa_endings). These screens are other tracks' (diegetic-ui, CAM, CONTENT, home-rework): a finding is filed in BUGS.md, not asserted here."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "title"
+    },
+    {
+      "op": "qaTexts",
+      "name": "title_A1",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "title"
+    },
+    {
+      "op": "qaTexts",
+      "name": "title_A4",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "title"
+    },
+    {
+      "op": "qaTexts",
+      "name": "title_A3",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "title"
+    },
+    {
+      "op": "qaTexts",
+      "name": "title_A5",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_briefing"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_briefing_A1",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_briefing"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_briefing_A4",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_briefing"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_briefing_A3",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_briefing"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_briefing_A5",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_desk"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_desk_A1",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_desk"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_desk_A4",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_desk"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_desk_A3",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_desk"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_desk_A5",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 60
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_report"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_report_A1",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_report"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_report_A4",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_report"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_report_A3",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "office_report"
+    },
+    {
+      "op": "qaTexts",
+      "name": "office_report_A5",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "home_bills"
+    },
+    {
+      "op": "qaTexts",
+      "name": "home_bills_A1",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "home_bills"
+    },
+    {
+      "op": "qaTexts",
+      "name": "home_bills_A4",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "home_bills"
+    },
+    {
+      "op": "qaTexts",
+      "name": "home_bills_A3",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "home_bills"
+    },
+    {
+      "op": "qaTexts",
+      "name": "home_bills_A5",
+      "n": 0
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "qaHome",
+      "name": "home_A4",
+      "f": 90
+    },
+    {
+      "op": "flowSettled"
+    },
+    {
+      "op": "waitOffice",
+      "n": 2,
+      "f": 120
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    }
+  ]
+}

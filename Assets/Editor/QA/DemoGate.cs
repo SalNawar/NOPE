@@ -48,7 +48,7 @@ public sealed class DemoGateReport
         var sb = new StringBuilder();
         sb.AppendLine($"# DemoGate ({Level}): {(Refused ? "REFUSED" : "PASS")}");
         sb.AppendLine();
-        sb.AppendLine($"Written {DateTime.Now:yyyy-MM-dd HH:mm:ss}, HEAD {(string.IsNullOrEmpty(Head) ? "unknown" : Head)}. {Results.Count(r => r.Pass)} pass, {Results.Count(r => !r.Pass)} fail.");
+        sb.AppendLine($"Written {DateTime.Now:yyyy-MM-dd HH:mm:ss}, HEAD {(string.IsNullOrEmpty(Head) ? "unknown" : Head)}. {Counts}.");
         sb.AppendLine();
         if (Carried.Count > 0)
         {
@@ -76,15 +76,26 @@ public sealed class DemoGateReport
                 sb.AppendLine("- " + line);
             sb.AppendLine();
         }
+        List<GateResult> na = Results.Where(r => r.NotApplicable).ToList();
+        if (na.Count > 0)
+        {
+            sb.AppendLine("## Not applicable (n/a: counted in neither pass nor fail)");
+            foreach (GateResult r in na)
+                sb.AppendLine($"- `{r.Id}` [{r.Owner}]: {r.Measured}{(string.IsNullOrEmpty(r.Detail) ? string.Empty : " - " + r.Detail)}");
+            sb.AppendLine();
+        }
         sb.AppendLine("## Results by owner");
         foreach (IGrouping<string, GateResult> owner in Results.GroupBy(r => r.Owner).OrderBy(g => g.Key, StringComparer.Ordinal))
         {
             sb.AppendLine($"### {owner.Key}");
             foreach (GateResult r in owner)
-                sb.AppendLine($"- {(r.Pass ? "PASS" : "**FAIL**")} `{r.Id}`: {r.Measured}{(string.IsNullOrEmpty(r.Detail) ? string.Empty : " - " + r.Detail)}");
+                sb.AppendLine($"- {(r.NotApplicable ? "N/A" : r.Pass ? "PASS" : "**FAIL**")} `{r.Id}`: {r.Measured}{(string.IsNullOrEmpty(r.Detail) ? string.Empty : " - " + r.Detail)}");
         }
         return sb.ToString();
     }
+
+    /// <summary>"N pass, M fail, K n/a": a result that did not apply counts in neither pass nor fail (GATE-12).</summary>
+    public string Counts => $"{Results.Count(r => r.Green)} pass, {Results.Count(r => !r.Pass)} fail, {Results.Count(r => r.NotApplicable)} n/a";
 }
 
 /// <summary>A play run judged against the known-red list (DemoGate.JudgeRun).</summary>
@@ -167,7 +178,7 @@ public static class DemoGate
         report.Head = GitHead.Read(GateResults.ProjectRoot);
         Directory.CreateDirectory(ReportFolder);
         File.WriteAllText(Path.Combine(ReportFolder, level == GateLevel.Demo ? "report_demo.md" : "report.md"), report.ToMarkdown());
-        string verdict = $"[DemoGate] {level}: {(report.Refused ? "REFUSED" : "PASS")} ({report.Results.Count(r => r.Pass)} pass, {report.Results.Count(r => !r.Pass)} fail). Report: {ReportFolder}";
+        string verdict = $"[DemoGate] {level}: {(report.Refused ? "REFUSED" : "PASS")} ({report.Counts}). Report: {ReportFolder}";
         if (report.Refused)
             Debug.LogError(verdict + "\n" + string.Join("\n", report.Reasons));
         else

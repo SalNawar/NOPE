@@ -1411,6 +1411,7 @@ public sealed class DeskStampTray : MonoBehaviour
             return;
         sound.pitch = pitch;
         sound.PlayOneShot(clip);
+        QaSignals.Sound(clip); // the QA rig's press-to-sound check (GATE-13): this clip is the tray's own, outside the sound bank
     }
 
     /// <summary>A button clicked leaves no selection behind (a selected button would take SPACE, the inspect key, as a press).</summary>

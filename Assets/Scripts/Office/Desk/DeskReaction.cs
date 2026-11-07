@@ -74,7 +74,10 @@ public sealed class DeskReaction : MonoBehaviour
         _elapsed = 0f;
         _animating = reaction.kind != ReactionKind.None;
         if (reaction.clip != null && audioSource != null)
+        {
             audioSource.PlayOneShot(reaction.clip);
+            QaSignals.Sound(reaction.clip); // the QA rig's press-to-sound check (GATE-13): a reaction's clip is outside the sound bank
+        }
         if (tooltip != null && !string.IsNullOrWhiteSpace(reaction.tooltipKey))
             tooltip.Show(UiText.Format(reaction.tooltipKey, _text != null ? _text() : readout != null ? readout.text : string.Empty, UiText.Currency(UiText.WalletForm.Label)),
                          _tooltipPoint != null ? _tooltipPoint : transform, reaction.tooltipOffset, reaction.tooltipSeconds);

@@ -2,7 +2,7 @@
 /// What a document field, an answer or a record row states: it decides what
 /// the value can be compared with (a reference book, the traveller's record,
 /// another paper) and how a report names it (ClueLabels). Order is serialized
-/// (templates, books, places, effects, saves) — append only, never reorder
+/// (templates, books, places, effects, saves): append only, never reorder
 /// (SerializedEnumsTests pins every value).
 /// </summary>
 public enum ClueCategory
@@ -17,7 +17,7 @@ public enum ClueCategory
     /// <summary>A place's signature dress: the Costume Guide rows and worn garments (derived from the place's wardrobe).</summary>
     Culture,
 
-    // Identity fields — validated against the agency's citizen records,
+    // Identity fields: validated against the agency's citizen records,
     // not the era reference books.
     Name,
     BirthDate,

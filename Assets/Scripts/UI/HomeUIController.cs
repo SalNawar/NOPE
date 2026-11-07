@@ -29,11 +29,11 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>The cel UI kit (Assets/Data/UI/UiKit_Default.asset): the sprites and fonts the spawned rows, cards and reels are drawn with.</summary>
     [SerializeField] private UiKitSO kit;
 
-    [Header("The flat (optional — null-safe)")]
+    [Header("The flat (optional, null-safe)")]
     /// <summary>The flat's painted backdrop (the art's ArtBackground): tinted toward deep night after a late shift (<see cref="SetLateness"/>).</summary>
     [SerializeField] private Image backdrop;
 
-    [Header("HUD (optional — null-safe)")]
+    [Header("HUD (optional, null-safe)")]
     /// <summary>Shows current money (on the HUD's phosphor readout).</summary>
     [SerializeField] private TMP_Text moneyText;
 
@@ -44,7 +44,7 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Root of the expenses panel.</summary>
     [SerializeField] private GameObject expensesPanel;
 
-    /// <summary>Expenses title ("Day 3 — Home").</summary>
+    /// <summary>Expenses title ("Day 3: Home").</summary>
     [SerializeField] private TMP_Text expensesTitleText;
 
     /// <summary>The fixed costs paid, the pet's needs in words, and the night's bills' total.</summary>
@@ -881,7 +881,7 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>
     /// Shows the sleep prompt, with <paramref name="radioLine"/> ("On the
     /// radio: ...") when the house owns the radio. Invokes onSleep when the
-    /// player clicks Sleep (or immediately if unwired) — HomeManager then
+    /// player clicks Sleep (or immediately if unwired): HomeManager then
     /// advances to the next day.
     /// </summary>
     public void ShowSleep(WorldState world, string radioLine, Action onSleep)
@@ -895,7 +895,7 @@ public sealed class HomeUIController : MonoBehaviour
         _onSleep = onSleep;
 
         if (sleepTitleText != null)
-            sleepTitleText.text = $"Day {world.day} — Turn In";
+            sleepTitleText.text = $"Day {world.day}: Turn In";
 
         if (sleepBodyText != null)
             sleepBodyText.text = "Get some rest. Tomorrow's briefing will reflect tonight's choices."
@@ -1080,7 +1080,7 @@ public sealed class HomeUIController : MonoBehaviour
         rt.sizeDelta = size;
     }
 
-    /// <summary>Creates a label-only row (no button) in <paramref name="ink"/> — used for empty-state messages.</summary>
+    /// <summary>Creates a label-only row (no button) in <paramref name="ink"/>: used for empty-state messages.</summary>
     private static GameObject CreateLabelRow(Transform parent, string label, Color ink)
     {
         var row = new GameObject("Row_Label", typeof(RectTransform));

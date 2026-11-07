@@ -7,11 +7,16 @@ usage:
   python seqtools.py flicker <seq> [--static] [--mask mask.png] [--th 24] [--back 8] [--within 3] [--max-toggles 2]
   python seqtools.py flash <seq> [--max-per-s 3] [--th 20]
   python seqtools.py latency <seq> [--roi x0,y0,x1,y1] [--track name] [--need-cue] [--max-frames 1]
+  python seqtools.py sound <seq> [--need-cue] [--max-frames 1] [--cue-window 6]
   python seqtools.py frozen <seq> [--max-seconds 0.25]
-  python seqtools.py cuts <seq>
+  python seqtools.py cuts <seq> [--cut-th 15]
+  python seqtools.py colour <seq> [--max-diff 3] [--colour-roi x0,y0,x1,y1]   (each frame taken with a still against it)
   python seqtools.py hitches <seq> [--budget-ms 33.4]   (a timing sequence: recorded after the op realtime n=1)
-  python seqtools.py all <seq>                 (flicker, flash, and latency when the sequence has presses; on a timing
-                                                sequence, which has no frames, hitches)
+  python seqtools.py all <seq>                 (flicker, flash and cuts; latency and sound when the sequence has
+                                                presses; colour when a still was taken while it recorded; cuts
+                                                is skipped on a sequence recorded with motion off (meta.json
+                                                motionStill: its views cut by design); on a timing sequence,
+                                                which has no frames, hitches only)
   python seqtools.py gif <seq> <out.gif> [--scale 0.67] [--start N] [--end M] [--step K]
   python seqtools.py sheet <seq> <out.png> [--start N] [--end M] [--step 3] [--cols 4]
   python seqtools.py side <seq> <reference frames folder> <out.gif> [--frames N] [--step K] [--height 360]
@@ -194,9 +199,68 @@ def cmd_frozen(args, seq=None):
 def cmd_cuts(args, seq=None):
     seq = seq or args.seq
     files, _, _ = load(seq)
-    c = seqlib.cuts([seqlib.load_luma(f) for f in files])
-    emit(args, seq, 'cuts', not c, f'{len(c)} single-frame full-screen changes', ', '.join(f'f{i} {a}' for i, a in c[:12]))
+    c = seqlib.cuts([seqlib.load_luma(f) for f in files], th=args.cut_th)
+    emit(args, seq, 'cuts', not c, f'{len(c)} single-frame jumps in mean luma over {args.cut_th:g} in {len(files)} frames',
+         ', '.join(f'f{i} {a}' for i, a in c[:12]))
     return not c
+
+
+def cmd_sound(args, seq=None):
+    seq = seq or args.seq
+    _, _, events = load(seq)
+    if not any(e.get('channel') in ('mouse', 'key') for e in events):
+        print(f'SKIP sound {seq}: no press in events.tsv')
+        return True
+    r = seqlib.sound(events, max_frames=args.max_frames, window=args.cue_window, need_cue=args.need_cue)
+    by = {}
+    for p in r['presses']:
+        by[p['state']] = by.get(p['state'], 0) + 1
+    worst = max((p['cue_frames'] for p in r['presses'] if p['cue_frames'] is not None), default=None)
+    detail = '; '.join(f'press f{p["frame"]} {p["name"]}: {p["state"]}' + (f' {p["cue"]} at {p["cue_frames"]:+d}' if p['cue_frames'] is not None else '')
+                       for p in r['presses'][:12])
+    emit(args, seq, 'sound', r['pass'],
+         f'{len(r["presses"])} presses: {by.get("on time", 0)} cue on time, {by.get("late", 0)} late, {by.get("silent", 0)} silent '
+         f'(worst {worst} frames, max {args.max_frames}; {r["cues"]} cue rows)', detail)
+    return r['pass']
+
+
+def still_rows(seq):
+    """The stills taken while the sequence recorded (events.tsv channel 'still'): [(frame index, still path)], the still
+    in the run's stills folder beside seq/."""
+    _, _, events = load(seq)
+    stills = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(seq))), 'stills')
+    out = []
+    for e in events:
+        if e.get('channel') == 'still':
+            try:
+                out.append((int(e['i']), os.path.join(stills, e.get('name', ''))))
+            except (KeyError, ValueError):
+                pass
+    return out
+
+
+def cmd_colour(args, seq=None):
+    """GATE-05: each frame captured with a still shows the still's colour (mean R, G, B within --max-diff)."""
+    seq = seq or args.seq
+    rows = still_rows(seq)
+    if not rows:
+        print(f'SKIP colour {seq}: no still was taken while it recorded')
+        return True
+    roi = tuple(float(v) for v in args.colour_roi.split(',')) if getattr(args, 'colour_roi', None) else None
+    worst, lines, ok = 0.0, [], True
+    for i, still in rows:
+        frame = os.path.join(seq, f'f{i:04d}.png')
+        if not os.path.exists(frame) or not os.path.exists(still):
+            ok = False
+            lines.append(f'f{i:04d} or {os.path.basename(still)} is missing')
+            continue
+        c = seqlib.colour_match(np.asarray(Image.open(frame).convert('RGB')), np.asarray(Image.open(still).convert('RGB')), roi)
+        worst = max(worst, c['diff'], c['roi_diff'] or 0.0)
+        lines.append(f'f{i:04d} {c["frame"]} against {os.path.basename(still)} {c["still"]}' +
+                     (f'; region {c["roi_frame"]} against {c["roi_still"]}' if roi else ''))
+    ok = ok and worst <= args.max_diff
+    emit(args, seq, 'colour', ok, f'{len(rows)} frame(s) against their stills: worst mean RGB difference {worst:g} (max {args.max_diff:g})', '; '.join(lines[:6]))
+    return ok
 
 
 def cmd_hitches(args, seq=None):
@@ -217,7 +281,14 @@ def cmd_all(args):
         return cmd_hitches(args)
     ok = cmd_flicker(args)
     ok = cmd_flash(args) and ok
+    if seqlib.motion_still(args.seq):
+        print(f'SKIP cuts {args.seq}: recorded with motion off (Reduced Motion or intensity 0: the views cut by design)')
+    else:
+        ok = cmd_cuts(args) and ok
     ok = cmd_latency(args) and ok
+    ok = cmd_sound(args) and ok
+    if still_rows(args.seq):
+        ok = cmd_colour(args) and ok
     return ok
 
 
@@ -349,13 +420,27 @@ def parser():
         p.add_argument('--need-cue', action='store_true')
         p.add_argument('--max-frames', type=int, default=1)
 
+    def sound_opts(p):
+        p.add_argument('--cue-window', type=int, default=6)
+
+    def cuts_opts(p):
+        p.add_argument('--cut-th', type=float, default=15.0)
+
+    def colour_opts(p):
+        p.add_argument('--max-diff', type=float, default=3.0)
+        p.add_argument('--colour-roi')
+
     p = sub.add_parser('flicker'); p.add_argument('seq'); flicker_opts(p); result_opts(p); p.set_defaults(fn=cmd_flicker)
     p = sub.add_parser('flash'); p.add_argument('seq'); flash_opts(p); result_opts(p); p.set_defaults(fn=cmd_flash)
     p = sub.add_parser('latency'); p.add_argument('seq'); latency_opts(p); result_opts(p); p.set_defaults(fn=cmd_latency)
+    p = sub.add_parser('sound'); p.add_argument('seq'); p.add_argument('--need-cue', action='store_true')
+    p.add_argument('--max-frames', type=int, default=1); sound_opts(p); result_opts(p); p.set_defaults(fn=cmd_sound)
     p = sub.add_parser('frozen'); p.add_argument('seq'); p.add_argument('--max-seconds', type=float, default=0.25); result_opts(p); p.set_defaults(fn=cmd_frozen)
-    p = sub.add_parser('cuts'); p.add_argument('seq'); result_opts(p); p.set_defaults(fn=cmd_cuts)
+    p = sub.add_parser('cuts'); p.add_argument('seq'); cuts_opts(p); result_opts(p); p.set_defaults(fn=cmd_cuts)
+    p = sub.add_parser('colour'); p.add_argument('seq'); colour_opts(p); result_opts(p); p.set_defaults(fn=cmd_colour)
     p = sub.add_parser('hitches'); p.add_argument('seq'); p.add_argument('--budget-ms', type=float, default=1000.0 / 30 + 0.1); result_opts(p); p.set_defaults(fn=cmd_hitches)
-    p = sub.add_parser('all'); p.add_argument('seq'); flicker_opts(p); flash_opts(p); latency_opts(p); result_opts(p)
+    p = sub.add_parser('all'); p.add_argument('seq'); flicker_opts(p); flash_opts(p); latency_opts(p); sound_opts(p); cuts_opts(p)
+    colour_opts(p); result_opts(p)
     p.add_argument('--budget-ms', type=float, default=1000.0 / 30 + 0.1); p.set_defaults(fn=cmd_all)
     p = sub.add_parser('gif'); p.add_argument('seq'); p.add_argument('out'); p.add_argument('--scale', type=float, default=0.67)
     p.add_argument('--start', type=int, default=0); p.add_argument('--end', type=int); p.add_argument('--step', type=int, default=1); p.set_defaults(fn=cmd_gif)

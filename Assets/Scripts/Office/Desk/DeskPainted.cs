@@ -60,6 +60,18 @@ public sealed class DeskPainted : MonoBehaviour
 
     private readonly Dictionary<string, Part> _byName = new Dictionary<string, Part>();
     private readonly HashSet<Renderer> _painted = new HashSet<Renderer>();
+    private readonly HashSet<Transform> _worn = new HashSet<Transform>();
+
+    /// <summary>True when <paramref name="r"/> is part of the painted look: one of the bake's renderers, or one under a line the painted desk wears (WearReadout: the readout's text and any sub-mesh it makes later).</summary>
+    private bool IsPainted(Renderer r)
+    {
+        if (_painted.Contains(r))
+            return true;
+        for (Transform t = r.transform; t != null; t = t.parent)
+            if (_worn.Contains(t))
+                return true;
+        return false;
+    }
 
     /// <summary>The painted homes (DeskLayoutSettings.UsePainted merges them over DESK-PLAN's map).</summary>
     public IReadOnlyList<DeskHome> Homes => homes;
@@ -570,7 +582,8 @@ public sealed class DeskPainted : MonoBehaviour
     /// <paramref name="home"/> the painted desk still draws or clicks of its
     /// old model (the binder's audit at bind: a warning names each, so a
     /// smoke run's console shows it): every renderer still on that is neither
-    /// painted, a stand-in's (under a "StandIn_" root), a part's box
+    /// painted (the bake's own, or under a line the desk wears: WearReadout),
+    /// a stand-in's (under a "StandIn_" root), a part's box
     /// (PartBoxName) nor under a part the home keeps (DeskPaintedMap.Kept),
     /// and every click box still on under a part the painted look has no
     /// part for (DeskPaintedMap.DeadClicks), or anywhere on an unshown
@@ -586,7 +599,7 @@ public sealed class DeskPainted : MonoBehaviour
         string[] keep = DeskPaintedMap.Kept(home), dead = DeskPaintedMap.DeadClicks(home);
         bool unshown = Array.IndexOf(DeskPaintedMap.Unshown, home) >= 0;
         foreach (Renderer r in gameplay.GetComponentsInChildren<Renderer>(true))
-            if (r.enabled && !_painted.Contains(r) && r.name != PartBoxName && !UnderStandIn(r.transform, gameplay) && (unshown || !Kept(r.transform, gameplay, keep)))
+            if (r.enabled && !IsPainted(r) && r.name != PartBoxName && !UnderStandIn(r.transform, gameplay) && (unshown || !Kept(r.transform, gameplay, keep)))
                 old.Add(PathOf(r.transform, gameplay));
         foreach (Collider box in gameplay.GetComponentsInChildren<Collider>(true))
             if (box.enabled && (unshown || Kept(box.transform, gameplay, dead)))
@@ -772,7 +785,7 @@ public sealed class DeskPainted : MonoBehaviour
         if (mesh == null || gameplay == null || rider == null)
             return Array.Empty<Renderer>();
         foreach (Renderer r in gameplay.GetComponentsInChildren<Renderer>(true))
-            if (!_painted.Contains(r) && !Kept(r.transform, gameplay, keep))
+            if (!IsPainted(r) && !Kept(r.transform, gameplay, keep))
                 r.enabled = false;
         mesh.SetParent(rider, true);
         Renderer[] painted = mesh.GetComponentsInChildren<Renderer>(true);
@@ -829,6 +842,9 @@ public sealed class DeskPainted : MonoBehaviour
         readout.fontSizeMax = PaintedReadout.FontSizeMax(local);
         foreach (Renderer r in readout.GetComponentsInChildren<Renderer>(true))
             r.enabled = true;
+        // The worn line is the painted look's now: the old-parts audit and a later reskin count it as painted (GATE-26 of
+        // 2026-10-28: it was not, so the audit warned on every office load and could not catch a real stray part).
+        _worn.Add(line);
         readout.ForceMeshUpdate();
         if (clickBox == null)
             return true;

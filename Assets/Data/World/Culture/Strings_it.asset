@@ -44,7 +44,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.masthead
-    text: "REGISTRO DEL TURNO \u2014 EDIZIONE DELLA SERA"
+    text: "REGISTRO DEL TURNO: EDIZIONE DELLA SERA"
     gloss: 0
     tier: 0
   - key: results.goHome
@@ -237,15 +237,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: briefing.title
-    text: "Giorno {0} \u2014 Briefing del mattino"
+    text: "Giorno {0}: Briefing del mattino"
     gloss: 0
     tier: 0
   - key: results.title
-    text: "Giorno {0} \u2014 Rapporto del turno"
+    text: "Giorno {0}: Rapporto del turno"
     gloss: 0
     tier: 0
   - key: briefing.newsHeader
-    text: "\u2014 NOTIZIE DELLA LINEA TEMPORALE \u2014"
+    text: "\u00B7 NOTIZIE DELLA LINEA TEMPORALE \u00B7"
     gloss: 0
     tier: 0
   - key: briefing.deskHeader
@@ -1904,11 +1904,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: compare.deviationLogged
-    text: "\u25CF  DEVIAZIONE REGISTRATA \u2014 {0}"
+    text: "\u25CF  DEVIAZIONE REGISTRATA: {0}"
     gloss: 0
     tier: 0
   - key: compare.alreadyDocumented
-    text: "\u25CF  GI\xC0 DOCUMENTATA \u2014 {0} \xE8 nel Rapporto di deviazione"
+    text: "\u25CF  GI\xC0 DOCUMENTATA: {0} \xE8 nel Rapporto di deviazione"
     gloss: 0
     tier: 0
   - key: compare.pair
@@ -2383,7 +2383,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.warning
-    text: "Avvertimento {0}/{1} \u2014 nessuna trattenuta sulla paga."
+    text: "Avvertimento {0}/{1}: nessuna trattenuta sulla paga."
     gloss: 0
     tier: 0
   - key: citation.penalty
@@ -2642,55 +2642,51 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers
-    text: "{0} ERRATO \u2014 documenti: \"{1}\"  /  previsto: \"{2}\""
+    text: "{0} ERRATO \u00B7 documenti: \"{1}\"  /  previsto: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.said
-    text: "{0} ERRATO \u2014 il viaggiatore ha detto: \"{1}\"  /  previsto: \"{2}\""
+    text: "{0} ERRATO \u00B7 il viaggiatore ha detto: \"{1}\"  /  previsto: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.worn
-    text: "{0} ERRATO \u2014 il viaggiatore indossa: \"{1}\"  /  previsto: \"{2}\"
-      \u2014 causerebbe il panico"
+    text: "{0} ERRATO \u00B7 il viaggiatore indossa: \"{1}\"  /  previsto: \"{2}\": causerebbe il panico"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.papers
-    text: "{0} ERRATO \u2014 i documenti mostrano \"{1}\", che appartiene a {2}"
+    text: "{0} ERRATO \u00B7 i documenti mostrano \"{1}\", che appartiene a {2}"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.said
-    text: "{0} ERRATO \u2014 il viaggiatore ha detto \"{1}\", che appartiene a {2}"
+    text: "{0} ERRATO \u00B7 il viaggiatore ha detto \"{1}\", che appartiene a {2}"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.worn
-    text: "{0} ERRATO \u2014 il viaggiatore indossa \"{1}\", che appartiene a {2}:
-      causerebbe il panico"
+    text: "{0} ERRATO \u00B7 il viaggiatore indossa \"{1}\", che appartiene a {2}: causerebbe il panico"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.papers
-    text: "{0} ERRATO \u2014 documenti: \"{1}\"  /  registri dell'agenzia: \"{2}\""
+    text: "{0} ERRATO \u00B7 documenti: \"{1}\"  /  registri dell'agenzia: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.said
-    text: "{0} ERRATO \u2014 il viaggiatore ha detto: \"{1}\"  /  registri dell'agenzia:
-      \"{2}\""
+    text: "{0} ERRATO \u00B7 il viaggiatore ha detto: \"{1}\"  /  registri dell'agenzia: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.worn
-    text: "{0} ERRATO \u2014 il viaggiatore indossa: \"{1}\"  /  registri dell'agenzia:
-      \"{2}\""
+    text: "{0} ERRATO \u00B7 il viaggiatore indossa: \"{1}\"  /  registri dell'agenzia: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.crossMismatch.papers
-    text: "{0} INCOERENTE \u2014 i documenti discordano: \"{1}\"  /  \"{2}\""
+    text: "{0} INCOERENTE \u00B7 i documenti discordano: \"{1}\"  /  \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.personMismatch.papers
-    text: "{0} ERRATO \u2014 la foto sui documenti non \xE8 il viaggiatore alla scrivania"
+    text: "{0} ERRATO \u00B7 la foto sui documenti non \xE8 il viaggiatore alla scrivania"
     gloss: 0
     tier: 0
   - key: deviation.hiddenMismatch.papers
-    text: "{0} ERRATO \u2014 documenti: \"{1}\"  /  la macchina legge: \"{2}\""
+    text: "{0} ERRATO \u00B7 documenti: \"{1}\"  /  la macchina legge: \"{2}\""
     gloss: 0
     tier: 0
   - key: category.Language
@@ -3067,6 +3063,10 @@ MonoBehaviour:
     text: 'Una spia lampeggia: collegaci un modulo, dagli corrente, tira il MASTER'
     gloss: 0
     tier: 0
+  - key: switchboard.hint.dial
+    text: "Una spia lampeggia: gira l'anello sul suo emblema, poi sulla sua epoca. Inserisci le celle fino al segno. Tira il MASTER"
+    gloss: 0
+    tier: 0
   - key: switchboard.display.pull
     text: TIRA
     gloss: 0
@@ -3096,7 +3096,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.title
-    text: "Giorno {0} \u2014 Casa"
+    text: "Giorno {0}: Casa"
     gloss: 0
     tier: 0
   - key: home.breakIn
@@ -3567,7 +3567,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: doc.work_permit_debt_relief_labour
-    text: "Permesso di lavoro \u2013 Lavoro per lo Sgravio del debito"
+    text: "Permesso di lavoro: Lavoro per lo Sgravio del debito"
     gloss: 0
     tier: 0
   - key: doc.authorised_by
@@ -6238,3 +6238,15 @@ MonoBehaviour:
     english: switchboard
   - native: libera
     english: free
+  - native: gira
+    english: turn
+  - native: "l'anello"
+    english: the ring
+  - native: emblema
+    english: emblem
+  - native: inserisci
+    english: insert
+  - native: celle
+    english: cells
+  - native: segno
+    english: mark

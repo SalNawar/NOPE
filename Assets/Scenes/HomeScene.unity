@@ -14266,7 +14266,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Day 1 \u2014 Turn In"
+  m_text: "Day 1: Turn In"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}
   m_sharedMaterial: {fileID: -8469071506916972853, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}
@@ -25444,7 +25444,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Day 1 \u2014 Home"
+  m_text: "Day 1: Home"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}
   m_sharedMaterial: {fileID: -8469071506916972853, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}

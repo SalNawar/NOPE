@@ -26,7 +26,10 @@ public static class CharacterPoseInstaller
             {
                 var sprite=AssetDatabase.LoadAssetAtPath<Sprite>(path);
                 if(sprite==null) throw new InvalidOperationException("Missing pose sprite: "+path);
-                var landmarks=Landmarks(sprite.texture);
+                // The source PNG at full size: the imported texture may be smaller (CharacterArtImporter.MaxSize), and the landmarks are canvas pixels.
+                var source=new Texture2D(2,2,TextureFormat.RGBA32,false);source.LoadImage(File.ReadAllBytes(path));
+                var landmarks=Landmarks(source);
+                UnityEngine.Object.DestroyImmediate(source);
                 float scale=(baseline.feet-baseline.top)/(float)(landmarks.feet-landmarks.top);
                 float offset=((1490-baseline.feet)-(1490-landmarks.feet)*scale)/1536f;
                 report+=$"{item.id} {Path.GetFileName(path)}: head {landmarks.top}, feet {landmarks.feet}, scale {scale:F5}, foot offset {offset:F5}\n";

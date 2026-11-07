@@ -1,6 +1,6 @@
 # Character art processing (`tools/characters`)
 
-## Full library completion — 2026-10-04
+## Full library completion: 2026-10-04
 
 The completion pipeline processes the 455 new sources without rerunning the approved pilot. It stages 902 outputs, then installs a complete 944-key library alongside the 42 pilot keys. The eight interim skin 2–5 face-a recolours are archived in `Completion/InterimPilotHeads` before replacement; existing Unity GUIDs are retained. All other pilot sources, resources and metadata remain unchanged.
 
@@ -74,14 +74,20 @@ Needs Python 3 with numpy and Pillow only. A full run takes about 5 minutes
   `Assets/Art/Office/Placeholder/traveller.png.meta`) with exactly what
   `CharacterArtImporter` enforces on import: Sprite, Single, FullRect mesh,
   custom pivot (0.5, 46/1536 = the soles), pixels per unit 1536 (one unit
-  tall), readable, mipmaps with trilinear filtering, high-quality (BC7)
-  compression, no crunch, max size 2048, alpha is transparency, in the form
+  tall; Unity scales it with the imported size), readable, no mipmaps with
+  bilinear filtering, high-quality (BC7) compression, no crunch, max size
+  1020 (the canvas imports at 680 x 1020), alpha is transparency, in the form
   Unity writes it. The three new folders get folder metas. An existing meta
   is never replaced (re-runs keep GUIDs). (2026-09-30: mipmaps and BC7
   replaced "no mipmaps, normal compression", the pilot review's open import
   question: at the desk a figure is drawn at about a third of its size, where
   thin outlines sampled without mips break up and shimmer, and the default
-  compression's 4x4 blocks smear the line art.)
+  compression's 4x4 blocks smear the line art. 2026-11-07, BLD-05, the
+  director's call D11: no mipmaps, BC7, max size 1020. Unity cannot
+  block-compress a mipmapped texture that is not a power of two, so every
+  canvas shipped as RGBA32, 12 GB of a 13.9 GB player. At 680 x 1020 the
+  figure is drawn at about half its imported size, where bilinear sampling
+  without mips holds; the edge measure is in the char-bc7 night report.)
 
 ### Keying (`keying.py`)
 
