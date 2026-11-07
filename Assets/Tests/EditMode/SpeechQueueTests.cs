@@ -432,4 +432,20 @@ public class SpeechQueueTests
         q.Tick(2f);
         Assert.AreEqual(0f, q.SecondsUntilShown, 1e-4f, "the last line is fully shown");
     }
+
+    /// <summary>Reduced Motion (D26): each line shows whole on its first frame, and its hold runs from its start.</summary>
+    [Test]
+    public void ShowsAtOnce_ShowsTheWholeLine_AndHoldsFromItsStart()
+    {
+        SpeechQueue q = Queue();
+        q.ShowsAtOnce = true;
+        q.Say("0123456789", null);
+        Assert.AreEqual(10, q.VisibleCharacters, "the whole line at once");
+        Assert.AreEqual(0f, q.SecondsUntilShown, 1e-4f, "fully shown at its start");
+
+        q.Tick(3.9f);
+        Assert.IsTrue(q.Showing, "the hold runs 4 s from its start");
+        q.Tick(0.2f);
+        Assert.IsFalse(q.Showing, "gone after the hold, with no typing time added");
+    }
 }
