@@ -8,10 +8,11 @@ using UnityEngine;
 
 /// <summary>
 /// The hall gates' ops for QA-RIG scenarios (the night of 2026-11-07, DECISIONS D6; tools/qa/scenarios/hall_portals_gate.json,
-/// read by tools/hall/gate_check.py). <c>hallGateDial</c> (n = the module's number, 1 for 01) answers the oldest waiting
-/// call on that module through the board's own rules, as a hand on the board ends up: its PLACE and PERIOD cords into the
-/// call's route, a power cord into it if it has none, MASTER pulled (Switchboard.PlugPlace, PlugPeriod, PlugPower,
-/// PullMaster), then the board's cords redrawn where the rules have them; the board's drags are swb01-play's to test.
+/// read by tools/hall/gate_check.py). <c>hallGateDial</c> (n = the module's number, 1 for 01; text "optional": no answerable
+/// call is a note, not a failure) answers the first waiting call no module holds and whose jacks the module can take,
+/// through the board's own rules, as a hand on the board ends up: its PLACE and PERIOD cords into the call's route, a
+/// parked power cord into it if it has none, MASTER pulled (Switchboard.PlugPlace, PlugPeriod, PlugPower, PullMaster),
+/// then the board's cords redrawn where the rules have them; the board's drags are swb01-play's to test.
 /// <c>hallGateClear</c> (n = the module's number) pulls the module's PLACE cord (Switchboard.UnplugPlace): its route
 /// unlocks and its ring closes. <c>hallGateWait</c> (n = the ring, name = a PortalGateState, f = a timeout in real
 /// seconds, 120 by default) waits until the ring's gate is in that state. <c>hallGateTrack</c> (n = the ring) adds the
@@ -55,17 +56,28 @@ public static class HallGateRig
         bool found = false;
         for (int d = 0; d < board.Destinations && !found; d++)
             for (int p = 0; p < board.Periods && !found; p++)
-                if (board.Waiting(new SwitchRoute(d, p)) > 0)
+            {
+                var r = new SwitchRoute(d, p);
+                if (board.Waiting(r) > 0 && !Served(board, r) && board.CanPlugPlace(module, d) && board.CanPlugPeriod(module, r))
                 {
-                    route = new SwitchRoute(d, p);
+                    route = r;
                     found = true;
                 }
+            }
         if (!found)
-            throw new InvalidOperationException("hallGateDial: no call waits on the board (ring the cheat 'Switchboard: 3 test calls' first).");
+        {
+            if (string.Equals(step.text, "optional", StringComparison.OrdinalIgnoreCase))
+            {
+                runner.Assert($"gate.dial{module + 1:00}", "HALL-GATE", true, $"module {module + 1:00}: no call it can answer (every waiting call is held, or its jacks are taken); optional, skipped",
+                    "an optional dial: the cheat's calls may all sit on one destination, whose PLACE jack takes one plug");
+                yield break;
+            }
+            throw new InvalidOperationException("hallGateDial: no call the module can answer waits on the board (ring the cheat 'Switchboard: 3 test calls' first).");
+        }
         bool place = board.PlugPlace(module, route.Destination);
         bool period = board.PlugPeriod(module, route);
         if (!board.Modules[module].Powered)
-            board.PlugPower(0, module);
+            board.PlugPower(FreeCord(board), module);
         MasterPull pull = board.PullMaster();
         Redraw(view);
         SwitchModule m = board.Modules[module];
@@ -73,6 +85,24 @@ public static class HallGateRig
             $"module {module + 1:00} on route {route}: place {place}, period {period}, powered {m.Powered}, {m.State} (committed {pull.Committed}, fused {pull.Fused}); {board.Waiting(route)} waiting there",
             "the oldest call answered through the board's rules, as a hand on the board ends up (the drags are swb01-play's)");
         yield return QaGame.Frames(1);
+    }
+
+    /// <summary>True when a locked-in module holds <paramref name="route"/> (its calls are being answered).</summary>
+    private static bool Served(Switchboard board, SwitchRoute route)
+    {
+        foreach (SwitchModule m in board.Modules)
+            if (m.Holding && m.Route == route)
+                return true;
+        return false;
+    }
+
+    /// <summary>A power cord parked on the power row, else the first.</summary>
+    private static int FreeCord(Switchboard board)
+    {
+        for (int c = 0; c < board.PowerCords; c++)
+            if (board.PowerCordModule(c) < 0)
+                return c;
+        return 0;
     }
 
     private static IEnumerator Clear(QaRunner runner, QaStep step)
