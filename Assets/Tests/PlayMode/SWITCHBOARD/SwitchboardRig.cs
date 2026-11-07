@@ -22,7 +22,7 @@ using UnityEngine.InputSystem.LowLevel;
 /// <item><c>boardMaster</c> (f = how far, default 1; n = frames to wait after, default 30): drags MASTER's handle down and lets go.</item>
 /// <item><c>boardHold</c> (n = the dial; key = Escape or RightClick; name): turns its ring half a turn of a slot, holding, then the key: asserts <c>hold.&lt;name&gt;</c> (the ring goes back, the locks unchanged, the board still turned to).</item>
 /// <item><c>boardCheat</c>: the cheat "Switchboard: 3 test calls". <c>boardRightClick</c>: a right-click where the pointer is.</item>
-/// <item><c>boardWait</c> (text = a condition; f = timeout, default 30 s) and <c>boardAssert</c> (name; text = a condition): conditions "open:N", "committed:N", "blown:N", "place:N", "period:N", "powered:N", "unpowered:N", "sent&gt;=K", "calls&gt;=K", "calls==K", "inService==K", "cells==K", "rack==K", "turned", "closed".</item>
+/// <item><c>boardWait</c> (text = a condition; f = timeout, default 30 s) and <c>boardAssert</c> (name; text = a condition): conditions "open:N", "committed:N", "blown:N", "place:N", "period:N", "powered:N", "unpowered:N", "sent&gt;=K", "calls&gt;=K", "calls==K", "inService==K", "cells==K", "rack==K", "turned", "closed", "hidden" (turned away and the turn done).</item>
 /// <item><c>boardLog</c> (n 1 starts, 0 stops; name): every frame, dial 01 to 03's state, ring turn, chevron lenses, bars and calibration into board_&lt;name&gt;.tsv (the frame strips' numbers: ring steps, the strobe's rate, the lens holding).</item>
 /// </list>
 /// </summary>
@@ -439,6 +439,7 @@ public static class SwitchboardRig
         {
             case "turned": return view.Turned;
             case "closed": return !view.IsOpen;
+            case "hidden": return view.Hidden;
         }
         foreach (string op in new[] { ">=", "==" })
         {

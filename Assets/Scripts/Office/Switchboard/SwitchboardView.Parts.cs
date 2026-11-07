@@ -211,7 +211,10 @@ public sealed partial class SwitchboardView
         Fill(_matte.rectTransform);
         _plate = Layer("Plate", _boardLayer);
         Sprite plate = SlotArt.Sprite(ArtSlots.SwitchboardPlate);
-        Picture("Plate art", _plate, plate, plate != null ? Color.white : new Color(0.16f, 0.1f, 0.07f, 1f), Vector2.zero, new Vector2(_layout.Width, _layout.Height));
+        if (Dialer && plate != null)
+            PlateAround(plate, GateBoardLayout.CoverRect);
+        else
+            Picture("Plate art", _plate, plate, plate != null ? Color.white : new Color(0.16f, 0.1f, 0.07f, 1f), Vector2.zero, new Vector2(_layout.Width, _layout.Height));
         if (Dialer)
             BuildGateLayers(); // the dialer's face, calls, dials, displays and lamps: filled when the day knows today's nations (BuildGate)
         else
@@ -236,6 +239,29 @@ public sealed partial class SwitchboardView
         _grab.gameObject.SetActive(false);
         _boardLayer.gameObject.SetActive(false);
         _lastLeft = new float[_layout.Modules.Count];
+    }
+
+    /// <summary>The dialer's plate: the plate's paint only around <paramref name="cover"/> (four pieces of its sprite), so none of the Classic jacks shows through the dialer's face while the board fades in.</summary>
+    private void PlateAround(Sprite plate, BoardRect cover)
+    {
+        float w = _layout.Width, h = _layout.Height;
+        Rect tr = plate.textureRect;
+        float sx = tr.width / w, sy = tr.height / h;
+        BoardRect[] pieces =
+        {
+            new BoardRect(0f, 0f, w, cover.Y), new BoardRect(0f, cover.Y + cover.H, w, h - cover.Y - cover.H),
+            new BoardRect(0f, cover.Y, cover.X, cover.H), new BoardRect(cover.X + cover.W, cover.Y, w - cover.X - cover.W, cover.H),
+        };
+        foreach (BoardRect r in pieces)
+        {
+            if (r.W <= 0f || r.H <= 0f)
+                continue;
+            var rect = new Rect(tr.x + r.X * sx, tr.y + (h - r.Y - r.H) * sy, r.W * sx, r.H * sy);
+            Sprite piece = UnityEngine.Sprite.Create(plate.texture, rect, new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
+            piece.name = "Switchboard plate piece";
+            _gateArt.Add(piece);
+            Picture("Plate art", _plate, piece, Color.white, Local(r.Centre), Size(r));
+        }
     }
 
     /// <summary>The blank name plates' and period tags' live words.</summary>

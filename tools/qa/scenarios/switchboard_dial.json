@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "The Stargate dialer (D1, docs/pending/SWITCHBOARD.md 'Stargate dialer'). Day 1: a call (the traveller decided correctly; if denied, the board's call as an approval makes it), D turns to the board, the ring turns the nation under the top chevron (seq ring_place) and the era under chevron 2 (seq ring_era), cells carried to the mark (seq cell_seat), MASTER thrown (seq master), the 20 s calibration (seq strobe; a still at about 10 s), '+1 SENT'. Then a wrong era pops the fuse and one drag fixes it. Day 5: 3 dials and the rack. Esc and a right-click let go of a held ring and back out. Stills at 16:9, 5:4 and 21:9. board_day1.tsv logs every frame's ring turn, lenses and bars."
+      "text": "The Stargate dialer (D1, docs/pending/SWITCHBOARD.md 'Stargate dialer'). Day 1: a call (the traveller decided correctly; if denied, the board's call as an approval makes it), D turns to the board, the ring turns the nation under the top chevron (seq ring_place) and the era under chevron 2 (seq ring_era), cells carried to the mark (seq cell_seat), MASTER thrown (seq master), the 20 s calibration (seq strobe; a still at about 10 s), '+1 SENT'. Then a wrong era pops the fuse and one drag fixes it. Day 5: 3 dials and the rack. A right-click lets go of a held ring, the next backs out (then a still of the board on the wall); Esc lets go of a held ring, the next closes the board (on this base Esc opens Settings on the PC, D20 and R3; D13's back-out lands with cheats-fix). Stills at 16:9, 5:4 and 21:9. board_day1.tsv logs every frame's ring turn, lenses and bars."
     },
     {
       "op": "title"
@@ -295,6 +295,36 @@
     {
       "op": "boardHold",
       "n": 0,
+      "key": "RightClick",
+      "name": "rightclick"
+    },
+    {
+      "op": "boardRightClick"
+    },
+    {
+      "op": "boardAssert",
+      "name": "rightclick_backs_out",
+      "text": "closed"
+    },
+    {
+      "op": "boardWait",
+      "text": "hidden",
+      "f": 3
+    },
+    {
+      "op": "wait",
+      "n": 10
+    },
+    {
+      "op": "still",
+      "name": "d1_office_wall"
+    },
+    {
+      "op": "boardOpen"
+    },
+    {
+      "op": "boardHold",
+      "n": 0,
       "key": "Escape",
       "name": "escape"
     },
@@ -308,33 +338,12 @@
     },
     {
       "op": "boardAssert",
-      "name": "escape_backs_out",
+      "name": "escape_closes",
       "text": "closed"
-    },
-    {
-      "op": "wait",
-      "n": 20
     },
     {
       "op": "still",
-      "name": "d1_office_wall"
-    },
-    {
-      "op": "boardOpen"
-    },
-    {
-      "op": "boardHold",
-      "n": 0,
-      "key": "RightClick",
-      "name": "rightclick"
-    },
-    {
-      "op": "boardRightClick"
-    },
-    {
-      "op": "boardAssert",
-      "name": "rightclick_backs_out",
-      "text": "closed"
+      "name": "d1_after_escape"
     },
     {
       "op": "jumpDay",

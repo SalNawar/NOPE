@@ -123,7 +123,7 @@ Saleh: "a switchboard that is intresting ( my friends suggested something based 
 6. Pull MASTER past 80 %: clunk. The 7 chevrons engage one every 2.86 s while the bars reach the mark.
 7. At 20 s the hub fills with the horizon, the chime, "+N SENT", the group bonus.
 
-A wrong era: at the pull the fuse pops for 2 s and the two lock chevrons flicker red. Drag the ring once to the right era and pull again. Moving the ring past the eras to any other glyph under chevron 2 opens both locks (the dial starts over). Esc or a right-click while holding the ring or a cell lets go with nothing changed; the next one backs out.
+A wrong era: at the pull the fuse pops for 2 s and the two lock chevrons flicker red. Drag the ring once to the right era and pull again. Moving the ring past the eras to any other glyph under chevron 2 opens both locks (the dial starts over). Esc or a right-click while holding the ring or a cell lets go with nothing changed; the next right-click backs out, the next Esc follows the game's Esc rule (Settings on the PC today, D20 and R3; the night's D13 makes it back out first).
 
 ### Decisions (ORCHESTRATOR unless marked)
 - D-S1. **SALEH (via D1):** the dial, the chevrons, the cells, MASTER as the final lock, the 20 s calibration, the eras' bars 3, 2, 2, 1, 1.
@@ -138,7 +138,7 @@ A wrong era: at the pull the fuse pops for 2 s and the two lock chevrons flicker
 - D-S10. The strobe: chevrons 1 and 2 are the locks; during the calibration every chevron engages in turn, one every 20/7 s, with a 0.45 s flash on the lens and a soft clunk; the passed ones hold. At 7 the gate opens. Below the mark they dim to 40 % and the count pauses.
 - D-S11. The calls of a traveller whose era has no glyph (the Future) find no route and leave at once (logged), as a call with no free jack did on the Classic board.
 - D-S12. The board on the wall shows the dialer's face as an unlit sprite tinted by `wallGrade` (the plate's paint is lit by the booth's material); the chevrons and cells are not drawn there, the hubs' lamps are.
-- D-S13. Esc and a right-click: the first lets go of a held ring or cell, the next backs out (ControlRules, unchanged).
+- D-S13. Esc and a right-click: the first lets go of a held ring or cell (OfficeControls' CancelDrag, the dialer's ring and cell included in IsDragging); the next follows the game's rules unchanged (a right-click backs out; Esc opens Settings until D13 lands).
 
 ### Files
 | File | What |

@@ -196,8 +196,11 @@ public static class GateDial
 /// </summary>
 public sealed class GateBoardLayout
 {
+    /// <summary>The slate cover over the Classic board's jacks and modules (the plate's paint shows only around it).</summary>
+    public static readonly BoardRect CoverRect = new BoardRect(300f, 84f, 1132f, 864f);
+
     /// <summary>The slate cover over the Classic board's jacks and modules.</summary>
-    public BoardRect Cover { get; } = new BoardRect(300f, 84f, 1132f, 864f);
+    public BoardRect Cover => CoverRect;
 
     /// <summary>The big dials (01 to 03); the modules after them are the small sealed ones.</summary>
     public const int BigDials = 3;
