@@ -43,8 +43,8 @@ using UnityEngine;
 /// wheel; n 1 Settings shown, 0 not, -1 either), pcapp (text a DesktopAppIds
 /// id; n 1 its window open and in front on the PC, 0 closed), redboxes (text
 /// the still's name: a still, and in it the red of every marked box on the
-/// desk's papers, at least 50 red pixels and 30 % of the boxes' middles on
-/// the screen), first (the forced appearance stands first: cheatForce's),
+/// desk's papers, at least 50 red pixels, 30 % of the boxes' middles on the
+/// screen and 3 times the red of the papers' other boxes), first (the forced appearance stands first: cheatForce's),
 /// lawbreaker (today's cases hold someone else's photo and the switch is used
 /// up).</item>
 /// <item><c>cheatForce</c> (text: "famous" or "D&lt;day&gt;"): picks the menu's
@@ -602,34 +602,47 @@ public static class CheatOps
 
     /// <summary>
     /// cheatCheck redboxes: a still (text: its name), then Reveal faults' red
-    /// in it. Each marked box of the desk's papers (DeskDocument.Marked,
-    /// TryBoundsOf through the pointer camera) gives its middle on the screen;
-    /// a pixel there counts as red when its red stands at least 40 of 255 over
-    /// its green and its blue (the mark: DeskInspect's mistakeMark, red at 32 %
-    /// over the paper). Passes with at least 50 red pixels, 30 % of the middles'
-    /// pixels on the screen.
+    /// in it, against the same papers' other boxes. Each box of a paper that
+    /// holds a mark (DeskDocument.Marked, TryBoundsOf through the pointer
+    /// camera) gives its middle on the screen; a pixel there counts as red
+    /// when its red stands at least 20 of 255 over its green and its blue
+    /// (the mark is DeskInspect's mistakeMark, red at 32 % over the paper: 31
+    /// to 37 over the paper's 12 to 15 in the first still, cheat_d1_redboxes
+    /// of 2026-11-07). Passes with at least 50 red pixels in the marked boxes,
+    /// 30 % of their middles' pixels on the screen, and at least 3 times the
+    /// red share of the same papers' unmarked boxes (the photo, the foil and
+    /// the printed frames count there).
     /// </summary>
     private static IEnumerator RedBoxes(QaRunner runner, QaStep step, string id)
     {
+        const float RedOver = 20f / 255f;
         yield return QaGame.Frames(15);
         Camera cam = QaGame.PointerCamera() ?? Camera.main;
-        var boxes = new List<(DeskDocument paper, int slot, Rect rect)>();
+        var boxes = new List<(DeskDocument paper, int slot, bool marked, Rect rect)>();
         if (cam != null)
             foreach (DeskDocument paper in DeskPapers())
+            {
+                bool holdsMark = false;
+                for (int slot = 0; slot < paper.SlotCount && !holdsMark; slot++)
+                    holdsMark = paper.Marked(slot);
+                if (!holdsMark)
+                    continue;
                 for (int slot = 0; slot < paper.SlotCount; slot++)
-                    if (paper.Marked(slot) && paper.TryBoundsOf(slot, out Bounds b))
-                        boxes.Add((paper, slot, MiddleOnScreen(cam, b)));
+                    if (paper.TryBoundsOf(slot, out Bounds b))
+                        boxes.Add((paper, slot, paper.Marked(slot), MiddleOnScreen(cam, b)));
+            }
         string path = Path.Combine(runner.OutDir, "stills", $"{(string.IsNullOrEmpty(step.text) ? "cheat_redboxes" : step.text)}_{Screen.width}x{Screen.height}.png");
         runner.Recorder.Still(path);
         yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the still");
-        long red = 0, all = 0;
+        long red = 0, all = 0, otherRed = 0, otherAll = 0;
+        int marked = 0;
         var where = new List<string>();
         var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
         try
         {
             bool read = File.Exists(path) && tex.LoadImage(File.ReadAllBytes(path));
             float sx = read ? tex.width / (float)Screen.width : 1f, sy = read ? tex.height / (float)Screen.height : 1f;
-            foreach ((DeskDocument paper, int slot, Rect rect) in boxes)
+            foreach ((DeskDocument paper, int slot, bool isMarked, Rect rect) in boxes)
             {
                 long boxRed = 0, boxAll = 0;
                 if (read)
@@ -638,9 +651,16 @@ public static class CheatOps
                         {
                             Color c = tex.GetPixel(x, y);
                             boxAll++;
-                            if (c.r - Mathf.Max(c.g, c.b) >= 40f / 255f)
+                            if (c.r - Mathf.Max(c.g, c.b) >= RedOver)
                                 boxRed++;
                         }
+                if (!isMarked)
+                {
+                    otherRed += boxRed;
+                    otherAll += boxAll;
+                    continue;
+                }
+                marked++;
                 red += boxRed;
                 all += boxAll;
                 where.Add($"paper {paper.Index} ({paper.Zone}) box {slot}: {boxRed} of {boxAll} px red in x {rect.xMin:0}-{rect.xMax:0}, y {rect.yMin:0}-{rect.yMax:0} from the bottom");
@@ -652,8 +672,9 @@ public static class CheatOps
         {
             UnityEngine.Object.Destroy(tex);
         }
-        bool pass = boxes.Count > 0 && red >= 50 && red >= 0.3f * all;
-        runner.Assert(id, Owner, pass, $"{boxes.Count} marked box(es); {red} of {all} px red; {string.Join("; ", where)}",
+        float share = all > 0 ? red / (float)all : 0f, otherShare = otherAll > 0 ? otherRed / (float)otherAll : 0f;
+        bool pass = marked > 0 && red >= 50 && share >= 0.3f && share >= 3f * otherShare;
+        runner.Assert(id, Owner, pass, $"{marked} marked box(es): {red} of {all} px red ({share:P0}); the same papers' {boxes.Count - marked} other box(es): {otherRed} of {otherAll} px ({otherShare:P0}); {string.Join("; ", where)}",
             "CHEATS.md Reveal faults: the boxes that show the fault are marked in red on the papers, seen in a still with the paper open on the mat");
     }
 
