@@ -23,9 +23,10 @@ public sealed class EveningEditionPage
 /// The ending screen's evening edition (FLOW, BUG-56a; the bible's J6: "an
 /// evening-edition epilogue with pictures and the pet's fate"): the run's last
 /// paper, its headline the ending's name over the ending's picture and story,
-/// with the pet's fate said in Home's words (the Welfare Office's line when
-/// the pet was taken, else its four needs as Home says them; never a number).
-/// Pure; Endings/EveningEditionView lays it out with Title and Quit.
+/// with the pet's fate said in Home's words (its four needs as Home says them;
+/// never a number; nothing for a pet the Welfare Office took, whose ending's
+/// story tells it). Pure; Endings/EveningEditionView lays it out with Close
+/// and Quit.
 /// </summary>
 public static class EveningEdition
 {
@@ -54,17 +55,18 @@ public static class EveningEdition
     }
 
     /// <summary>
-    /// The pet's fate in Home's words: "" without an adopted pet or words; the
-    /// paper's Welfare Office line (PetContent.paperWelfare) when the pet was
-    /// taken; else each need's line at its level (PetContent.Need, up to
+    /// The pet's fate in Home's words: "" without an adopted pet or words, and
+    /// "" for a pet the Welfare Office took (its ending's story says where the
+    /// pet went; the paper's line PetContent.paperWelfare is the warning after
+    /// a night at the worst, "inspectors are asking after ...", which reads as
+    /// if the pet were still at home: qa-endings-saves, 2026-11-07); else each
+    /// need's line at its level (PetContent.Need, up to
     /// <paramref name="needMax"/>, GameConfigSO.petNeedMax), joined by spaces.
     /// </summary>
     public static string PetFate(PetState pet, PetContent words, int needMax)
     {
-        if (pet == null || !pet.Adopted || words == null)
+        if (pet == null || !pet.Adopted || words == null || pet.taken)
             return string.Empty;
-        if (pet.taken)
-            return words.Fill(words.paperWelfare, pet);
         var lines = new List<string>();
         PetNeeds needs = pet.Needs;
         foreach (PetNeed need in (PetNeed[])System.Enum.GetValues(typeof(PetNeed)))

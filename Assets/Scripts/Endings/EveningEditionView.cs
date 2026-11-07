@@ -13,10 +13,12 @@ using UnityEngine.UI;
 /// it first: the masthead (the morning paper's, "The Temporal Times"), the
 /// edition of the day, the ending's name as the headline over its picture
 /// and story, and the pet's fate in Home's words (EveningEdition.Compose).
-/// MENU lays the paper down (a fade) onto the title's own ending page (New
-/// Run, the world you leave behind); QUIT GAME quits. Its words are the
-/// game's existing strings (briefing.masthead, book.edition, taskbar.start,
-/// startmenu.quit), so no string table changes with it.
+/// Close lays the paper down (a fade) onto the title's own ending page (New
+/// Run, the world you leave behind); Quit game quits. Its words are the
+/// game's existing strings (briefing.masthead, book.edition, window.close,
+/// startmenu.quit), so no string table changes with it. (Close, not the
+/// taskbar's taskbar.start: in English that reads "Start", which on an
+/// ending page promised a new game; qa-endings-saves, 2026-11-07.)
 /// A title opened at boot over an old ending shows its own page only. Built
 /// at runtime in the title's own faces (the fonts its texts use), so the
 /// title scene needs no rebuild.
@@ -159,13 +161,13 @@ public sealed class EveningEditionView : MonoBehaviour
         rowLayout.childControlWidth = true;
         rowLayout.childControlHeight = true;
         rowLayout.childForceExpandWidth = false;
-        rowLayout.childForceExpandHeight = true;
+        rowLayout.childForceExpandHeight = false; // a forced expand made the row flexible, so on a page with no picture it took half the spare height and the buttons grew to 224 px squares (qa-endings-saves, 2026-11-07)
         Fix(row, 64f, 0f);
-        MakeButton(row.transform, "TitleButton", UiText.Get("taskbar.start"), display, ToTitle);
+        MakeButton(row.transform, "TitleButton", UiText.Get("window.close"), display, ToTitle);
         MakeButton(row.transform, "QuitButton", UiText.Get("startmenu.quit"), display, Quit);
     }
 
-    /// <summary>MENU (the title): the paper is laid down (a fade) onto the title's own ending page.</summary>
+    /// <summary>Close: the paper is laid down (a fade) onto the title's own ending page.</summary>
     private void ToTitle()
     {
         if (_group != null)
