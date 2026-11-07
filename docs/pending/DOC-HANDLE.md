@@ -211,6 +211,38 @@ The fixer's report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01.md, "Round
 
 **Tests:** `DropResolverTests.APaperPulledFromTheCounter_FollowsThePointerOverTheLip_TheBoundHoldsItOnlyOnceItLiesWhollyOnTheDesk`, `QaPathsTests.TheDropJump_FailsAMoveTheReleaseAdds_NotAPaperStillSettlingFromItsDragTilt`. Scenarios retuned for the true landing place: `fold_rest` (the folder over the passport's lower part, the day 12 scanner strip f 80) and `doclook_print` (the folder over the passport's right part).
 
+### FOLD-01 round 4 (G1, G2, G4; FOLD-02)
+
+The round 3 verifier's report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01_VERIFY_R3.md. This round's: E:/unity/NOPE-tools/reports/night/n1107/tasks/fold01-rest/REPORT.md. Saleh's call of 2026-10-30: "G3: keep the eased slide onto the desk after release. Fix only G1, G2 and G4 in round 4."
+
+**G1 (S1): the desk surface's clamp holds the pressed point, not the root.**
+- The cause: `DeskDraggable.Follow` clamped the root to the clamp area. A passport pressed on the near half of its closed cover asks its root to go 11 to 22 cm past the pointer once it has grown 3.39 times, past the clamp's far edge (y 0.5075). It stood still for up to 11 frames while the pointer moved 43.5 px on.
+- The fix: the held point (the pointer's point at the grab height, or Init's aim) is clamped, and the grab offset is added after. The pressed point stays under the pointer while the pointer is over the desk, and stops at the clamp's edge when the pointer leaves it. The root may hang past the clamp by its grab offset; the paper's bound keeps it where it may rest.
+- A stamp (a drag with an anchor) keeps its root clamp: its carry is DeskStamps'.
+
+**G2 (S2): the bound judges a growing paper where it lies once its size ends.**
+- The cause: at the counter's edge round 3 judged "it lies wholly on the desk" where the frame's first follow had put the root (the smaller offset of the counter's size) but at the full desk size. The bound turned on, and the next follows, with the grown offset, put the top over the lip: held 1 to 3 frames, up to 59.9 mm.
+- The fix: `HeldBound` (pure, Visuals) holds the bound's state (moved out of `DeskController.Inward`). Each follow judges the footprint at its zone's size with its root moved on by the growth still to come: `DeskDraggable.Regrown(at, DeskDocument.SettledGrabScale) - at`, the grab offset times the grab scale still to grow. That footprint does not change while the size eases, only with the pointer.
+- A zone change is not a pick-up: the paper starts free in its new zone and is held from the frame its grown footprint lies wholly in the new area, with no move then. Where it lay at the pick-up still counts, so a desk paper is held from its first frame (round 3's b06).
+- The folder's bound is round 2's (kept inside from its first frame). `Inward` caches its `RestArea` delegate: a drag frame allocates nothing.
+
+**G4 (S3): a paper let go while its size still eases grows round the pressed point.**
+- The cause: the ease ran on after the release round the root, so the pressed point drifted 8.7 px (39.5 px in the reading view that the drop brings).
+- The fix: the drop is judged where the root lies once the size ends (`DeskDocument.SettledRoot`). Resting there (`DeskController.LayDown`), the root moves with the rest of the ease (`DeskDocument.GrowRoundHeldPoint`, `KeepHeldPointWhileGrowing`): each frame it lies at the held point plus the grab offset grown to the size of that frame, and the swing pivots on the held point. It ends with the ease, or when a drag, a carry or a dock takes the paper. Nothing snaps: the size keeps its eased ease (Reduced Motion: at once, as before).
+- A rest elsewhere (a limit, a keep-out, G3) slides as before (`MoveTo`).
+
+**G3 (by design, unchanged):** a paper let go before it lies wholly on the desk slides onto the desk, eased.
+
+**FOLD-02:** measured on the day 12 entry ticket let go mid-mat in the reading view, from the counter and from the desk (counter_drag `d12_e1_ticket_near_mat`, `d12_fold02_ticket_on_desk`); the report gives the numbers.
+
+**The rig (the verifier's path 5):**
+- `counterDrag` presses the paper's visible click box at (`x`, `y`) shares of its half size (the middle, the near edge -0.95, the far edge 0.9), takes any path (`path`), any paper by index (`target` "index:N", on the counter or the desk) and a release at a desk point (`target2` "m:x,y", DeskLayout.Frame metres).
+- New assert `counterDrag.<name>.hold`: no held frame with the root more than 5 mm from where the pointer asks. It reports how far the root lay past the clamp (G1's case exercised).
+- `counterDrag.<name>.rest`: let go where the paper lies wholly on the desk once grown, the pressed point 8 px or less from the spot under the pointer; let go before (G3), it rests on the desk wholly short of the back step. It reports the root's move after the release, its largest step and whether the size still eased.
+- Scenario `counter_drag`: 35 drags. Day 1 (the passport) and day 12 (the large form, the entry ticket, the ID card); the office view and the reading view; 1920x1080 and 1280x1024; P-SLOW, P-PLAIN, P-FAST and P-FLICK; mid-mat, the far corners and near the counter; full motion and Reduced Motion (`cammotion`). The drags carry the verifier's names where they repeat his (o2, o4, o7, r2, r6, r8, r9, c0, e0 to e2). `doc.play.rests` reads every `counter_drag.counterDrag.*`.
+
+**Tests:** `HeldBoundTests` (pure: the passport stepped through the counter's edge with the grab scale 1.58, 2.43, 3.01, 3.31, 3.39; round 3's rule and a rule without the growth to come both hold it back; Reduced Motion; a desk paper held from its first frame; the folder; a zone change), `HeldPointTests` (NeedsEditor: G1's clamp of the held point, a stamp's root clamp, G4's settled root and the growth after a release).
+
 ### BUG-8: no shared obstacle model
 
 **`Visuals/DeskObstacles.cs` is the registry:**

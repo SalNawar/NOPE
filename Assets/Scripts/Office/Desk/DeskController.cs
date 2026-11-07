@@ -281,7 +281,7 @@ public sealed class DeskController : MonoBehaviour
         if (_rulebookDragged)
         {
             MeasureMachines();
-            _heldAreaSet = false;
+            _held.PickUp();
         }
         else if (!rulebook.Carrying)
             rulebook.ShowHeld(null, 1f);
@@ -364,78 +364,71 @@ public sealed class DeskController : MonoBehaviour
         DeskRect box = RestRect(_folderCorners, 8);
         Vector3 shift = at - rulebook.transform.position;
         var footprint = new DeskRect(box.CentreX + Vector3.Dot(shift, RestRight), box.CentreY + Vector3.Dot(shift, RestForward), box.Width, box.Height);
-        return Inward(footprint, at, true);
+        return Inward(footprint, at, Vector3.zero, true);
     }
 
     /// <summary>
     /// Where a held paper's root may go (its drag's Bound; F3): its footprint
     /// at the size it rests at in its zone wholly inside the area it may rest
     /// in (RestArea), as FolderBound, but only once it has lain wholly there
-    /// in this drag and zone (DropResolver.Held; FOLD-01 round 3): a paper
-    /// pulled from the counter follows the pointer one to one onto the desk,
-    /// never held back at the back step's lip while it leaves the counter
-    /// (Papers, Please). A paper that lay wholly there where it was picked up
-    /// (a desk paper) is held from the first frame: the drag's first follow
-    /// catches up the drag threshold, and a passport picked up 2 cm short of
-    /// the lip went past it then and was never held (the round 2 verifier's
-    /// b06 at 1280x1024, round 3's first build). Allocates nothing.
+    /// in this drag and zone (HeldBound, DropResolver.Held; FOLD-01 round 3):
+    /// a paper pulled from the counter follows the pointer one to one onto the
+    /// desk, never held back at the back step's lip while it leaves the
+    /// counter (Papers, Please). A paper that lay wholly there where it was
+    /// picked up (a desk paper) is held from the first frame: the drag's first
+    /// follow catches up the drag threshold, and a passport picked up 2 cm
+    /// short of the lip went past it then and was never held (the round 2
+    /// verifier's b06 at 1280x1024, round 3's first build). It is judged where
+    /// its root lies once its size ends its ease (DeskDraggable.Regrown at
+    /// DeskDocument.SettledGrabScale; FOLD-01 round 4, G2: judged at the
+    /// counter's edge where a smaller offset had put it, the bound held a
+    /// growing paper at the lip for 1 to 3 frames, up to 59.9 mm).
+    /// Allocates nothing.
     /// </summary>
     private Vector3 PaperBound(DeskDocument paper, Vector3 at)
     {
-        if (config == null || surface == null || paper == null)
+        if (config == null || surface == null || paper == null || paper.Drag == null)
             return at;
         float y = surface.transform.position.y;
         Vector3 lies = paper.transform.position;
         paper.RestCorners(new Vector3(lies.x, y, lies.z), _boundCorners);
         DeskRect where = RestRect(_boundCorners, 4);
         paper.RestCorners(new Vector3(at.x, y, at.z), _boundCorners);
-        return Inward(RestRect(_boundCorners, 4), at, paper.Zone == DeskZone.Desk, where);
+        Vector3 grow = paper.Drag.Regrown(at, paper.SettledGrabScale) - at;
+        return Inward(RestRect(_boundCorners, 4), at, grow, paper.Zone == DeskZone.Desk, where);
     }
 
     /// <summary>PaperBound's buffer (a paper's four corners).</summary>
     private readonly Vector3[] _boundCorners = new Vector3[4];
 
     /// <summary>
-    /// <paramref name="at"/> moved the least so that <paramref name="footprint"/>
-    /// (the rest's frame, with its root at <paramref name="at"/>) lies wholly
-    /// inside the area it may rest in (RestArea). With
+    /// <paramref name="at"/> moved by the bound (HeldBound): the held thing's
+    /// <paramref name="footprint"/> (the rest's frame, with its root at
+    /// <paramref name="at"/>), its root moved on by <paramref name="grow"/>
+    /// (world: how far it still goes while its size ends its ease), kept
+    /// wholly inside the area it may rest in (RestArea). With
     /// <paramref name="lies"/> (a paper: its footprint where it lies before
     /// this frame's move) it is not moved until it has lain wholly inside in
-    /// this drag and zone (DropResolver.Held), counting where it lay at the
-    /// pick-up or as it crossed the counter's edge. The area is taken at each
-    /// pick-up and again only when the held thing's size or zone changes (at
-    /// the counter's edge), so a drag frame allocates nothing.
+    /// this drag and zone, counting where it lay at the pick-up. The area is
+    /// taken at each pick-up and again only when the held thing's size or
+    /// zone changes (at the counter's edge), so a drag frame allocates
+    /// nothing.
     /// </summary>
-    private Vector3 Inward(DeskRect footprint, Vector3 at, bool onDesk, DeskRect? lies = null)
+    private Vector3 Inward(DeskRect footprint, Vector3 at, Vector3 grow, bool onDesk, DeskRect? lies = null)
     {
-        bool onceInside = lies != null;
-        if (!_heldAreaSet || onDesk != _heldAreaOnDesk || Mathf.Abs(footprint.Width - _heldAreaSize.x) > 1e-4f || Mathf.Abs(footprint.Height - _heldAreaSize.y) > 1e-4f)
-        {
-            bool fresh = !_heldAreaSet || onDesk != _heldAreaOnDesk;
-            _heldArea = RestArea(footprint, onDesk);
-            if (fresh) // a pick-up, or the counter's edge crossed: held at once where it lies wholly in its area, else free until it does
-                _heldHolding = onceInside && DropResolver.Held(lies.Value, _heldArea, false).holding;
-            _heldAreaSet = true;
-            _heldAreaOnDesk = onDesk;
-            _heldAreaSize = new Vector2(footprint.Width, footprint.Height);
-        }
-        float x, y;
-        if (onceInside)
-            (x, y, _heldHolding) = DropResolver.Held(footprint, _heldArea, _heldHolding);
-        else
-            (x, y) = DropResolver.Inside(footprint, _heldArea);
-        if (Mathf.Approximately(x, footprint.CentreX) && Mathf.Approximately(y, footprint.CentreY))
+        if (_restArea == null)
+            _restArea = RestArea;
+        (float x, float y) = _held.Step(footprint, Vector3.Dot(grow, RestRight), Vector3.Dot(grow, RestForward), onDesk, lies, _restArea);
+        if (Mathf.Approximately(x, 0f) && Mathf.Approximately(y, 0f))
             return at;
-        return at + RestRight * (x - footprint.CentreX) + RestForward * (y - footprint.CentreY);
+        return at + RestRight * x + RestForward * y;
     }
 
-    /// <summary>The area Inward last took (RestArea) and the size and zone it was taken for; unset at each pick-up (the view's shape may have changed since).</summary>
-    private DeskRect _heldArea;
-    private bool _heldAreaSet, _heldAreaOnDesk;
-    private Vector2 _heldAreaSize;
+    /// <summary>The held paper's or folder's bound (Inward), picked up afresh at each drag's start.</summary>
+    private readonly HeldBound _held = new HeldBound();
 
-    /// <summary>True once the held paper has lain wholly in its area in this drag and zone: the bound holds it there from then on (DropResolver.Held).</summary>
-    private bool _heldHolding;
+    /// <summary>RestArea as the bound asks for it (made once, so a drag frame allocates nothing).</summary>
+    private Func<DeskRect, bool, DeskRect> _restArea;
 
     /// <summary>The rectangle enclosing the first <paramref name="count"/> of <paramref name="corners"/> in the rest's frame (InViewFrame's measure; allocates nothing).</summary>
     private DeskRect RestRect(Vector3[] corners, int count)
@@ -922,7 +915,7 @@ public sealed class DeskController : MonoBehaviour
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _dragged = paper.Index;
-        _heldAreaSet = false;
+        _held.PickUp();
         if (_state != null)
             _state.Lift(paper.Index);
         MeasureMachines();
@@ -991,7 +984,8 @@ public sealed class DeskController : MonoBehaviour
         DeskZone zone = ZoneAt(released);
         bool verdict = stamps != null && stamps.HasVerdict;
         _stack.BringToFront(index);
-        Vector3 at = paper.transform.position;
+        // Judged where its root lies once its size ends its ease, the held point under the pointer (FOLD-01 round 4, G4).
+        Vector3 at = paper.SettledRoot;
 
         // A machine takes only its documents (MachineIntake; Saleh's 1018a playtest): the chip reader a chip card
         // in its slot or a passport on its pad, the scanner any case paper on its bed; anything else is refused.
@@ -1030,23 +1024,23 @@ public sealed class DeskController : MonoBehaviour
                 // Drop and go: it waits on the desk beside the busy scanner (so at its desk size, never on the counter) and feeds through at its turn.
                 _waiting.Add(index);
                 paper.SetZone(lies, false);
-                MoveTo(paper, Rest(paper, at, true));
+                LayDown(paper, Rest(paper, at, true), at);
                 break;
             case DropOutcome.NotStamped:
                 if (stamps != null)
                     stamps.Note("stamp.refused.handBackFirst");
                 paper.SetZone(lies, false);
                 paper.Shake();
-                MoveTo(paper, Rest(paper, at, true));
+                LayDown(paper, Rest(paper, at, true), at);
                 break;
             case DropOutcome.Refused:
                 paper.SetZone(lies, false);
                 paper.Shake();
-                MoveTo(paper, Rest(paper, at, false));
+                LayDown(paper, Rest(paper, at, false), at);
                 break;
             default:
                 paper.SetZone(lies, false);
-                MoveTo(paper, Rest(paper, at, false));
+                LayDown(paper, Rest(paper, at, false), at);
                 if (lies == DeskZone.Desk)
                     Read(paper);
                 break;
@@ -1126,7 +1120,7 @@ public sealed class DeskController : MonoBehaviour
         DeskZone lies = PaperSizes.ZoneAfterDrop(DropOutcome.MachineRefused, released, _state.ZoneOf(paper.Index));
         _state.Lay(paper.Index, lies);
         paper.SetZone(lies, false);
-        MoveTo(paper, Rest(paper, at, true));
+        LayDown(paper, Rest(paper, at, true), at);
         RefreshHint();
     }
 
@@ -1588,6 +1582,25 @@ public sealed class DeskController : MonoBehaviour
             maxY = Mathf.Max(maxY, y);
         }
         return new DeskRect((minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY);
+    }
+
+    /// <summary>
+    /// A paper let go goes to <paramref name="rest"/> (DropResolver), judged
+    /// with its root at <paramref name="at"/>, where it lies once its size
+    /// ends its ease (DeskDocument.SettledRoot). Resting there, it stays: its
+    /// root moves with the rest of the ease, so the held point stays where the
+    /// pointer let it go (DeskDocument.GrowRoundHeldPoint; FOLD-01 round 4,
+    /// G4). Else it goes there (MoveTo).
+    /// </summary>
+    private void LayDown(DeskDocument paper, Vector3 rest, Vector3 at)
+    {
+        if ((rest - at).sqrMagnitude > 1e-8f)
+        {
+            MoveTo(paper, rest);
+            return;
+        }
+        paper.GrowRoundHeldPoint();
+        ApplyLive(paper);
     }
 
     /// <summary>A dropped paper goes to <paramref name="rest"/> (DropResolver): nowhere when it already lies there (it rests exactly where it was released); else the short way, over any casing.</summary>

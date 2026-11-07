@@ -344,11 +344,61 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// desk sizes it for the zone under the pointer: Feel, in the next Update,
     /// took it after the size's first eased step, so a paper pulled from the
     /// counter grew its grab offset by 2.1 times while it grew 3.4 times, and
-    /// the held point slid 4 cm off the pointer (FOLD-01 round 3).
+    /// the held point slid 4 cm off the pointer (FOLD-01 round 3). The new
+    /// drag owns the root: a growth after an earlier release ends here
+    /// (GrowRoundHeldPoint).
     /// </summary>
-    private void Grabbed(DeskDraggable dragged) => _sizeAtGrab = _sizeNow;
+    private void Grabbed(DeskDraggable dragged)
+    {
+        _sizeAtGrab = _sizeNow;
+        _grownFrom = null;
+    }
 
-    /// <summary>Each frame: its feel, the ease of a change of size (the grab offset growing with it while held), and the carry along a way (its done callback on landing).</summary>
+    /// <summary>The grab scale the running (or the last) drag reaches once the size ends its ease: the size it eases to over the size it was grabbed at (PaperSizes.GrabRatio).</summary>
+    public float SettledGrabScale => PaperSizes.GrabRatio(_sizeAtGrab, _sizeTarget);
+
+    /// <summary>
+    /// Where the paper's root lies once its size ends its ease, the point its
+    /// drag holds kept where the drag's last follow put it
+    /// (DeskDraggable.Regrown): where a drop is judged (FOLD-01 round 4, G4).
+    /// Its root now when its size does not ease. Read at a drag's release.
+    /// </summary>
+    public Vector3 SettledRoot => drag != null ? drag.Regrown(transform.position, SettledGrabScale) : transform.position;
+
+    /// <summary>The root where the drag let the paper go while its size still eased (GrowRoundHeldPoint), or null.</summary>
+    private Vector3? _grownFrom;
+
+    /// <summary>
+    /// The paper was let go where it rests (DeskController) while its size
+    /// still eases: its root moves with the rest of the ease, so the point the
+    /// drag held stays where the pointer let it go, and the root ends at
+    /// SettledRoot, where the drop was judged (FOLD-01 round 4, the round 3
+    /// verifier's G4: the paper grew round its root, and the held point
+    /// drifted 8.7 px, 39.5 px in the reading view that the drop brings).
+    /// Nothing when the size has ended its ease.
+    /// </summary>
+    public void GrowRoundHeldPoint() =>
+        _grownFrom = drag != null && !Mathf.Approximately(_sizeNow, _sizeTarget) ? transform.position : (Vector3?)null;
+
+    /// <summary>After a release mid-ease (GrowRoundHeldPoint): the root goes where the grown offset puts it from the held point, and the swing pivots on that point; it ends with the ease, or as soon as a drag, a carry or a dock takes the paper.</summary>
+    private void KeepHeldPointWhileGrowing()
+    {
+        if (_grownFrom == null)
+            return;
+        if (drag == null || drag.IsDragging || _carry.Running || _docked)
+        {
+            _grownFrom = null;
+            return;
+        }
+        Vector3 from = _grownFrom.Value;
+        transform.position = drag.Regrown(from, PaperSizes.GrabRatio(_sizeAtGrab, _sizeNow));
+        Vector3 held = transform.InverseTransformDirection(drag.Regrown(from, 0f) - transform.position);
+        _pivot = new Vector2(held.x, held.z);
+        if (Mathf.Approximately(_sizeNow, _sizeTarget))
+            _grownFrom = null;
+    }
+
+    /// <summary>Each frame: its feel, the ease of a change of size (the grab offset growing with it while held, and the root with it after a release mid-ease), and the carry along a way (its done callback on landing).</summary>
     private void Update()
     {
         if (!Mathf.Approximately(_sizeNow, _sizeTarget))
@@ -359,6 +409,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
             _sizeNow = eased >= 1f ? _sizeTarget : Mathf.LerpUnclamped(_sizeFrom, _sizeTarget, UiMotion.Ease(eased, UiMotion.Knobs.deskMoveFeel, seconds));
             _feelDirty = true;
         }
+        KeepHeldPointWhileGrowing();
         Feel(Time.unscaledDeltaTime);
         if (drag != null && drag.IsDragging)
             drag.GrabScale = PaperSizes.GrabRatio(_sizeAtGrab, _sizeNow);

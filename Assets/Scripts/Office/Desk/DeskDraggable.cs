@@ -5,8 +5,8 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// Drags a desk object across a DeskSurface with the EventSystem (its collider
 /// proxy is found by the office camera's PhysicsRaycaster): the pointer is
-/// projected onto the desk plane and the object's centre stays inside the desk
-/// area. The proxy is off during the drag, so the release is never over the
+/// projected onto the desk plane and the held point (a stamp: its centre)
+/// stays inside the desk area (Follow). The proxy is off during the drag, so the release is never over the
 /// object itself (no click follows a drag) and the drop is decided by the
 /// projected pointer (DragEnded). While disabled by its owner the EventSystem
 /// sends it nothing, so disabling it mid-drag ends the drag at once
@@ -96,9 +96,20 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     public Camera DragCamera => _camera;
 
     /// <summary>
+    /// Where a root the last follow placed lies once the grab scale is
+    /// <paramref name="scale"/>: the held point stays where that follow put
+    /// it, and the grab offset grows (or shrinks) round it. FOLD-01 round 4:
+    /// the root a paper still growing at the counter's edge will reach once its
+    /// size ends its ease, where its bound and its drop judge it (G2, G4), and
+    /// the root of a paper let go while its size still eases (G4: it grows
+    /// round the held point, not its root).
+    /// </summary>
+    public Vector3 Regrown(Vector3 root, float scale) => root + _grabOffset * (scale - _followedScale);
+
+    /// <summary>
     /// Where its owner keeps the held object's origin, or null: given the
-    /// origin the pointer asks for (already in the desk's area), the origin it
-    /// takes. The desk keeps a held paper or the folder wholly where it may
+    /// origin the pointer asks for (the held point in the desk's area plus the
+    /// grab offset), the origin it takes. The desk keeps a held paper or the folder wholly where it may
     /// rest (DeskController.PaperBound, FolderBound; FOLD-01 round 2, the
     /// verifier's F3: Papers, Please keeps a held paper on the desk, so a
     /// release never slides after). The pointer goes on; the object stops at
@@ -234,7 +245,21 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
             Follow();
     }
 
-    /// <summary>The object goes where the pointer shows through the camera now, its centre clamped to the desk and carried at its height above it; Dragged says where the pointer is on the desk.</summary>
+    /// <summary>
+    /// The object goes where the pointer shows through the camera now, carried
+    /// at its height above the desk; Dragged says where the pointer is on the
+    /// desk. The desk's clamp area holds the held point (the point pressed),
+    /// not the origin: the pressed point stays under the pointer wherever the
+    /// pointer is over the desk, and stops at the clamp's edge when the
+    /// pointer leaves it (Papers, Please). The origin hangs from it by the
+    /// grab offset, and the owner's Bound keeps a paper or the folder where it
+    /// may rest. FOLD-01 round 4, the round 3 verifier's G1: the origin was
+    /// clamped, and a passport pressed on the near half of its closed cover
+    /// asked to go 11 to 22 cm past the pointer as it grew at the counter's
+    /// edge, past the clamp's far edge, so it stood still for up to 11 frames
+    /// while the pointer moved 43.5 px on. A stamp, carried by its anchor,
+    /// keeps its origin clamped (its carry is DeskStamps').
+    /// </summary>
     private void Follow()
     {
         _moved = false;
@@ -246,7 +271,8 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         _followedScale = GrabScale;
         if (_surface == null || !_surface.TryProject(_camera, _pointer, out Vector3 point))
             return;
-        Vector3 at = _surface.Clamp(Aimed(AtGrabHeight(point)) + GrabOffset);
+        Vector3 held = Aimed(AtGrabHeight(point));
+        Vector3 at = _anchor != null ? _surface.Clamp(held + GrabOffset) : _surface.Clamp(held) + GrabOffset;
         if (Bound != null)
             at = Bound(at);
         transform.position = at + _surface.transform.up * _height;
