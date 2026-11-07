@@ -98,7 +98,9 @@ public class DemoGateTests
         Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
         Dictionary<string, List<string>> own = DemoGate.KnownRedPatternsByCheck(text);
         Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { Helix(R("hall_fx_helix.seq.helix_before.flicker", false)) }, 1, known, own).Refused);
-        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { Helix(R("hall_fx_helix.seq.helix_after_drop.flicker", false)) }, 1, known, own).Refused, "the other three helix lines stay strict");
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { Helix(R("hall_fx_helix.seq.helix_after_drop.flicker", false)) }, 1, known, own).Refused, "helix_after_drop holds the city in the hall's window (gate-hygiene round 1: named under the ruling)");
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { Helix(R("hall_fx_helix.seq.helix_home.flicker", false)) }, 1, known, own).Refused, "helix_home and helix_tray_drop stay strict");
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { Helix(R("hall_fx_helix.seq.helix_before.flicker", false), R("hall_fx_helix.seq.helix_tray_drop.flicker", false)) }, 1, known, own).Refused, "a strict line beside a named one refuses");
         GateResult edge = GateResults.Judge("stamp.aim", "STAMP", "stamp_aim.aim.*", new[] { R("stamp_aim.aim.a6", false), R("stamp_aim.aim.c3", false), R("stamp_aim.aim.b4_1", true) }, "abc", false);
         Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { edge }, 1, known, own).Refused, "the edge tries the entry names");
         GateResult pile = GateResults.Judge("stamp.aim", "STAMP", "stamp_aim.aim.*", new[] { R("stamp_aim.aim.a6", false), R("stamp_aim.aim.b9_1", false) }, "abc", false);
