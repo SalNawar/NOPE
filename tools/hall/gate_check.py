@@ -1,7 +1,7 @@
 """The hall portals as gates: the frame-strip checks of tools/qa/scenarios/hall_portals_gate.json (the night of
 2026-11-07, DECISIONS D6; PortalGate, PortalEffect, TimeDesk/PortalGlow).
 
-    python tools/hall/gate_check.py <run folder> [--ring 1] [--out DIR]
+    python tools/hall/gate_check.py <run folder> [--ring 1] [--closed 2 ...] [--out DIR]
     python tools/hall/gate_check.py <hall_fx_portals run folder> --fx
 
 With --fx it reads a hall_fx_portals run instead (BUG-26a's portal strobe): seqlib.flicker inside every ring's quad
@@ -32,6 +32,11 @@ hole is the ellipse inside 0.95 opening radii, its chevrons' band the ring 1.05 
             normalised: pass when no frame steps more than 0.1.
   flicker   tools/qa/seqlib.flicker (a pixel toggling more than twice in 10 s) inside the ring's quad only, on every
             sequence: pass when no pixel there toggles more than twice.
+  closed    each --closed ring (default 2: under maintenance on day 1, while the scenario dials its module) on the
+            1920x1080 stills: the mean G-R of its hole on gate_lockedin_h12, gate_open_h12 and gate_kawoosh_h12 against
+            gate_offline_h12 (within 3), and on gate_open_h22 and gate_closed_h22 against it (within 8: the night's
+            light shifts a dark hole by 2.4, an open one by 41): pass when each holds (a closed ring stays dark
+            whatever its module does; Saleh 2026-09-29: "hide a closed portal's halo").
 
 Luma is Rec. 601 on the frames as captured (as seqtools reads them). Writes <out>/gate_check.txt (out: the run
 folder) and exits 0 when every check passes.
@@ -55,6 +60,8 @@ PEAK = (10, 14)
 KAWOOSH_STEP = 0.15
 CLOSE_STEP = 0.1
 CHANGE = 8.0
+CLOSED_GR = 3.0                     # a closed ring's hole: mean G-R within 3 of its dark look by day
+CLOSED_NIGHT_GR = 8.0               # and within 8 of it at night (the night's light shifts a dark hole by 2.4)
 
 
 def columns(row):
@@ -205,6 +212,44 @@ def check_close(rows, lumas, hole, band, ring, lines):
     return ok
 
 
+def hole_gr(run, still, quad):
+    """The mean G-R of the ring's hole (0.95 opening radii) on stills/<still>_1920x1080.png, or None when it is missing."""
+    from PIL import Image
+    path = os.path.join(run, 'stills', still + '_1920x1080.png')
+    if not os.path.exists(path):
+        return None
+    a = np.asarray(Image.open(path).convert('RGB')).astype(float)
+    h, w, _ = a.shape
+    cx, cy, x0, y0, x1, y1 = quad
+    rx, ry = (x1 - x0) / 2 / 1.5 * 0.95, (y1 - y0) / 2 / 1.5 * 0.95
+    yy, xx = np.mgrid[0:h, 0:w]
+    mask = ((xx + 0.5 - cx) / max(rx, 1e-3)) ** 2 + ((yy + 0.5 - (h - cy)) / max(ry, 1e-3)) ** 2 <= 1
+    return float((a[..., 1] - a[..., 0])[mask].mean()) if mask.any() else None
+
+
+def check_closed(run, ring, lines):
+    """A closed ring stays dark while the scenario dials its module: its hole's mean G-R holds on the stills."""
+    quad = quads(run, ring).get((1920, 1080))
+    if quad is None:
+        lines.append('closed ring %d: no "gate ring %d" quad for 1920x1080 in qa_report.txt' % (ring, ring))
+        return False
+    ok = True
+    for base, others, tol in (('gate_offline_h12', ('gate_lockedin_h12', 'gate_open_h12', 'gate_kawoosh_h12'), CLOSED_GR),
+                              ('gate_offline_h12', ('gate_open_h22', 'gate_closed_h22'), CLOSED_NIGHT_GR)):
+        ref = hole_gr(run, base, quad)
+        if ref is None:
+            lines.append('closed ring %d: %s missing' % (ring, base))
+            ok = False
+            continue
+        for still in others:
+            v = hole_gr(run, still, quad)
+            good = v is not None and abs(v - ref) <= tol
+            ok &= good
+            lines.append('closed ring %d: %s mean G-R %s against %s %.1f (within %.0f: %s)'
+                         % (ring, still, 'missing' if v is None else '%.1f' % v, base, ref, tol, 'yes' if good else 'NO'))
+    return ok
+
+
 def check_flicker(lumas, rows, box, lines, name):
     states = [seqlib.frame_state(r) for r in rows] if rows else None
     r = seqlib.flicker(lumas, states, static_mask=~box)
@@ -255,6 +300,7 @@ def main():
     ap.add_argument('run')
     ap.add_argument('--ring', type=int, default=1)
     ap.add_argument('--fx', action='store_true')
+    ap.add_argument('--closed', type=int, nargs='*', default=[2])
     ap.add_argument('--out')
     a = ap.parse_args()
     run, ring = a.run, a.ring
@@ -310,6 +356,8 @@ def main():
         results['flicker close'] = check_flicker(lumas, rows, box, lines, 'gate_close_h22')
     else:
         results['close'] = False
+    for c in a.closed:
+        results['closed ring %d' % c] = check_closed(run, c, lines)
 
     lines.append('')
     for k, v in results.items():
