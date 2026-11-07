@@ -1,0 +1,30 @@
+{
+  "name": "char_edge_d1",
+  "owner": "QA-RIG",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "BLD-05 (D11, 2026-11-07): the day 1 traveller at rest and through a Tab tilt both ways, for the edge-toggling measure of the character art without mipmaps (tracked: the figure's canvas rect)." },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "startShift" },
+    { "op": "wait", "f": 1.0 },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "wait", "f": 2.0 },
+    { "op": "track", "name": "figure", "target": "Figure" },
+    { "op": "still", "name": "d1_traveller" },
+    { "op": "record", "name": "d1_rest", "f": 1.0 },
+    { "op": "key", "key": "Tab" },
+    { "op": "record", "name": "d1_to_reading", "f": 2.5 },
+    { "op": "still", "name": "d1_reading" },
+    { "op": "key", "key": "Tab" },
+    { "op": "record", "name": "d1_from_reading", "f": 2.5 },
+    { "op": "res", "w": 1280, "h": 1024 },
+    { "op": "wait", "f": 1.5 },
+    { "op": "still", "name": "d1_traveller_54" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "wait", "f": 1.0 }
+  ]
+}
