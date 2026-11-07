@@ -399,4 +399,155 @@ public class SwitchboardTests
         Assert.AreEqual(0, board.WaitingTotal);
         Assert.AreEqual(0, Events(board).Count);
     }
+
+    // ------------------------------------------------------------------ the Stargate dialer's rules (D1)
+
+    /// <summary>The dialer's rules: 4 cells, a cradle of 3, the eras' bars (Ancient 3, Medieval 2, Early modern 2, Industrial 1, Modern 1), MASTER the final lock, one dial per route.</summary>
+    private static SwitchboardRules Dialer() => new SwitchboardRules
+    {
+        PowerCords = 4,
+        CellsPerModule = 3,
+        PeriodBars = new[] { 3, 2, 2, 1, 1 },
+        MasterNeedsPower = true,
+        PlaceTakesOnePlug = false,
+    };
+
+    /// <summary>A dialer board: 5 dials (01 to 03 in service), 8 nations, 5 eras.</summary>
+    private static Switchboard DialBoard()
+    {
+        var board = new Switchboard(Dialer(), 5, 8, 5);
+        for (int m = 0; m < 3; m++)
+            board.SetInService(m, true);
+        return board;
+    }
+
+    [Test]
+    public void Dialer_ARouteNeedsItsErasBars_OneCellLightsOneBar_AndTheCradleTakesThree()
+    {
+        Switchboard board = DialBoard();
+        var egyptAncient = new SwitchRoute(0, 0);
+        Patch(board, 0, egyptAncient);
+        Assert.AreEqual(3, board.Modules[0].Need, "Ancient needs 3 bars");
+        Assert.IsTrue(board.PlugPower(0, 0));
+        Assert.IsTrue(board.PlugPower(1, 0));
+        Assert.AreEqual(2, board.Modules[0].Cells);
+        Assert.IsFalse(board.Modules[0].Powered, "2 bars of 3: short of the mark");
+        Assert.IsTrue(board.PlugPower(2, 0));
+        Assert.IsTrue(board.Modules[0].Powered, "3 bars reach the mark");
+        Assert.IsFalse(board.CanPlugPower(3, 0), "the cradle takes 3 cells");
+        Assert.IsTrue(board.CanPlugPower(2, 0), "a cell already in it may be dropped back in");
+
+        board.UnplugPeriod(0);
+        Assert.AreEqual(1, board.Modules[0].Need, "no era plugged: 1 bar");
+        Assert.IsTrue(board.PlugPeriod(0, new SwitchRoute(0, 3)));
+        Assert.AreEqual(1, board.Modules[0].Need, "Industrial needs 1 bar");
+    }
+
+    [Test]
+    public void Dialer_MasterEngagesOnlyDialsAtTheMark_AndADialReachingItTripsTheClosedBreaker()
+    {
+        Switchboard board = DialBoard();
+        var egyptAncient = new SwitchRoute(0, 0);
+        board.AddCall(egyptAncient);
+        Patch(board, 0, egyptAncient);
+        board.PlugPower(0, 0);
+        Assert.IsFalse(board.MasterPending, "1 bar of 3: the dial does not wait for MASTER yet");
+        MasterPull idle = board.PullMaster();
+        Assert.IsTrue(idle.Idle, "MASTER is the final lock: a dial short of bars stays as it is");
+        Assert.AreEqual(SwitchModuleState.Patching, board.Modules[0].State);
+        Assert.IsTrue(board.BreakerClosed);
+
+        board.PlugPower(1, 0);
+        board.PlugPower(2, 0);
+        board.Tick(0.01f);
+        Assert.IsFalse(board.BreakerClosed, "the dial reached its mark: the breaker trips open for the pull");
+        Assert.AreEqual(1, board.PullMaster().Committed);
+        board.Tick(20f);
+        Assert.AreEqual(0, board.Waiting(egyptAncient), "calibrated 20 s at the mark, then sent");
+    }
+
+    [Test]
+    public void Dialer_ACellTakenOut_DarkensTheDialAtOnce_AndCalibrationPausesBelowTheMark()
+    {
+        Switchboard board = DialBoard();
+        var italyMedieval = new SwitchRoute(3, 1);
+        board.AddCall(italyMedieval);
+        Patch(board, 1, italyMedieval);
+        board.PlugPower(0, 1);
+        board.PlugPower(1, 1);
+        board.PullMaster();
+        board.Tick(5f);
+        board.UnplugPower(1);
+        Assert.IsFalse(board.Modules[1].Powered, "Medieval needs 2: one cell out darkens it at once");
+        board.Tick(30f);
+        Assert.AreEqual(15f, board.Modules[1].CalibrationLeft, 1e-3f, "it paused below the mark, its progress kept");
+        board.PlugPower(3, 1);
+        board.Tick(15f);
+        Assert.AreEqual(SwitchModuleState.Open, board.Modules[1].State);
+        Assert.AreEqual(0, board.Waiting(italyMedieval));
+    }
+
+    [Test]
+    public void Dialer_TwoDialsMayServeOneNation_OnTwoEras_ButNeverOneRouteTwice()
+    {
+        Switchboard board = DialBoard();
+        Assert.IsTrue(board.PlugPlace(0, 2));
+        Assert.IsTrue(board.PlugPlace(1, 2), "Greece on 01 and on 02");
+        Assert.IsTrue(board.PlugPeriod(0, new SwitchRoute(2, 0)));
+        Assert.IsFalse(board.CanPlugPeriod(1, new SwitchRoute(2, 0)), "one dial per route");
+        Assert.IsTrue(board.PlugPeriod(1, new SwitchRoute(2, 1)));
+    }
+
+    [Test]
+    public void Dialer_AWrongEra_PopsTheFuse_AtTheFinalLock()
+    {
+        Switchboard board = DialBoard();
+        board.AddCall(new SwitchRoute(5, 0));
+        Patch(board, 0, new SwitchRoute(5, 4));
+        board.PlugPower(0, 0);
+        MasterPull pull = board.PullMaster();
+        Assert.AreEqual(1, pull.Fused, "Japan calls on Ancient; Modern is the wrong era");
+        Assert.AreEqual(SwitchModuleState.Blown, board.Modules[0].State);
+    }
+
+    [Test]
+    public void TheRouteEvents_OpenSendAndClose_ForTheHallsPortals()
+    {
+        Switchboard board = DialBoard();
+        var opened = new List<string>();
+        board.RouteOpened += (m, r) => opened.Add("opened " + m + " " + r);
+        board.RouteSending += (m, r, k) => opened.Add("sending " + m + " " + r + " x" + k);
+        board.RouteClosed += (m, r) => opened.Add("closed " + m + " " + r);
+        var chinaModern = new SwitchRoute(4, 4);
+        board.AddCall(chinaModern);
+        board.AddCall(chinaModern);
+        Patch(board, 2, chinaModern);
+        board.PlugPower(0, 2);
+        board.PullMaster();
+        board.Tick(19f);
+        Assert.AreEqual(0, opened.Count, "nothing while it calibrates");
+        board.Tick(1f);
+        CollectionAssert.AreEqual(new[] { "opened 2 4/4", "sending 2 4/4 x2" }, opened);
+        board.UnplugPeriod(2);
+        Assert.AreEqual("closed 2 4/4", opened.Last(), "moving the ring shuts the gate");
+        board.UnplugPlace(2);
+        Assert.AreEqual(3, opened.Count, "an unlocked dial closes nothing twice");
+    }
+
+    [Test]
+    public void ClosingADialForTheDay_ReturnsEveryCell_AndClosesItsRoute()
+    {
+        Switchboard board = DialBoard();
+        var closed = 0;
+        board.RouteClosed += (m, r) => closed++;
+        Patch(board, 0, new SwitchRoute(1, 4));
+        board.PlugPower(0, 0);
+        board.PlugPower(1, 0);
+        board.PullMaster();
+        board.SetInService(0, false);
+        Assert.AreEqual(1, closed);
+        Assert.AreEqual(-1, board.PowerCordModule(0));
+        Assert.AreEqual(-1, board.PowerCordModule(1));
+        Assert.AreEqual(0, board.Modules[0].Cells);
+    }
 }
