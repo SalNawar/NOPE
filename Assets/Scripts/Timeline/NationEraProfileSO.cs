@@ -114,7 +114,7 @@ public sealed class ProfileFact
 /// An attribute's starting score within a profile, plus the generic effects
 /// activated while that attribute is dominant or supporting here.
 /// Effects are channel-tagged so ANY system (visuals, music, UI, visitor pool,
-/// newsletter, tech tree...) can react — see EffectSO.
+/// newsletter, tech tree...) can react: see EffectSO.
 /// </summary>
 [Serializable]
 public sealed class AttributeBaseline

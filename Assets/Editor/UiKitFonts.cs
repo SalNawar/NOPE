@@ -40,7 +40,7 @@ public static class UiKitFonts
         var chars = new System.Text.StringBuilder();
         for (int c = 0x20; c < 0x7F; c++)
             chars.Append((char)c);
-        chars.Append("–—‘’“”•…‹›€£¥←→↑↓▲▼▶◀✓✗×·°№");
+        chars.Append("–‘’“”•…‹›€£¥←→↑↓▲▼▶◀✓✗×·°№");
         return chars.ToString();
     }
 

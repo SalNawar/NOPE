@@ -60,7 +60,7 @@ MonoBehaviour:
     gloss: 1
     tier: 1
   - key: results.masthead
-    text: "SHIFT LEDGER \u2014 EVENING EDITION"
+    text: "SHIFT LEDGER: EVENING EDITION"
     gloss: 0
     tier: 1
   - key: results.goHome
@@ -269,15 +269,15 @@ MonoBehaviour:
     gloss: 1
     tier: 1
   - key: briefing.title
-    text: "Day {0} \u2014 Morning Briefing"
+    text: "Day {0}: Morning Briefing"
     gloss: 0
     tier: 1
   - key: results.title
-    text: "Day {0} \u2014 Shift Report"
+    text: "Day {0}: Shift Report"
     gloss: 0
     tier: 1
   - key: briefing.newsHeader
-    text: "\u2014 TIMELINE NEWS \u2014"
+    text: "\u00B7 TIMELINE NEWS \u00B7"
     gloss: 0
     tier: 1
   - key: briefing.deskHeader
@@ -1045,7 +1045,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: site.history.none
-    text: "\u2014"
+    text: "\u2013"
     gloss: 0
     tier: 0
   - key: site.history.subtitle
@@ -2067,11 +2067,11 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: compare.deviationLogged
-    text: "\u25CF  DEVIATION LOGGED \u2014 {0}"
+    text: "\u25CF  DEVIATION LOGGED: {0}"
     gloss: 0
     tier: 1
   - key: compare.alreadyDocumented
-    text: "\u25CF  ALREADY DOCUMENTED \u2014 {0} is in the Deviation Report"
+    text: "\u25CF  ALREADY DOCUMENTED: {0} is in the Deviation Report"
     gloss: 0
     tier: 1
   - key: compare.pair
@@ -2569,7 +2569,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: citation.warning
-    text: "Warning {0}/{1} \u2014 no pay deduction."
+    text: "Warning {0}/{1}: no pay deduction."
     gloss: 0
     tier: 1
   - key: citation.penalty
@@ -2864,54 +2864,51 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: deviation.claimMismatch.papers
-    text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  expected: \"{2}\""
+    text: "{0} INCORRECT \u00B7 papers: \"{1}\"  /  expected: \"{2}\""
     gloss: 0
     tier: 1
   - key: deviation.claimMismatch.said
-    text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  expected: \"{2}\""
+    text: "{0} INCORRECT \u00B7 traveller said: \"{1}\"  /  expected: \"{2}\""
     gloss: 0
     tier: 1
   - key: deviation.claimMismatch.worn
-    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  expected: \"{2}\" \u2014
-      would cause a panic"
+    text: "{0} INCORRECT \u00B7 traveller wears: \"{1}\"  /  expected: \"{2}\": would cause a panic"
     gloss: 0
     tier: 1
   - key: deviation.foreignOrigin.papers
-    text: "{0} INCORRECT \u2014 papers show \"{1}\", which belongs to {2}"
+    text: "{0} INCORRECT \u00B7 papers show \"{1}\", which belongs to {2}"
     gloss: 0
     tier: 1
   - key: deviation.foreignOrigin.said
-    text: "{0} INCORRECT \u2014 traveller said \"{1}\", which belongs to {2}"
+    text: "{0} INCORRECT \u00B7 traveller said \"{1}\", which belongs to {2}"
     gloss: 0
     tier: 1
   - key: deviation.foreignOrigin.worn
-    text: "{0} INCORRECT \u2014 traveller wears \"{1}\", which belongs to {2}: would
-      cause a panic"
+    text: "{0} INCORRECT \u00B7 traveller wears \"{1}\", which belongs to {2}: would cause a panic"
     gloss: 0
     tier: 1
   - key: deviation.recordMismatch.papers
-    text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  agency records: \"{2}\""
+    text: "{0} INCORRECT \u00B7 papers: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
     tier: 1
   - key: deviation.recordMismatch.said
-    text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  agency records: \"{2}\""
+    text: "{0} INCORRECT \u00B7 traveller said: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
     tier: 1
   - key: deviation.recordMismatch.worn
-    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  agency records: \"{2}\""
+    text: "{0} INCORRECT \u00B7 traveller wears: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
     tier: 1
   - key: deviation.crossMismatch.papers
-    text: "{0} INCONSISTENT \u2014 the papers disagree: \"{1}\"  /  \"{2}\""
+    text: "{0} INCONSISTENT \u00B7 the papers disagree: \"{1}\"  /  \"{2}\""
     gloss: 0
     tier: 1
   - key: deviation.personMismatch.papers
-    text: "{0} INCORRECT \u2014 the photo on the papers is not the traveller at the
-      desk"
+    text: "{0} INCORRECT \u00B7 the photo on the papers is not the traveller at the desk"
     gloss: 0
     tier: 1
   - key: deviation.hiddenMismatch.papers
-    text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  the machine reads: \"{2}\""
+    text: "{0} INCORRECT \u00B7 papers: \"{1}\"  /  the machine reads: \"{2}\""
     gloss: 0
     tier: 1
   - key: category.Language
@@ -3345,7 +3342,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.title
-    text: "Day {0} \u2014 Home"
+    text: "Day {0}: Home"
     gloss: 0
     tier: 1
   - key: home.breakIn
@@ -3812,7 +3809,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: doc.work_permit_debt_relief_labour
-    text: "WORK PERMIT \u2013 DEBT RELIEF LABOUR"
+    text: "WORK PERMIT: DEBT RELIEF LABOUR"
     gloss: 0
     tier: 1
   - key: doc.authorised_by

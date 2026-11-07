@@ -6,7 +6,7 @@ using UnityEngine;
 
 /// <summary>
 /// Phase 6 editor tool: scans every ContentLibrarySO asset in the project and
-/// reports data issues to the console — null array entries, duplicate or
+/// reports data issues to the console: null array entries, duplicate or
 /// missing IDs, duplicate day numbers, dangling cross-references, interview
 /// content the office could not use (questions, dialogs, menus), the Future
 /// and history (Future places, leader effects, history values, SetFact only
@@ -28,7 +28,7 @@ public static partial class ContentLibraryValidator
 
         if (guids.Length == 0)
         {
-            Debug.LogWarning("[ContentLibraryValidator] <<< Exiting Validate — no ContentLibrarySO assets found in the project.");
+            Debug.LogWarning("[ContentLibraryValidator] <<< Exiting Validate: no ContentLibrarySO assets found in the project.");
             return;
         }
 
@@ -48,9 +48,9 @@ public static partial class ContentLibraryValidator
         }
 
         if (totalIssues == 0)
-            Debug.Log("[ContentLibraryValidator] <<< Exiting Validate — no issues found.");
+            Debug.Log("[ContentLibraryValidator] <<< Exiting Validate: no issues found.");
         else
-            Debug.LogWarning($"[ContentLibraryValidator] <<< Exiting Validate — {totalIssues} issue(s) found (see warnings/errors above).");
+            Debug.LogWarning($"[ContentLibraryValidator] <<< Exiting Validate: {totalIssues} issue(s) found (see warnings/errors above).");
     }
 
     /// <summary>Runs every check against a single library asset and returns the issue count.</summary>

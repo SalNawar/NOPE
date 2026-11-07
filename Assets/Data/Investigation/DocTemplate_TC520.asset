@@ -311,7 +311,7 @@ MonoBehaviour:
           share: 1
           ink: '#07182B'
           centre: 1
-        - text: "WORK PERMIT \u2013 DEBT RELIEF LABOUR"
+        - text: "WORK PERMIT: DEBT RELIEF LABOUR"
           kind: 1
           rect:
             x0: 0.0998

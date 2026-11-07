@@ -257,8 +257,8 @@ public static partial class OfficeSceneUIBuilder
             if (dayPlan == null && library.DayPlans.Count > 0) dayPlan = library.DayPlans[0];
         }
         if (dayPlan == null) dayPlan = FindFirstAsset<DayPlanSO>();
-        if (library == null) Debug.LogWarning("[TimeDesk] No ContentLibrarySO found — assign GameManager.contentLibrary manually.");
-        if (dayPlan == null) Debug.LogWarning("[TimeDesk] No DayPlanSO found — generate content first (Tools > TimeDesk).");
+        if (library == null) Debug.LogWarning("[TimeDesk] No ContentLibrarySO found: assign GameManager.contentLibrary manually.");
+        if (dayPlan == null) Debug.LogWarning("[TimeDesk] No DayPlanSO found: generate content first (Tools > TimeDesk).");
 
         DayOrchestrator orchestrator = Object.FindFirstObjectByType<DayOrchestrator>();
         if (orchestrator == null) orchestrator = new GameObject("DaySystem").AddComponent<DayOrchestrator>();
@@ -560,7 +560,7 @@ public static partial class OfficeSceneUIBuilder
 
     private static void AddGridLayout(Transform t, Vector2 cell, Vector2 spacing)
     {
-        // A GameObject can only host one layout group — drop any conflicting one.
+        // A GameObject can only host one layout group: drop any conflicting one.
         HorizontalLayoutGroup h = t.GetComponent<HorizontalLayoutGroup>();
         if (h != null)
             Object.DestroyImmediate(h);

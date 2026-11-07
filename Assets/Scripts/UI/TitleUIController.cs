@@ -365,7 +365,7 @@ public sealed class TitleUIController : MonoBehaviour
 
     /// <summary>
     /// Shows the ending panel for the reached EndingSO (may be null if the id
-    /// has no matching content yet — falls back to a generic message): its
+    /// has no matching content yet: falls back to a generic message): its
     /// title, its body and, set apart under it, its closing card when it has
     /// one; its world button, labelled <paramref name="worldLabel"/>, runs
     /// <paramref name="onWorld"/> (hidden when null: "The world you leave behind");

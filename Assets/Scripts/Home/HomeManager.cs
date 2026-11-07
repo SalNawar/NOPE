@@ -316,7 +316,7 @@ public sealed class HomeManager : MonoBehaviour
         int cost = HomeEconomy.BuyHouseUpgrade(_world, _lib, upgrade);
         if (cost < 0)
         {
-            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — not a buyable Home upgrade (owned, locked or too dear).");
+            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade: not a buyable Home upgrade (owned, locked or too dear).");
             return;
         }
 
@@ -376,7 +376,7 @@ public sealed class HomeManager : MonoBehaviour
 
         if (_world.money < spinCost)
         {
-            Debug.Log($"[HomeManager] <<< Exiting HandleSpin — not enough credits ({_world.money} < {spinCost}).");
+            Debug.Log($"[HomeManager] <<< Exiting HandleSpin: not enough credits ({_world.money} < {spinCost}).");
             return new HomeUIController.SpinView(SlotMachineView.BrokeLine());
         }
 
@@ -384,7 +384,7 @@ public sealed class HomeManager : MonoBehaviour
 
         if (outcomes.Count == 0)
         {
-            Debug.Log("[HomeManager] <<< Exiting HandleSpin — no slot outcomes configured.");
+            Debug.Log("[HomeManager] <<< Exiting HandleSpin: no slot outcomes configured.");
             return new HomeUIController.SpinView("The slot machine is out of order.");
         }
 
@@ -398,7 +398,7 @@ public sealed class HomeManager : MonoBehaviour
         {
             RefreshHud();
             RecordStatement();
-            Debug.Log("[HomeManager] <<< Exiting HandleSpin — no outcome picked (nothing happens).");
+            Debug.Log("[HomeManager] <<< Exiting HandleSpin: no outcome picked (nothing happens).");
             return new HomeUIController.SpinView("...nothing happens.");
         }
 

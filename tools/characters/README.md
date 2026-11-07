@@ -1,6 +1,6 @@
 # Character art processing (`tools/characters`)
 
-## Full library completion — 2026-10-04
+## Full library completion: 2026-10-04
 
 The completion pipeline processes the 455 new sources without rerunning the approved pilot. It stages 902 outputs, then installs a complete 944-key library alongside the 42 pilot keys. The eight interim skin 2–5 face-a recolours are archived in `Completion/InterimPilotHeads` before replacement; existing Unity GUIDs are retained. All other pilot sources, resources and metadata remain unchanged.
 

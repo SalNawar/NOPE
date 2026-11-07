@@ -52,7 +52,7 @@ public static class ShiftScoring
 
         if (world == null || config == null)
         {
-            Debug.LogError("ShiftScoring.ResolveDecision missing world/config — verdict recorded without consequences.");
+            Debug.LogError("ShiftScoring.ResolveDecision missing world/config: verdict recorded without consequences.");
             return verdict;
         }
 
@@ -65,7 +65,7 @@ public static class ShiftScoring
         {
             verdict.correct = false;
             verdict.unprovenDenial = true;
-            Debug.Log($"[ShiftScoring] Case {caseIndex1Based}: deny was factually right but had no documented evidence — treating as unproven denial.");
+            Debug.Log($"[ShiftScoring] Case {caseIndex1Based}: deny was factually right but had no documented evidence: treating as unproven denial.");
         }
 
         if (verdict.correct)

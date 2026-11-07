@@ -60,7 +60,7 @@ public static class HomeSceneBuilder
         // --- Expenses panel (the bills) ---
         Transform expenses = FindOrCreatePanel(uiRoot, "ExpensesPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
             Vector2.zero, ExpensesPanelSize, withBackground: true);
-        TMP_Text expensesTitle = FindOrCreateText(expenses, "TitleText", "Day 1 — Home", 34,
+        TMP_Text expensesTitle = FindOrCreateText(expenses, "TitleText", "Day 1: Home", 34,
             TextAlignmentOptions.Left, new Vector2(0.05f, 0.875f), new Vector2(0.95f, 0.955f));
         TMP_Text expensesBody = FindOrCreateText(expenses, "BodyText", "...", 22,
             TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.44f), new Vector2(0.94f, 0.86f));
@@ -117,7 +117,7 @@ public static class HomeSceneBuilder
         // --- Sleep panel ---
         Transform sleep = FindOrCreatePanel(uiRoot, "SleepPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
             Vector2.zero, SleepPanelSize, withBackground: true);
-        TMP_Text sleepTitle = FindOrCreateText(sleep, "TitleText", "Day 1 — Turn In", 34,
+        TMP_Text sleepTitle = FindOrCreateText(sleep, "TitleText", "Day 1: Turn In", 34,
             TextAlignmentOptions.Left, new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.98f));
         TMP_Text sleepBody = FindOrCreateText(sleep, "BodyText", "...", 24,
             TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.3f), new Vector2(0.94f, 0.82f));
@@ -292,7 +292,7 @@ public static class HomeSceneBuilder
     }
 
     /// <summary>
-    /// Re-applies the bills panel on every build (sheet 04's DAY 8 — HOME): the
+    /// Re-applies the bills panel on every build (sheet 04's DAY 8: HOME): the
     /// kit's manila panel; its heading at the top left; the evening's lines
     /// (shrinking from 21 to 16 reference px); the bills' rows (HomeUIController
     /// spawns them: tile, name, price line, Paying / Skip); Pay on the oxblood
@@ -743,7 +743,7 @@ public static class HomeSceneBuilder
     private const float MoonSize = 96f;
 
     /// <summary>
-    /// Re-applies the sleep prompt on every build (sheet 04's DAY 8 — TURN IN):
+    /// Re-applies the sleep prompt on every build (sheet 04's DAY 8: TURN IN):
     /// the kit's slate panel, the moon tile at the left, the heading and the
     /// night's lines beside it in bone, and Sleep on the oxblood plate at the
     /// foot right.

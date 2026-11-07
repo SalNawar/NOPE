@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// A special condition of the timeline ("5+ greek warriors sent to the battle era",
 /// "Tesla delivered to Germany") evaluated during the nightly resolve. When all
-/// conditions pass, its outcome effects activate — e.g., "+scientist visitors for
+/// conditions pass, its outcome effects activate: e.g., "+scientist visitors for
 /// 3 days" or "-30% on electric tech upgrades for 2 days". Generate World also
 /// writes one per gated interview question, whose news line announces it, and
 /// one per history rule (world_source.json history.rules), whose effect

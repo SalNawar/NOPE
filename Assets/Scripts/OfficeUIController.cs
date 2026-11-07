@@ -25,7 +25,7 @@ public sealed partial class OfficeUIController : MonoBehaviour
     /// <summary>The UI kit the ribbon's faces come from; optional.</summary>
     [SerializeField] private UiKitSO kit;
 
-    [Header("HUD (optional — null-safe)")]
+    [Header("HUD (optional, null-safe)")]
     /// <summary>Shows current money.</summary>
     [SerializeField] private TMP_Text moneyText;
 
@@ -41,7 +41,7 @@ public sealed partial class OfficeUIController : MonoBehaviour
     /// <summary>The Investigation app (the date is held on its workbench).</summary>
     [SerializeField] private InvestigationApp app;
 
-    [Header("Citation Slip (optional — null-safe)")]
+    [Header("Citation Slip (optional, null-safe)")]
     /// <summary>Panel shown when a citation is issued.</summary>
     [SerializeField] private GameObject citationPanel;
 
