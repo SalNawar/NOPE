@@ -43,8 +43,8 @@ using UnityEngine;
 /// wheel; n 1 Settings shown, 0 not, -1 either), pcapp (text a DesktopAppIds
 /// id; n 1 its window open and in front on the PC, 0 closed), redboxes (text
 /// the still's name: a still, and in it the red of every marked box on the
-/// desk's papers, at least 50 red pixels, 30 % of the boxes' middles on the
-/// screen and 3 times the red of the papers' other boxes), first (the forced appearance stands first: cheatForce's),
+/// desk's papers, at least 50 red pixels, half of the boxes' middles on the
+/// screen and twice the median red of the papers' other boxes), first (the forced appearance stands first: cheatForce's),
 /// lawbreaker (today's cases hold someone else's photo and the switch is used
 /// up).</item>
 /// <item><c>cheatForce</c> (text: "famous" or "D&lt;day&gt;"): picks the menu's
@@ -609,9 +609,9 @@ public static class CheatOps
     /// (the mark is DeskInspect's mistakeMark, red at 32 % over the paper: 31
     /// to 37 over the paper's 12 to 15 in the first still, cheat_d1_redboxes
     /// of 2026-11-07). Passes with at least 50 red pixels in the marked boxes,
-    /// 30 % of their middles' pixels on the screen, and at least 3 times the
-    /// red share of the same papers' unmarked boxes (the photo, the foil and
-    /// the printed frames count there).
+    /// half of their middles' pixels on the screen, and at least twice the
+    /// median red share of the same papers' unmarked boxes (the median, as
+    /// the photo's box holds the portrait's own red).
     /// </summary>
     private static IEnumerator RedBoxes(QaRunner runner, QaStep step, string id)
     {
@@ -634,8 +634,9 @@ public static class CheatOps
         string path = Path.Combine(runner.OutDir, "stills", $"{(string.IsNullOrEmpty(step.text) ? "cheat_redboxes" : step.text)}_{Screen.width}x{Screen.height}.png");
         runner.Recorder.Still(path);
         yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the still");
-        long red = 0, all = 0, otherRed = 0, otherAll = 0;
+        long red = 0, all = 0;
         int marked = 0;
+        var others = new List<float>();
         var where = new List<string>();
         var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
         try
@@ -656,8 +657,8 @@ public static class CheatOps
                         }
                 if (!isMarked)
                 {
-                    otherRed += boxRed;
-                    otherAll += boxAll;
+                    if (boxAll > 0)
+                        others.Add(boxRed / (float)boxAll);
                     continue;
                 }
                 marked++;
@@ -672,9 +673,10 @@ public static class CheatOps
         {
             UnityEngine.Object.Destroy(tex);
         }
-        float share = all > 0 ? red / (float)all : 0f, otherShare = otherAll > 0 ? otherRed / (float)otherAll : 0f;
-        bool pass = marked > 0 && red >= 50 && share >= 0.3f && share >= 3f * otherShare;
-        runner.Assert(id, Owner, pass, $"{marked} marked box(es): {red} of {all} px red ({share:P0}); the same papers' {boxes.Count - marked} other box(es): {otherRed} of {otherAll} px ({otherShare:P0}); {string.Join("; ", where)}",
+        others.Sort();
+        float share = all > 0 ? red / (float)all : 0f, median = others.Count > 0 ? others[others.Count / 2] : 0f;
+        bool pass = marked > 0 && red >= 50 && share >= 0.5f && share >= 2f * median;
+        runner.Assert(id, Owner, pass, $"{marked} marked box(es): {red} of {all} px red ({share:P0}); the same papers' {others.Count} other box(es) on the screen: red shares {string.Join(", ", others.Select(o => o.ToString("P0", CultureInfo.InvariantCulture)))}, median {median:P0}; {string.Join("; ", where)}",
             "CHEATS.md Reveal faults: the boxes that show the fault are marked in red on the papers, seen in a still with the paper open on the mat");
     }
 
