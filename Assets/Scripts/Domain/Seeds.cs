@@ -314,6 +314,16 @@ public static class Seeds
     /// </summary>
     public static int ForReturnSlots(int daySeed) => Mix(daySeed, ReturnSlotSalt);
 
+    /// <summary>Salt for the day's famous draw ("FAMS").</summary>
+    public const int FamousSalt = 0x46414D53;
+
+    /// <summary>
+    /// Seed for the day's famous draw (FamousDraw.Pick and the slots the
+    /// drawn travellers stand in), one per run and day, apart from every
+    /// other stream, so a day with no draw (famousPerDay 0) draws as before.
+    /// </summary>
+    public static int ForFamous(int daySeed) => Mix(daySeed, FamousSalt);
+
     /// <summary>Salt for the hall's slot picks ("HALL").</summary>
     public const int HallSlotSalt = 0x48414C4C;
 

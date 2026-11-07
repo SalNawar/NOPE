@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_aspasia
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_aspasia
+    label: Ask about their work >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_aspasia.start.1
+        speaker: 1
+        text: You ask questions like a clerk. Ask them like a philosopher and I will
+          answer.
+        expression: neutral
+      choices:
+      - id: more1
+        label: Go on.
+        lines: []
+        next: line2
+        effect: 
+      - id: bye1
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: line2
+      lines:
+      - id: dlg_aspasia.line2.1
+        speaker: 1
+        text: Pericles reads my speeches aloud. The Assembly cheers. Nobody asks
+          who wrote them.
+        expression: happy
+      choices:
+      - id: more2
+        label: Go on.
+        lines: []
+        next: line3
+        effect: 
+      - id: bye2
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: line3
+      lines:
+      - id: dlg_aspasia.line3.1
+        speaker: 1
+        text: The comic poets call me names in every play. I have heard better insults
+          from goats.
+        expression: angry
+      choices:
+      - id: done
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+  conditions: []

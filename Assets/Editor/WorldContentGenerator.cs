@@ -1176,6 +1176,8 @@ public static partial class WorldContentGenerator
                 errors.Add($"{owner} pools a premade twice.");
             if (d.premadeChance < 0f || d.premadeChance > 1f || (pool.Length > 0 && d.premadeChance <= 0f))
                 errors.Add($"{owner} needs \"premadeChance\" in 0..1, above 0 with a pool (a missing value reads 0).");
+            if (d.famousPerDay < 0 || d.famousPerDay > FamousDraw.MaxPerDay || (d.famousPerDay > 0 && pool.Length == 0))
+                errors.Add($"{owner} needs \"famousPerDay\" in 0..{FamousDraw.MaxPerDay}, and a pool to draw from when above 0.");
 
             foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
             {
@@ -1818,6 +1820,7 @@ public static partial class WorldContentGenerator
         WriteKinds(so, d, authored);
         SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
+        so.FindProperty("famousPerDay").intValue = d.famousPerDay;
         so.FindProperty("costumeErrorChance").floatValue = d.costumeErrorChance;
         so.FindProperty("slipChance").floatValue = d.slipChance;
         so.FindProperty("returnsMax").intValue = d.returns;
@@ -2474,6 +2477,8 @@ public static partial class WorldContentGenerator
         public ForcedData[] forced;
         /// <summary>Chance per slot of a pooled premade (required above 0 with a pool).</summary>
         public float premadeChance;
+        /// <summary>How many famous travellers the run's draw seats on the day (FamousDraw; 0 none, 1 to 2 with a pool).</summary>
+        public int famousPerDay;
         /// <summary>Chance per 2150 citizen of a costume error (0..1).</summary>
         public float costumeErrorChance;
         /// <summary>Chance per generated liar of a slip after small talk (0..1; the personalities spec's T9).</summary>

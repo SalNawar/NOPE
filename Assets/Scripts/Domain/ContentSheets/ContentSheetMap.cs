@@ -320,6 +320,7 @@ public static class ContentSheetMap
                 Text("intro").Omit().Note("the desk's opener for the appearance (blank: the premade's, else the interview's)"),
                 GateConditions("dayForcedConditions").OmitEmpty().Note("when the appearance stands (all must pass at the day's start; none: always)")).Note("forced slots: a premade, a blueprint or both, and a beat's fault, voice and conditions"),
             Float("premadeChance"),
+            Int("famousPerDay").Omit().Note("how many famous travellers of the day's pool the run's draw seats that day (0 to 2; blank: none), on top of the per-slot roll"),
             Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"),
             Float("slipChance").Note("chance per generated liar of a slip after small talk (the personalities spec's T9; 0 never)"),
             Float("violationChance").Note("chance per honest traveller of breaking a rolled procedure, the paper set or the debt standing (0 before their first day)"),

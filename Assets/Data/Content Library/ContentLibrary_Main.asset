@@ -86,6 +86,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8c220539675f994fb7aaa9549004937, type: 2}
   - {fileID: 11400000, guid: d171f52877791594c869d5a820c5e40d, type: 2}
   - {fileID: 11400000, guid: 143df44c5b867ee478900d18038e0354, type: 2}
+  - {fileID: 11400000, guid: 63d9bbffc851fb347b581c77dd4d8a99, type: 2}
+  - {fileID: 11400000, guid: d54027570c3708c4daeef7fe89201972, type: 2}
+  - {fileID: 11400000, guid: 70b6338cd7c810c4986400f8c19e43c6, type: 2}
+  - {fileID: 11400000, guid: feb4a9c5877c6e244a092dc48c0f9aed, type: 2}
+  - {fileID: 11400000, guid: fec18288508e00946a974421dd5da9f1, type: 2}
+  - {fileID: 11400000, guid: e500dee3090985643a1742e62a9f6d26, type: 2}
+  - {fileID: 11400000, guid: 4c23c476a0011e642879254228dcdb66, type: 2}
+  - {fileID: 11400000, guid: bd8ca20977a3e5a4fb7351d054df7d78, type: 2}
+  - {fileID: 11400000, guid: 1aa850835826e1f40a561e7ebd7ec85f, type: 2}
+  - {fileID: 11400000, guid: f9d01632da8f6aa468f93688ee47eaf2, type: 2}
+  - {fileID: 11400000, guid: 6298fb3cd3f14664bb442266c01556a5, type: 2}
+  - {fileID: 11400000, guid: 062a071cae77d9f4a8111ccc1543066a, type: 2}
+  - {fileID: 11400000, guid: c61362e852d397b4494493a3b9b58621, type: 2}
+  - {fileID: 11400000, guid: 2d95ba5ad14a1a64b837414c2bf3e84d, type: 2}
   effects:
   - {fileID: 11400000, guid: 42e1353d8857b2f41a8b91b0a6aa2c3d, type: 2}
   - {fileID: 11400000, guid: 0305c253639018445aab40a9a8999063, type: 2}
@@ -153,6 +167,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 50272e57879e48244bfedcc0301011d9, type: 2}
   - {fileID: 11400000, guid: 7f6eb62894378d54ba777d5aae23a1bc, type: 2}
   - {fileID: 11400000, guid: 80c2c46014b31044896396414d0225e7, type: 2}
+  - {fileID: 11400000, guid: 12333bc6064c7ca41afa27077fd6587c, type: 2}
+  - {fileID: 11400000, guid: 182fa10f6afb49748971282600ccf53b, type: 2}
+  - {fileID: 11400000, guid: b5b30254c1b7ce14f9b1f26dd18fa246, type: 2}
+  - {fileID: 11400000, guid: 3c410c79efc6e7742bd04eec855e61e3, type: 2}
+  - {fileID: 11400000, guid: 8c161aff003e91e40a23b916df2da57c, type: 2}
+  - {fileID: 11400000, guid: 03106630baf8ba04aa274c9f92d097a0, type: 2}
+  - {fileID: 11400000, guid: e2172cea20b126b4f9b701111f67a3a6, type: 2}
+  - {fileID: 11400000, guid: 9e3d4c40fc35d0244854fa38ab84871f, type: 2}
+  - {fileID: 11400000, guid: ad927e0dfff4c8d4db7e255b258c0972, type: 2}
+  - {fileID: 11400000, guid: ab55dcdc633706c4f8ed947d2a55f0bf, type: 2}
+  - {fileID: 11400000, guid: bf219acc94c1b704ea9961901c4d4eaa, type: 2}
+  - {fileID: 11400000, guid: 7a3328689b17add4096a2f7297fc1852, type: 2}
+  - {fileID: 11400000, guid: 15b08ed2e619b3e408874ba723d353af, type: 2}
+  - {fileID: 11400000, guid: 37de2ce6b4176964496854204c52bd3b, type: 2}
   - {fileID: 11400000, guid: 1edb0ebb45e7ac845b7ac23a97dcd87c, type: 2}
   - {fileID: 11400000, guid: 136e76ea283226747b9ff36ae84eda84, type: 2}
   - {fileID: 11400000, guid: e05b62c69932d8f48aa54ffda14f0f21, type: 2}
@@ -380,6 +408,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 24bbe1a3c8b6c7f4a8ba7b3619508241, type: 2}
   - {fileID: 11400000, guid: 9a765eb090f7f8940864fbcaf929ea7e, type: 2}
   - {fileID: 11400000, guid: 8bc9e0355dc6b284bab419374b676b59, type: 2}
+  - {fileID: 11400000, guid: 83ec11a85c0c4e54da7ddaf622d57876, type: 2}
+  - {fileID: 11400000, guid: 06aee43800ecc4542bb4f83d2cb99de9, type: 2}
+  - {fileID: 11400000, guid: d6ce30469076b7d48aa387a5f1c8d7cd, type: 2}
+  - {fileID: 11400000, guid: dc1b4fb346f4afe4fb36d5b77f10dc93, type: 2}
+  - {fileID: 11400000, guid: a5034f9ea7baeb14fbf6c83166746652, type: 2}
+  - {fileID: 11400000, guid: 78e68e9595d6cff4399220ada6654e53, type: 2}
+  - {fileID: 11400000, guid: ddcfc77e71a386446a80009f215ea883, type: 2}
+  - {fileID: 11400000, guid: 228bd0f4218839a46abb098a615ef6fd, type: 2}
+  - {fileID: 11400000, guid: ca89ea43d073416498e592caaf311398, type: 2}
+  - {fileID: 11400000, guid: d22b9eacc1dfe1f4d92b4322bddcdec5, type: 2}
+  - {fileID: 11400000, guid: 826e9e4f04d0b644b99cb8de93ac22e2, type: 2}
+  - {fileID: 11400000, guid: 94b0d7a702138e141a453aee2b969ca7, type: 2}
+  - {fileID: 11400000, guid: 3abc939d74ef90b42851d4749651e6ec, type: 2}
+  - {fileID: 11400000, guid: 3a125cbbcdcb8734cb4d1d4fe83841e2, type: 2}
   slotOutcomes:
   - {fileID: 11400000, guid: cb2cd8c5f1c374845a8b2fff345e8611, type: 2}
   - {fileID: 11400000, guid: cea4755b11e6eb9458b38a903853ca50, type: 2}
@@ -1595,6 +1637,244 @@ MonoBehaviour:
         then:
           id: 
           text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.senenmut.1
+          text: Home to {place}. The queen has a temple half built.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.aspasia.1
+          text: Home to {place}, please. The Assembly meets tomorrow.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.banzhao.1
+          text: Home to {place}. The archive needs me.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.arib.1
+          text: Home to {place}. The caliph wants a song.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.lanyer.1
+          text: Home to {place}. My school opens on Monday.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.gallerani.1
+          text: Home to {place}. The salon meets on Thursday.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.elytis.1
+          text: Home to {place}, please. I miss the sea.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.fellini.1
+          text: Home to {place}. My crew is waiting at Cinecitta.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.hezehui.1
+          text: Home to {place}, please. The station needs me.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.malaika.1
+          text: Home to {place}. My students are waiting.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.meitner.1
+          text: Home to {place}, please. The institute needs me.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.sayyab.1
+          text: Home to {place}, please. I want to hear the rain.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.tahtawi.1
+          text: Home to {place}. The school of languages opens soon.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.claims.toyoda.1
+          text: Home to {place}. The loom works need me.
+        then:
+          id: 
+          text: 
       handOver:
       - personality: curt
         premade: 
@@ -2358,6 +2638,244 @@ MonoBehaviour:
         line:
           id: interview.voices.handOver.auditor.1
           text: Here. Take your time. I always do.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.senenmut.1
+          text: My papers. The seal is the queen's own. Mind the corners.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.aspasia.1
+          text: Here. Read them closely. I wrote half of them myself.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.banzhao.1
+          text: My papers. Every character checked twice.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.arib.1
+          text: My papers. Sing them back to me if you like.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.lanyer.1
+          text: Here. And a copy of my poems, for your desk.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.gallerani.1
+          text: My papers. The ermine has none. I asked.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.elytis.1
+          text: Here. They smell a little of the sea.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.fellini.1
+          text: My papers. Do you like them? I drew on the back.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.hezehui.1
+          text: My papers. All measured, all in order.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.malaika.1
+          text: Here. Read them in any metre you like.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.meitner.1
+          text: My papers. Please count them. I always do.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.sayyab.1
+          text: Here. The paper is a little wet. It rained.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.tahtawi.1
+          text: My papers. Translated, checked and in order.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.handOver.toyoda.1
+          text: My papers. If one is wrong, stop and ask why.
         then:
           id: 
           text: 
@@ -4204,6 +4722,482 @@ MonoBehaviour:
         line:
           id: interview.voices.missingForms.einstein.2
           text: A waiver? I waive only my socks. I never wear them.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.senenmut.1
+          text: A ticket? I have the queen's word. It is better.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.senenmut.2
+          text: A waiver? I build things to last. I do not waive.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.aspasia.1
+          text: A ticket? Persuade me that I need one.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.aspasia.2
+          text: A waiver? I waive nothing until I hear the argument.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.banzhao.1
+          text: A ticket? It is not in any register I keep.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.banzhao.2
+          text: A waiver? I sign only what I have read twice.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.arib.1
+          text: A ticket? I sing for my supper, not for paper.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.arib.2
+          text: A waiver? Sing it to me and I may sign.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.lanyer.1
+          text: A ticket? My pupils have tickets. I have a book.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.lanyer.2
+          text: A waiver? I have read worse contracts. Not many.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.gallerani.1
+          text: A ticket? Leonardo never asked me for a ticket.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.gallerani.2
+          text: A waiver? For the ermine too? It cannot hold a pen.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.elytis.1
+          text: A ticket? My ticket is a ferry to the islands.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.elytis.2
+          text: A waiver? I waive the shade. I keep the sun.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.fellini.1
+          text: A ticket? I make tickets. People queue for them.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.fellini.2
+          text: A waiver? I sign it if you appear in my film.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.hezehui.1
+          text: A ticket? A particle needs no ticket. Neither do I.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.hezehui.2
+          text: A waiver? Show me the data first.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.malaika.1
+          text: A ticket? I broke the old rules. I can break this one.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.malaika.2
+          text: A waiver? I sign in free verse only.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.meitner.1
+          text: A ticket? I left Berlin once without one.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.meitner.2
+          text: A waiver? I read the small print. It matters.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.sayyab.1
+          text: A ticket? I have a poem. Will you take a poem?
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.sayyab.2
+          text: A waiver? I waive the drought. Give me the rain.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.tahtawi.1
+          text: A ticket? I translated one in Paris. It said no.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.tahtawi.2
+          text: A waiver? Give me a minute. I will translate it first.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: TC-230
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.toyoda.1
+          text: A ticket? Why? Why do I need it? Why?
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: TC-310
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.missingForms.toyoda.2
+          text: A waiver? Five questions first. Then I sign.
         then:
           id: 
           text: 
@@ -8834,6 +9828,1434 @@ MonoBehaviour:
         then:
           id: 
           text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.senenmut.1
+          text: '{value}. Counted in grain, mostly.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.senenmut.2
+          text: '{value}. And the language of masons.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.senenmut.3
+          text: '{value}. A plumb line, a cubit rod, a reed pen.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.senenmut.4
+          text: '{value}. Where the queen keeps her court.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.senenmut.5
+          text: '{value}. And I keep her accounts.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.senenmut.6
+          text: '{value}. The year is not written down. Nobody wrote me down.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.aspasia.1
+          text: '{value}. Owls, we call them.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.aspasia.2
+          text: '{value}. The best language for an argument.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.aspasia.3
+          text: '{value}. A wax tablet and a sharp mind.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.aspasia.4
+          text: '{value}. Its walls listen to everything.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.aspasia.5
+          text: '{value}. Pericles speaks. I write.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.aspasia.6
+          text: '{value}. In Miletus. Write it neatly.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.banzhao.1
+          text: '{value}. Strung on cords of a hundred.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.banzhao.2
+          text: '{value}. Written with care.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.banzhao.3
+          text: '{value}. A brush, ink and bamboo strips.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.banzhao.4
+          text: '{value}. Where the Han archives are.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.banzhao.5
+          text: '{value}. I teach his empress.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.banzhao.6
+          text: '{value}. My father kept the record.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.arib.1
+          text: '{value}. The caliph pays in it.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.arib.2
+          text: '{value}. And the language of music.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.arib.3
+          text: '{value}. An oud with five strings.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.arib.4
+          text: '{value}. The round city of the caliphs.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.arib.5
+          text: '{value}. For now. I have outlived five.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.arib.6
+          text: '{value}. In the court of Baghdad.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.lanyer.1
+          text: '{value}. Too little of it, always.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.lanyer.2
+          text: '{value}. And some Latin for my pupils.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.lanyer.3
+          text: '{value}. A quill and a printing press.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.lanyer.4
+          text: '{value}. Its printers know my name now.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.lanyer.5
+          text: '{value}. She reads poems, I am told.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.lanyer.6
+          text: '{value}. To a court musician.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.gallerani.1
+          text: '{value}. My family has some.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.gallerani.2
+          text: '{value}. And Latin for my letters.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.gallerani.3
+          text: '{value}. A pen, and a very patient painter.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.gallerani.4
+          text: '{value}. Where the Sforza court is.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.gallerani.5
+          text: '{value}. Il Moro. We are close.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.gallerani.6
+          text: '{value}. In Siena, near Milan.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.elytis.1
+          text: '{value}. Poets do not count it.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.elytis.2
+          text: '{value}. The language of the light.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.elytis.3
+          text: '{value}. A typewriter and a window.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.elytis.4
+          text: '{value}. White walls, blue doors.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.elytis.5
+          text: '{value}. A government. They change.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.elytis.6
+          text: '{value}. On Crete, in the sun.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.fellini.1
+          text: '{value}. Producers have it. I spend it.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.fellini.2
+          text: '{value}. And the language of dreams.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.fellini.3
+          text: '{value}. A camera and a notebook of dreams.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.fellini.4
+          text: '{value}. The most beautiful set in the world.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.fellini.5
+          text: '{value}. A man in a grey suit. No colour.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.fellini.6
+          text: '{value}. By the sea, in Rimini.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.hezehui.1
+          text: '{value}. Science runs on very little.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.hezehui.2
+          text: '{value}. And the language of numbers.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.hezehui.3
+          text: '{value}. A cloud chamber and photographic plates.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.hezehui.4
+          text: '{value}. The institute is there.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.hezehui.5
+          text: '{value}. I study atoms, not rulers.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.hezehui.6
+          text: '{value}. In Suzhou. Write it carefully.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.malaika.1
+          text: '{value}. Poets live on very little.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.malaika.2
+          text: '{value}. The language I set free.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.malaika.3
+          text: '{value}. A pen and a notebook with no lines.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.malaika.4
+          text: '{value}. City of poets and rivers.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.malaika.5
+          text: '{value}. Rulers come and go. Verse stays.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.malaika.6
+          text: '{value}. In Baghdad, in a house of poets.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.meitner.1
+          text: '{value}. I left with ten of them.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.meitner.2
+          text: '{value}. And the language of physics.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.meitner.3
+          text: '{value}. A Geiger counter and a pencil.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.meitner.4
+          text: '{value}. The institute is in Dahlem.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.meitner.5
+          text: '{value}. I do not discuss him.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.meitner.6
+          text: '{value}. In Vienna, in 1878.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.sayyab.1
+          text: '{value}. Too little in Jaykur.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.sayyab.2
+          text: '{value}. Of the rain and the river.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.sayyab.3
+          text: '{value}. A pen and the Shatt al-Arab.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.sayyab.4
+          text: '{value}. Far from my village.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.sayyab.5
+          text: '{value}. Kings change. The river does not.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.sayyab.6
+          text: '{value}. In Jaykur, by the palms.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.tahtawi.1
+          text: '{value}. And French francs, now.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.tahtawi.2
+          text: '{value}. And French, which I translate.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.tahtawi.3
+          text: '{value}. A dictionary, and another one.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.tahtawi.4
+          text: '{value}. The finest city to come home to.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.tahtawi.5
+          text: '{value}. The Pasha sent me to Paris.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.tahtawi.6
+          text: '{value}. In Tahta, upriver.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: q_currency
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.toyoda.1
+          text: '{value}. A loom pays for itself.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: q_language
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.toyoda.2
+          text: '{value}. And the language of machines.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: q_device
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.toyoda.3
+          text: '{value}. A loom that stops itself.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: q_capital
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.toyoda.4
+          text: '{value}. The factories are near there.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: q_ruler
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.toyoda.5
+          text: '{value}. The Emperor. Long may he reign.'
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: q_born
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.answers.toyoda.6
+          text: '{value}. In Kosai, a weaving town.'
+        then:
+          id: 
+          text: 
       smallTalk:
       - personality: anxious
         premade: 
@@ -9738,6 +12160,244 @@ MonoBehaviour:
         line:
           id: interview.voices.smallTalk.auditor.1
           text: Your desk sign is four millimetres off centre. Just an observation.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.senenmut.1
+          text: Your columns are thin. Who designed this hall? I have questions.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.aspasia.1
+          text: Your queue is a democracy. Everyone waits the same. I approve.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.banzhao.1
+          text: Your record has a stroke missing here. May I correct it?
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.arib.1
+          text: Your hall has a good echo. I could fill it in one verse.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.lanyer.1
+          text: Do you read poetry at this desk? You should. It helps.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.gallerani.1
+          text: Your hall would suit a salon. Poets left, philosophers right.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.elytis.1
+          text: This hall has no sunlight. How do you work without the sun?
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.fellini.1
+          text: That lamp! That queue! Hold still, it is a perfect shot.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.hezehui.1
+          text: Your hall hums. I hear a frequency. Is it shielded?
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.malaika.1
+          text: Your rules have a metre. Some lines are too long for it.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.meitner.1
+          text: Your stamp hits with some force. Have you measured it?
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.sayyab.1
+          text: Does it rain here? It should. Everything grows with rain.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.tahtawi.1
+          text: I can translate your forms. All of them. Into five languages.
+        then:
+          id: 
+          text: 
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.smallTalk.toyoda.1
+          text: Your queue stops for every problem. That is good design.
         then:
           id: 
           text: 
@@ -11799,6 +14459,482 @@ MonoBehaviour:
         then:
           id: interview.voices.reactions.auditor.2.then
           text: Very correct. I'll make a note of that.
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.senenmut.1
+          text: Thank you. The terraces will be ready.
+        then:
+          id: interview.voices.reactions.senenmut.1.then
+          text: Three of them, facing the sun.
+      - personality: 
+        premade: senenmut
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.senenmut.2
+          text: Denied? The queen will hear of this.
+        then:
+          id: interview.voices.reactions.senenmut.2.then
+          text: And she remembers everything.
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.aspasia.1
+          text: Thank you. A fair decision, well argued.
+        then:
+          id: interview.voices.reactions.aspasia.1.then
+          text: Socrates would agree. Eventually.
+      - personality: 
+        premade: aspasia
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.aspasia.2
+          text: Denied? Give me your reasons.
+        then:
+          id: interview.voices.reactions.aspasia.2.then
+          text: All of them. I have time.
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.banzhao.1
+          text: Thank you. I will note it in the record.
+        then:
+          id: interview.voices.reactions.banzhao.1.then
+          text: Correctly, of course.
+      - personality: 
+        premade: banzhao
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.banzhao.2
+          text: Denied? This will go in the history.
+        then:
+          id: interview.voices.reactions.banzhao.2.then
+          text: With your name spelled right.
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.arib.1
+          text: Thank you. You will have a song for this.
+        then:
+          id: interview.voices.reactions.arib.1.then
+          text: A short one. You are busy.
+      - personality: 
+        premade: arib
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.arib.2
+          text: Denied? Then I sing a sad song.
+        then:
+          id: interview.voices.reactions.arib.2.then
+          text: Very loud. All day.
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.lanyer.1
+          text: Thank you. You are a reader, I can tell.
+        then:
+          id: interview.voices.reactions.lanyer.1.then
+          text: The second poem is the best.
+      - personality: 
+        premade: lanyer
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.lanyer.2
+          text: Denied? I shall write a poem about this desk.
+        then:
+          id: interview.voices.reactions.lanyer.2.then
+          text: It will not be kind.
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.gallerani.1
+          text: Thank you. The ermine thanks you too.
+        then:
+          id: interview.voices.reactions.gallerani.1.then
+          text: It is very well behaved.
+      - personality: 
+        premade: gallerani
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.gallerani.2
+          text: Denied? The ermine is not pleased.
+        then:
+          id: interview.voices.reactions.gallerani.2.then
+          text: Nor am I.
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.elytis.1
+          text: Thank you. The sea is waiting.
+        then:
+          id: interview.voices.reactions.elytis.1.then
+          text: It is always waiting.
+      - personality: 
+        premade: elytis
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.elytis.2
+          text: Denied? Then I will write about the clouds.
+        then:
+          id: interview.voices.reactions.elytis.2.then
+          text: Greek clouds. Very dramatic.
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.fellini.1
+          text: Thank you! Cut! Print it!
+        then:
+          id: interview.voices.reactions.fellini.1.then
+          text: That was the take.
+      - personality: 
+        premade: fellini
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.fellini.2
+          text: Denied? Wonderful. Very dramatic. Again!
+        then:
+          id: interview.voices.reactions.fellini.2.then
+          text: This time with more rain.
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.hezehui.1
+          text: Thank you. A clean result.
+        then:
+          id: interview.voices.reactions.hezehui.1.then
+          text: Repeatable, I hope.
+      - personality: 
+        premade: hezehui
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.hezehui.2
+          text: Denied? Then measure it again.
+        then:
+          id: interview.voices.reactions.hezehui.2.then
+          text: Errors happen. I check mine.
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.malaika.1
+          text: Thank you. That line scans well.
+        then:
+          id: interview.voices.reactions.malaika.1.then
+          text: A good ending.
+      - personality: 
+        premade: malaika
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.malaika.2
+          text: Denied? The critics said that too.
+        then:
+          id: interview.voices.reactions.malaika.2.then
+          text: I wrote anyway.
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.meitner.1
+          text: Thank you. Science travels well.
+        then:
+          id: interview.voices.reactions.meitner.1.then
+          text: Better than scientists.
+      - personality: 
+        premade: meitner
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.meitner.2
+          text: Denied? Otto will hear of this.
+        then:
+          id: interview.voices.reactions.meitner.2.then
+          text: He will not do anything.
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.sayyab.1
+          text: Thank you. Rain, rain, rain.
+        then:
+          id: interview.voices.reactions.sayyab.1.then
+          text: That is a good sign.
+      - personality: 
+        premade: sayyab
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.sayyab.2
+          text: Denied? Then I wait for the rain.
+        then:
+          id: interview.voices.reactions.sayyab.2.then
+          text: It always comes.
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.tahtawi.1
+          text: Thank you. Merci. Shukran.
+        then:
+          id: interview.voices.reactions.tahtawi.1.then
+          text: In every language I know.
+      - personality: 
+        premade: tahtawi
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.tahtawi.2
+          text: Denied? I must translate that word.
+        then:
+          id: interview.voices.reactions.tahtawi.2.then
+          text: Into something kinder.
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 0
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.toyoda.1
+          text: Thank you. A good process.
+        then:
+          id: interview.voices.reactions.toyoda.1.then
+          text: No broken threads.
+      - personality: 
+        premade: toyoda
+        kinds: 
+        era: 
+        key: 
+        variant: 0
+        verdict: 1
+        intent: 0
+        reason: 
+        lie: 
+        outcome: 0
+        line:
+          id: interview.voices.reactions.toyoda.2
+          text: Denied? Why? Then why? Then why?
+        then:
+          id: interview.voices.reactions.toyoda.2.then
+          text: We will find the root cause.
       slips:
       - personality: chatty
         premade: 
@@ -13831,6 +16967,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1659b5f194760d54a8f2ed1c225ea195, type: 2}
   - {fileID: 11400000, guid: 7914445603d6ed14d9171fca243d4289, type: 2}
   - {fileID: 11400000, guid: 17e39465df3f9144c8aa9b20fc5f9949, type: 2}
+  - {fileID: 11400000, guid: 4e72533d76585824cac0c981ebf7c043, type: 2}
+  - {fileID: 11400000, guid: 3ccfb4a38b2c917489e2bf7dd15f404c, type: 2}
+  - {fileID: 11400000, guid: d36e927960ff4ce4e89109d7b0edad6e, type: 2}
+  - {fileID: 11400000, guid: 0e6f0933629e4a44f88340a115ff09ae, type: 2}
+  - {fileID: 11400000, guid: 17b4f15788afb2f4ba65b5c8514f054a, type: 2}
+  - {fileID: 11400000, guid: 81aca85eae72cd046b5f10f9b1645b15, type: 2}
+  - {fileID: 11400000, guid: aa605df1f349c1148862eb6bee92675e, type: 2}
+  - {fileID: 11400000, guid: 6c1b9fbebb0c4c142944145f8283d669, type: 2}
+  - {fileID: 11400000, guid: 4ada011c04cbb25439a9499d1c316872, type: 2}
+  - {fileID: 11400000, guid: b2451e69f79134a4fbf21e22949fe40e, type: 2}
+  - {fileID: 11400000, guid: 2ad824696de72444bbaa6c70254ec1cb, type: 2}
+  - {fileID: 11400000, guid: 9fecce30ff431594190d8fc027b19742, type: 2}
+  - {fileID: 11400000, guid: 6d0bced4530e06041b3794f8343b1055, type: 2}
+  - {fileID: 11400000, guid: 28ec1598ccad27745a6061172e2dd2c3, type: 2}
   historyLines:
     leaderGained:
       id: history.leaderGained
@@ -14433,13 +17583,6 @@ MonoBehaviour:
         died: 1458 BCE
         place: egypt_ancient
         note: Pharaoh of Egypt. Senenmut stewarded her household and built her temple.
-      - id: senenmut
-        name: Senenmut
-        born: c. 1505 BCE
-        died: 
-        place: egypt_ancient
-        note: Steward of Hatshepsut's household and architect of her temple at Deir
-          el-Bahari.
       - id: neferure
         name: Neferure
         born: c. 1505 BCE
@@ -14458,12 +17601,6 @@ MonoBehaviour:
         died: 406 BCE
         place: greece_ancient
         note: Son of Pericles and Aspasia. A general of Athens.
-      - id: aspasia
-        name: Aspasia
-        born: c. 470 BCE
-        died: c. 400 BCE
-        place: greece_ancient
-        note: Teacher of rhetoric in Athens. Companion of Pericles.
       - id: banbiao
         name: Ban Biao
         born: 3
@@ -14482,25 +17619,12 @@ MonoBehaviour:
         died: 102
         place: china_ancient
         note: General who held the Western Regions for the Han.
-      - id: banzhao
-        name: Ban Zhao
-        born: 45
-        died: 117
-        place: china_ancient
-        note: Court historian and tutor to the empress. Finished her brother's Book
-          of Han.
       - id: mamun
         name: Caliph al-Ma'mun
         born: 786
         died: 833
         place: iraq_medieval
         note: Caliph in Baghdad. Patron of the House of Wisdom.
-      - id: arib
-        name: Arib al-Ma'muniyya
-        born: 797
-        died: 890
-        place: iraq_medieval
-        note: Singer and poet of the caliph's court. Travelled with her own musicians.
       - id: fust
         name: Johann Fust
         born: c. 1400
@@ -14531,24 +17655,12 @@ MonoBehaviour:
         died: 1508
         place: italy_earlymodern
         note: Duke of Milan. Patron of Leonardo.
-      - id: gallerani
-        name: Cecilia Gallerani
-        born: 1473
-        died: 1536
-        place: italy_earlymodern
-        note: Lady of the Milanese court. Sat for Leonardo's portrait with an ermine.
       - id: bassano
         name: Baptiste Bassano
         born: 
         died: 1576
         place: britain_earlymodern
         note: Venetian-born court musician to the Tudors. Father of Aemilia Lanyer.
-      - id: lanyer
-        name: Aemilia Lanyer
-        born: 1569
-        died: 1645
-        place: britain_earlymodern
-        note: Poet of London, raised in a countess's household.
       relations:
       - person: senenmut
         kind: Father
@@ -17241,6 +20353,94 @@ MonoBehaviour:
       - 'Account note: Premium since the account opened. A first-series Citizen ID.'
       - 'Clerk note: has filed fourteen procedural complaints. All upheld.'
       - 'Clerk note: asks each desk officer for their name, and writes it down.'
+    - premade: senenmut
+      lines:
+      - 'Registry note: Senenmut, steward of Queen Hatshepsut and tutor of her daughter
+        Neferure.'
+      - 'Registry note: credited with the terraced temple at Deir el-Bahari.'
+      - 'Registry note: carved his own image behind the temple doors, out of sight.'
+      - 'Declared purpose: going home to Thebes.'
+    - premade: aspasia
+      lines:
+      - 'Registry note: Aspasia of Miletus, resident of Athens, companion of Pericles.'
+      - 'Registry note: Plato and Xenophon say Socrates came to her for lessons in
+        rhetoric.'
+      - 'Registry note: mocked by the comic poets; tried for impiety and acquitted.'
+      - 'Declared purpose: going home to Athens.'
+    - premade: banzhao
+      lines:
+      - 'Registry note: Ban Zhao, historian of the Eastern Han court.'
+      - 'Registry note: completed the Book of Han after her brother Ban Gu died.'
+      - 'Registry note: wrote Lessons for Women; tutor to Empress Deng.'
+      - 'Declared purpose: going home to Luoyang.'
+    - premade: arib
+      lines:
+      - 'Registry note: Arib al-Ma''muniyya, singer and composer of the Abbasid court.'
+      - 'Registry note: the Book of Songs says she knew a thousand songs.'
+      - 'Registry note: sang for six caliphs from al-Amin to al-Mu''tamid.'
+      - 'Declared purpose: going home to Baghdad.'
+    - premade: lanyer
+      lines:
+      - 'Registry note: Aemilia Lanyer, poet of London.'
+      - 'Registry note: published Salve Deus Rex Judaeorum in 1611.'
+      - 'Registry note: ran a school in St Giles in the Fields.'
+      - 'Declared purpose: going home to London.'
+    - premade: gallerani
+      lines:
+      - 'Registry note: Cecilia Gallerani, noblewoman of Milan.'
+      - 'Registry note: the sitter of Leonardo''s Lady with an Ermine.'
+      - 'Registry note: kept a literary salon in Milan and wrote letters in Latin.'
+      - 'Declared purpose: going home to Milan.'
+    - premade: elytis
+      lines:
+      - 'Registry note: Odysseas Elytis, born Alepoudelis, poet of Crete and Athens.'
+      - 'Registry note: author of the Axion Esti.'
+      - 'Registry note: Nobel Prize in Literature, 1979.'
+      - 'Declared purpose: going home to Athens.'
+    - premade: fellini
+      lines:
+      - 'Registry note: Federico Fellini, film director of Rimini and Rome.'
+      - 'Registry note: directed La Strada, La Dolce Vita and 8 1/2.'
+      - 'Registry note: kept a book of his dreams, drawn in colour.'
+      - 'Declared purpose: going home to Rome.'
+    - premade: hezehui
+      lines:
+      - 'Registry note: He Zehui, nuclear physicist of Suzhou and Beijing.'
+      - 'Registry note: with Qian Sanqiang, observed the ternary and quaternary fission
+        of uranium.'
+      - 'Registry note: built cosmic ray research stations in China.'
+      - 'Declared purpose: going home to Beijing.'
+    - premade: malaika
+      lines:
+      - 'Registry note: Nazik al-Malaika, poet of Baghdad.'
+      - 'Registry note: her poem Cholera, 1947, is counted among the first Arabic
+        free verse.'
+      - 'Registry note: taught literature at the universities of Basra and Kuwait.'
+      - 'Declared purpose: going home to Baghdad.'
+    - premade: meitner
+      lines:
+      - 'Registry note: Lise Meitner, physicist of Vienna and Berlin.'
+      - 'Registry note: with Otto Frisch, explained nuclear fission in 1939.'
+      - 'Registry note: element 109, meitnerium, carries her name.'
+      - 'Declared purpose: going home to Berlin.'
+    - premade: sayyab
+      lines:
+      - 'Registry note: Badr Shakir al-Sayyab, poet of Jaykur near Basra.'
+      - 'Registry note: a founder of Arabic free verse.'
+      - 'Registry note: author of the Song of the Rain, 1954.'
+      - 'Declared purpose: going home to Basra.'
+    - premade: tahtawi
+      lines:
+      - 'Registry note: Rifa''a al-Tahtawi, scholar of al-Azhar.'
+      - 'Registry note: imam of the Egyptian mission to Paris, 1826 to 1831.'
+      - 'Registry note: founded the School of Languages in Cairo.'
+      - 'Declared purpose: going home to Cairo.'
+    - premade: toyoda
+      lines:
+      - 'Registry note: Sakichi Toyoda, inventor of Kosai.'
+      - 'Registry note: his automatic loom stops itself when a thread breaks.'
+      - 'Registry note: father of the Five Whys.'
+      - 'Declared purpose: going home to Nagoya.'
     templates:
     - id: rich_since
       kinds: 00000000

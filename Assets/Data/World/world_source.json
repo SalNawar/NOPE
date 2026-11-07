@@ -10631,7 +10631,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -10646,6 +10660,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 2,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
@@ -10774,7 +10789,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -10789,6 +10818,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
@@ -10912,7 +10942,21 @@
         "gutenberg",
         "luther",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -10927,6 +10971,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
@@ -11057,7 +11102,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -11072,6 +11131,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 2,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
@@ -11198,7 +11258,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -11221,6 +11295,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
@@ -11360,7 +11435,21 @@
         "turing",
         "gutenberg",
         "luther",
-        "beethoven"
+        "beethoven",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -11375,6 +11464,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
@@ -11509,7 +11599,21 @@
         "gutenberg",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -11530,6 +11634,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 2,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
       "violationChance": 0.05,
@@ -11670,7 +11775,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -11685,6 +11804,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.06,
@@ -11821,7 +11941,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -11838,6 +11972,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.06,
@@ -11980,7 +12115,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -11995,6 +12144,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 2,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.06,
@@ -12133,7 +12283,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -12155,6 +12319,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.06,
@@ -12297,7 +12462,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -12312,6 +12491,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
@@ -12452,7 +12632,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -12510,6 +12704,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 2,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
@@ -12663,7 +12858,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -12678,6 +12887,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
@@ -12824,7 +13034,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -12873,6 +13097,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 1,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
@@ -13020,7 +13245,21 @@
         "luther",
         "beethoven",
         "marx",
-        "einstein"
+        "einstein",
+        "senenmut",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "lanyer",
+        "gallerani",
+        "elytis",
+        "fellini",
+        "hezehui",
+        "malaika",
+        "meitner",
+        "sayyab",
+        "tahtawi",
+        "toyoda"
       ],
       "forced": [
         {
@@ -13069,6 +13308,7 @@
         }
       ],
       "premadeChance": 0.05,
+      "famousPerDay": 2,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
       "violationChance": 0.08,
@@ -13612,6 +13852,62 @@
         {
           "premade": "auditor",
           "text": "One Premium leisure departure to {place}, as worded."
+        },
+        {
+          "premade": "senenmut",
+          "text": "Home to {place}. The queen has a temple half built."
+        },
+        {
+          "premade": "aspasia",
+          "text": "Home to {place}, please. The Assembly meets tomorrow."
+        },
+        {
+          "premade": "banzhao",
+          "text": "Home to {place}. The archive needs me."
+        },
+        {
+          "premade": "arib",
+          "text": "Home to {place}. The caliph wants a song."
+        },
+        {
+          "premade": "lanyer",
+          "text": "Home to {place}. My school opens on Monday."
+        },
+        {
+          "premade": "gallerani",
+          "text": "Home to {place}. The salon meets on Thursday."
+        },
+        {
+          "premade": "elytis",
+          "text": "Home to {place}, please. I miss the sea."
+        },
+        {
+          "premade": "fellini",
+          "text": "Home to {place}. My crew is waiting at Cinecitta."
+        },
+        {
+          "premade": "hezehui",
+          "text": "Home to {place}, please. The station needs me."
+        },
+        {
+          "premade": "malaika",
+          "text": "Home to {place}. My students are waiting."
+        },
+        {
+          "premade": "meitner",
+          "text": "Home to {place}, please. The institute needs me."
+        },
+        {
+          "premade": "sayyab",
+          "text": "Home to {place}, please. I want to hear the rain."
+        },
+        {
+          "premade": "tahtawi",
+          "text": "Home to {place}. The school of languages opens soon."
+        },
+        {
+          "premade": "toyoda",
+          "text": "Home to {place}. The loom works need me."
         }
       ],
       "handOver": [
@@ -13794,6 +14090,62 @@
         {
           "premade": "auditor",
           "text": "Here. Take your time. I always do."
+        },
+        {
+          "premade": "senenmut",
+          "text": "My papers. The seal is the queen's own. Mind the corners."
+        },
+        {
+          "premade": "aspasia",
+          "text": "Here. Read them closely. I wrote half of them myself."
+        },
+        {
+          "premade": "banzhao",
+          "text": "My papers. Every character checked twice."
+        },
+        {
+          "premade": "arib",
+          "text": "My papers. Sing them back to me if you like."
+        },
+        {
+          "premade": "lanyer",
+          "text": "Here. And a copy of my poems, for your desk."
+        },
+        {
+          "premade": "gallerani",
+          "text": "My papers. The ermine has none. I asked."
+        },
+        {
+          "premade": "elytis",
+          "text": "Here. They smell a little of the sea."
+        },
+        {
+          "premade": "fellini",
+          "text": "My papers. Do you like them? I drew on the back."
+        },
+        {
+          "premade": "hezehui",
+          "text": "My papers. All measured, all in order."
+        },
+        {
+          "premade": "malaika",
+          "text": "Here. Read them in any metre you like."
+        },
+        {
+          "premade": "meitner",
+          "text": "My papers. Please count them. I always do."
+        },
+        {
+          "premade": "sayyab",
+          "text": "Here. The paper is a little wet. It rained."
+        },
+        {
+          "premade": "tahtawi",
+          "text": "My papers. Translated, checked and in order."
+        },
+        {
+          "premade": "toyoda",
+          "text": "My papers. If one is wrong, stop and ask why."
         }
       ],
       "missingForms": [
@@ -14605,6 +14957,174 @@
           "request": "TC-310",
           "variant": "Honest",
           "text": "A waiver? I waive only my socks. I never wear them."
+        },
+        {
+          "premade": "senenmut",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? I have the queen's word. It is better."
+        },
+        {
+          "premade": "senenmut",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I build things to last. I do not waive."
+        },
+        {
+          "premade": "aspasia",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? Persuade me that I need one."
+        },
+        {
+          "premade": "aspasia",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I waive nothing until I hear the argument."
+        },
+        {
+          "premade": "banzhao",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? It is not in any register I keep."
+        },
+        {
+          "premade": "banzhao",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I sign only what I have read twice."
+        },
+        {
+          "premade": "arib",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? I sing for my supper, not for paper."
+        },
+        {
+          "premade": "arib",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Sing it to me and I may sign."
+        },
+        {
+          "premade": "lanyer",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? My pupils have tickets. I have a book."
+        },
+        {
+          "premade": "lanyer",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I have read worse contracts. Not many."
+        },
+        {
+          "premade": "gallerani",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? Leonardo never asked me for a ticket."
+        },
+        {
+          "premade": "gallerani",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? For the ermine too? It cannot hold a pen."
+        },
+        {
+          "premade": "elytis",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? My ticket is a ferry to the islands."
+        },
+        {
+          "premade": "elytis",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I waive the shade. I keep the sun."
+        },
+        {
+          "premade": "fellini",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? I make tickets. People queue for them."
+        },
+        {
+          "premade": "fellini",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I sign it if you appear in my film."
+        },
+        {
+          "premade": "hezehui",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? A particle needs no ticket. Neither do I."
+        },
+        {
+          "premade": "hezehui",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Show me the data first."
+        },
+        {
+          "premade": "malaika",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? I broke the old rules. I can break this one."
+        },
+        {
+          "premade": "malaika",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I sign in free verse only."
+        },
+        {
+          "premade": "meitner",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? I left Berlin once without one."
+        },
+        {
+          "premade": "meitner",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I read the small print. It matters."
+        },
+        {
+          "premade": "sayyab",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? I have a poem. Will you take a poem?"
+        },
+        {
+          "premade": "sayyab",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I waive the drought. Give me the rain."
+        },
+        {
+          "premade": "tahtawi",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? I translated one in Paris. It said no."
+        },
+        {
+          "premade": "tahtawi",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Give me a minute. I will translate it first."
+        },
+        {
+          "premade": "toyoda",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A ticket? Why? Why do I need it? Why?"
+        },
+        {
+          "premade": "toyoda",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Five questions first. Then I sign."
         }
       ],
       "spoken": [],
@@ -15984,6 +16504,426 @@
           "premade": "auditor",
           "question": "q_born",
           "text": "{value}. As it says."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_currency",
+          "text": "{value}. Counted in grain, mostly."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_language",
+          "text": "{value}. And the language of masons."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_device",
+          "text": "{value}. A plumb line, a cubit rod, a reed pen."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_capital",
+          "text": "{value}. Where the queen keeps her court."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_ruler",
+          "text": "{value}. And I keep her accounts."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_born",
+          "text": "{value}. The year is not written down. Nobody wrote me down."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_currency",
+          "text": "{value}. Owls, we call them."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_language",
+          "text": "{value}. The best language for an argument."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_device",
+          "text": "{value}. A wax tablet and a sharp mind."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_capital",
+          "text": "{value}. Its walls listen to everything."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_ruler",
+          "text": "{value}. Pericles speaks. I write."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_born",
+          "text": "{value}. In Miletus. Write it neatly."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_currency",
+          "text": "{value}. Strung on cords of a hundred."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_language",
+          "text": "{value}. Written with care."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_device",
+          "text": "{value}. A brush, ink and bamboo strips."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_capital",
+          "text": "{value}. Where the Han archives are."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_ruler",
+          "text": "{value}. I teach his empress."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_born",
+          "text": "{value}. My father kept the record."
+        },
+        {
+          "premade": "arib",
+          "question": "q_currency",
+          "text": "{value}. The caliph pays in it."
+        },
+        {
+          "premade": "arib",
+          "question": "q_language",
+          "text": "{value}. And the language of music."
+        },
+        {
+          "premade": "arib",
+          "question": "q_device",
+          "text": "{value}. An oud with five strings."
+        },
+        {
+          "premade": "arib",
+          "question": "q_capital",
+          "text": "{value}. The round city of the caliphs."
+        },
+        {
+          "premade": "arib",
+          "question": "q_ruler",
+          "text": "{value}. For now. I have outlived five."
+        },
+        {
+          "premade": "arib",
+          "question": "q_born",
+          "text": "{value}. In the court of Baghdad."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_currency",
+          "text": "{value}. Too little of it, always."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_language",
+          "text": "{value}. And some Latin for my pupils."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_device",
+          "text": "{value}. A quill and a printing press."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_capital",
+          "text": "{value}. Its printers know my name now."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_ruler",
+          "text": "{value}. She reads poems, I am told."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_born",
+          "text": "{value}. To a court musician."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_currency",
+          "text": "{value}. My family has some."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_language",
+          "text": "{value}. And Latin for my letters."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_device",
+          "text": "{value}. A pen, and a very patient painter."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_capital",
+          "text": "{value}. Where the Sforza court is."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_ruler",
+          "text": "{value}. Il Moro. We are close."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_born",
+          "text": "{value}. In Siena, near Milan."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_currency",
+          "text": "{value}. Poets do not count it."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_language",
+          "text": "{value}. The language of the light."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_device",
+          "text": "{value}. A typewriter and a window."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_capital",
+          "text": "{value}. White walls, blue doors."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_ruler",
+          "text": "{value}. A government. They change."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_born",
+          "text": "{value}. On Crete, in the sun."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_currency",
+          "text": "{value}. Producers have it. I spend it."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_language",
+          "text": "{value}. And the language of dreams."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_device",
+          "text": "{value}. A camera and a notebook of dreams."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_capital",
+          "text": "{value}. The most beautiful set in the world."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_ruler",
+          "text": "{value}. A man in a grey suit. No colour."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_born",
+          "text": "{value}. By the sea, in Rimini."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_currency",
+          "text": "{value}. Science runs on very little."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_language",
+          "text": "{value}. And the language of numbers."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_device",
+          "text": "{value}. A cloud chamber and photographic plates."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_capital",
+          "text": "{value}. The institute is there."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_ruler",
+          "text": "{value}. I study atoms, not rulers."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_born",
+          "text": "{value}. In Suzhou. Write it carefully."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_currency",
+          "text": "{value}. Poets live on very little."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_language",
+          "text": "{value}. The language I set free."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_device",
+          "text": "{value}. A pen and a notebook with no lines."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_capital",
+          "text": "{value}. City of poets and rivers."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_ruler",
+          "text": "{value}. Rulers come and go. Verse stays."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_born",
+          "text": "{value}. In Baghdad, in a house of poets."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_currency",
+          "text": "{value}. I left with ten of them."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_language",
+          "text": "{value}. And the language of physics."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_device",
+          "text": "{value}. A Geiger counter and a pencil."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_capital",
+          "text": "{value}. The institute is in Dahlem."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_ruler",
+          "text": "{value}. I do not discuss him."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_born",
+          "text": "{value}. In Vienna, in 1878."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_currency",
+          "text": "{value}. Too little in Jaykur."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_language",
+          "text": "{value}. Of the rain and the river."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_device",
+          "text": "{value}. A pen and the Shatt al-Arab."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_capital",
+          "text": "{value}. Far from my village."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_ruler",
+          "text": "{value}. Kings change. The river does not."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_born",
+          "text": "{value}. In Jaykur, by the palms."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_currency",
+          "text": "{value}. And French francs, now."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_language",
+          "text": "{value}. And French, which I translate."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_device",
+          "text": "{value}. A dictionary, and another one."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_capital",
+          "text": "{value}. The finest city to come home to."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_ruler",
+          "text": "{value}. The Pasha sent me to Paris."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_born",
+          "text": "{value}. In Tahta, upriver."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_currency",
+          "text": "{value}. A loom pays for itself."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_language",
+          "text": "{value}. And the language of machines."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_device",
+          "text": "{value}. A loom that stops itself."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_capital",
+          "text": "{value}. The factories are near there."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_ruler",
+          "text": "{value}. The Emperor. Long may he reign."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_born",
+          "text": "{value}. In Kosai, a weaving town."
         }
       ],
       "smallTalk": [
@@ -16250,6 +17190,62 @@
         {
           "premade": "auditor",
           "text": "Your desk sign is four millimetres off centre. Just an observation."
+        },
+        {
+          "premade": "senenmut",
+          "text": "Your columns are thin. Who designed this hall? I have questions."
+        },
+        {
+          "premade": "aspasia",
+          "text": "Your queue is a democracy. Everyone waits the same. I approve."
+        },
+        {
+          "premade": "banzhao",
+          "text": "Your record has a stroke missing here. May I correct it?"
+        },
+        {
+          "premade": "arib",
+          "text": "Your hall has a good echo. I could fill it in one verse."
+        },
+        {
+          "premade": "lanyer",
+          "text": "Do you read poetry at this desk? You should. It helps."
+        },
+        {
+          "premade": "gallerani",
+          "text": "Your hall would suit a salon. Poets left, philosophers right."
+        },
+        {
+          "premade": "elytis",
+          "text": "This hall has no sunlight. How do you work without the sun?"
+        },
+        {
+          "premade": "fellini",
+          "text": "That lamp! That queue! Hold still, it is a perfect shot."
+        },
+        {
+          "premade": "hezehui",
+          "text": "Your hall hums. I hear a frequency. Is it shielded?"
+        },
+        {
+          "premade": "malaika",
+          "text": "Your rules have a metre. Some lines are too long for it."
+        },
+        {
+          "premade": "meitner",
+          "text": "Your stamp hits with some force. Have you measured it?"
+        },
+        {
+          "premade": "sayyab",
+          "text": "Does it rain here? It should. Everything grows with rain."
+        },
+        {
+          "premade": "tahtawi",
+          "text": "I can translate your forms. All of them. Into five languages."
+        },
+        {
+          "premade": "toyoda",
+          "text": "Your queue stops for every problem. That is good design."
         }
       ],
       "reactions": [
@@ -17116,6 +18112,202 @@
           "intent": "Lying",
           "text": "Correct.",
           "then": "Very correct. I'll make a note of that."
+        },
+        {
+          "premade": "senenmut",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. The terraces will be ready.",
+          "then": "Three of them, facing the sun."
+        },
+        {
+          "premade": "senenmut",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? The queen will hear of this.",
+          "then": "And she remembers everything."
+        },
+        {
+          "premade": "aspasia",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. A fair decision, well argued.",
+          "then": "Socrates would agree. Eventually."
+        },
+        {
+          "premade": "aspasia",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Give me your reasons.",
+          "then": "All of them. I have time."
+        },
+        {
+          "premade": "banzhao",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. I will note it in the record.",
+          "then": "Correctly, of course."
+        },
+        {
+          "premade": "banzhao",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? This will go in the history.",
+          "then": "With your name spelled right."
+        },
+        {
+          "premade": "arib",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. You will have a song for this.",
+          "then": "A short one. You are busy."
+        },
+        {
+          "premade": "arib",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Then I sing a sad song.",
+          "then": "Very loud. All day."
+        },
+        {
+          "premade": "lanyer",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. You are a reader, I can tell.",
+          "then": "The second poem is the best."
+        },
+        {
+          "premade": "lanyer",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? I shall write a poem about this desk.",
+          "then": "It will not be kind."
+        },
+        {
+          "premade": "gallerani",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. The ermine thanks you too.",
+          "then": "It is very well behaved."
+        },
+        {
+          "premade": "gallerani",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? The ermine is not pleased.",
+          "then": "Nor am I."
+        },
+        {
+          "premade": "elytis",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. The sea is waiting.",
+          "then": "It is always waiting."
+        },
+        {
+          "premade": "elytis",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Then I will write about the clouds.",
+          "then": "Greek clouds. Very dramatic."
+        },
+        {
+          "premade": "fellini",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you! Cut! Print it!",
+          "then": "That was the take."
+        },
+        {
+          "premade": "fellini",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Wonderful. Very dramatic. Again!",
+          "then": "This time with more rain."
+        },
+        {
+          "premade": "hezehui",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. A clean result.",
+          "then": "Repeatable, I hope."
+        },
+        {
+          "premade": "hezehui",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Then measure it again.",
+          "then": "Errors happen. I check mine."
+        },
+        {
+          "premade": "malaika",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. That line scans well.",
+          "then": "A good ending."
+        },
+        {
+          "premade": "malaika",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? The critics said that too.",
+          "then": "I wrote anyway."
+        },
+        {
+          "premade": "meitner",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Science travels well.",
+          "then": "Better than scientists."
+        },
+        {
+          "premade": "meitner",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Otto will hear of this.",
+          "then": "He will not do anything."
+        },
+        {
+          "premade": "sayyab",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Rain, rain, rain.",
+          "then": "That is a good sign."
+        },
+        {
+          "premade": "sayyab",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Then I wait for the rain.",
+          "then": "It always comes."
+        },
+        {
+          "premade": "tahtawi",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Merci. Shukran.",
+          "then": "In every language I know."
+        },
+        {
+          "premade": "tahtawi",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? I must translate that word.",
+          "then": "Into something kinder."
+        },
+        {
+          "premade": "toyoda",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. A good process.",
+          "then": "No broken threads."
+        },
+        {
+          "premade": "toyoda",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? Why? Then why? Then why?",
+          "then": "We will find the root cause."
         }
       ],
       "slips": [
@@ -18640,6 +19832,1167 @@
           ]
         }
       ]
+    },
+    {
+      "id": "dlg_senenmut",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_senenmut.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "Your ceiling is three cubits too low. I say this as a friend."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_senenmut.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "The queen gave me her daughter to teach. And a temple to build. In that order."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_senenmut.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "They will chisel her name off the walls one day. I put mine behind the doors."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_aspasia",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_aspasia.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "You ask questions like a clerk. Ask them like a philosopher and I will answer."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_aspasia.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "Pericles reads my speeches aloud. The Assembly cheers. Nobody asks who wrote them."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_aspasia.line3.1",
+              "speaker": "Traveller",
+              "expression": "angry",
+              "text": "The comic poets call me names in every play. I have heard better insults from goats."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_banzhao",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_banzhao.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "My brother died before the Book of Han was done. I finished the astronomy tables."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_banzhao.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "The empress herself sits in my lessons. She takes better notes than the ministers."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_banzhao.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "If your record has an error, it is copied forever. I check every character twice."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_arib",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_arib.start.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "Name any song from Baghdad. I know it, and I know who stole it from whom."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_arib.line2.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "Six caliphs have asked me to sing. I have outlived five of them."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_arib.line3.1",
+              "speaker": "Traveller",
+              "expression": "angry",
+              "text": "You want me to hum for the stamp? Pay me like a caliph first."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_lanyer",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_lanyer.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "I wrote a book of poems and printed it myself. The printers were very surprised."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_lanyer.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "Eve was framed. It is all in the second poem. You may borrow a copy."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_lanyer.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "My school is losing its rent. Is there a desk in your century for a teacher?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_gallerani",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_gallerani.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "Leonardo painted me with an ermine. He said I turned my head the right way."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_gallerani.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "My salon has poets on Mondays and philosophers on Thursdays. The ermine prefers poets."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_gallerani.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "Is the ermine allowed? It has no papers. It has never had papers."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_elytis",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_elytis.start.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "Your window has no sea in it. I can lend you one. It is very blue."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_elytis.line2.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "I changed my name so my family soap company would not be embarrassed."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_elytis.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "In 2150, do the islands still have their light? Tell me the truth."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_fellini",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_fellini.start.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "This hall! The lamps, the queue, the clerk. You are all in my next film."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_fellini.line2.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "I write down every dream in a notebook. Last night I dreamt of your stamp."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_fellini.line3.1",
+              "speaker": "Traveller",
+              "expression": "angry",
+              "text": "No! Do not stamp yet. The light is wrong. We do it again."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more3",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line4",
+              "effect": ""
+            },
+            {
+              "id": "bye3",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line4",
+          "lines": [
+            {
+              "id": "dlg_fellini.line4.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "The producers want an ending. I never know the ending."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_hezehui",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_hezehui.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "Uranium can split in three, or in four. I saw it. Nobody believed me at first."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_hezehui.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "They call me the Chinese Marie Curie. I would rather they called me He Zehui."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_hezehui.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "Your hall hums. Is that a reactor? Who checks the shielding?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_malaika",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_malaika.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "I wrote a poem about cholera, and the old metre could not hold it. So I broke it."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_malaika.line2.1",
+              "speaker": "Traveller",
+              "expression": "angry",
+              "text": "The critics say a woman should not change Arabic verse. The verse did not ask them."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_malaika.line3.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "Badr says he was first with free verse. We can argue in the queue."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_meitner",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_meitner.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "Otto Hahn found the barium. I explained it. The prize went to Otto."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_meitner.line2.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "I left Berlin with ten marks and a diamond ring. Do you check rings?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_meitner.line3.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "Element one hundred and nine has my name. That is better than a prize."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_sayyab",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_sayyab.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "Rain, rain, rain. That is the whole poem. Also the Gulf, and the hunger."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_sayyab.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "Nazik says she was first with free verse. She was not. Ask anyone in Basra."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_sayyab.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "My village has palm trees and a river. Does it still have them in 2150?"
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_tahtawi",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_tahtawi.start.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "I went to Paris to lead the prayers. I came back with two thousand books."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_tahtawi.line2.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "I translated the geography of the French. Now Cairo knows where Paris is."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_tahtawi.line3.1",
+              "speaker": "Traveller",
+              "expression": "angry",
+              "text": "Your form asks my religion and my tailor. Ask what I can translate."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_toyoda",
+      "label": "Ask about their work >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_toyoda.start.1",
+              "speaker": "Traveller",
+              "expression": "neutral",
+              "text": "Your queue stops when one traveller has a problem. Good. My loom does the same."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more1",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line2",
+              "effect": ""
+            },
+            {
+              "id": "bye1",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line2",
+          "lines": [
+            {
+              "id": "dlg_toyoda.line2.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "My mother wove all night. I built a loom so she could sleep."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more2",
+              "label": "Go on.",
+              "lines": [],
+              "next": "line3",
+              "effect": ""
+            },
+            {
+              "id": "bye2",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "line3",
+          "lines": [
+            {
+              "id": "dlg_toyoda.line3.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "Why is the stamp slow? Why? Why? Why? Why? Five times, then you know."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
     }
   ],
   "premades": [
@@ -19590,6 +21943,370 @@
       "kind": "RichTourist",
       "family": "italy",
       "citizenId": "AAA-001"
+    },
+    {
+      "id": "senenmut",
+      "name": "Senenmut",
+      "gender": "Male",
+      "place": "egypt_ancient",
+      "truePlace": "",
+      "birthDate": "2 Feb 1505 BCE",
+      "archetype": "artist",
+      "intro": "Priority arrival: Senenmut, steward of Queen Hatshepsut. He measures the hall with his eyes.",
+      "recordNote": "Architect of Deir el-Bahari. Steward of the queen. Hid his own name behind the temple doors.",
+      "dialog": "dlg_senenmut",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "monarchy",
+          "amount": 8
+        },
+        {
+          "factor": "future",
+          "outcome": "space_age",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "aspasia",
+      "name": "Aspasia",
+      "gender": "Female",
+      "place": "greece_ancient",
+      "truePlace": "",
+      "birthDate": "9 Apr 470 BCE",
+      "archetype": "diplomat",
+      "intro": "Priority arrival: Aspasia of Miletus. Socrates says she taught him rhetoric.",
+      "recordNote": "Teacher of rhetoric in Athens. Partner of Pericles. The city talks about her more than to her.",
+      "dialog": "dlg_aspasia",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "democracy",
+          "amount": 10
+        },
+        {
+          "factor": "money",
+          "outcome": "commons",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "banzhao",
+      "name": "Ban Zhao",
+      "gender": "Female",
+      "place": "china_ancient",
+      "truePlace": "",
+      "birthDate": "12 Jun 45",
+      "archetype": "scientist",
+      "intro": "Priority arrival: Ban Zhao, court historian of Han. She has finished her brother's book.",
+      "recordNote": "Historian and astronomer of the Han court. Completed the Book of Han. Tutor to the empress.",
+      "dialog": "dlg_banzhao",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "directorate",
+          "amount": 6
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "arib",
+      "name": "Arib al-Ma'muniyya",
+      "gender": "Female",
+      "place": "iraq_medieval",
+      "truePlace": "",
+      "birthDate": "3 Mar 797",
+      "archetype": "artist",
+      "intro": "Priority arrival: Arib al-Ma'muniyya, singer of the Baghdad court. She has a thousand songs.",
+      "recordNote": "Singer, poet and composer of the Abbasid court. Knew a thousand songs by heart. Outlived six caliphs.",
+      "dialog": "dlg_arib",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "banking_houses",
+          "amount": 6
+        },
+        {
+          "factor": "government",
+          "outcome": "monarchy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "lanyer",
+      "name": "Aemilia Lanyer",
+      "gender": "Female",
+      "place": "britain_earlymodern",
+      "truePlace": "",
+      "birthDate": "27 Jan 1569",
+      "archetype": "artist",
+      "intro": "Priority arrival: Aemilia Lanyer, poet of London. She wants her book stamped too.",
+      "recordNote": "Poet of London. One of the first women in England to publish a book of poems. Ran a school.",
+      "dialog": "dlg_lanyer",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "commons",
+          "amount": 6
+        },
+        {
+          "factor": "government",
+          "outcome": "democracy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "gallerani",
+      "name": "Cecilia Gallerani",
+      "gender": "Female",
+      "place": "italy_earlymodern",
+      "truePlace": "",
+      "birthDate": "15 Mar 1473",
+      "archetype": "artist",
+      "intro": "Priority arrival: Cecilia Gallerani of Milan. She has brought a small white ermine.",
+      "recordNote": "Noblewoman of Milan. Sat for Leonardo with an ermine. Kept a salon of poets and philosophers.",
+      "dialog": "dlg_gallerani",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "banking_houses",
+          "amount": 6
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "elytis",
+      "name": "Odysseas Elytis",
+      "gender": "Male",
+      "place": "greece_modern",
+      "truePlace": "",
+      "birthDate": "2 Nov 1911",
+      "archetype": "artist",
+      "intro": "Priority arrival: Odysseas Elytis, poet of the Aegean. He smells of salt and lemons.",
+      "recordNote": "Poet of Crete and Athens. Writes of the sun and the sea. A Nobel prize in a coat pocket.",
+      "dialog": "dlg_elytis",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "naturalism",
+          "amount": 10
+        },
+        {
+          "factor": "government",
+          "outcome": "democracy",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "fellini",
+      "name": "Federico Fellini",
+      "gender": "Male",
+      "place": "italy_modern",
+      "truePlace": "",
+      "birthDate": "20 Jan 1920",
+      "archetype": "artist",
+      "intro": "Priority arrival: Federico Fellini. He asks if your hall has ever been in a film.",
+      "recordNote": "Film director of Rome. Dreams in colour and writes the dreams down. Loves a circus.",
+      "dialog": "dlg_fellini",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "anarchy",
+          "amount": 6
+        },
+        {
+          "factor": "money",
+          "outcome": "company_towns",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "hezehui",
+      "name": "He Zehui",
+      "gender": "Female",
+      "place": "china_modern",
+      "truePlace": "",
+      "birthDate": "5 Mar 1914",
+      "archetype": "scientist",
+      "intro": "Priority arrival: He Zehui, nuclear physicist. She carries a notebook of particle tracks.",
+      "recordNote": "Nuclear physicist of Beijing. Found the four-part split of uranium. Called the Chinese Marie Curie.",
+      "dialog": "dlg_hezehui",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "nuclear",
+          "amount": 10
+        },
+        {
+          "factor": "government",
+          "outcome": "technocracy",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "malaika",
+      "name": "Nazik al-Malaika",
+      "gender": "Female",
+      "place": "iraq_modern",
+      "truePlace": "",
+      "birthDate": "23 Aug 1923",
+      "archetype": "artist",
+      "intro": "Priority arrival: Nazik al-Malaika, poet of Baghdad. She has broken the old metre.",
+      "recordNote": "Poet of Baghdad. One of the first to write Arabic free verse. Teaches literature at the university.",
+      "dialog": "dlg_malaika",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "democracy",
+          "amount": 6
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "meitner",
+      "name": "Lise Meitner",
+      "gender": "Female",
+      "place": "germany_modern",
+      "truePlace": "",
+      "birthDate": "7 Nov 1878",
+      "archetype": "scientist",
+      "intro": "Priority arrival: Lise Meitner, physicist of Berlin. She explains fission over coffee.",
+      "recordNote": "Physicist of Berlin. Explained nuclear fission with Otto Frisch. Left Germany in 1938 with ten marks.",
+      "dialog": "dlg_meitner",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "future",
+          "outcome": "nuclear",
+          "amount": 8
+        },
+        {
+          "factor": "government",
+          "outcome": "technocracy",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "sayyab",
+      "name": "Badr Shakir al-Sayyab",
+      "gender": "Male",
+      "place": "iraq_modern",
+      "truePlace": "",
+      "birthDate": "24 Dec 1926",
+      "archetype": "artist",
+      "intro": "Priority arrival: Badr Shakir al-Sayyab, poet of Basra. He talks about rain.",
+      "recordNote": "Poet of Basra. A founder of Arabic free verse. Wrote the Song of the Rain.",
+      "dialog": "dlg_sayyab",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "commons",
+          "amount": 6
+        },
+        {
+          "factor": "future",
+          "outcome": "naturalism",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "tahtawi",
+      "name": "Rifa'a al-Tahtawi",
+      "gender": "Male",
+      "place": "egypt_industrial",
+      "truePlace": "",
+      "birthDate": "15 Oct 1801",
+      "archetype": "diplomat",
+      "intro": "Priority arrival: Rifa'a al-Tahtawi, translator of Cairo. He has read every book in Paris.",
+      "recordNote": "Scholar and translator of Cairo. Went to Paris as an imam and came back with a library.",
+      "dialog": "dlg_tahtawi",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "government",
+          "outcome": "technocracy",
+          "amount": 6
+        },
+        {
+          "factor": "money",
+          "outcome": "commons",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "toyoda",
+      "name": "Sakichi Toyoda",
+      "gender": "Male",
+      "place": "japan_industrial",
+      "truePlace": "",
+      "birthDate": "14 Feb 1867",
+      "archetype": "merchant",
+      "intro": "Priority arrival: Sakichi Toyoda, inventor of looms. He watches your conveyor belt.",
+      "recordNote": "Inventor of Kosai. Built a loom that stops itself when a thread breaks. Asks why five times.",
+      "dialog": "dlg_toyoda",
+      "repeatable": false,
+      "impacts": [],
+      "pulls": [
+        {
+          "factor": "money",
+          "outcome": "company_towns",
+          "amount": 10
+        },
+        {
+          "factor": "future",
+          "outcome": "cybernetic",
+          "amount": 4
+        }
+      ]
     }
   ],
   "lore": {
@@ -19946,6 +22663,132 @@
           "Account note: Premium since the account opened. A first-series Citizen ID.",
           "Clerk note: has filed fourteen procedural complaints. All upheld.",
           "Clerk note: asks each desk officer for their name, and writes it down."
+        ]
+      },
+      {
+        "premade": "senenmut",
+        "lines": [
+          "Registry note: Senenmut, steward of Queen Hatshepsut and tutor of her daughter Neferure.",
+          "Registry note: credited with the terraced temple at Deir el-Bahari.",
+          "Registry note: carved his own image behind the temple doors, out of sight.",
+          "Declared purpose: going home to Thebes."
+        ]
+      },
+      {
+        "premade": "aspasia",
+        "lines": [
+          "Registry note: Aspasia of Miletus, resident of Athens, companion of Pericles.",
+          "Registry note: Plato and Xenophon say Socrates came to her for lessons in rhetoric.",
+          "Registry note: mocked by the comic poets; tried for impiety and acquitted.",
+          "Declared purpose: going home to Athens."
+        ]
+      },
+      {
+        "premade": "banzhao",
+        "lines": [
+          "Registry note: Ban Zhao, historian of the Eastern Han court.",
+          "Registry note: completed the Book of Han after her brother Ban Gu died.",
+          "Registry note: wrote Lessons for Women; tutor to Empress Deng.",
+          "Declared purpose: going home to Luoyang."
+        ]
+      },
+      {
+        "premade": "arib",
+        "lines": [
+          "Registry note: Arib al-Ma'muniyya, singer and composer of the Abbasid court.",
+          "Registry note: the Book of Songs says she knew a thousand songs.",
+          "Registry note: sang for six caliphs from al-Amin to al-Mu'tamid.",
+          "Declared purpose: going home to Baghdad."
+        ]
+      },
+      {
+        "premade": "lanyer",
+        "lines": [
+          "Registry note: Aemilia Lanyer, poet of London.",
+          "Registry note: published Salve Deus Rex Judaeorum in 1611.",
+          "Registry note: ran a school in St Giles in the Fields.",
+          "Declared purpose: going home to London."
+        ]
+      },
+      {
+        "premade": "gallerani",
+        "lines": [
+          "Registry note: Cecilia Gallerani, noblewoman of Milan.",
+          "Registry note: the sitter of Leonardo's Lady with an Ermine.",
+          "Registry note: kept a literary salon in Milan and wrote letters in Latin.",
+          "Declared purpose: going home to Milan."
+        ]
+      },
+      {
+        "premade": "elytis",
+        "lines": [
+          "Registry note: Odysseas Elytis, born Alepoudelis, poet of Crete and Athens.",
+          "Registry note: author of the Axion Esti.",
+          "Registry note: Nobel Prize in Literature, 1979.",
+          "Declared purpose: going home to Athens."
+        ]
+      },
+      {
+        "premade": "fellini",
+        "lines": [
+          "Registry note: Federico Fellini, film director of Rimini and Rome.",
+          "Registry note: directed La Strada, La Dolce Vita and 8 1/2.",
+          "Registry note: kept a book of his dreams, drawn in colour.",
+          "Declared purpose: going home to Rome."
+        ]
+      },
+      {
+        "premade": "hezehui",
+        "lines": [
+          "Registry note: He Zehui, nuclear physicist of Suzhou and Beijing.",
+          "Registry note: with Qian Sanqiang, observed the ternary and quaternary fission of uranium.",
+          "Registry note: built cosmic ray research stations in China.",
+          "Declared purpose: going home to Beijing."
+        ]
+      },
+      {
+        "premade": "malaika",
+        "lines": [
+          "Registry note: Nazik al-Malaika, poet of Baghdad.",
+          "Registry note: her poem Cholera, 1947, is counted among the first Arabic free verse.",
+          "Registry note: taught literature at the universities of Basra and Kuwait.",
+          "Declared purpose: going home to Baghdad."
+        ]
+      },
+      {
+        "premade": "meitner",
+        "lines": [
+          "Registry note: Lise Meitner, physicist of Vienna and Berlin.",
+          "Registry note: with Otto Frisch, explained nuclear fission in 1939.",
+          "Registry note: element 109, meitnerium, carries her name.",
+          "Declared purpose: going home to Berlin."
+        ]
+      },
+      {
+        "premade": "sayyab",
+        "lines": [
+          "Registry note: Badr Shakir al-Sayyab, poet of Jaykur near Basra.",
+          "Registry note: a founder of Arabic free verse.",
+          "Registry note: author of the Song of the Rain, 1954.",
+          "Declared purpose: going home to Basra."
+        ]
+      },
+      {
+        "premade": "tahtawi",
+        "lines": [
+          "Registry note: Rifa'a al-Tahtawi, scholar of al-Azhar.",
+          "Registry note: imam of the Egyptian mission to Paris, 1826 to 1831.",
+          "Registry note: founded the School of Languages in Cairo.",
+          "Declared purpose: going home to Cairo."
+        ]
+      },
+      {
+        "premade": "toyoda",
+        "lines": [
+          "Registry note: Sakichi Toyoda, inventor of Kosai.",
+          "Registry note: his automatic loom stops itself when a thread breaks.",
+          "Registry note: father of the Five Whys.",
+          "Declared purpose: going home to Nagoya."
         ]
       }
     ],
@@ -21666,6 +24509,272 @@
           }
         ],
         "section": "Front"
+      },
+      {
+        "id": "senenmut_home",
+        "name": "Senenmut's return",
+        "news": "SENENMUT'S TERRACES: The queen's architect, stamped home at Desk 3, builds the terraces at Deir el-Bahari a century early.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:senenmut:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "egypt_ancient",
+            "category": "Technology",
+            "value": "Terraced stone temples"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "aspasia_home",
+        "name": "Aspasia's return",
+        "news": "ASPASIA'S ASSEMBLY: Aspasia of Miletus, stamped home at Desk 3, takes the speaker's stone in Athens.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:aspasia:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "greece_ancient",
+            "category": "Politics",
+            "value": "Women speak in the Assembly"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "banzhao_home",
+        "name": "Ban Zhao's return",
+        "news": "BAN ZHAO'S HISTORY: The court historian, stamped home at Desk 3, opens the Han archives to every scribe.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:banzhao:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "china_ancient",
+            "category": "Language",
+            "value": "Han history in schools"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "arib_home",
+        "name": "Arib al-Ma'muniyya's return",
+        "news": "ARIB'S SONGBOOK: The singer of Baghdad, stamped home at Desk 3, writes down all thousand songs.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:arib:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "iraq_medieval",
+            "category": "Currency",
+            "value": "Arib's silver dirham"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "lanyer_home",
+        "name": "Aemilia Lanyer's return",
+        "news": "LANYER IN PRINT: The poet of London, stamped home at Desk 3, opens a school for girls in Westminster.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:lanyer:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "britain_earlymodern",
+            "category": "Language",
+            "value": "Lanyer's poems in schools"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "gallerani_home",
+        "name": "Cecilia Gallerani's return",
+        "news": "GALLERANI'S SALON: The lady with the ermine, stamped home at Desk 3, opens her salon to the whole of Milan.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:gallerani:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_earlymodern",
+            "category": "Politics",
+            "value": "The salons of Milan"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "elytis_home",
+        "name": "Odysseas Elytis's return",
+        "news": "ELYTIS SEES THE SEA: The poet, stamped home at Desk 3, reads the Axion Esti on the steps of the Acropolis.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:elytis:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "greece_modern",
+            "category": "Geography",
+            "value": "The Aegean light protected"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "fellini_home",
+        "name": "Federico Fellini's return",
+        "news": "FELLINI AT CINECITTA: The director, stamped home at Desk 3, films the queue of Desk 3 as a dream.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:fellini:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_modern",
+            "category": "Technology",
+            "value": "Cinecitta in colour"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "hezehui_home",
+        "name": "He Zehui's return",
+        "news": "HE ZEHUI'S LAB: The physicist, stamped home at Desk 3, opens a cosmic ray station in the hills.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:hezehui:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "china_modern",
+            "category": "Technology",
+            "value": "The Beijing particle lab"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "malaika_home",
+        "name": "Nazik al-Malaika's return",
+        "news": "NAZIK'S VERSE: The poet of Baghdad, stamped home at Desk 3, puts free verse in every school book.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:malaika:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "iraq_modern",
+            "category": "Language",
+            "value": "Free verse in the schools"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "meitner_home",
+        "name": "Lise Meitner's return",
+        "news": "MEITNER STAYS: The physicist, stamped home at Desk 3, keeps her chair at the Kaiser Wilhelm Institute.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:meitner:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "germany_modern",
+            "category": "Technology",
+            "value": "Meitner institute of physics"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "sayyab_home",
+        "name": "Badr Shakir al-Sayyab's return",
+        "news": "SAYYAB'S RAIN: The poet of Basra, stamped home at Desk 3, plants palms along the Shatt al-Arab.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:sayyab:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "iraq_modern",
+            "category": "Geography",
+            "value": "The palms of Jaykur saved"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "tahtawi_home",
+        "name": "Rifa'a al-Tahtawi's return",
+        "news": "TAHTAWI'S SCHOOL: The translator, stamped home at Desk 3, opens the School of Languages in Cairo.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:tahtawi:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "egypt_industrial",
+            "category": "Language",
+            "value": "Cairo School of Languages"
+          }
+        ],
+        "section": "Front"
+      },
+      {
+        "id": "toyoda_home",
+        "name": "Sakichi Toyoda's return",
+        "news": "TOYODA'S LOOM: The inventor, stamped home at Desk 3, opens a loom works that stops for every broken thread.",
+        "conditions": [
+          {
+            "type": "FlagSet",
+            "key": "premade:toyoda:accepted"
+          }
+        ],
+        "edits": [
+          {
+            "place": "japan_industrial",
+            "category": "Technology",
+            "value": "Toyoda's automatic loom"
+          }
+        ],
+        "section": "Front"
       }
     ]
   },
@@ -22250,14 +25359,6 @@
           "note": "Pharaoh of Egypt. Senenmut stewarded her household and built her temple."
         },
         {
-          "id": "senenmut",
-          "name": "Senenmut",
-          "born": "c. 1505 BCE",
-          "died": "",
-          "place": "egypt_ancient",
-          "note": "Steward of Hatshepsut's household and architect of her temple at Deir el-Bahari."
-        },
-        {
           "id": "neferure",
           "name": "Neferure",
           "born": "c. 1505 BCE",
@@ -22280,14 +25381,6 @@
           "died": "406 BCE",
           "place": "greece_ancient",
           "note": "Son of Pericles and Aspasia. A general of Athens."
-        },
-        {
-          "id": "aspasia",
-          "name": "Aspasia",
-          "born": "c. 470 BCE",
-          "died": "c. 400 BCE",
-          "place": "greece_ancient",
-          "note": "Teacher of rhetoric in Athens. Companion of Pericles."
         },
         {
           "id": "banbiao",
@@ -22314,28 +25407,12 @@
           "note": "General who held the Western Regions for the Han."
         },
         {
-          "id": "banzhao",
-          "name": "Ban Zhao",
-          "born": "45",
-          "died": "117",
-          "place": "china_ancient",
-          "note": "Court historian and tutor to the empress. Finished her brother's Book of Han."
-        },
-        {
           "id": "mamun",
           "name": "Caliph al-Ma'mun",
           "born": "786",
           "died": "833",
           "place": "iraq_medieval",
           "note": "Caliph in Baghdad. Patron of the House of Wisdom."
-        },
-        {
-          "id": "arib",
-          "name": "Arib al-Ma'muniyya",
-          "born": "797",
-          "died": "890",
-          "place": "iraq_medieval",
-          "note": "Singer and poet of the caliph's court. Travelled with her own musicians."
         },
         {
           "id": "fust",
@@ -22378,28 +25455,12 @@
           "note": "Duke of Milan. Patron of Leonardo."
         },
         {
-          "id": "gallerani",
-          "name": "Cecilia Gallerani",
-          "born": "1473",
-          "died": "1536",
-          "place": "italy_earlymodern",
-          "note": "Lady of the Milanese court. Sat for Leonardo's portrait with an ermine."
-        },
-        {
           "id": "bassano",
           "name": "Baptiste Bassano",
           "born": "",
           "died": "1576",
           "place": "britain_earlymodern",
           "note": "Venetian-born court musician to the Tudors. Father of Aemilia Lanyer."
-        },
-        {
-          "id": "lanyer",
-          "name": "Aemilia Lanyer",
-          "born": "1569",
-          "died": "1645",
-          "place": "britain_earlymodern",
-          "note": "Poet of London, raised in a countess's household."
         }
       ],
       "relations": [

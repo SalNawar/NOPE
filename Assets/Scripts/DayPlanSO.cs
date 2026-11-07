@@ -100,6 +100,14 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField] private LegendarySO[] availableLegendaries;
 
     /// <summary>
+    /// How many famous travellers of the day's pool the run's draw seats
+    /// today (FamousDraw: 0 none, 1 to 2), on top of the pool's per-slot roll;
+    /// the authored forced slots stay as they are. Written by Generate World
+    /// from world_source.json days[].famousPerDay.
+    /// </summary>
+    [SerializeField, Range(0, FamousDraw.MaxPerDay)] private int famousPerDay;
+
+    /// <summary>
     /// How many tells each liar's disguise leaks today (at least 1; capped per
     /// liar at the categories that can carry a tell). Written by
     /// Tools > TimeDesk > Generate World from world_source.json.
@@ -231,6 +239,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>The premades that may roll this day.</summary>
     public IReadOnlyList<LegendarySO> AvailableLegendaries => availableLegendaries;
+
+    /// <summary>How many famous travellers the run's draw seats today (0 none, 1 to 2).</summary>
+    public int FamousPerDay => famousPerDay;
 
     /// <summary>The forced slots, in authored order.</summary>
     public IReadOnlyList<ForcedCaseSlot> ForcedCases => forcedCases;

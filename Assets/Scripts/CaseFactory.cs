@@ -230,6 +230,7 @@ public sealed class CaseFactory
         // which also keeps them out of the day's random roll.
         _roster = new NameRoster();
         _appearances = Appearances(plan, state);
+        SeatDrawnFamous(plan, state, total, daySeed);
         _transponders = Directives.Unrecalled(_lib.Agency.transponders,
             plan.ActiveTravelRules.Where(r => r != null && r.type == TravelRuleType.TransponderRecall && !string.IsNullOrWhiteSpace(r.transponder)).Select(r => r.transponder).ToList());
         _agencyNumbers = new HashSet<string>();
@@ -2094,6 +2095,35 @@ public sealed class CaseFactory
         }
 
         return appearances;
+    }
+
+    /// <summary>
+    /// Seats the run's famous draw for today (FamousDraw.Pick on the day's
+    /// famous stream, Seeds.ForFamous): up to the plan's FamousPerDay
+    /// premades of the day's pool, not met this run and not standing in a
+    /// forced slot today, each as an appearance in a slot no forced
+    /// appearance holds (Returns.Slots on the same stream), with a blueprint
+    /// of its kind (today's mix first). A day with no draw changes nothing.
+    /// </summary>
+    private void SeatDrawnFamous(DayPlanSO plan, WorldState state, int total, int daySeed)
+    {
+        if (plan.FamousPerDay <= 0)
+            return;
+        List<LegendarySO> pool = (plan.AvailableLegendaries ?? System.Array.Empty<LegendarySO>()).Where(l => l != null && !string.IsNullOrWhiteSpace(l.id)).ToList();
+        var unavailable = new HashSet<string>(pool.Where(l => IsMet(state, l)).Select(l => l.id));
+        foreach (ForcedCaseSlot standing in _appearances.Values.Where(a => a.legendary != null))
+            unavailable.Add(standing.legendary.id);
+        var rng = new SeededRandom(Seeds.ForFamous(daySeed));
+        List<string> drawn = FamousDraw.Pick(pool.Select(l => l.id).ToList(), unavailable, plan.FamousPerDay, rng);
+        List<int> slots = Returns.Slots(total, _appearances.Keys.ToList(), drawn.Count, rng);
+        for (int i = 0; i < slots.Count; i++)
+        {
+            LegendarySO premade = pool.First(l => l.id == drawn[i]);
+            var blueprint = plan.Kinds.Concat(_lib.DayPlans.Where(p => p != null).SelectMany(p => p.Kinds))
+                .Where(k => k != null && k.blueprint != null && k.blueprint.Kind == premade.kind).Select(k => k.blueprint).FirstOrDefault();
+            _appearances[slots[i]] = new ForcedCaseSlot { caseIndex1Based = slots[i], id = "draw:" + premade.id, legendary = premade, caseBlueprint = blueprint };
+            Debug.Log($"[CaseFactory] Day {plan.DayNumber} slot {slots[i]}: '{premade.displayName}' stands here (the run's famous draw, {plan.FamousPerDay} a day).");
+        }
     }
 
     /// <summary>A forced entry as the logs name it: its id, else its premade's or blueprint's name.</summary>

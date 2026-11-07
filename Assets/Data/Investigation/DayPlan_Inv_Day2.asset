@@ -44,6 +44,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   legendaryBaseChance: 0
   availableLegendaries: []
+  famousPerDay: 0
   tellCount: 1
   tellChannels: 00000000
   costumeErrorChance: 0

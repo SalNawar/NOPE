@@ -1,0 +1,1435 @@
+{
+  "name": "premades_52",
+  "owner": "premades-52",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "premades-52 (night 2026-11-07, D12, D43): the 52 characters of Saleh's list, in his order, each forced to stand first at the counter (the cheat ForceAppearance premade:<id>: their day, or today's shift again), one office still each at 1920x1080 for the contact sheet (8 columns, the name under each)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:cleopatra"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p01_cleopatra"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:ramesses"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p02_ramesses"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:saladin"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p03_saladin"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:kulthum"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p04_kulthum"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:hammurabi"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p05_hammurabi"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:khwarizmi"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p06_khwarizmi"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:alexander"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p07_alexander"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:aristotle"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p08_aristotle"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:socrates"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p09_socrates"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:archimedes"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p10_archimedes"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:caesar"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p11_caesar"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:marcopolo"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p12_marcopolo"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:galileo"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p13_galileo"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:leonardo"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p14_leonardo"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:michelangelo"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p15_michelangelo"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:confucius"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p16_confucius"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:qinshihuang"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p17_qinshihuang"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:suntzu"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p18_suntzu"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:genghis"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p19_genghis"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:nobunaga"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p20_nobunaga"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:hokusai"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p21_hokusai"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:kurosawa"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p22_kurosawa"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:elizabeth"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p23_elizabeth"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:newton"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p24_newton"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:shakespeare"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p25_shakespeare"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:ada"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p26_ada"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:darwin"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p27_darwin"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:turing"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p28_turing"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:gutenberg"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p29_gutenberg"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:luther"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p30_luther"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:beethoven"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p31_beethoven"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:marx"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p32_marx"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:einstein"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p33_einstein"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:senenmut"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p34_senenmut"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:aspasia"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p35_aspasia"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:banzhao"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p36_banzhao"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:arib"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p37_arib"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:lanyer"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p38_lanyer"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:gallerani"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p39_gallerani"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:elytis"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p40_elytis"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:fellini"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p41_fellini"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:hezehui"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p42_hezehui"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:malaika"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p43_malaika"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:meitner"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p44_meitner"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:sayyab"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p45_sayyab"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:tahtawi"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p46_tahtawi"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:toyoda"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p47_toyoda"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:pell"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p48_pell"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:ines"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p49_ines"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:rook"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p50_rook"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:hollis"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p51_hollis"
+    },
+    {
+      "op": "cheat",
+      "name": "ForceAppearance",
+      "text": "premade:auditor"
+    },
+    {
+      "op": "waitOffice",
+      "f": 240
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "p52_auditor"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}
