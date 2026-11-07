@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 /// Drags a desk object across a DeskSurface with the EventSystem (its collider
 /// proxy is found by the office camera's PhysicsRaycaster): the pointer is
 /// projected onto the desk plane and the held point (a stamp: its centre)
-/// stays inside the desk area (Follow). The proxy is off during the drag, so
+/// stays inside the desk area, grown for a paper's drag to hold the point its
+/// press met, so a pick-up never moves it (Follow). The proxy is off during the drag, so
 /// the release is never over the object itself (no click follows a drag) and
 /// the drop is decided by the projected pointer (DragEnded). While disabled
 /// by its owner the EventSystem sends it nothing, so disabling it mid-drag
@@ -55,6 +56,18 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
 
     /// <summary>The highest grab height taken (metres): a press hit higher than this (no desk thing is) falls back to the desk plane.</summary>
     private const float MaxGrabHeight = 0.12f;
+
+    /// <summary>
+    /// The area the held point stays in during this drag (the desk's local
+    /// XZ): the desk surface's clamp area, grown at the pick-up to hold the
+    /// point the press met (DeskSurface.AreaHolding). FOLD-01 round 4, the
+    /// verifier's P1: a paper resting with a part past the clamp area (the
+    /// reading view's bottom, the lip, the left limit, a large form's far part
+    /// on the counter), pressed on that part, jumped toward the clamp on the
+    /// drag's first frame (45.8 px) and then stood still until the pointer
+    /// entered the clamp area.
+    /// </summary>
+    private DeskRect _heldArea;
 
     /// <summary>The camera and the screen point of the drag's last pointer move: the drag re-projects them every frame.</summary>
     private Camera _camera;
@@ -161,6 +174,8 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// the point pressed stays under the pointer. The pointer is then followed
     /// on the plane at that point's height (GrabHeight), so the point pressed,
     /// lying as high as it lay when pressed, comes to rest under the pointer.
+    /// The held point's area for the drag holds the point the press met
+    /// (_heldArea), so the pick-up never moves the paper.
     /// </summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -173,6 +188,8 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         GrabScale = 1f;
         _camera = eventData.pressEventCamera;
         _pointer = eventData.position;
+        if (_surface != null)
+            _heldArea = _surface.Area;
         if (_surface != null && _anchor != null)
             _grabOffset = Vector3.ProjectOnPlane(transform.position - _anchor.position, _surface.transform.up);
         else if (_surface != null && PressPoint(eventData, out Vector3 point))
@@ -180,6 +197,7 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
             _grabOffset = Vector3.ProjectOnPlane(transform.position - point, _surface.transform.up);
             float height = Vector3.Dot(point - _surface.transform.position, _surface.transform.up);
             _grabHeight = height > 0f && height <= MaxGrabHeight ? height : 0f;
+            _heldArea = _surface.AreaHolding(point);
         }
         if (proxy != null)
             proxy.enabled = false;
@@ -249,17 +267,20 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>
     /// The object goes where the pointer shows through the camera now, carried
     /// at its height above the desk; Dragged says where the pointer is on the
-    /// desk. The desk's clamp area holds the held point (the point pressed),
-    /// not the origin: the pressed point stays under the pointer wherever the
-    /// pointer is over the desk, and stops at the clamp's edge when the
-    /// pointer leaves it (Papers, Please). The origin hangs from it by the
-    /// grab offset, and the owner's Bound keeps a paper or the folder where it
-    /// may rest. FOLD-01 round 4, the round 3 verifier's G1: the origin was
+    /// desk. The drag's area (_heldArea: the desk's clamp area, grown to hold
+    /// the point the press met) holds the held point (the point pressed), not
+    /// the origin: the pressed point stays under the pointer wherever the
+    /// pointer is over the desk, and stops at the area's edge when the pointer
+    /// leaves it (Papers, Please). The origin hangs from it by the grab
+    /// offset, and the owner's Bound keeps a paper or the folder where it may
+    /// rest. FOLD-01 round 4, the round 3 verifier's G1: the origin was
     /// clamped, and a passport pressed on the near half of its closed cover
     /// asked to go 11 to 22 cm past the pointer as it grew at the counter's
     /// edge, past the clamp's far edge, so it stood still for up to 11 frames
-    /// while the pointer moved 43.5 px on. A stamp, carried by its anchor,
-    /// keeps its origin clamped (its carry is DeskStamps').
+    /// while the pointer moved 43.5 px on. The round 4 verifier's P1: the
+    /// clamp area alone moved a paper pressed on a part past it at the first
+    /// frame. A stamp, carried by its anchor, keeps its origin clamped to the
+    /// clamp area (its carry is DeskStamps').
     /// </summary>
     private void Follow()
     {
@@ -273,7 +294,7 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         if (_surface == null || !_surface.TryProject(_camera, _pointer, out Vector3 point))
             return;
         Vector3 held = Aimed(AtGrabHeight(point));
-        Vector3 at = _anchor != null ? _surface.Clamp(held + GrabOffset) : _surface.Clamp(held) + GrabOffset;
+        Vector3 at = _anchor != null ? _surface.Clamp(held + GrabOffset) : _surface.Clamp(held, _heldArea) + GrabOffset;
         if (Bound != null)
             at = Bound(at);
         transform.position = at + _surface.transform.up * _height;

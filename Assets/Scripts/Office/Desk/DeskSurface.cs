@@ -44,11 +44,31 @@ public sealed class DeskSurface : MonoBehaviour
         return true;
     }
 
-    /// <summary>The nearest point inside the clamp area, on the plane.</summary>
-    public Vector3 Clamp(Vector3 world)
+    /// <summary>The clamp area (local XZ, centred on the transform).</summary>
+    public DeskRect Area => new DeskRect(0f, 0f, size.x, size.y);
+
+    /// <summary>
+    /// The clamp area grown just enough to hold <paramref name="world"/> too
+    /// (local XZ; the point taken on the plane): a drag's area for the point
+    /// it holds, grown to hold the point its press met. A paper may rest with
+    /// a part past the clamp area (its rest area is the clamp area grown by
+    /// its footprint), and a press on that part must not move it (FOLD-01
+    /// round 4, the verifier's P1).
+    /// </summary>
+    public DeskRect AreaHolding(Vector3 world)
     {
         Vector3 local = transform.InverseTransformPoint(world);
-        (float x, float z) = new DeskRect(0f, 0f, size.x, size.y).Clamp(local.x, local.z);
+        return DeskRect.Union(Area, new DeskRect(local.x, local.z, 0f, 0f));
+    }
+
+    /// <summary>The nearest point inside the clamp area, on the plane.</summary>
+    public Vector3 Clamp(Vector3 world) => Clamp(world, Area);
+
+    /// <summary>The nearest point inside <paramref name="area"/> (local XZ: the clamp area, or a drag's area from AreaHolding), on the plane.</summary>
+    public Vector3 Clamp(Vector3 world, DeskRect area)
+    {
+        Vector3 local = transform.InverseTransformPoint(world);
+        (float x, float z) = area.Clamp(local.x, local.z);
         return transform.TransformPoint(new Vector3(x, 0f, z));
     }
 
