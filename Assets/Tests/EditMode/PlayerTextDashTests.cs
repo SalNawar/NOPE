@@ -111,7 +111,7 @@ public class PlayerTextDashTests
             Assert.Greater(count, 0, $"the scan of '{g.Name}' reached no file (root {root})");
         }
 
-        TestContext.Out.WriteLine("Scanned for a long dash (U+2014 in any form, U+2013 between spaces):\n  " + string.Join("\n  ", report) + $"\n  {scanned.Count} files in all; kept apart: {string.Join(", ", NamesTheDash)} (they name the dash)");
+        System.Console.WriteLine("Scanned for a long dash (U+2014 in any form, U+2013 between spaces):\n  " + string.Join("\n  ", report) + $"\n  {scanned.Count} files in all; kept apart: {string.Join(", ", NamesTheDash)} (they name the dash)");
         foreach (string name in MustScan)
             Assert.IsTrue(scanned.Any(s => s.EndsWith("/" + name)), $"{name} was not scanned");
         CollectionAssert.IsEmpty(hits, $"{hits.Count} long dash line(s) in the sources of player text:\n" + string.Join("\n", hits.Take(60)));
