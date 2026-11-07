@@ -29,12 +29,17 @@ public sealed class CharacterArtImporter : AssetPostprocessor
     public const bool Mipmaps = false;
 
     /// <summary>
-    /// The largest texture side kept: 1024 by the director's call D11 (BLD-05,
-    /// night of 2026-11-07; reversible by Saleh). Without mipmaps a smaller
-    /// texture keeps the outlines clean where the office draws the figure
-    /// small. The fallback D11 names, when the outlines alias, is 512.
+    /// The largest texture side kept: 1020, the director's call D11 (BLD-05,
+    /// night of 2026-11-07; reversible by Saleh) of 1024 made compressible.
+    /// Unity scales a larger source in proportion, and BC7 needs both sides
+    /// in multiples of 4: at 1024 the 1024 x 1536 canvas imports at
+    /// 683 x 1024 and stays RGBA32, at 1020 it imports at 680 x 1020 as BC7
+    /// (keep it a multiple of 12 for the 2:3 canvas). Without mipmaps a
+    /// smaller texture also keeps the outlines cleaner where the office draws
+    /// the figure small (its canvas is about 550 px tall at 1080p). D11's
+    /// fallback when the outlines alias is 504 (336 x 504).
     /// </summary>
-    public const int MaxSize = 1024;
+    public const int MaxSize = 1020;
 
     private void OnPreprocessTexture()
     {
@@ -47,6 +52,11 @@ public sealed class CharacterArtImporter : AssetPostprocessor
         importer.GetSourceTextureWidthAndHeight(out int width, out int height);
         if (width * LookCanvas.Height != height * LookCanvas.Width)
             Debug.LogWarning($"[CharacterArtImporter] '{assetPath}' is {width}x{height}; character art must be {LookCanvas.Width}x{LookCanvas.Height} (2:3). See docs/CHARACTER_ART_CONTRACT.md.");
+
+        float scale = Mathf.Min(1f, MaxSize / (float)Mathf.Max(1, Mathf.Max(width, height)));
+        int importedWidth = Mathf.RoundToInt(width * scale), importedHeight = Mathf.RoundToInt(height * scale);
+        if (importedWidth % 4 != 0 || importedHeight % 4 != 0)
+            Debug.LogWarning($"[CharacterArtImporter] '{assetPath}' imports at {importedWidth}x{importedHeight}: BC7 needs both sides in multiples of 4, so Unity keeps it uncompressed (RGBA32). See MaxSize.");
     }
 
     /// <summary>
