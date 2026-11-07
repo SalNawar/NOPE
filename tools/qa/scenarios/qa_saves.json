@@ -150,6 +150,10 @@
       "name": "EndShift"
     },
     {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
       "op": "waitActive",
       "target": "DayFlowUIController.resultsPanel",
       "f": 60

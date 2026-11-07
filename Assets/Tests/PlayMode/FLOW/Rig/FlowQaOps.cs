@@ -66,6 +66,9 @@ public static class FlowQaOps
     /// <summary>The preference that holds the player's own Reduced Motion choice while a run has changed it.</summary>
     private const string MotionMarker = "TimeDesk.QaMotionRestore";
 
+    /// <summary>The ellipsis TMP puts at the end of a text it cut (U+2026).</summary>
+    private static readonly char Ellipsis = (char)0x2026;
+
     /// <summary>The parts qaSnap compares when the step names none (the world in memory is compared only when named).</summary>
     private static readonly string[] DefaultParts = { "scene", "day", "phase", "money", "stability", "ending", "hour", "save", "board", "desk", "papers", "pet", "home" };
 
@@ -425,7 +428,7 @@ public static class FlowQaOps
             s.Flags.Add("truncated");
         if (t.isTextOverflowing && t.overflowMode != TextOverflowModes.Overflow && t.overflowMode != TextOverflowModes.ScrollRect)
             s.Flags.Add($"overflowing ({t.overflowMode})");
-        if (words.IndexOf('…') >= 0 && (t.text ?? string.Empty).IndexOf('…') < 0)
+        if (words.IndexOf(Ellipsis) >= 0 && (t.text ?? string.Empty).IndexOf(Ellipsis) < 0)
             s.Flags.Add("ellipsis added");
         if (onScreen && Masked(t.transform) == false)
         {

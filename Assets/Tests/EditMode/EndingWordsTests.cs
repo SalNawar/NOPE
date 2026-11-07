@@ -15,7 +15,7 @@ using NUnit.Framework;
 /// </summary>
 public class EndingWordsTests
 {
-    [TestCase("Badge, keys, and timeline clearance — all revoked", "em dash")]
+    [TestCase("Badge, keys, and timeline clearance \u2014 all revoked", "em dash")]
     [TestCase("You retire with a pension.", "retire")]
     [TestCase("Retirement awaits.", "Retirement")]
     [TestCase("Your world ranked third.", "ranked")]
@@ -47,7 +47,7 @@ public class EndingWordsTests
     [Test]
     public void Problems_CountEveryDashAndWord()
     {
-        List<string> problems = EndingWords.Problems("rank — score — retire");
+        List<string> problems = EndingWords.Problems("rank \u2014 score \u2014 retire");
         Assert.AreEqual(4, problems.Count, string.Join("; ", problems));
         StringAssert.Contains("2 em dash", problems[0]);
     }

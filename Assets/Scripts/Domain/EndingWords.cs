@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 public static class EndingWords
 {
     /// <summary>The long dash Saleh banned (U+2014).</summary>
-    public const char EmDash = '—';
+    public const char EmDash = '\u2014';
 
     /// <summary>The judgement words and phrases, whole words only, any case.</summary>
     private static readonly Regex Judgement = new Regex(
