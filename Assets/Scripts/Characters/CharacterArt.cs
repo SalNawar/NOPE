@@ -33,9 +33,21 @@ public sealed class CharacterArt : IDisposable
         /// <summary>The full-canvas sprite (loaded from Resources).</summary>
         public Sprite Full;
 
-        /// <summary>The photo crop (made on first use).</summary>
+        /// <summary>The photo crop (made on first use), drawn from <see cref="PhotoTexture"/>.</summary>
         public Sprite Photo;
+
+        /// <summary>The photo crop's own mipmapped texture (MakePhotoTexture); destroyed with <see cref="Photo"/>.</summary>
+        public Texture2D PhotoTexture;
     }
+
+    /// <summary>
+    /// The height in pixels of a photo's own texture, at most: twice the
+    /// largest size a photo is drawn at (D53). The reading size is about 72 px
+    /// tall at 1080p (VERIFY1), so 256 px keeps a photo sharp up to 128 px on
+    /// screen. A crop that is smaller (the 680 x 1020 texture's crop is 249 px
+    /// tall, a premade's whole picture's 173 px) keeps its own height.
+    /// </summary>
+    public const int PhotoTextureHeight = 256;
 
     /// <summary>The loaded art, by the name of the key actually drawn.</summary>
     private readonly Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
@@ -116,7 +128,14 @@ public sealed class CharacterArt : IDisposable
     /// <summary>The layer's full-canvas sprite: its own art, else its nearest stand-in's; null when there is none (the layer is not drawn).</summary>
     public Sprite Get(LookKey key) => EntryOf(key)?.Full;
 
-    /// <summary>The layer's passport-photo crop (the head and shoulders; a premade's whole picture the head and neck, LookCanvas.PhotoRectFor) of the sprite Get draws; null when Get has none.</summary>
+    /// <summary>
+    /// The layer's passport-photo crop (the head and shoulders; a premade's
+    /// whole picture the head and neck, LookCanvas.PhotoRectFor) of the sprite
+    /// Get draws; null when Get has none. The crop gets its own mipmapped,
+    /// bilinear texture, made once per drawing (D53): the character textures
+    /// have no mipmaps (D11), and the photo is drawn 3.5 to 13 times smaller
+    /// than its crop, so a crop of them shimmers when the papers move.
+    /// </summary>
     public Sprite GetPhoto(LookKey key)
     {
         Entry e = EntryOf(key);
@@ -127,10 +146,52 @@ public sealed class CharacterArt : IDisposable
             Rect r = e.Full.rect;
             (float x, float y, float w, float h) = LookCanvas.PhotoRectFor(key.Layer == LookLayer.Whole);
             var crop = new Rect(r.x + x * r.width, r.y + y * r.height, w * r.width, h * r.height);
-            e.Photo = Sprite.Create(e.Full.texture, crop, new Vector2(0.5f, 0.5f), crop.height, 0, SpriteMeshType.FullRect);
+            e.PhotoTexture = MakePhotoTexture(e.Full.texture, crop, e.Full.name + "_photo");
+            if (e.PhotoTexture != null)
+                e.Photo = Sprite.Create(e.PhotoTexture, new Rect(0, 0, e.PhotoTexture.width, e.PhotoTexture.height),
+                                        new Vector2(0.5f, 0.5f), e.PhotoTexture.height, 0, SpriteMeshType.FullRect);
+            else
+                e.Photo = Sprite.Create(e.Full.texture, crop, new Vector2(0.5f, 0.5f), crop.height, 0, SpriteMeshType.FullRect);
             e.Photo.name = e.Full.name + "_photo";
         }
         return e.Photo;
+    }
+
+    /// <summary>
+    /// The <paramref name="crop"/> of <paramref name="source"/> as its own
+    /// texture (D53): drawn by the GPU into a render texture at most
+    /// <see cref="PhotoTextureHeight"/> px tall, read back, mipmapped,
+    /// bilinear. Null without a graphics device (a batch run with no
+    /// graphics): the photo then crops the source as before.
+    /// </summary>
+    private static Texture2D MakePhotoTexture(Texture2D source, Rect crop, string name)
+    {
+        if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Null)
+            return null;
+        int height = Mathf.Max(1, Mathf.Min(PhotoTextureHeight, Mathf.RoundToInt(crop.height)));
+        int width = Mathf.Max(1, Mathf.RoundToInt(height * crop.width / crop.height));
+        RenderTexture target = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
+        RenderTexture active = RenderTexture.active;
+        try
+        {
+            Graphics.Blit(source, target, new Vector2(crop.width / source.width, crop.height / source.height),
+                          new Vector2(crop.x / source.width, crop.y / source.height));
+            RenderTexture.active = target;
+            var photo = new Texture2D(width, height, TextureFormat.RGBA32, true)
+            {
+                name = name,
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp,
+            };
+            photo.ReadPixels(new Rect(0, 0, width, height), 0, 0, false);
+            photo.Apply(true, true);
+            return photo;
+        }
+        finally
+        {
+            RenderTexture.active = active;
+            RenderTexture.ReleaseTemporary(target);
+        }
     }
 
     /// <summary>Releases every loaded texture the keys in <paramref name="keys"/> (the traveller now at the desk) do not draw.</summary>
@@ -222,17 +283,23 @@ public sealed class CharacterArt : IDisposable
     private static Sprite Load(string keyName) =>
         string.IsNullOrEmpty(keyName) ? null : Resources.Load<Sprite>($"{ResourcesFolder}/{keyName}");
 
-    /// <summary>Frees one entry: its photo crop, and its texture back to Resources.</summary>
+    /// <summary>Frees one entry: its photo crop and the photo's own texture, and its texture back to Resources.</summary>
     private static void Release(Entry e)
     {
-        if (e.Photo != null)
-        {
-            if (Application.isPlaying)
-                Object.Destroy(e.Photo);
-            else
-                Object.DestroyImmediate(e.Photo);
-        }
+        DestroyMade(e.Photo);
+        DestroyMade(e.PhotoTexture);
         if (e.Full != null)
             Resources.UnloadAsset(e.Full.texture);
+    }
+
+    /// <summary>Destroys an object this class made (Destroy in play, DestroyImmediate in the editor); nothing for null.</summary>
+    private static void DestroyMade(Object made)
+    {
+        if (made == null)
+            return;
+        if (Application.isPlaying)
+            Object.Destroy(made);
+        else
+            Object.DestroyImmediate(made);
     }
 }

@@ -41,6 +41,10 @@ public static class CharacterLibraryValidation
         if (required.Count != 944)
             report.errors.Add($"Expected 944 required keys; found {required.Count}.");
 
+        // The registration the importer keeps at its size (CharacterArtImporter.MaxSize, D11):
+        // one unit tall, pivoted at the soles on the canvas's centre line.
+        Vector2Int size = CharacterArtImporter.ImportedSize(LookCanvas.Width, LookCanvas.Height);
+        float scale = size.y / (float)LookCanvas.Height;
         foreach (string key in required)
         {
             string path = CharacterArt.AssetFolder + "/" + key + ".png";
@@ -51,20 +55,14 @@ public static class CharacterLibraryValidation
                 continue;
             }
             report.importedKeys++;
-            if (sprite.rect.width != LookCanvas.Width || sprite.rect.height != LookCanvas.Height)
-                report.errors.Add($"Wrong sprite canvas: {key} ({sprite.rect})");
-            if (Mathf.Abs(sprite.pixelsPerUnit - LookCanvas.Height) > 0.01f ||
-                Mathf.Abs(sprite.pivot.x - LookCanvas.CenterX) > 0.01f ||
-                Mathf.Abs(sprite.pivot.y - (LookCanvas.Height - LookCanvas.Feet)) > 0.01f)
+            if (sprite.rect.width != size.x || sprite.rect.height != size.y)
+                report.errors.Add($"Wrong sprite canvas: {key} ({sprite.rect}; expected {size.x}x{size.y})");
+            if (Mathf.Abs(sprite.pixelsPerUnit - size.y) > 0.01f ||
+                Mathf.Abs(sprite.pivot.x - LookCanvas.CenterX * scale) > 0.01f ||
+                Mathf.Abs(sprite.pivot.y - (LookCanvas.Height - LookCanvas.Feet) * scale) > 0.01f)
                 report.errors.Add($"Wrong registration pivot or pixels per unit: {key}");
 
-            var importer = (TextureImporter)AssetImporter.GetAtPath(path);
-            var settings = new TextureImporterSettings();
-            importer.ReadTextureSettings(settings);
-            if (importer.textureType != TextureImporterType.Sprite || importer.spriteImportMode != SpriteImportMode.Single ||
-                settings.spriteMeshType != SpriteMeshType.FullRect || !importer.isReadable || !importer.mipmapEnabled ||
-                importer.filterMode != FilterMode.Trilinear || !importer.alphaIsTransparency ||
-                importer.textureCompression != TextureImporterCompression.CompressedHQ || importer.crunchedCompression)
+            if (!CharacterArtImporter.HasSettings((TextureImporter)AssetImporter.GetAtPath(path)))
                 report.errors.Add($"Importer differs from the approved character contract: {key}");
 
             Sprite resource = Resources.Load<Sprite>(CharacterArt.ResourcesFolder + "/" + key);

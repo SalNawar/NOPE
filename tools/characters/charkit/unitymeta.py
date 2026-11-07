@@ -5,11 +5,14 @@ serializedVersion 13, as in Assets/Art/Office/Placeholder/traveller.png.meta,
 the retired traveller sprite) with exactly the settings CharacterArtImporter
 enforces on every import: Sprite, Single, FullRect mesh, custom pivot at the
 soles (0.5, LookCanvas.FeetPivotY), pixels per unit = the texture's height
-(one unit tall), readable, mipmaps with trilinear filtering, high-quality
-(BC7) compression, no crunch, max size 2048, alpha is transparency, in the
-form Unity writes it (the WebGL block, empty values with a trailing space).
-Because the importer re-applies these, Unity's first import should leave the
-file unchanged; if it does rewrite it, the rewrite wins.
+(one unit tall; Unity scales it with the imported size), readable, no
+mipmaps with bilinear filtering, high-quality (BC7) compression, no crunch,
+max size 1020 on the default platform (CharacterArtImporter.Mipmaps and
+MaxSize, the director's call D11 of 2026-11-07), alpha is transparency, in
+the form Unity writes it (the WebGL block, empty values with a trailing
+space; the top-level and per-platform max sizes stay 2048, as Unity leaves
+them). Because the importer re-applies these, Unity's first import should
+leave the file unchanged; if it does rewrite it, the rewrite wins.
 An existing meta is never replaced (its GUID is kept).
 """
 
@@ -24,7 +27,7 @@ TextureImporter:
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -52,7 +55,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 2
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -87,7 +90,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1020
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 2
