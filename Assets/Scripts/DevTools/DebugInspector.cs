@@ -39,7 +39,7 @@ internal static class DebugInspector
             string remaining = entry.durationDays < 0
                 ? "permanent"
                 : $"{Mathf.Max(0, entry.startDay + entry.durationDays - world.day)}d left";
-            GUILayout.Label($"  {EffectName(lib, entry)} — {entry.sourceLabel} (started day {entry.startDay}, {remaining})");
+            GUILayout.Label($"  {EffectName(lib, entry)}: {entry.sourceLabel} (started day {entry.startDay}, {remaining})");
         }
 
         GUILayout.Space(6f);
@@ -75,7 +75,7 @@ internal static class DebugInspector
 
         sb.AppendLine($"Active effects ({world.timeline.activeEffects.Count}):");
         foreach (ActiveEffectEntry entry in world.timeline.activeEffects)
-            sb.AppendLine($"  {EffectName(lib, entry)} — {entry.sourceLabel} (startDay={entry.startDay}, durationDays={entry.durationDays})");
+            sb.AppendLine($"  {EffectName(lib, entry)}: {entry.sourceLabel} (startDay={entry.startDay}, durationDays={entry.durationDays})");
 
         foreach (string line in HistorySummary(world))
             sb.AppendLine(line);

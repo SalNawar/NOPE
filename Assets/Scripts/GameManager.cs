@@ -216,7 +216,7 @@ public sealed partial class GameManager : MonoBehaviour
         _gameConfig = run != null && run.Config != null ? run.Config.gameConfig : null;
 
         if (_gameConfig == null)
-            Debug.LogWarning("GameManager: no GameConfigSO assigned in RunConfig — pay/citations/stability will not be applied.");
+            Debug.LogWarning("GameManager: no GameConfigSO assigned in RunConfig: pay/citations/stability will not be applied.");
 
         // Shift clock (Papers, Please-style closing time).
         if (shiftClock != null)
@@ -590,7 +590,7 @@ public sealed partial class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("[GameManager] <<< Exiting HandleGoHome — no RunManager, day ended (standalone test scene).");
+            Debug.Log("[GameManager] <<< Exiting HandleGoHome: no RunManager, day ended (standalone test scene).");
         }
     }
 

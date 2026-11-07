@@ -57,7 +57,7 @@ public static class TimelineService
     /// <summary>
     /// Applies the timeline impacts of one decision. The visitor physically goes
     /// to the CHOSEN era, so impacts land on (claimed nation, chosen era): where
-    /// the traveller is sent, liar or not — authored profile if one exists,
+    /// the traveller is sent, liar or not: authored profile if one exists,
     /// ad-hoc score keys otherwise. The attribute keys it writes are what
     /// history counts as influence (HistoryService).
     /// Also bumps tag counters used by trigger conditions.
@@ -222,7 +222,7 @@ public static class TimelineService
             var scores = attrs.Select(a => new RankedScore(a.id, GetProfileAttributeScore(world, profile, a))).ToList();
             DominanceTier[] tiers = DominanceTiers.Classify(scores, dominantCount, supportingCount);
 
-            Trace($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", attrs.Select((a, i) => $"{a.displayName}={scores[i].score:0.#} ({tiers[i]})"))}.");
+            Trace($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores: {string.Join(", ", attrs.Select((a, i) => $"{a.displayName}={scores[i].score:0.#} ({tiers[i]})"))}.");
 
             for (int i = 0; i < attrs.Count; i++)
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Persistent run state. Fully serializable via JsonUtility (see SaveSystem).
-/// Everything that must survive sleep/quit lives here — nothing else should
+/// Everything that must survive sleep/quit lives here: nothing else should
 /// hold cross-day state.
 /// </summary>
 [Serializable]

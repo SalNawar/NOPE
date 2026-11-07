@@ -41,8 +41,8 @@ public static class AnimeHallHooks
     /// <summary>The anime hall's scene; the readouts' poses below are measured on its boards.</summary>
     public const string HallPath = "Assets/Art/Office/AnimeHallLayers/AnimeHall.unity";
 
-    /// <summary>The prefix of the static preview texts the art's first (retired) hall builder put on the boards ("Preview display — 09:00").</summary>
-    private const string PreviewPrefix = "Preview display — ";
+    /// <summary>The prefix of the static preview texts the art's first (retired) hall builder put on the boards ("Preview display 09:00").</summary>
+    private const string PreviewPrefix = "Preview display ";
 
     /// <summary>The tool's undo step.</summary>
     private const string UndoName = "Add anime hall hooks";

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Records every verdict of the current shift for the end-of-day report, and
-/// every narrative dialog completed this shift. Pure data — no Unity
+/// every narrative dialog completed this shift. Pure data: no Unity
 /// dependencies. Rebuilt fresh each day.
 /// </summary>
 public sealed class ShiftLedger

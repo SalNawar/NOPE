@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
 /// <summary>
-/// Decision table for DiscrepancyLog.Prove and Add — the core verification rule.
+/// Decision table for DiscrepancyLog.Prove and Add, the core verification rule.
 /// Claim under test: Norvik / Medieval, by the traveller Bjorn. Truth for
 /// Technology: "Longship". A liar's papers print "Aqueduct" (which really
 /// belongs to Latia / Rome).
@@ -34,7 +34,7 @@ public class DiscrepancyLogTests
     };
 
     private static CompareEvidence Entry(string nationId, string eraId, string value, ClueCategory category = ClueCategory.Technology) =>
-        CompareEvidence.ForReferenceEntry(category, value, nationId, eraId, $"{nationId} — {eraId}");
+        CompareEvidence.ForReferenceEntry(category, value, nationId, eraId, $"{nationId}, {eraId}");
 
     private static CompareEvidence TellIdentityField(ClueCategory category, string value) => new CompareEvidence
     {
@@ -205,21 +205,21 @@ public class DiscrepancyLogTests
     public void MatchAgainstForeignEraEntry_Registers_AsOriginProof()
     {
         // The screenshot bug: papers say Aqueduct, player matches it against
-        // the Latia/Rome entry — that MATCH proves the device is Roman.
+        // the Latia/Rome entry, that MATCH proves the device is Roman.
         var log = new DiscrepancyLog();
         Discrepancy d = Register(log, TellDocField("Aqueduct"), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
         Assert.IsNull(d.expectedValue);
-        Assert.AreEqual("latia — rome", d.actualOrigin);
+        Assert.AreEqual("latia, rome", d.actualOrigin);
     }
 
     /// <summary>Audit R1-010: the origin proof names the row's label as it is; FactTable guarantees a label (R1-017), so Domain carries no English fallback.</summary>
     [Test]
     public void OriginProof_NamesTheRowsLabelVerbatim()
     {
-        Discrepancy d = DiscrepancyLog.Prove(TellDocField("Aqueduct"), CompareEvidence.ForReferenceEntry(ClueCategory.Technology, "Aqueduct", "latia", "rome", " Latia — Republican Rome "), ClaimNation, ClaimEra, Traveller);
-        Assert.AreEqual(" Latia — Republican Rome ", d.actualOrigin);
+        Discrepancy d = DiscrepancyLog.Prove(TellDocField("Aqueduct"), CompareEvidence.ForReferenceEntry(ClueCategory.Technology, "Aqueduct", "latia", "rome", " Latia, Republican Rome "), ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual(" Latia, Republican Rome ", d.actualOrigin);
         Assert.AreEqual(d.actualOrigin, d.ReportOther);
         Assert.Throws<System.ArgumentException>(() => new FactTable().Add("latia", "rome", " ", ClueCategory.Technology, "Aqueduct"), "a book row always has a label");
     }
@@ -250,7 +250,7 @@ public class DiscrepancyLogTests
     public void MismatchAgainstForeignEraEntry_DoesNotRegister()
     {
         // Aqueduct vs The Future's "Solar Sail": mismatch, but the entry says
-        // nothing about the claim — proves nothing.
+        // nothing about the claim, proves nothing.
         var log = new DiscrepancyLog();
         Assert.IsNull(Register(log, TellDocField(), Entry("helios", "future", "Solar Sail"), ClaimNation, ClaimEra));
         Assert.AreEqual(0, log.Count);
@@ -374,7 +374,7 @@ public class DiscrepancyLogTests
     [Test]
     public void OtherNationSameEraEntry_MismatchDoesNotRegister()
     {
-        // Albion's Waterwheel is not Norvik's truth — a mismatch against it
+        // Albion's Waterwheel is not Norvik's truth, a mismatch against it
         // proves nothing about the claim.
         var log = new DiscrepancyLog();
         Assert.IsNull(Register(log, TellDocField(), Entry("albion", "medieval", "Waterwheel"), ClaimNation, ClaimEra));
@@ -389,7 +389,7 @@ public class DiscrepancyLogTests
         Discrepancy d = Register(log, TellDocField("Waterwheel"), Entry("albion", "medieval", "Waterwheel"), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
-        Assert.AreEqual("albion — medieval", d.actualOrigin);
+        Assert.AreEqual("albion, medieval", d.actualOrigin);
     }
 
     [Test]
@@ -455,9 +455,9 @@ public class DiscrepancyLogTests
 
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
-        Assert.AreEqual("latia — rome", d.actualOrigin);
+        Assert.AreEqual("latia, rome", d.actualOrigin);
         Assert.AreEqual("deviation.foreignOrigin.said", d.ReportKey);
-        Assert.AreEqual("latia — rome", d.ReportOther);
+        Assert.AreEqual("latia, rome", d.ReportOther);
     }
 
     [Test]
@@ -515,7 +515,7 @@ public class DiscrepancyLogTests
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
         Assert.AreEqual(EvidenceKind.Appearance, d.source);
         Assert.AreEqual("deviation.foreignOrigin.worn", d.ReportKey);
-        Assert.AreEqual("britain — industrial", d.ReportOther);
+        Assert.AreEqual("britain, industrial", d.ReportOther);
     }
 
     /// <summary>
@@ -577,7 +577,7 @@ public class DiscrepancyLogTests
 
         Discrepancy origin = DiscrepancyLog.Prove(TellDocField(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra, Traveller);
         Assert.AreEqual("deviation.foreignOrigin.papers", origin.ReportKey);
-        Assert.AreEqual("latia — rome", origin.ReportOther);
+        Assert.AreEqual("latia, rome", origin.ReportOther);
     }
 
     [Test]
@@ -636,7 +636,7 @@ public class DiscrepancyLogTests
 
         Discrepancy origin = DiscrepancyLog.Prove(Entry("latia", "rome", "Aqueduct"), SaidDevice(), ClaimNation, ClaimEra, Traveller);
         Assert.AreEqual("deviation.foreignOrigin.said", origin.ReportKey);
-        Assert.AreEqual("latia — rome", origin.ReportOther, "the place the value belongs to");
+        Assert.AreEqual("latia, rome", origin.ReportOther, "the place the value belongs to");
 
         Discrepancy record = DiscrepancyLog.Prove(
             CompareEvidence.ForAnswer(ClueCategory.BirthDate, "3 Jun 1801 BCE", true),

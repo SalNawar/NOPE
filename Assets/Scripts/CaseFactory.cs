@@ -207,7 +207,7 @@ public sealed class CaseFactory
 
         if (plan == null || state == null || _lib == null)
         {
-            Debug.LogWarning("[CaseFactory] <<< Exiting GenerateDayCases early — null plan/state/library.");
+            Debug.LogWarning("[CaseFactory] <<< Exiting GenerateDayCases early: null plan/state/library.");
             return results;
         }
 

@@ -57,7 +57,7 @@ public enum DiscrepancyProof
 /// <summary>
 /// Typed metadata carried by one side of a comparison so the discrepancy
 /// system can tell a real contradiction from a meaningless mismatch.
-/// Pure data — identified by string ids so the domain stays decoupled from
+/// Pure data: identified by string ids so the domain stays decoupled from
 /// ScriptableObjects and scenes.
 /// </summary>
 public struct CompareEvidence
@@ -80,7 +80,7 @@ public struct CompareEvidence
     /// <summary>Reference side: era id the entry applies to.</summary>
     public string entryEraId;
 
-    /// <summary>Reference side: display label for the entry's origin ("Latia — Ancient Rome"); never blank for a book row (FactTable.Add refuses one, audit R1-017), so a proof names the place as it is (audit R1-010: no English fallback in Domain).</summary>
+    /// <summary>Reference side: display label for the entry's origin ("Latia, Ancient Rome"); never blank for a book row (FactTable.Add refuses one, audit R1-017), so a proof names the place as it is (audit R1-010: no English fallback in Domain).</summary>
     public string entryOriginLabel;
 
     /// <summary>Record side: the full name of the person the citizen record belongs to (Prove takes only the traveller's own).</summary>
@@ -253,7 +253,7 @@ public sealed class Discrepancy
 /// - MISMATCH proof: a liar's tell differs from the reference entry that
 ///   applies to the CLAIMED nation+era, or from the agency's record.
 /// - MATCH proof: a liar's tell equals a reference entry that does
-///   NOT apply to the claim — the value provably belongs somewhere else
+///   NOT apply to the claim: the value provably belongs somewhere else
 ///   (e.g. papers claim Medieval but the declared device matches Ancient Rome).
 /// - CROSS proof: two of the traveller's papers disagree on one compared
 ///   category and one of them is a tell (PaperChecks; papers prove, answers
@@ -330,7 +330,7 @@ public sealed class DiscrepancyLog
         if (truth.kind != EvidenceKind.ReferenceEntry && truth.kind != EvidenceKind.RecordField)
             return null;
 
-        // Same category — comparing Language against Currency proves nothing.
+        // Same category: comparing Language against Currency proves nothing.
         if (statement.category != truth.category)
             return null;
 

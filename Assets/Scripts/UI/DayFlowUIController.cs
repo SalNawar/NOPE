@@ -20,7 +20,7 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>Root of the briefing panel.</summary>
     [SerializeField] private GameObject briefingPanel;
 
-    /// <summary>Briefing title ("Day 3 — Morning Briefing"), the dateline's left.</summary>
+    /// <summary>Briefing title ("Day 3: Morning Briefing"), the dateline's left.</summary>
     [SerializeField] private TMP_Text briefingTitleText;
 
     /// <summary>Today's date in the agency's calendar, the dateline's centre (optional).</summary>
@@ -57,7 +57,7 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>Root of the results panel.</summary>
     [SerializeField] private GameObject resultsPanel;
 
-    /// <summary>Results title ("Day 3 — Shift Report").</summary>
+    /// <summary>Results title ("Day 3: Shift Report").</summary>
     [SerializeField] private TMP_Text resultsTitleText;
 
     /// <summary>Results body (pay breakdown, citations, departures; stability is the panel's Helix River, never a number).</summary>

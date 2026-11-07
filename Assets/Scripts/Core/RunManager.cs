@@ -215,7 +215,7 @@ public sealed class RunManager : MonoBehaviour
 
         if (loaded == null)
         {
-            Debug.Log("[RunManager] <<< Exiting ContinueRun — no save found.");
+            Debug.Log("[RunManager] <<< Exiting ContinueRun: no save found.");
             return false;
         }
 
@@ -529,7 +529,7 @@ public sealed class RunManager : MonoBehaviour
 
     /// <summary>
     /// Call at end of shift: one-day "tomorrow modifiers" (set by yesterday's
-    /// slot machine) have been consumed by today's generation — reset them
+    /// slot machine) have been consumed by today's generation: reset them
     /// before the Home phase sets new ones for tomorrow (DayCycle.ResetTomorrowModifiers).
     /// </summary>
     public void ResetTomorrowModifiers()
@@ -558,7 +558,7 @@ public sealed class RunManager : MonoBehaviour
         SceneTransit.Load(Config.homeSceneName);
     }
 
-    /// <summary>Loads the title scene (run ended — ending display, Continue/New Run; through SceneTransit). A second request while the first is under way is ignored (the cheat's End Shift and an ending's own continuation can both ask; BUG-28b).</summary>
+    /// <summary>Loads the title scene (run ended: ending display, Continue/New Run; through SceneTransit). A second request while the first is under way is ignored (the cheat's End Shift and an ending's own continuation can both ask; BUG-28b).</summary>
     public void LoadTitleScene()
     {
         if (_titleOnItsWay)
@@ -590,7 +590,7 @@ public sealed class RunManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[RunManager] Scene '{Config.homeSceneName}' not in Build Settings — skipping Home phase and sleeping (day {World.day}).");
+            Debug.LogWarning($"[RunManager] Scene '{Config.homeSceneName}' not in Build Settings: skipping Home phase and sleeping (day {World.day}).");
             Sleep();
         }
     }
