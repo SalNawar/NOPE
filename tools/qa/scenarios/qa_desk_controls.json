@@ -52,8 +52,8 @@
       "target2": "m:0,-0.05"
     },
     {
-      "op": "key",
-      "key": "Tab"
+      "op": "stampView",
+      "n": 1
     },
     {
       "op": "wait",
@@ -223,6 +223,10 @@
     },
     {
       "op": "recStop"
+    },
+    {
+      "op": "stampView",
+      "n": 1
     },
     {
       "op": "recStart",
@@ -401,12 +405,147 @@
       "name": "d1_reading_end"
     },
     {
-      "op": "restTrace",
-      "text": "off"
+      "op": "stampView",
+      "n": 0
     },
     {
-      "op": "key",
-      "key": "Tab"
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "recStart",
+      "name": "d1_office"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_short",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.45,
+      "y2": 0.15,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_short",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_long_slow",
+      "path": "Slow",
+      "target": "Rulebook",
+      "x2": 0.36,
+      "y2": 0.1,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_long_slow",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_flick",
+      "path": "Flick",
+      "target": "Rulebook",
+      "x2": 0.55,
+      "y2": 0.2,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_flick",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_far_edge",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.45,
+      "y2": 0.27,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_far_edge",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_short",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.58,
+      "y2": 0.15,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_short",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_long_slow",
+      "path": "Slow",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.66,
+      "y2": 0.1,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_long_slow",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_flick",
+      "path": "Flick",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.5,
+      "y2": 0.2,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_flick",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_far_edge",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.58,
+      "y2": 0.27,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_far_edge",
+      "f": 8
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d1_office_block_end"
+    },
+    {
+      "op": "restTrace",
+      "text": "off"
     },
     {
       "op": "wait",
