@@ -32,6 +32,27 @@ public sealed class CheatEdits
             _edits.Add((label ?? string.Empty, edit));
     }
 
+    /// <summary>
+    /// Makes <paramref name="edit"/> on <paramref name="world"/> now and keeps
+    /// it (Note) only when it changed the world, as <paramref name="fingerprint"/>
+    /// reads it before and after (DevCheats: the world as JSON). Another
+    /// track's cheat that changes only the presentation or a setting (the
+    /// motion intensity, the hall's dust or its slot overrides, a game-feel
+    /// punch, the switchboard's test calls) is then never made a second time
+    /// by a skip or a jump from Home (cheats-fix). True when it was kept.
+    /// </summary>
+    public bool NoteIfChanged(string label, Action<WorldState> edit, WorldState world, Func<WorldState, string> fingerprint)
+    {
+        if (edit == null || world == null || fingerprint == null)
+            return false;
+        string before = fingerprint(world);
+        edit(world);
+        if (fingerprint(world) == before)
+            return false;
+        Note(label, edit);
+        return true;
+    }
+
     /// <summary>Forgets every change (the world was saved with them, or replaced).</summary>
     public void Clear() => _edits.Clear();
 

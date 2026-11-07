@@ -72,7 +72,8 @@ public enum DevCheat
 /// warning (<see cref="Warning"/>) the overlay shows for a confirm first; an
 /// item given by a cheat cancels and refunds its pending order (BUG-28c).
 /// Every change a cheat makes to the world is noted (Edit,
-/// RunManager.CheatEdits), so a skip or jump from Home keeps it.
+/// RunManager.CheatEdits), so a skip or jump from Home keeps it; another
+/// track's cheat is noted only when it changed the world (CheatEdits.NoteIfChanged).
 /// </summary>
 public static class DevCheats
 {
@@ -399,7 +400,7 @@ public static class DevCheats
                 if (restarts)
                     extra(run);   // its world change comes with its own restart (a route), or none outside a shift: nothing to replay
                 else
-                    Edit(run, label, w => run.RunOn(w, extra));
+                    run.CheatEdits.NoteIfChanged(label, w => run.RunOn(w, extra), run.World, JsonUtility.ToJson);   // replayed from Home only when it changed the world (the lens), never a setting or a punch twice
                 Say($"{label}: done.");
                 break;
         }
