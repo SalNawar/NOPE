@@ -3,7 +3,7 @@
   "owner": "CHEATS",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "cheats-d7-regress (2026-11-07): the D7 story beat forced from day 12 (a jump back to a guided day) lands on a clean day with its first traveller at the desk after startShift and the AVAILABLE sign (DECISIONS D13)." },
+    { "op": "note", "text": "cheats-d7-regress (2026-11-07): the D7 story beat forced from day 12 (a jump back to a guided day: Start Shift tilts into the reading view for the rulebook's new page) lands on a clean day with its first traveller at the desk after Start Shift and the AVAILABLE sign (DECISIONS D13). The sign op waits for the sign to hold still before it presses it." },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },
@@ -24,7 +24,6 @@
     { "op": "startShift" },
     { "op": "still", "name": "jump_d7_shift" },
     { "op": "sign" },
-    { "op": "record", "name": "jump_d7_sign", "f": 2.5 },
     { "op": "still", "name": "jump_d7_after_sign" },
     { "op": "waitTraveller", "f": 20 },
     { "op": "cheatCheck", "name": "first", "target": "d7", "w": 5 },
