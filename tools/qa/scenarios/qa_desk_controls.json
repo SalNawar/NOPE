@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "qa-desk-controls (night 2026-11-07, Saleh's item 14: \"things should never go some palce you dont want it to\"): every drag kind on the desk at 1920x1080 with a short drag, a long drag, a flick and a drop at each zone edge (the counter, the mat's edge, the tray, the bottom edge). It measures, it does not fix (D32). drop.<name>: the root's move from the release to the rest (px at 1080p, max 8: DOC-HANDLE D1). restTrace.<name>: the desk's own rest trace (rests.tsv: footprint, area, keep-outs, move). counterDrag.<name>: the hold and the rest of a counter paper (counterdrag.tsv). stampHold: a carried dater backs out on a right-click and on Esc."
+      "text": "qa-desk-controls (night 2026-11-07, Saleh's item 14: \"things should never go some palce you dont want it to\"): every drag kind on the desk at 1920x1080 with a short drag, a long drag, a flick and a drop at each zone edge (the counter, the mat's edge, the tray, the bottom edge). It measures, it does not fix (D32). drop.<name>: the root's move from the release to the rest (px at 1080p, max 8: DOC-HANDLE D1). Five drops are red on purpose, on drop and restTrace: fo_counter and pa_counter (BUGS N-qa-desk-controls-02, the refused counter push) and fo_tray, pa_tray, d12_fo_tray (BUGS N-qa-desk-controls-01, the rail slide). They stay red until those rows close. restTrace.<name>: the desk's own rest trace (rests.tsv: footprint, area, keep-outs, move). counterDrag.<name>: the hold and the rest of a counter paper (counterdrag.tsv). stampHold: a carried dater backs out on a right-click and on Esc."
     },
     {
       "op": "title"
@@ -184,12 +184,12 @@
       "target": "Rulebook",
       "x2": 0.4,
       "y2": 0.86,
-      "f": 80
+      "f": 8
     },
     {
       "op": "restTrace",
       "name": "fo_counter",
-      "f": 80
+      "f": 8
     },
     {
       "op": "drop",
@@ -199,12 +199,12 @@
       "target": "Rulebook",
       "x2": 0.8225,
       "y2": 0.4383,
-      "f": 170
+      "f": 8
     },
     {
       "op": "restTrace",
       "name": "fo_tray",
-      "f": 170
+      "f": 8
     },
     {
       "op": "drop",
@@ -360,12 +360,12 @@
       "target": "PaperTemplate(Clone)",
       "x2": 0.8225,
       "y2": 0.4383,
-      "f": 170
+      "f": 8
     },
     {
       "op": "restTrace",
       "name": "pa_tray",
-      "f": 170
+      "f": 8
     },
     {
       "op": "drop",
@@ -390,12 +390,12 @@
       "target": "PaperTemplate(Clone)",
       "x2": 0.55,
       "y2": 0.86,
-      "f": 80
+      "f": 8
     },
     {
       "op": "restTrace",
       "name": "pa_counter",
-      "f": 80
+      "f": 8
     },
     {
       "op": "recStop"
@@ -666,12 +666,12 @@
       "target": "Rulebook",
       "x2": 0.8225,
       "y2": 0.4383,
-      "f": 170
+      "f": 8
     },
     {
       "op": "restTrace",
       "name": "d12_fo_tray",
-      "f": 170
+      "f": 8
     },
     {
       "op": "restTrace",
