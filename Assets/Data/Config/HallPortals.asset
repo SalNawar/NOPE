@@ -34,6 +34,9 @@ MonoBehaviour:
       y: 0.20703125
       width: 0.21875
       height: 0.7890625
+    chevrons: {x: 1094.18, y: 486.57, z: 65.04, w: 58.39}
+    chevronStep: 40
+    chevronSize: 7
   - portal: 2
     bay: 40 Portal 02 rear left secure bay
     ring: 41 Portal 02 rear left metal ring
@@ -52,6 +55,9 @@ MonoBehaviour:
       y: 0.63671875
       width: 0.103515625
       height: 0.359375
+    chevrons: {x: 969.37, y: 365.23, z: 28.93, w: 23.4}
+    chevronStep: 40
+    chevronSize: 3.6
   - portal: 3
     bay: 42 Portal 03 rear right secure bay
     ring: 43 Portal 03 rear right metal ring
@@ -70,6 +76,9 @@ MonoBehaviour:
       y: 0.59765625
       width: 0.10546875
       height: 0.3984375
+    chevrons: {x: 1210.4, y: 366.45, z: 29.08, w: 25.97}
+    chevronStep: 40
+    chevronSize: 3.6
   - portal: 4
     bay: 44 Portal 04 upper left secure bay
     ring: 45 Portal 04 upper left metal ring
@@ -88,6 +97,9 @@ MonoBehaviour:
       y: 0.34765625
       width: 0.103515625
       height: 0.6484375
+    chevrons: {x: 1765.5, y: 206, z: 28.5, w: 37}
+    chevronStep: 30
+    chevronSize: 4.2
   - portal: 5
     bay: 46 Portal 05 upper right secure bay
     ring: 47 Portal 05 upper right metal ring
@@ -106,6 +118,9 @@ MonoBehaviour:
       y: 0.21484375
       width: 0.154296875
       height: 0.78125
+    chevrons: {x: 2002, y: 200, z: 45, w: 48}
+    chevronStep: 28
+    chevronSize: 5
   vortex:
     departureDeep: {r: 0.12, g: 0.2, b: 0.42, a: 1}
     departureMid: {r: 0.16, g: 0.55, b: 0.82, a: 1}
@@ -129,3 +144,31 @@ MonoBehaviour:
     nightBoost: 0.35
     irisSeconds: 0.7
   pulseSeconds: 0.8
+  gate:
+    eventHorizon: 1
+    showChevrons: 1
+    departureTone: {r: 0.35, g: 0.85, b: 1, a: 1}
+    returnTone: {r: 1, g: 0.62, b: 0.25, a: 1}
+    poolDark: 0.7
+    poolLift: 0.25
+    rippleRings: 2.6
+    rippleShare: 0.28
+    poolCore: 0.18
+    rippleHz: 0.15
+    wobble: 0.45
+    wobbleHz: 0.1
+    rimGlow: 0.55
+    openSeconds: 0.7
+    fadeSeconds: 0.8
+    kawooshSeconds: 1.2
+    kawooshPeak: 0.36
+    kawooshReach: 1.15
+    kawooshFlare: 0.7
+    kawooshVolume: 0.7
+    dwellSeconds: 2
+    chevrons: 7
+    chevronStep: 40
+    chevronGrow: 1.22
+    chevronSize: 0.14
+    chevronLit: {r: 1, g: 0.6, b: 0.2, a: 1}
+    chevronDark: {r: 0.3, g: 0.27, b: 0.3, a: 1}

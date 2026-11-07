@@ -3,30 +3,43 @@ using UnityEngine;
 
 /// <summary>
 /// The anime hall's portal rings (the portals spec v3 VX1-VX7;
-/// docs/SCENE_CONTRACT_GAMEPLAY.md; HALL-FX BUG-26a, 73d): at the day's start
-/// (when the shift's PortalDay arrives, GameManager.Portals) each ring of the
-/// hall's portals (HallPortalsSO, the one source of the rings, handed to every
-/// PortalEffect by Build Office UI) takes its look (PortalRoute.Look): its
-/// PortalEffect opens its cel vortex (an open departure portal), the Return
-/// Gate's amber one, or shuts (a closed portal: CLOSED or under maintenance).
-/// Each vortex sits on its ring's opening as the hall drawing paints it
-/// (Saleh's demo 1018a: "the vfx for portals ... is not even alligned"): the
-/// opening and the painted-aperture mask on the drawing's canvas
-/// (HallPortalRing), scaled to the drawing as imported, drawn on its sorting
-/// layer just above it, following its transform (the pan) at every aspect;
-/// without that drawing it falls back on the ring layer's opaque rect,
-/// unmasked, at the secure bay's order less one. An accepted traveller's portal
-/// (GameManager.Departed) flares its vortex. With the hall's lights
-/// (HallLightingRig) each ring's state also sets its light (on while the ring
-/// shows a vortex, off while it is closed), each vortex reads the rig's night
-/// (HallLightingRig.PortalNight: brighter, more sparkles after dark), and the
+/// docs/SCENE_CONTRACT_GAMEPLAY.md; HALL-FX BUG-26a, 73d), driven as gates
+/// (the night of 2026-11-07, DECISIONS D6: "portals", the Stargate idea). At
+/// the day's start (when the shift's PortalDay arrives, GameManager.Portals)
+/// each ring of the hall's portals (HallPortalsSO, the one source of the
+/// rings, handed to every PortalEffect by Build Office UI) is placed on its
+/// opening as the hall drawing paints it (Saleh's demo 1018a: "the vfx for
+/// portals ... is not even alligned"): the opening and the painted-aperture
+/// mask on the drawing's canvas (HallPortalRing), scaled to the drawing as
+/// imported, drawn on its sorting layer just above it, following its
+/// transform (the pan) at every aspect; without that drawing it falls back on
+/// the ring layer's opaque rect, unmasked, at the secure bay's order less one.
+/// Its chevrons go on the ring's metal (HallPortalRing.chevrons) and it takes
+/// its colours: the ring's light (HallLightingSO.portalOpenLight, the Return
+/// Gate's returnGateLight) and the close's fade (portalFadeSeconds). Then each
+/// frame each ring is fed (PortalEffect.Drive): with a switchboard in the
+/// office (HallGateFeed, read only), ring NN follows module NN: locked in, its
+/// chevrons light over the calibration; live, its event horizon opens; each
+/// group the module sends plays a kawoosh (PortalEffect.Send); a cleared or
+/// broken route closes it. The Return Gate in service keeps its warm event
+/// horizon open all day (PortalRoute.Look). Without a switchboard the day's
+/// look alone drives the rings, as before the board: an open departure portal
+/// shows its event horizon, and an accepted traveller's portal
+/// (GameManager.Departed) plays the kawoosh; with the board, the approval
+/// plays none (the board's send does). A closed portal (CLOSED today or under
+/// maintenance) stays a dark ring (Saleh 2026-09-29: "a closed portal has
+/// nothing in the ring"). The cheat "Hall: portals open" (and the QA rig's
+/// hallPortalsOpen) opens every ring's event horizon (<see cref="AllOpen"/>).
+/// With the hall's lights (HallLightingRig) each ring's light follows its
+/// event horizon (on while it shows, fading with it), each ring reads the
+/// rig's night (HallLightingRig.PortalNight: brighter after dark), and the
 /// effects move to the lights' art layer (HallBackdrop), so the 2D camera that
 /// draws the painted layers draws them in their order. OfficeSceneBinder adds
 /// it to the gameplay layer at load when the art office carries a
 /// presentation, beside AnimeHallShiftLink. The metal rings stay as the art
-/// drew them in every state (Saleh 2026-09-29: "a closed portal has nothing in
-/// the ring"); the gameplay reads the art only through its public hook
-/// FindLayer. A layer the hall lacks is warned about once.
+/// drew them in every state but for the chevrons; the gameplay reads the art
+/// only through its public hook FindLayer. A layer the hall lacks is warned
+/// about once.
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class AnimeHallPortalLink : MonoBehaviour
@@ -37,6 +50,16 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
     private HallLightingRig _lights;
     private PortalEffect[] _effects;
     private PortalDay _shown;
+    private PortalLook[] _looks = System.Array.Empty<PortalLook>();
+    private int[] _sent = System.Array.Empty<int>();
+    private bool _board;
+
+    /// <summary>True while every ring shows its event horizon whatever drives it (the cheat "Hall: portals open"; the QA rig's hallPortalsOpen).</summary>
+    public static bool AllOpen { get; set; }
+
+    /// <summary>Forgets the cheat when play starts (the editor without a domain reload keeps statics).</summary>
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics() => AllOpen = false;
 
     /// <summary>
     /// Points the link at the hall's presentation, the shift, the effects (one
@@ -83,38 +106,78 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
         int layer = _lights != null ? _lights.ArtLayer : -1;
         if (layer != _layer)
             MoveEffects(layer);
-        HallPortalRing[] rings = _portals.rings;
-        for (int i = 0; rings != null && i < rings.Length && i < _effects.Length; i++)
-            if (_effects[i] != null && rings[i] != null)
-                _effects[i].Night = _lights != null ? _lights.PortalNight(rings[i].portal) : 0f;
+        Feed();
     }
 
-    /// <summary>Each ring's vortex for <paramref name="day"/> (a day without portals shows none).</summary>
+    /// <summary>
+    /// Each ring's feed this frame: ring NN follows module NN of the office's
+    /// switchboard (a module's new send plays its kawoosh), or the day's look
+    /// without one; the Return Gate in service and the cheat keep the event
+    /// horizon open. The ring's light follows its event horizon.
+    /// </summary>
+    private void Feed()
+    {
+        HallPortalRing[] rings = _portals.rings;
+        _board = HallGateFeed.Present;
+        Switchboard board = _board ? HallGateFeed.Board : null;
+        float calibration = board != null ? board.Rules.CalibrationSeconds : 0f;
+        for (int i = 0; rings != null && i < rings.Length && i < _effects.Length && i < _looks.Length; i++)
+        {
+            HallPortalRing ring = rings[i];
+            PortalEffect effect = _effects[i];
+            if (ring == null || effect == null)
+                continue;
+            bool returnGate = _looks[i] == PortalLook.ReturnGate;
+            bool steady = AllOpen || returnGate || !_board && _looks[i] == PortalLook.Glow;
+            SwitchModule module = HallGateFeed.Module(board, ring.portal);
+            PortalGateFeed feed = PortalGateFeed.Of(module, calibration, steady);
+            effect.Drive(feed);
+            if (PortalGateFeed.SentSince(module, ref _sent[i]))
+                effect.Send();
+            effect.Night = _lights != null ? _lights.PortalNight(ring.portal) : 0f;
+            if (_lights != null)
+                _lights.SetPortal(ring.portal, feed.Horizon, returnGate);
+        }
+    }
+
+    /// <summary>Each ring placed, its chevrons put on its metal and its colours set for <paramref name="day"/> (a day without portals: every ring dark).</summary>
     private void Apply(PortalDay day)
     {
         _shown = day;
         HallPortalRing[] rings = _portals.rings ?? System.Array.Empty<HallPortalRing>();
+        if (_looks.Length != rings.Length)
+        {
+            _looks = new PortalLook[rings.Length];
+            _sent = new int[rings.Length];
+        }
         SpriteRenderer drawing = string.IsNullOrEmpty(_portals.drawing) ? null : _hall.FindLayer(_portals.drawing);
+        PortalGateTuning gate = _portals.gate;
+        HallLightingSO light = _lights != null ? _lights.Settings : null;
         for (int i = 0; i < rings.Length && i < _effects.Length; i++)
         {
             HallPortalRing ring = rings[i];
             PortalEffect effect = _effects[i];
+            _looks[i] = PortalLook.Empty;
             if (ring == null || effect == null || !Place(effect, ring, drawing))
                 continue;
 
-            PortalLook look = PortalLook.Empty;
             foreach (PortalRoute p in day.Portals)
             {
                 if (p.Number != ring.portal)
                     continue;
-                look = p.Look;
+                _looks[i] = p.Look;
                 break;
             }
 
-            bool open = look == PortalLook.Glow || look == PortalLook.ReturnGate;
-            if (_lights != null)
-                _lights.SetPortal(ring.portal, open, look == PortalLook.ReturnGate);
-            effect.Show(open, look == PortalLook.ReturnGate, _portals.vortex, _portals.pulseSeconds);
+            bool returnGate = _looks[i] == PortalLook.ReturnGate;
+            Color tone = light != null ? (returnGate ? light.returnGateLight : light.portalOpenLight) : returnGate ? gate.returnTone : gate.departureTone;
+            effect.Look(returnGate, tone, light != null ? light.portalFadeSeconds : gate.fadeSeconds);
+            Vector4 o = ring.opening, c = ring.chevrons;
+            float mean = Mathf.Sqrt(Mathf.Max(1e-3f, o.z * o.w));
+            effect.PlaceChevrons(PortalVortex.ChevronRing(o.x, o.y, o.z, o.w, c.x, c.y, c.z, c.w, gate.chevronGrow),
+                                 ring.chevronStep > 0f ? ring.chevronStep : gate.chevronStep,
+                                 ring.chevronSize > 0f ? ring.chevronSize / mean : gate.chevronSize,
+                                 o.w > 0f ? o.z / o.w : 1f);
         }
     }
 
@@ -175,15 +238,15 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
                     t.gameObject.layer = layer >= 0 ? layer : _ownLayers[i];
     }
 
-    /// <summary>A traveller left through <paramref name="portal"/>: its ring's vortex flares.</summary>
+    /// <summary>An accepted traveller left through <paramref name="portal"/>: without a switchboard its ring plays the kawoosh (with one, the board's send does).</summary>
     private void HandleDeparted(int portal)
     {
         HallPortalRing[] rings = _portals != null ? _portals.rings : null;
-        if (rings == null)
+        if (rings == null || _board)
             return;
         for (int i = 0; i < rings.Length && i < _effects.Length; i++)
             if (rings[i] != null && rings[i].portal == portal && _effects[i] != null)
-                _effects[i].Pulse();
+                _effects[i].Send();
     }
 
     /// <summary>One warning naming a missing HallPortalsSO, the drawing and each ring layer the hall lacks (a renamed layer is a HallPortals.asset edit), and a missing effect.</summary>

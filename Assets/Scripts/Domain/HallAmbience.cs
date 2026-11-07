@@ -111,6 +111,9 @@ public static class SoundCues
     /// <summary>The booth.</summary>
     public const string CallNext = "call_next", PortalThrough = "portal_through", DialogueBlip = "dialogue_blip";
 
+    /// <summary>A hall portal sends its group (the gate's kawoosh, PortalEffect; the night of 2026-11-07, DECISIONS D6).</summary>
+    public const string PortalKawoosh = "portal_kawoosh";
+
     /// <summary>The PC.</summary>
     public const string PcOn = "pc_on", PcOff = "pc_off", KeyTap = "key_tap", MouseClick = "mouse_click", WindowOpen = "window_open", WindowClose = "window_close", PcError = "pc_error", PcNotify = "pc_notify";
 

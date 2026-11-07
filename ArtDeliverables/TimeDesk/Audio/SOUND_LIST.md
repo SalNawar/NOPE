@@ -66,6 +66,7 @@ Drop each file into `ArtDeliverables/TimeDesk/Audio/` under the exact name in th
 | 34 | `booth_shutter_open` | shift starts, shutter goes up | 1.2 s | metal roller shutter | ×1 | P1 |
 | 35 | `booth_shutter_close` | shift ends, shutter down | 1.2 s | metal roller shutter down, final clang | ×1 | P1 |
 | 36 | `portal_through` | an approved traveller goes through the portal | 1.5 s | rising warp whoosh, tonal | ×2 | P2 |
+| 107 | `portal_kawoosh` | a hall portal sends its group (the gate's kawoosh) | 1.2 s | a gate's burst: a deep whoomp, a rushing swell, a watery settle | ×1 | P2 |
 | 37 | `detain` | a traveller is detained | 1.0 s | alarm chirp plus guard boots | ×1 | P2 |
 | 80 | `detain_cover` | the DETAIN button's clear cover flips up or snaps shut | 0.1 s | a stiff plastic hinge snapping | ×2 | P2 |
 | 38 | `dialogue_blip` | each line of dialogue appears | 0.05 s | tiny voice-like blip (Papers, Please murmur) | ×4 | P2 |
