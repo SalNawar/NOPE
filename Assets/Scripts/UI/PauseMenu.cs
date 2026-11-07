@@ -20,7 +20,8 @@ using UnityEngine.SceneManagement;
 /// With a mode open the first Esc backs out of it (D13, UI-23,
 /// GameConfigSO.escBacksOutFirst: the switchboard, the city, the wheel,
 /// inspect mode, the reading view, a held value), so Settings opens from the
-/// plain desk; Esc never leaves the PC (R3: Q or the bezel). EscapeWatch keeps
+/// plain desk; Esc never leaves the PC (R3: Q or the bezel) and never closes
+/// its Settings (PcBackOut.ClosesFront). EscapeWatch keeps
 /// the office's back-out off an Esc press that must not run it
 /// (EscapeChain.KeepsTheOfficeOut).
 /// Nothing while a scene loads or the cheat overlay holds the input.</item>

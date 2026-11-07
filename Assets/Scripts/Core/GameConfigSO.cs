@@ -294,8 +294,8 @@ public sealed class GameConfigSO : ScriptableObject
     public int accountDaysKept = 60;
 
     [Header("Controls (D13, UI-23)")]
-    /// <summary>On: with a mode open (the switchboard, the city view, the wheel, inspect mode, the reading view, a held value, a window on the PC) the first Esc backs out of it, Papers, Please's way, and Esc opens Settings only from the plain desk (EscapeChain.KeepsTheOfficeOut, PcBackOut). The PC itself is left by Q or the bezel (R3). Off: the rule of 2026-10-20, Esc keeps every mode and opens Settings.</summary>
-    [Tooltip("On: the first Esc backs out of an open mode (the switchboard, the city, the wheel, inspect, the reading view, a PC window); Esc opens Settings only from the plain desk. Off: Esc keeps every mode and opens Settings.")]
+    /// <summary>On: with a mode open (the switchboard, the city view, the wheel, inspect mode, the reading view, a held value, a window on the PC other than Settings) the first Esc backs out of it, Papers, Please's way, and Esc opens Settings only from the plain desk (EscapeChain.KeepsTheOfficeOut, PcBackOut.ClosesFront). The PC itself is left by Q or the bezel, and Esc never closes Settings, the pause it opens (R3/R4). Off: the rule of 2026-10-20, Esc keeps every mode and opens Settings.</summary>
+    [Tooltip("On: the first Esc backs out of an open mode (the switchboard, the city, the wheel, inspect, the reading view, a PC window other than Settings); Esc opens Settings only from the plain desk, and on the PC Settings stays. Off: Esc keeps every mode and opens Settings.")]
     public bool escBacksOutFirst = ControlRules.EscBacksOutFirst;
 
     /// <summary>Warns about history knobs that would silently disable a rule.</summary>

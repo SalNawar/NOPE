@@ -172,8 +172,8 @@ public enum BackOutStep
 /// GameConfigSO.escBacksOutFirst): with a mode open the first Esc leaves it;
 /// from the plain desk, with nothing to back out of, Esc opens Settings
 /// (EscapeChain, PauseMenu). The PC is the one mode Esc never leaves (R3: Q
-/// or the bezel): there Esc closes a menu, a field or the front window first,
-/// then opens Settings (PcBackOut).
+/// or the bezel): there Esc closes a menu, a field or the front window first
+/// (never Settings), then opens Settings, which stays (PcBackOut.ClosesFront).
 /// DeskCard is the F1 card's desk section, printed from the same constants
 /// as the tabs' hints. Pure; tested headless; OfficeControls applies it.
 /// </summary>

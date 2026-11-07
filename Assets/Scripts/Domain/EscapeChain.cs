@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// player is holding or has open, if anything, and otherwise opens Settings
 /// (PauseMenu). Each step answers "did I let go of something?": the desk's
 /// hold (cancelled first: <see cref="HoldOrder"/>), the PC's own chain (a
-/// menu, a field, then the front window), the office's back-out on this press
+/// menu, a field, then the front window but Settings), the office's back-out on this press
 /// (a drag, the wheel, a held value, inspect mode, the switchboard, the city,
 /// the reading view: <see cref="KeepsTheOfficeOut"/>), then what a track
 /// registers (DIALOGUE an open ring, PORTALS a held cable). Steps run lowest
@@ -39,8 +39,8 @@ public sealed class EscapeChain
     /// on: D13 and UI-23, "the first Esc backs out of the mode; from the plain
     /// desk Esc opens Settings", Papers, Please's controls and Saleh's D20
     /// together) only the PC stays: R3, "To leave the PC, press Q or click the
-    /// bezel" (its own chain closes a menu, a field or the front window, then
-    /// opens Settings). Off, the rule of 2026-10-20: every mode stays (the PC,
+    /// bezel" (its own chain closes a menu, a field or the front window but
+    /// Settings, then opens Settings). Off, the rule of 2026-10-20: every mode stays (the PC,
     /// the wheel, the value held, inspect mode, the switchboard, the city, the
     /// reading view) and Esc opens Settings.
     /// Either way a drag is a hold (the back-out still cancels it first), and
