@@ -3,7 +3,7 @@
   "owner": "QA-RIG",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "BLD-05 (D11, 2026-11-07): the day 12 traveller at rest and through a Tab tilt both ways (the reading still shows the papers' photos), for the edge-toggling measure of the character art without mipmaps (tracked: the figure's canvas rect)." },
+    { "op": "note", "text": "BLD-05 (D11, 2026-11-07): the day 12 traveller at rest and through a Tab tilt both ways (the reading still shows the papers' photos), for the edge-toggling measure of the character art without mipmaps (tracked: the figure's canvas rect). Each tilt sequence starts before its Tab press, so the whole tilt plays at the fixed capture step and two runs record the same frames." },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },
@@ -22,11 +22,15 @@
     { "op": "track", "name": "figure", "target": "Figure" },
     { "op": "still", "name": "d12_traveller" },
     { "op": "record", "name": "d12_rest", "f": 1.0 },
+    { "op": "recStart", "name": "d12_to_reading" },
     { "op": "key", "key": "Tab" },
-    { "op": "record", "name": "d12_to_reading", "f": 2.5 },
+    { "op": "wait", "n": 75 },
+    { "op": "recStop" },
     { "op": "still", "name": "d12_reading" },
+    { "op": "recStart", "name": "d12_from_reading" },
     { "op": "key", "key": "Tab" },
-    { "op": "record", "name": "d12_from_reading", "f": 2.5 },
+    { "op": "wait", "n": 75 },
+    { "op": "recStop" },
     { "op": "wait", "f": 1.5 }
   ]
 }
