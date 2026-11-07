@@ -418,6 +418,18 @@ public static class GatePaint
         return canvas;
     }
 
+    /// <summary>Lays <paramref name="from"/> over <paramref name="into"/> with its top-left corner at (<paramref name="left"/>, <paramref name="top"/>) (the board on the wall: the rings stamped on its face).</summary>
+    public static void Stamp(GateCanvas into, GateCanvas from, int left, int top)
+    {
+        for (int y = 0; y < from.Height; y++)
+            for (int x = 0; x < from.Width; x++)
+            {
+                (byte r, byte g, byte b, byte a) c = from.At(x, y);
+                if (c.a > 0)
+                    into.Blend(left + x, top + y, new GateColour(c.r, c.g, c.b), c.a / 255f);
+            }
+    }
+
     /// <summary>The era mark (a brass arrow pointing down, 18 x 12).</summary>
     public static GateCanvas MarkArrow()
     {

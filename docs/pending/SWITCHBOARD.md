@@ -137,7 +137,7 @@ A wrong era: at the pull the fuse pops for 2 s and the two lock chevrons flicker
 - D-S9. The eras' glyphs are code-drawn: Ancient a stepped pyramid, Medieval a tower, Early modern a ship, Industrial a gear, Modern a bolt. The nations wear their passport emblems (`EmblemArt`: the art when it lands, else the code-drawn stand-ins). No Higgsfield credits spent.
 - D-S10. The strobe: chevrons 1 and 2 are the locks; during the calibration every chevron engages in turn, one every 20/7 s, with a 0.45 s flash on the lens and a soft clunk; the passed ones hold. At 7 the gate opens. Below the mark they dim to 40 % and the count pauses.
 - D-S11. The calls of a traveller whose era has no glyph (the Future) find no route and leave at once (logged), as a call with no free jack did on the Classic board.
-- D-S12. The board on the wall shows the dialer's face as an unlit sprite tinted by `wallGrade` (the plate's paint is lit by the booth's material); the chevrons and cells are not drawn there, the hubs' lamps are.
+- D-S12. The board on the wall shows the dialer's face with the rings stamped at rest, one unlit sprite tinted by `wallGrade` (the plate's paint is lit by the booth's material) and drawn over the board by its order; a ring's turn, the chevrons, the cells and the closed veils are not drawn there (too small from the desk); the hubs' lamps and the call lamps are. Separate ring and veil sprites on the wall showed the face's texture in Unity (run 11:02), so they were dropped.
 - D-S13. Esc and a right-click: the first lets go of a held ring or cell (OfficeControls' CancelDrag, the dialer's ring and cell included in IsDragging); the next follows the game's rules unchanged (a right-click backs out; Esc opens Settings until D13 lands).
 
 ### Files

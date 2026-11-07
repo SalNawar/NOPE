@@ -61,7 +61,6 @@ public sealed partial class SwitchboardView
     private WallLamp[] _wallModules;
     private WallLamp _wallMaster;
     private SpriteRenderer[] _wallVeils;
-    private SpriteRenderer[] _wallRings;
     private Sprite _wallWhite;
     private readonly Dictionary<Cord, WallCord> _wallCords = new Dictionary<Cord, WallCord>();
     private readonly List<BoardPoint> _wallCurve = new List<BoardPoint>();
@@ -118,11 +117,7 @@ public sealed partial class SwitchboardView
         {
             LayoutModule module = _layout.Modules[m];
             if (Dialer)
-            {
-                _wallVeils[m] = WallSprite("Closed " + module.Id, _discSprite, _gate.DialCentre(m), 2f * (_gate.DialRadius(m) + 2f), VeilLift, 3);
-                _wallVeils[m].color = DialVeilColor;
-                continue;
-            }
+                continue; // the dialer's state on the wall is its hub lamps
             _wallVeils[m] = WallSprite("Closed " + module.Id, _wallWhite, module.Rect.Centre, 0f, VeilLift, 0);
             float mpp = SwitchboardWall.Painted.MetresPerPixel(_layout.Board);
             _wallVeils[m].transform.localScale = new Vector3((module.Rect.W - VeilInset) * mpp, (module.Rect.H - VeilInset) * mpp, 1f);
@@ -220,20 +215,19 @@ public sealed partial class SwitchboardView
         Graphics.Blit(texture, _wallPaint, new Vector2(uw, vh), new Vector2(u0, v0));
     }
 
-    /// <summary>The dialer on the wall: its slate face over the plate's jacks and each big dial's ring (turned as the board view turns it), in the booth's grade (unlit sprites, so tinted by wallGrade like the board's paint), drawn over the board by their order.</summary>
+    /// <summary>The dialer on the wall: one picture over the plate's jacks, its slate face with each big dial's ring stamped on it at rest (too far from the desk to read a turn), in the booth's grade (an unlit sprite, so tinted by wallGrade like the board's paint), drawn over the board by its order.</summary>
     private void BuildWallGate()
     {
-        Color grade = _config.wallGrade;
-        SpriteRenderer face = WallSprite("Dialer face", SpriteOf(_faceTexture), _gate.Cover.Centre, _gate.Cover.W, VeilLift * 0.5f, 1);
-        face.color = grade;
-        _wallRings = new SpriteRenderer[_dials.Length];
+        GateCanvas paint = GatePaint.Face(_gate, _layout.Modules.Count, GateEras);
+        GateCanvas ring = GatePaint.Ring(_ring.Length);
         for (int m = 0; m < _dials.Length; m++)
-        {
-            if (_dials[m].Ring == null)
-                continue;
-            _wallRings[m] = WallSprite("Ring " + _layout.Modules[m].Id, _ringSprite, _gate.DialCentre(m), _ringSprite != null ? _ringSprite.rect.width : 0f, VeilLift * 0.75f, 2);
-            _wallRings[m].color = grade;
-        }
+            if (_dials[m].Ring != null)
+            {
+                BoardPoint c = _gate.DialCentre(m);
+                GatePaint.Stamp(paint, ring, Mathf.RoundToInt(c.X - _gate.Cover.X - ring.Width / 2f), Mathf.RoundToInt(c.Y - _gate.Cover.Y - ring.Height / 2f));
+            }
+        SpriteRenderer face = WallSprite("Dialer face", SpriteOf(Art(paint, "Switchboard dialer on the wall")), _gate.Cover.Centre, _gate.Cover.W, VeilLift * 0.5f, 1);
+        face.color = _config.wallGrade;
     }
 
     /// <summary>A lamp on the wall at <paramref name="at"/>: its glow and its lit dome, the board view's sizes (by the glass's radius).</summary>
@@ -332,12 +326,9 @@ public sealed partial class SwitchboardView
         for (int m = 0; m < _wallVeils.Length; m++)
         {
             bool veiled = (_board == null || _board.Modules[m].State == SwitchModuleState.Closed) && !_layout.Modules[m].Placarded;
-            if (_wallVeils[m].enabled != veiled)
+            if (_wallVeils[m] != null && _wallVeils[m].enabled != veiled)
                 _wallVeils[m].enabled = veiled;
         }
-        for (int m = 0; _wallRings != null && m < _wallRings.Length; m++)
-            if (_wallRings[m] != null)
-                _wallRings[m].transform.localRotation = Quaternion.LookRotation(Vector3.right, Vector3.up) * Quaternion.Euler(0f, 0f, -_dials[m].Turn.Value);
         foreach (KeyValuePair<Cord, WallCord> pair in _wallCords)
             DrawWallCord(pair.Key, pair.Value);
     }

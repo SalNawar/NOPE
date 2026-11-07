@@ -289,12 +289,12 @@ public sealed partial class SwitchboardView
         return texture;
     }
 
-    /// <summary>A texture as a sprite (kept to be destroyed with the view).</summary>
+    /// <summary>A texture as a sprite, a plain quad (the textures are not readable once painted, so no tight mesh), kept to be destroyed with the view.</summary>
     private Sprite SpriteOf(Texture2D texture)
     {
         if (texture == null)
             return null;
-        Sprite sprite = UnityEngine.Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
+        Sprite sprite = UnityEngine.Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
         sprite.name = texture.name;
         _gateArt.Add(sprite);
         return sprite;
