@@ -11,7 +11,10 @@ public enum PcBackOutStep
     Swallow,
 
     /// <summary>Esc on the PC with its screen off (no desktop to back out of): the screen comes on and the Settings app comes to the front (R3/R4: "Esc opens the same Settings window everywhere").</summary>
-    WakeAndOpenSettings
+    WakeAndOpenSettings,
+
+    /// <summary>Esc with nothing else to close and a window other than Settings in front: that window closes (D13, UI-23: Esc backs out of a PC window first; GameConfigSO.escBacksOutFirst; <see cref="PcBackOut.ClosesFront"/>). With no such window, Esc brings Settings forward and Settings stays (R3/R4).</summary>
+    CloseWindow
 }
 
 /// <summary>Which of the PC keyboard's pollers runs in a frame (DesktopKeyboard, <see cref="PcBackOut.Poller"/>). Not serialized.</summary>
@@ -44,8 +47,11 @@ public enum PcPoller
 /// The PC's back-out (BUG-50a, UI-PC; FIX_PLAN_v2 D20 and the R3/R4
 /// confirmation: "Esc opens the same Settings window everywhere ... To leave
 /// the PC, press Q or click the bezel"): the desktop's own Escape chain runs
-/// first, one step per press; when it has nothing left to close, Esc brings
-/// the Settings app to the front and a right-click does nothing. Either way
+/// first, one step per press; when it has nothing left to close, Esc closes
+/// the front window unless it is Settings (D13, UI-23, while
+/// GameConfigSO.escBacksOutFirst is on; <see cref="ClosesFront"/>), then
+/// brings the Settings app to the front, where it stays (Esc never closes the
+/// pause it opens), and a right-click does nothing. Either way
 /// the desktop takes the press, so the office's back-out never closes the PC
 /// (OfficeControls skips a press the desktop stamped). With the PC's screen
 /// off there is no desktop to take the press, so the PC still takes it: Esc
@@ -79,13 +85,36 @@ public static class PcBackOut
         return pcOpen && !screenOn ? PcPoller.ScreenOff : PcPoller.None;
     }
 
-    /// <summary>What a back-out does after the chain resolved <paramref name="chain"/>; <paramref name="fromKey"/> is true for Esc, false for a right-click.</summary>
-    public static PcBackOutStep Resolve(DesktopEscape chain, bool fromKey)
+    /// <summary>
+    /// What a back-out does after the chain resolved <paramref name="chain"/>;
+    /// <paramref name="fromKey"/> is true for Esc, false for a right-click.
+    /// With nothing left in the chain, Esc closes the front window when
+    /// <paramref name="windowToClose"/> (D13, UI-23: a window open on the PC
+    /// and GameConfigSO.escBacksOutFirst on), else brings Settings forward; a
+    /// right-click does nothing (it never leaves the PC: R3).
+    /// </summary>
+    public static PcBackOutStep Resolve(DesktopEscape chain, bool fromKey, bool windowToClose = false)
     {
         if (chain != DesktopEscape.None)
             return PcBackOutStep.Chain;
-        return fromKey ? PcBackOutStep.OpenSettings : PcBackOutStep.Swallow;
+        if (!fromKey)
+            return PcBackOutStep.Swallow;
+        return windowToClose ? PcBackOutStep.CloseWindow : PcBackOutStep.OpenSettings;
     }
+
+    /// <summary>
+    /// True when Esc, with the desktop's chain empty, closes the PC's front
+    /// window (Resolve's windowToClose): a window is in front
+    /// (<paramref name="windowInFront"/>), it is not the Settings app
+    /// (<paramref name="frontAppId"/>, DesktopApps.IdOf: null for a window of
+    /// no app), and <paramref name="escBacksOutFirst"/>
+    /// (GameConfigSO.escBacksOutFirst, D13). Settings is the pause Esc opens
+    /// (R3/R4: "Esc opens the same Settings window everywhere"; the gate check
+    /// flow.esc.pc): Esc never closes it, so Esc twice from the desk keeps the
+    /// PC open with Settings in front and the shift clock held.
+    /// </summary>
+    public static bool ClosesFront(string frontAppId, bool windowInFront, bool escBacksOutFirst) =>
+        windowInFront && escBacksOutFirst && frontAppId != DesktopAppIds.Settings;
 
     /// <summary>What a back-out does on the PC while its screen is off; <paramref name="fromKey"/> is true for Esc, false for a right-click.</summary>
     public static PcBackOutStep ScreenOff(bool fromKey) => fromKey ? PcBackOutStep.WakeAndOpenSettings : PcBackOutStep.Swallow;

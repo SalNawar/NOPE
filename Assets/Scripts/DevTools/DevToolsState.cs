@@ -129,9 +129,13 @@ public static class DevToolsState
     public static ForcedCaseSlot ForcedAppearance;
 
     /// <summary>
-    /// When set, the anime hall shows this hour (0-24) instead of the shift
-    /// clock's (HallLightingRig.Hour: the cheat menu's "Time of day" toggle:
-    /// morning, dusk, night); the clock itself runs on. Null = the clock's.
+    /// The one hour override (GATE-22, D13; <see cref="HourOverride"/>): when
+    /// set, everything that shows the hour shows this one (0-24) instead of
+    /// the shift clock's: the clock's readouts (ShiftClockDriver.ShownMinute),
+    /// the hall's light (HallLightingRig.Hour) and, through the hall's state
+    /// weights, the city in its windows. The cheat menu's "Time" toggle
+    /// (morning, dusk, night) and the QA rig's hour op set it. The shift's own
+    /// clock runs on under it (closing time, the last hour). Null = the clock's.
     /// </summary>
     public static float? ForcedHour;
 

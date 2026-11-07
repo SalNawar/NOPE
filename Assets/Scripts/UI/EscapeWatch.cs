@@ -10,11 +10,11 @@ using UnityEngine.InputSystem;
 /// Esc). On an Esc press it notes the office's controls state before the
 /// office acts, so PauseMenu, which runs after them, can tell whether the
 /// office let go of something (a drag cancelled) and Settings
-/// waits for the next press; and when the press would leave a mode
-/// (EscapeChain.KeepsTheOfficeOut: the PC, the wheel, inspect mode, the city,
-/// the reading view; a drag is still cancelled), it keeps the office's poller
-/// out of this one frame, so nothing closes and PauseMenu opens Settings (in
-/// the PC, in front).
+/// waits for the next press; and when the press must not run the office's
+/// back-out (EscapeChain.KeepsTheOfficeOut: the PC, R3; every mode while
+/// GameConfigSO.escBacksOutFirst is off; a drag is still cancelled), it keeps
+/// the office's poller out of this one frame, so nothing closes and PauseMenu
+/// opens Settings (in the PC, in front).
 /// Added by PauseMenu on its own host.
 /// </summary>
 [DefaultExecutionOrder(-1085)]

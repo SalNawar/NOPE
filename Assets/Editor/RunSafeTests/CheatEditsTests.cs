@@ -44,6 +44,29 @@ public class CheatEditsTests
     }
 
     [Test]
+    public void AnotherTracksCheat_IsKeptOnlyWhenItChangedTheWorld()
+    {
+        // cheats-fix: "Feel: intensity", "Hall FX: dust" and the "Hall:" steps change a setting, not the run: a skip from Home must not make them again.
+        var edits = new CheatEdits();
+        var world = new WorldState { money = 50 };
+        int steps = 0;
+        string Fingerprint(WorldState w) => w.money + "|" + string.Join(",", w.unlockedUpgradeIds);
+
+        Assert.IsFalse(edits.NoteIfChanged("Feel: intensity", w => steps++, world, Fingerprint), "a setting's step changes no world");
+        Assert.AreEqual(1, steps, "it is made once, now");
+        Assert.IsTrue(edits.NoteIfChanged("Lens: Word", w => w.UnlockUpgrade("lens_word"), world, Fingerprint), "the lens is the run's");
+        Assert.IsTrue(world.HasUpgrade("lens_word"));
+        CollectionAssert.AreEqual(new List<string> { "Lens: Word" }, edits.Labels);
+
+        var save = new WorldState { money = 50 };
+        edits.ReplayOn(save);
+        Assert.IsTrue(save.HasUpgrade("lens_word"), "the world change is replayed on the end-of-shift save");
+        Assert.AreEqual(1, steps, "the setting is never stepped a second time");
+        Assert.IsFalse(edits.NoteIfChanged("x", null, world, Fingerprint));
+        Assert.IsFalse(edits.NoteIfChanged("x", w => w.money++, null, Fingerprint));
+    }
+
+    [Test]
     public void NoSave_AndNoEdit_ChangeNothing()
     {
         var edits = new CheatEdits();

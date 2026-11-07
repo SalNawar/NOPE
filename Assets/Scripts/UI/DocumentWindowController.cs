@@ -120,7 +120,7 @@ public sealed class DocumentWindowController : MonoBehaviour
     {
         if (scanStrip == null || template == null)
             return;
-        string time = clock != null && clock.Clock != null ? ShiftClock.Format(clock.Clock.CurrentMinute) : "--:--";
+        string time = clock != null && clock.Clock != null ? ShiftClock.Format(clock.ShownMinute) : "--:--";
         scanStrip.text = string.Format(UiText.Pc.DocumentWord(template), time);
     }
 

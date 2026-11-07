@@ -34,6 +34,29 @@ public class PcDesktopRulesTests
     public void BackOut_RightClickWithNothingToClose_IsSwallowed_NeverLeaves()
     {
         Assert.AreEqual(PcBackOutStep.Swallow, PcBackOut.Resolve(DesktopEscape.None, false));
+        Assert.AreEqual(PcBackOutStep.Swallow, PcBackOut.Resolve(DesktopEscape.None, false, windowToClose: true), "a right-click backs out as before: it closes no window");
+    }
+
+    [Test]
+    public void BackOut_EscWithAWindowInFront_ClosesIt_ThenSettings()
+    {
+        // D13, UI-23: "with a mode open (... a PC window ...) the first Esc backs out of the mode" (GameConfigSO.escBacksOutFirst on).
+        Assert.AreEqual(PcBackOutStep.CloseWindow, PcBackOut.Resolve(DesktopEscape.None, true, windowToClose: true));
+        Assert.AreEqual(PcBackOutStep.Chain, PcBackOut.Resolve(DesktopEscape.CloseMenu, true, windowToClose: true), "the chain (a menu, a field) still comes first");
+        Assert.AreEqual(PcBackOutStep.OpenSettings, PcBackOut.Resolve(DesktopEscape.None, true, windowToClose: false), "no window in front (or the knob off): Settings");
+    }
+
+    [Test]
+    public void BackOut_EscNeverClosesSettings_ThePauseStays()
+    {
+        // R3/R4 ("Esc opens the same Settings window everywhere"; the gate check flow.esc.pc) with D13: Esc closes a PC window
+        // first, but never Settings, the pause it opens. Esc, Esc from the desk leaves the PC open with Settings in front.
+        Assert.IsFalse(PcBackOut.ClosesFront(DesktopAppIds.Settings, windowInFront: true, escBacksOutFirst: true), "Settings in front stays");
+        Assert.AreEqual(PcBackOutStep.OpenSettings, PcBackOut.Resolve(DesktopEscape.None, true, PcBackOut.ClosesFront(DesktopAppIds.Settings, true, true)), "Settings in front: Esc keeps it in front");
+        Assert.IsTrue(PcBackOut.ClosesFront(DesktopAppIds.Notes, true, true), "another app's window closes");
+        Assert.IsTrue(PcBackOut.ClosesFront(null, true, true), "a window of no app (a document) closes");
+        Assert.IsFalse(PcBackOut.ClosesFront(DesktopAppIds.Notes, true, false), "the knob off: Esc brings Settings forward");
+        Assert.IsFalse(PcBackOut.ClosesFront(null, false, true), "no window in front: Esc brings Settings forward");
     }
 
     // --- One action per input (BUG-58a: "places then cancels on a double-click") ---

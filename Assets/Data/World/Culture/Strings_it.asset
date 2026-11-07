@@ -1310,9 +1310,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.escape
-    text: 'Clic destro o Esc: chiudi un menu, questa scheda o il pannello di ricerca;
-      cancella la ricerca; esci da un campo di testo; lascia un valore tenuto; chiudi
-      il Menu o annulla un trascinamento. Altrimenti, torna alla scrivania'
+    text: "Clic destro o Esc: chiudi un menu, questa scheda o il pannello di ricerca; cancella la ricerca; esci da un campo di testo; lascia un valore tenuto; chiudi il Menu o annulla un trascinamento. Altrimenti Esc chiude la finestra in primo piano, poi apre le Impostazioni, che restano aperte. Q o un clic sulla cornice lascia il PC"
     gloss: 0
     tier: 0
   - key: keys.help
@@ -1434,8 +1432,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.back
-    text: "Esci da: un trascinamento, la ruota, il PC, un valore tenuto, la modalit\xE0
-      ispezione, la barra dei timbri, la citt\xE0, la vista di lettura"
+    text: "Esci da: un trascinamento, la ruota, un valore tenuto, la modalit\u00E0 ispezione, la barra dei timbri, il centralino, la citt\u00E0, la vista di lettura. Dalla scrivania libera Esc apre le Impostazioni"
     gloss: 0
     tier: 0
   - key: keys.desk.city
@@ -6229,3 +6226,15 @@ MonoBehaviour:
     english: MASTER
   - native: PARTITI
     english: sent
+  - native: piano
+    english: plane
+  - native: aperte
+    english: open
+  - native: Q
+    english: Q
+  - native: cornice
+    english: frame
+  - native: centralino
+    english: switchboard
+  - native: libera
+    english: free

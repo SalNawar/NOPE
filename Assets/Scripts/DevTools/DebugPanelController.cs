@@ -134,6 +134,15 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>The library the forced appearances were listed from.</summary>
     private ContentLibrarySO _appearancesFor;
 
+    /// <summary>The day buttons (index: the day), each with its opening hour as its hint (DAY-01, D13: DayHoursHint.Hint), for <see cref="_daysFor"/>.</summary>
+    private GUIContent[] _days = Array.Empty<GUIContent>();
+
+    /// <summary>The days' opening hours in runs (DayHoursHint.Summary), shown under the day buttons while no button is hovered.</summary>
+    private string _openings = string.Empty;
+
+    /// <summary>The library the day buttons were made for.</summary>
+    private ContentLibrarySO _daysFor;
+
     /// <summary>True while the overlay is open.</summary>
     private bool _open;
 
@@ -386,16 +395,19 @@ public sealed class DebugPanelController : MonoBehaviour
     /// </summary>
     private void DrawPlayTab(WorldState world, ContentLibrarySO lib)
     {
-        GUILayout.Label("Jump to the start of day");
+        GUILayout.Label("Jump to the start of day (the day opens at its own hours, as in play)");
         int last = Mathf.Clamp(lib != null && lib.LastDay > 0 ? lib.LastDay : 21, 1, DayNames.Length - 1);
+        if (lib != _daysFor || _days.Length <= last)
+            MakeDayButtons(lib, last);
         for (int first = 1; first <= last; first += 8)
         {
             GUILayout.BeginHorizontal();
             for (int day = first; day < first + 8 && day <= last; day++)
-                if (GUILayout.Button(DayNames[day], Width40))
+                if (GUILayout.Button(_days[day], Width40))
                     Queue(DevCheat.JumpToDay, day);
             GUILayout.EndHorizontal();
         }
+        GUILayout.Label(string.IsNullOrEmpty(GUI.tooltip) ? _openings : GUI.tooltip);
 
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Restart shift")) Queue(DevCheat.RestartShift);
@@ -459,6 +471,31 @@ public sealed class DebugPanelController : MonoBehaviour
             if (GUILayout.Button(label))
                 Queue(DevCheat.Extra, text: label);
         }
+    }
+
+    /// <summary>
+    /// Makes the day buttons 1 to <paramref name="last"/> for
+    /// <paramref name="lib"/>: each one's hint names the day's opening and
+    /// closing hours (DayPlanSO.Shift over the run's GameConfigSO; DAY-01: a
+    /// jump opens the day at its own hours), and the line under them sums the
+    /// openings up (DayHoursHint.Summary). Made once per library, so drawing
+    /// allocates nothing.
+    /// </summary>
+    private void MakeDayButtons(ContentLibrarySO lib, int last)
+    {
+        _daysFor = lib;
+        GameConfigSO config = RunManager.HasInstance && RunManager.Instance.Config != null ? RunManager.Instance.Config.gameConfig : null;
+        var hours = new List<ShiftHours>(last);
+        _days = new GUIContent[last + 1];
+        _days[0] = GUIContent.none;
+        for (int day = 1; day <= last; day++)
+        {
+            DayPlanSO plan = lib != null ? lib.GetDayPlan(day) : null;
+            ShiftHours h = plan != null ? plan.Shift(config) : GameConfigSO.Standard(config);
+            hours.Add(h);
+            _days[day] = new GUIContent(DayNames[day], DayHoursHint.Hint(day, h));
+        }
+        _openings = DayHoursHint.Summary(hours);
     }
 
     /// <summary>More cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, the voice, upgrades.</summary>

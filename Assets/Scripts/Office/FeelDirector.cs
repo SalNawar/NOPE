@@ -177,7 +177,7 @@ public sealed class FeelDirector : MonoBehaviour
         Time.timeScale = Mathf.Clamp(knobs.hitStopScale, 0f, 1f);
     }
 
-    /// <summary>Ends a hit-stop on time, rings the last hour as the clock crosses into it, and sets the hall's ambience twice a second.</summary>
+    /// <summary>Ends a hit-stop on time, rings the last hour as the clock crosses into it, and sets the hall's ambience twice a second at the hour the clock shows (ShiftClockDriver.ShownMinute: the cheat menu's forced hour too, GATE-22).</summary>
     private void Update()
     {
         if (_stopped && Time.unscaledTime >= _stopUntil)
@@ -200,6 +200,6 @@ public sealed class FeelDirector : MonoBehaviour
             _cityLooked = true;
             _city = FindAnyObjectByType<HallCityExterior>();
         }
-        Sounds.SetBeds(HallAmbience.For(minute, _city != null ? _city.rain : 0f, bank.nightFromMinute, bank.dayFromMinute, bank.bedFadeMinutes, bank.rushWindows));
+        Sounds.SetBeds(HallAmbience.For(_clock.ShownMinute, _city != null ? _city.rain : 0f, bank.nightFromMinute, bank.dayFromMinute, bank.bedFadeMinutes, bank.rushWindows));
     }
 }

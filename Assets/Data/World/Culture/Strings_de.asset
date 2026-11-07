@@ -1309,10 +1309,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.escape
-    text: "Rechtsklick oder Esc: ein Men\xFC, diese Karte oder die Suchleiste schlie\xDFen;
-      die Suche leeren; ein Textfeld verlassen; einen gehaltenen Wert loslassen;
-      das Men\xFC schlie\xDFen oder ein Ziehen abbrechen. Ist nichts davon offen,
-      zur\xFCck zum Schreibtisch"
+    text: "Rechtsklick oder Esc: ein Men\u00FC, diese Karte oder die Suchleiste schlie\u00DFen; die Suche leeren; ein Textfeld verlassen; einen gehaltenen Wert loslassen; das Men\u00FC schlie\u00DFen oder ein Ziehen abbrechen. Ist nichts davon offen, schlie\u00DFt Esc das vordere Fenster und \u00F6ffnet dann die Einstellungen, die offen bleiben. Q oder ein Klick auf den Rahmen verl\u00E4sst den PC"
     gloss: 0
     tier: 0
   - key: keys.help
@@ -1435,8 +1432,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.back
-    text: "Zur\xFCck: ein Ziehen, das Rad, der PC, ein gehaltener Wert, der Pr\xFCfmodus,
-      die Stempelleiste, die Stadt, die Leseansicht"
+    text: "Zur\u00FCck: ein Ziehen, das Rad, ein gehaltener Wert, der Pr\u00FCfmodus, die Stempelleiste, die Schalttafel, die Stadt, die Leseansicht. Vom freien Schreibtisch \u00F6ffnet Esc die Einstellungen"
     gloss: 0
     tier: 0
   - key: keys.desk.city
@@ -6324,3 +6320,17 @@ MonoBehaviour:
     english: MASTER
   - native: GESENDET
     english: sent
+  - native: vordere
+    english: front
+  - native: Fenster
+    english: window
+  - native: Q
+    english: Q
+  - native: Klick
+    english: click
+  - native: Rahmen
+    english: frame
+  - native: Schalttafel
+    english: switchboard
+  - native: freien
+    english: free

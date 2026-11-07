@@ -7,7 +7,9 @@ using UnityEngine;
 /// office's digital clock (the art office's own text, handed over by the
 /// office binder through Bind, or the fallback HUD's). Polls the driver each
 /// frame (as OfficeReadouts polls WorldState) and writes only when the minute
-/// changes. Every reference is optional and null-safe.
+/// changes. It shows the driver's ShownMinute: the cheat menu's forced hour
+/// while one is forced (GATE-22, HourOverride), else the clock's.
+/// Every reference is optional and null-safe.
 /// </summary>
 public sealed class ShiftClockReadouts : MonoBehaviour
 {
@@ -38,11 +40,12 @@ public sealed class ShiftClockReadouts : MonoBehaviour
         if (driver == null || driver.Clock == null)
             return;
 
-        int whole = Mathf.FloorToInt(driver.Clock.CurrentMinute);
+        float minute = driver.ShownMinute;
+        int whole = Mathf.FloorToInt(minute);
         if (whole == _shownMinute)
             return;
 
-        string text = ShiftClock.Format(driver.Clock.CurrentMinute);
+        string text = ShiftClock.Format(minute);
         if (trayClockText != null)
             trayClockText.text = text;
         if (crtClockText != null)
