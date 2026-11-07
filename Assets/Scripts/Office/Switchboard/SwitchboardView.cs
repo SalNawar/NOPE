@@ -379,7 +379,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
         Flare(CallLampOf(e.Route.Destination).Centre, LampWarm, 5f);
         Flare(ModuleLampOf(e.Module).Centre, LampGreen, Dialer ? 5f : 3f);
         BoardPoint rise = Dialer ? _gate.DialCentre(e.Module).Plus(0f, 10f) : DisplayAt(e.Module); // the dialer's tally rises out of the gate
-        Rise(rise, Words(SwitchboardWords.Sent, e.Travellers), LampGreen);
+        Rise(rise, Words(SwitchboardWords.Sent, e.Travellers), Dialer ? LampWarm : LampGreen); // the dialer's rises over the green flare in the gate: cream reads there
         if (e.Bonus > 0 && _game != null && _game.World != null)
         {
             _game.World.money += e.Bonus;
