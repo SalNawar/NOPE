@@ -16,7 +16,7 @@ using UnityEngine.InputSystem.LowLevel;
 /// <list type="bullet">
 /// <item><c>boardOpen</c>: D, then waits for the board to be fully turned to.</item>
 /// <item><c>boardCall</c> (text "ifNone": a call on today's first place only when none waits; "next": a call on today's next place at another nation; else "nation:era", the nation's id and the era's order): a call as an approval makes it (for a day whose decided traveller was denied).</item>
-/// <item><c>boardDial</c> (n = the dial, 0 for 01; text = what to bring under its chevron: "call" (the waiting call's nation, top chevron), "callEra" (the era waiting at the dial's nation, chevron 2), "wrongEra" (an era nobody waits on there), "reset" (the origin under chevron 2), a nation id or an era id; f = seconds of the turn, default 0.9; name): presses on the ring and turns it along its arc to the glyph, lets go, waits for it to rest; asserts <c>dial.&lt;name&gt;</c> (the lock it should make).</item>
+/// <item><c>boardDial</c> (n = the dial, 0 for 01; text = what to bring under its chevron: "call" (the waiting call's nation, top chevron), "callEra" (the era waiting at the dial's nation, chevron 2), "wrongEra" (an era nobody waits on there), "reset" (the origin under chevron 2), a nation id or an era id; prefix "refused:" (as "refused:callEra") for a lock the rules must refuse (another dial holds that route); f = seconds of the turn, default 0.9; name): presses on the ring and turns it along its arc to the glyph, lets go, waits for it to rest; asserts <c>dial.&lt;name&gt;</c> (the lock it should make, or for "refused:" the refusal: the period unchanged, the place kept, chevron 2's lens lit red).</item>
 /// <item><c>boardCells</c> (n = the dial; f = how many cells, 0 to its mark; name): carries rack cells into its cradle one by one; asserts <c>cells.&lt;name&gt;</c>.</item>
 /// <item><c>boardCellOut</c> (n = the dial; name): carries one of its cells back to the rack; asserts <c>cellOut.&lt;name&gt;</c> (the dial falls short of its mark at once).</item>
 /// <item><c>boardMaster</c> (f = how far, default 1; n = frames to wait after, default 30): drags MASTER's handle down and lets go.</item>
@@ -140,6 +140,10 @@ public static class SwitchboardRig
         int slots = ring.Length;
         SwitchModule module = board.Modules[m];
         string what = (step.text ?? string.Empty).Trim();
+        const string RefusedPrefix = "refused:";
+        bool refusal = what.StartsWith(RefusedPrefix, StringComparison.OrdinalIgnoreCase);
+        if (refusal)
+            what = what.Substring(RefusedPrefix.Length).Trim();
         GateGlyph glyph = Target(view, board, m, what, out int chevron);
         int slot = GateDial.SlotOf(ring, glyph.Kind, glyph.Index);
         if (slot < 0)
@@ -149,6 +153,9 @@ public static class SwitchboardRig
         if (Mathf.Abs(delta) < 1f && what == "reset")
             delta = 360f; // already there: a full turn moves it on
         bool placeBefore = module.PlaceJack >= 0;
+        int placeJackBefore = module.PlaceJack;
+        bool periodBefore = module.HasPeriod;
+        SwitchRoute periodJackBefore = module.PeriodJack;
 
         BoardPoint c = layout.DialCentre(m);
         float a0 = 250f;
@@ -172,20 +179,37 @@ public static class SwitchboardRig
             samples.Add(new QaPathSample(At(a0 + delta), true));
         for (int i = 0; i <= QaPaths.SettleFrames; i++)
             samples.Add(new QaPathSample(At(a0 + delta), false));
-        yield return Fixed(runner.Input.Play(new QaPath(QaPathKind.Plain, samples)));
+        // The refused chevron's red lasts 0.45 s from the detent: its lens is read on every frame of the turn, to the rest and 3 frames after.
+        float lensPeak = 0f;
+        void PeakLens() => lensPeak = Mathf.Max(lensPeak, view.DialLenses(m)[chevron]);
+        IEnumerator turn = Fixed(runner.Input.Play(new QaPath(QaPathKind.Plain, samples)));
+        while (turn.MoveNext())
+        {
+            yield return turn.Current;
+            PeakLens();
+        }
         yield return QaGame.Until(() =>
         {
+            PeakLens();
             view.DialTurn(m, out bool resting);
             return resting;
         }, 3f, "the ring to rest in its detent");
-        yield return QaGame.Frames(3);
+        for (int i = 0; i < 3; i++)
+        {
+            yield return QaGame.Frames(1);
+            PeakLens();
+        }
 
         float rest = view.DialTurn(m, out _);
         int top = GateDial.SlotUnderChevron(rest, GateDial.PlaceChevron, slots), second = GateDial.SlotUnderChevron(rest, GateDial.PeriodChevron, slots);
         bool pass;
         string expect;
-        switch (what)
+        switch (refusal ? RefusedPrefix : what)
         {
+            case RefusedPrefix:
+                pass = module.PlaceJack == placeJackBefore && module.HasPeriod == periodBefore && (!periodBefore || module.PeriodJack == periodJackBefore) && lensPeak >= 0.5f;
+                expect = $"the lock refused on chevron {chevron + 1}: place kept, period unchanged, lens {chevron + 1} lit (peak {lensPeak:0.00})";
+                break;
             case "reset":
                 pass = module.PlaceJack < 0 && !module.HasPeriod;
                 expect = "both locks open";
@@ -203,7 +227,7 @@ public static class SwitchboardRig
                 }
                 break;
         }
-        runner.Assert("dial." + Name(step, what), Owner, pass,
+        runner.Assert("dial." + Name(step, (refusal ? "refused_" : string.Empty) + what), Owner, pass,
             $"turned {delta:0.#} deg in {frames} frames; rests at {rest:0.##} ({ring[top]} under chevron 1, {ring[second]} under chevron 2); place {module.PlaceJack}, period {(module.HasPeriod ? module.PeriodJack.ToString() : "-")}, state {module.State}",
             expect);
     }
