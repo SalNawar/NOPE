@@ -31,9 +31,15 @@ public enum CameraMoveCause
 /// - <see cref="Event"/>: a named moment (an audio cue played, a flash shown,
 ///   a hit-stop started) that the recorder writes on the frame it happened,
 ///   for the press-to-cue latency check and the audio and flash logs.
+/// - <see cref="Sound"/>: a sound the game plays outside the sound bank (its
+///   own AudioSource and clip), on the <see cref="Cue"/> channel; the bank's
+///   cues reach the recorder through Sounds.Fired.
 /// </summary>
 public static class QaSignals
 {
+    /// <summary>The channel of a sound played: events.tsv's "cue" rows, which the press-to-sound check reads (tools/qa/seqlib.py CUE_CHANNELS).</summary>
+    public const string Cue = "cue";
+
     /// <summary>Raised by <see cref="TagCamera"/>: the cause, its length in unscaled seconds and its pixel cap at 1080p (0: no cap).</summary>
     public static event Action<CameraMoveCause, float, float> CameraTagged;
 
@@ -57,5 +63,12 @@ public static class QaSignals
     public static void Event(string channel, string name)
     {
         Raised?.Invoke(channel ?? string.Empty, name ?? string.Empty);
+    }
+
+    /// <summary>Marks a sound played on this frame outside the sound bank (<paramref name="clip"/>'s name on the <see cref="Cue"/> channel); nothing without a clip.</summary>
+    public static void Sound(AudioClip clip)
+    {
+        if (clip != null && Raised != null)
+            Raised(Cue, clip.name);
     }
 }

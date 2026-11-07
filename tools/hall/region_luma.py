@@ -27,7 +27,8 @@ lights, not the sky behind it).
                     luma leave a span of 1-2, where 5 % of it is a tenth of a luma: the crossfade's pass is then
                     tools/hall/slot_fade.py, which measures the painting showing through in colour.
   --decode:         every mode reads the frames with QA-RIG's extra sRGB encode undone (decode below): the screen's
-                    own luma, not the washed-out sequence's.
+                    own luma, not the washed-out sequence's. Only a sequence from before the recorder's fix carries
+                    that encode (meta.json without "srgbEncodes": 1, GATE-05); a newer one is read as it is.
   --dips N:         the AVAILABLE sign's invitation (BUG-67): exactly N dips, each at least --min-depth luma under
                     the levels either side of it, then steady; prints the per-frame values and each dip's time.
   --compare:        the statistic of A's region over B's (the traffic tint: H5 over H2, pass at most --max-ratio 0.5).
@@ -36,19 +37,39 @@ It writes nothing; the Unity pass copies its output into R7/FIX/HALL-FX/RESULT.m
 """
 import argparse
 import csv
-import glob
+import json
 import os
+import re
 import sys
 
 import numpy as np
 from PIL import Image
 
 
+FRAME_NAME = re.compile(r'^f\d{4,}\.png$')
+
+
+def frame_files(seq):
+    """The sequence's frames in order: f0000.png ... only (QA-RIG's seqlib.FRAME_NAME), never an analysis's picture
+    beside them (flicker_heat.png, a mask_*.png)."""
+    return sorted(os.path.join(seq, n) for n in os.listdir(seq) if FRAME_NAME.match(n)) if os.path.isdir(seq) else []
+
+
 def frames(seq):
-    files = sorted(glob.glob(os.path.join(seq, 'f*.png')))
+    files = frame_files(seq)
     if not files:
         raise SystemExit(f'no frames in {seq}')
     return files
+
+
+def extra_encode(seq):
+    """True when the sequence's frames carry QA-RIG's old second sRGB encode: meta.json does not say "srgbEncodes": 1
+    (the recorder writes it since its fix, GATE-05 of 2026-10-28; older sequences have no key and two encodes)."""
+    path = os.path.join(seq, 'meta.json')
+    if not os.path.exists(path):
+        return True
+    with open(path, encoding='utf-8-sig') as f:
+        return json.load(f).get('srgbEncodes', 2) != 1
 
 
 def tracked(seq):
@@ -73,9 +94,10 @@ def tracked(seq):
 
 
 def decode(img):
-    """Undoes one sRGB encode (0-255 in, 0-255 out): QA-RIG's sequence frames are sRGB-encoded twice (SeqRecorder blits the
-    sRGB screenshot, read as linear, into an sRGB texture; integration 2026-10-21, a finding for QA-RIG), so they read
-    washed out: a frame's 11, 92, 166 shows as 59, 162, 211. A still (stills/, full resolution) is encoded once."""
+    """Undoes one sRGB encode (0-255 in, 0-255 out): QA-RIG's sequence frames from before the recorder's fix are
+    sRGB-encoded twice (SeqRecorder blitted the sRGB screenshot, read as linear, into an sRGB texture; integration
+    2026-10-21, GATE-05), so they read washed out: a frame's 11, 92, 166 shows as 59, 162, 211. A still (stills/, full
+    resolution) and a newer frame (extra_encode false) are encoded once: never decode those."""
     v = img / 255.0
     return np.where(v <= 0.04045, v / 12.92, ((v + 0.055) / 1.055) ** 2.4) * 255.0
 
@@ -110,13 +132,14 @@ def series(seq, args, start, end):
     rects = tracked(seq) if args.track else None
     names = args.track.split(',') if args.track else []
     mask = np.asarray(Image.open(args.mask).convert('L')) >= 128 if args.mask else None
+    decoded = args.decode and extra_encode(seq)
     values = []
     for i in range(a, b):
         if rects is not None:
             boxes = [r for n, r in rects.get(i, {}).items() if n in names]
         else:
             boxes = [args.roi or (0.0, 0.0, 1.0, 1.0)]
-        stats = [v for v in (region_stat(files[i], box, args.stat, rects is None, mask, args.decode) for box in boxes) if v is not None]
+        stats = [v for v in (region_stat(files[i], box, args.stat, rects is None, mask, decoded) for box in boxes) if v is not None]
         if stats:
             values.append(float(np.mean(stats)))
     if not values:

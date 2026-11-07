@@ -815,6 +815,18 @@ public sealed class QaRunner : MonoBehaviour
         _assertions.Add(new QaAssertion { id = $"{Scenario.name}.{id}", owner = string.IsNullOrEmpty(owner) ? Scenario.owner : owner, pass = pass, measured = measured, detail = detail });
     }
 
+    /// <summary>
+    /// Records "&lt;scenario&gt;.&lt;id&gt;" as not applicable here (n/a,
+    /// <see cref="QaAssertion.na"/>): a neutral line that says why
+    /// (<paramref name="measured"/>, <paramref name="detail"/>), never red and
+    /// never counted as a pass (GATE-12: "not applicable on the painted desk"
+    /// lines passed as green).
+    /// </summary>
+    public void NotApplicable(string id, string owner, string measured, string detail)
+    {
+        _assertions.Add(new QaAssertion { id = $"{Scenario.name}.{id}", owner = string.IsNullOrEmpty(owner) ? Scenario.owner : owner, pass = true, na = true, measured = measured, detail = detail });
+    }
+
     private void Finish()
     {
         Recorder.Stop();

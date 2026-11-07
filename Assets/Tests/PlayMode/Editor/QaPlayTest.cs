@@ -54,11 +54,13 @@ public abstract class QaPlayTest
     }
 
     /// <summary>
-    /// Fails with every unexpected failure unless the run finished and every
+    /// Fails with every unexpected failure unless the run finished, every
     /// red assertion is on the known-red list (tools/qa/gate_known_red.txt's
     /// run patterns: an open BUG part a later track owns, e.g. the camera
-    /// until CAM merges). Known red ones are logged, not failed, so the test
-    /// turns red only on a regression, as the merge gate does.
+    /// until CAM merges) and every red frame-analysis line is too (harness.txt's
+    /// verdict, QaPlayHarness.VerdictOk: GATE-07). Known red ones are logged,
+    /// not failed, so the test turns red only on a regression, as the merge
+    /// gate does.
     /// </summary>
     protected static void AssertRun(QaRunReport report)
     {
@@ -67,5 +69,6 @@ public abstract class QaPlayTest
         if (verdict.KnownRed.Count > 0)
             Debug.Log($"[QA] {report.scenario}: {verdict.KnownRed.Count} known red (tools/qa/gate_known_red.txt):\n{string.Join("\n", verdict.KnownRed)}");
         Assert.IsTrue(verdict.Ok, $"{report.scenario} failed ({QaPlayHarness.OutDir}):\n{string.Join("\n", verdict.Unexpected)}");
+        Assert.IsTrue(QaPlayHarness.VerdictOk, $"{report.scenario}'s frames failed ({QaPlayHarness.OutDir}, analysis.txt): {QaPlayHarness.VerdictLine}");
     }
 }

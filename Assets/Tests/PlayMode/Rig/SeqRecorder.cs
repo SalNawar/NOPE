@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using Unity.Collections;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -28,9 +29,21 @@ using UnityEngine;
 /// measurement, which reads timing sequences only), and in a captured
 /// sequence the tracked screen rects (the expected-motion mask for the
 /// flicker detector) and any extra columns a track adds. events.tsv gets
-/// every <see cref="QaSignals.Event"/> and every press the game saw, on the
-/// frame it happened (the latency probe's input). meta.json says which kind
-/// the sequence is (fixedStep, frames). tools/qa/seqtools.py reads the folder.
+/// every <see cref="QaSignals.Event"/>, every press the game saw, every
+/// sound cue (channel "cue": each cue the sound bank was asked for,
+/// Sounds.Fired, and each sound the game plays outside the bank, which
+/// raises QaSignals.Event("cue", ...)) and every still taken while a
+/// captured sequence records (channel "still", on the frame that holds the
+/// same picture), on the frame it happened (the latency and press-to-sound
+/// probes' input). A captured frame keeps the screen's colour exactly as a
+/// still does: the scale-down reads the screenshot and writes the frame in
+/// the same colour space, so the picture is sRGB-encoded once (GATE-05 of
+/// 2026-10-28: a second encode made every frame about twice as bright as
+/// the game). meta.json says which kind the sequence is (fixedStep, frames),
+/// how many sRGB encodes its frames carry (srgbEncodes 1; a sequence without
+/// the key is from before the fix and carries 2) and whether motion was off
+/// (motionStill: Reduced Motion or intensity 0, when the views cut by
+/// design). tools/qa/seqtools.py reads the folder.
 /// </summary>
 public sealed class SeqRecorder : MonoBehaviour
 {
@@ -68,8 +81,8 @@ public sealed class SeqRecorder : MonoBehaviour
     private bool _skipBeginFrame;
     private int _oldCaptureFramerate;
     private double _lastFrameEnd = -1;
-    private RenderTexture _rt;
     private Texture2D _small;
+    private byte[] _screenBytes, _frameBytes;
     private ProfilerRecorder _gc;
     private ProfilerRecorder _mainThread;
 
@@ -112,9 +125,10 @@ public sealed class SeqRecorder : MonoBehaviour
         _frames.WriteLine("i\tframe\ttime\tunscaled\ttimeScale\tscreenW\tscreenH\tcapW\tcapH\tmx\tmy\tdown\tgcBytes\tmainMs\tdtMs\ttracked\textra");
         _events = new StreamWriter(Path.Combine(dir, "events.tsv"));
         _events.WriteLine("frame\ti\tunscaled\tchannel\tname");
-        // How the sequence was taken: a fixed-step capture with frames, or a timing sequence (the hitch analysis reads only those).
+        // How the sequence was taken: a fixed-step capture with frames, or a timing sequence (the hitch analysis reads only those);
+        // its frames' colour (one sRGB encode, as a still's) and whether the game's motions were off (the cuts analysis skips those).
         File.WriteAllText(Path.Combine(dir, "meta.json"),
-            $"{{\"fixedStep\": {(_capturing ? "true" : "false")}, \"frames\": {(_capturing ? "true" : "false")}, \"fps\": {Fps}, \"captureWidth\": {CaptureWidth}, \"screen\": \"{Screen.width}x{Screen.height}\"}}\n");
+            $"{{\"fixedStep\": {(_capturing ? "true" : "false")}, \"frames\": {(_capturing ? "true" : "false")}, \"fps\": {Fps}, \"captureWidth\": {CaptureWidth}, \"screen\": \"{Screen.width}x{Screen.height}\", \"srgbEncodes\": 1, \"motionStill\": {(UiMotion.Amount.Still ? "true" : "false")}}}\n");
         if (_capturing)
         {
             _oldCaptureFramerate = Time.captureFramerate;
@@ -162,9 +176,16 @@ public sealed class SeqRecorder : MonoBehaviour
         _events.WriteLine($"{Time.frameCount}\t{Index}\t{F(Time.unscaledTime)}\t{Clean(channel)}\t{Clean(name)}");
     }
 
+    /// <summary>The events.tsv channel of a still taken while a captured sequence records: its row's frame index holds the same picture (seqtools colour).</summary>
+    public const string StillChannel = "still";
+
+    /// <summary>A cue the sound bank was asked for (Sounds.Fired): a "cue" row named by its id, and "(no bank clip)" when the bank had none to play (the caller's own placeholder, if any, plays then).</summary>
+    private void OnCue(string id, bool clip) => Mark(QaSignals.Cue, clip ? id : id + " (no bank clip)");
+
     private void OnEnable()
     {
         QaSignals.Raised += Mark;
+        Sounds.Fired += OnCue;
         if (QaInput.Current != null)
             QaInput.Current.Pressed += Mark;
         _gc = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame");
@@ -175,13 +196,103 @@ public sealed class SeqRecorder : MonoBehaviour
     private void OnDisable()
     {
         QaSignals.Raised -= Mark;
+        Sounds.Fired -= OnCue;
         if (QaInput.Current != null)
             QaInput.Current.Pressed -= Mark;
         Stop();
         _gc.Dispose();
         _mainThread.Dispose();
-        if (_rt != null)
-            _rt.Release();
+        if (_small != null)
+            Destroy(_small);
+    }
+
+    /// <summary>
+    /// Scales the screenshot <paramref name="screen"/> down into
+    /// <paramref name="frame"/> (RGB24) on the CPU: each frame pixel is the
+    /// mean of the screen pixels under it, taken from the screenshot's own
+    /// bytes. Nothing decodes or encodes a colour on the way (GATE-05: the old
+    /// GPU blit read the sRGB bytes as linear and wrote them through an sRGB
+    /// target, encoding them a second time), so a frame carries the screen's
+    /// one sRGB encode, as a still does. Rows stay bottom-up, as the textures
+    /// keep them (EncodeToPNG writes them upright). The byte buffers are the
+    /// recorder's, kept between frames.
+    /// </summary>
+    private void ScaleDown(Texture2D screen, Texture2D frame)
+    {
+        if (Layout(screen.format, out int stride, out int r, out int g, out int b))
+        {
+            NativeArray<byte> raw = screen.GetRawTextureData<byte>();
+            Fit(ref _screenBytes, raw.Length);
+            NativeArray<byte>.Copy(raw, _screenBytes, raw.Length);
+        }
+        else
+        {
+            // Any other format: its pixels as Color32 (an allocation per frame; the screenshot is RGBA32 on the editor and players).
+            Color32[] px = screen.GetPixels32();
+            Fit(ref _screenBytes, px.Length * 4);
+            for (int i = 0; i < px.Length; i++)
+            {
+                _screenBytes[i * 4] = px[i].r;
+                _screenBytes[i * 4 + 1] = px[i].g;
+                _screenBytes[i * 4 + 2] = px[i].b;
+            }
+        }
+        Fit(ref _frameBytes, frame.width * frame.height * 3);
+        Box(_screenBytes, stride, r, g, b, screen.width, screen.height, _frameBytes, frame.width, frame.height);
+        frame.SetPixelData(_frameBytes, 0);
+    }
+
+    /// <summary>The byte layout of a screenshot format read raw: bytes per pixel and the red, green and blue offsets; false (and RGBA32's layout, for the Color32 copy) for any other format.</summary>
+    private static bool Layout(TextureFormat format, out int stride, out int r, out int g, out int b)
+    {
+        stride = 4;
+        r = 0;
+        g = 1;
+        b = 2;
+        switch (format)
+        {
+            case TextureFormat.RGBA32: return true;
+            case TextureFormat.ARGB32: r = 1; g = 2; b = 3; return true;
+            case TextureFormat.BGRA32: r = 2; g = 1; b = 0; return true;
+            case TextureFormat.RGB24: stride = 3; return true;
+            default: return false;
+        }
+    }
+
+    private static void Fit(ref byte[] buffer, int length)
+    {
+        if (buffer == null || buffer.Length != length)
+            buffer = new byte[length];
+    }
+
+    /// <summary>The box filter behind <see cref="ScaleDown"/>: <paramref name="dst"/> (RGB24, <paramref name="fw"/> x <paramref name="fh"/>) pixel by pixel as the rounded mean of the source pixels its footprint covers (at least one).</summary>
+    private static void Box(byte[] src, int stride, int r, int g, int b, int sw, int sh, byte[] dst, int fw, int fh)
+    {
+        for (int y = 0; y < fh; y++)
+        {
+            int y0 = (int)((long)y * sh / fh), y1 = Math.Max(y0 + 1, (int)((long)(y + 1) * sh / fh));
+            for (int x = 0; x < fw; x++)
+            {
+                int x0 = (int)((long)x * sw / fw), x1 = Math.Max(x0 + 1, (int)((long)(x + 1) * sw / fw));
+                int sr = 0, sg = 0, sb = 0, n = 0;
+                for (int yy = y0; yy < y1; yy++)
+                {
+                    int row = yy * sw;
+                    for (int xx = x0; xx < x1; xx++)
+                    {
+                        int i = (row + xx) * stride;
+                        sr += src[i + r];
+                        sg += src[i + g];
+                        sb += src[i + b];
+                        n++;
+                    }
+                }
+                int o = (y * fw + x) * 3;
+                dst[o] = (byte)((sr + n / 2) / n);
+                dst[o + 1] = (byte)((sg + n / 2) / n);
+                dst[o + 2] = (byte)((sb + n / 2) / n);
+            }
+        }
     }
 
     private IEnumerator EndOfFrames()
@@ -208,6 +319,9 @@ public sealed class SeqRecorder : MonoBehaviour
                 Texture2D full = ScreenCapture.CaptureScreenshotAsTexture();
                 File.WriteAllBytes(_stillPath, full.EncodeToPNG());
                 Destroy(full);
+                // A captured sequence's frame of this pass holds the same picture: the row names it (seqtools colour compares them).
+                if (Dir != null && _capturing)
+                    Mark(StillChannel, Path.GetFileName(_stillPath));
                 _stillPath = null;
             }
             if (Dir == null)
@@ -223,19 +337,13 @@ public sealed class SeqRecorder : MonoBehaviour
             int capW = Mathf.Max(16, CaptureWidth);
             int capH = Mathf.Max(16, Mathf.RoundToInt(capW * Screen.height / (float)Mathf.Max(1, Screen.width)));
             Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();
-            if (_rt == null || _rt.width != capW || _rt.height != capH)
+            if (_small == null || _small.width != capW || _small.height != capH)
             {
-                if (_rt != null)
-                    _rt.Release();
-                _rt = new RenderTexture(capW, capH, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB);
+                if (_small != null)
+                    Destroy(_small);
                 _small = new Texture2D(capW, capH, TextureFormat.RGB24, false);
             }
-            Graphics.Blit(tex, _rt);
-            RenderTexture previous = RenderTexture.active;
-            RenderTexture.active = _rt;
-            _small.ReadPixels(new Rect(0, 0, capW, capH), 0, 0);
-            _small.Apply();
-            RenderTexture.active = previous;
+            ScaleDown(tex, _small);
             Destroy(tex);
             File.WriteAllBytes(Path.Combine(Dir, $"f{Index:0000}.png"), _small.EncodeToPNG());
             WriteRow(capW, capH, dtMs);

@@ -111,7 +111,8 @@ public static class DeskPlanChecks
         if (!shown.Pass)
             return GateResult.Fail(id, Owner, shown.Measured, $"no drop measured at HEAD and no '{DecorSpotsId}' line that passes: {shown.Detail}");
         QaGateResult line = all.First(r => string.Equals(r.id, DecorSpotsId, StringComparison.OrdinalIgnoreCase) && GateResults.IsCurrent(r.commit, head));
-        bool notApplicable = (line.measured ?? string.Empty).StartsWith("not applicable", StringComparison.OrdinalIgnoreCase);
+        // The scenario writes the line as n/a (QaRunner.NotApplicable, GATE-12); a line from before says so in its words.
+        bool notApplicable = line.na || (line.measured ?? string.Empty).StartsWith("not applicable", StringComparison.OrdinalIgnoreCase);
         if (!notApplicable)
             return GateResult.Fail(id, Owner, line.measured, "the desk in use has decoration spots, but there is no drop measured at HEAD (desk_plan_decor.drop.*): run the recipe (docs/pending/QA-RIG.md)");
         GateResult cut = GateResult.Fail(id, Owner, line.measured,

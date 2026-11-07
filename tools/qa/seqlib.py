@@ -6,13 +6,15 @@ Everything works on numpy arrays, so it is unit-tested on synthetic frames (test
 - flash: GAME_FEEL_BIBLE G3, flashes per second per screen cell (a flash = a pair of opposing luma changes), the
   full-field flashes and the saturated-red ones;
 - latency: GAME_FEEL_BIBLE check 2, frames from a press (events.tsv) to the first visible change, and to its cue;
-- frozen and cuts: BUG-31's "no frame repeated more than 0.25 s" and BUG-32's single-frame full-screen jumps;
+- sound: GAME_FEEL_BIBLE check 2's other half, frames from a press to the sound cue that answers it (events.tsv's cue rows);
+- frozen and cuts: BUG-31's "no frame repeated more than 0.25 s" and BUG-32's single-frame jumps (a frame whose mean
+  luma jumps against its steady neighbours, or a one-frame pop);
 - blockiness: the 8x8 block-artefact ratio (VIS audit).
 A sequence folder is what SeqRecorder writes: f0000.png ..., frames.tsv, events.tsv, meta.json (a timing sequence,
-recorded after the op realtime n=1, has no frames: only frames.tsv's real frame times, for the hitch analysis).
+recorded after the op realtime n=1, has no frames: only frames.tsv's real frame times, for the hitch analysis). The
+analyses write their own pictures into the folder (flicker_heat.png ...): only names like f0000.png are frames.
 """
 import csv
-import glob
 import json
 import os
 import re
@@ -23,24 +25,47 @@ from PIL import Image
 
 FPS = 30
 
+# A frame's file name (SeqRecorder: f0000.png, f0001.png ...): 'f', four or more digits, '.png'. Nothing else in the folder
+# is a frame (the analyses' own pictures, flicker_heat.png, sit beside them; GATE-15 of 2026-10-28).
+FRAME_NAME = re.compile(r'^f\d{4,}\.png$')
+
+# The events.tsv channels that mark a sound played: 'cue' (SeqRecorder: every cue the sound bank was asked for, and every
+# sound the game plays outside it, QaSignals.Event("cue", ...)) and 'audio' (the older name).
+CUE_CHANNELS = ('cue', 'audio')
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Reading a sequence
 
 def frame_files(seq):
-    """The sequence's frames in order."""
-    return sorted(glob.glob(os.path.join(seq, 'f*.png')))
+    """The sequence's frames in order: the files named like f0000.png (FRAME_NAME), never an analysis's picture."""
+    if not os.path.isdir(seq):
+        return []
+    return sorted(os.path.join(seq, n) for n in os.listdir(seq) if FRAME_NAME.match(n))
+
+
+def read_meta(seq):
+    """The sequence's meta.json as a dict (empty when the file is missing)."""
+    path = os.path.join(seq, 'meta.json')
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding='utf-8-sig') as f:
+        return json.load(f)
 
 
 def is_timing(seq):
     """True for a timing sequence (meta.json frames false, or fixedStep false from before the frames key): real frame
     times only, no captured frames."""
-    path = os.path.join(seq, 'meta.json')
-    if not os.path.exists(path):
+    meta = read_meta(seq)
+    if not meta:
         return False
-    with open(path, encoding='utf-8-sig') as f:
-        meta = json.load(f)
     return not meta.get('frames', meta.get('fixedStep', True))
+
+
+def motion_still(seq):
+    """True when the sequence was recorded with motion off (meta.json motionStill: Reduced Motion or a Motion intensity
+    of 0, when the game's motions cut by design)."""
+    return bool(read_meta(seq).get('motionStill', False))
 
 
 def read_tsv(path):
@@ -344,7 +369,7 @@ def first_change(lumas, i, roi=None, exclude=None, th=12.0, min_px=12):
     return None
 
 
-def latency(lumas, frames_rows, events_rows, roi=None, cue_channel='audio', max_frames=1, need_cue=False):
+def latency(lumas, frames_rows, events_rows, roi=None, cue_channel=CUE_CHANNELS, max_frames=1, need_cue=False):
     """For every press in events.tsv (channel mouse or key), the frames from the press to the first visible change
     (pointer area excluded) and to the nearest cue. Returns {'presses': [...], 'pass': ...}."""
     index_of = {}
@@ -354,7 +379,8 @@ def latency(lumas, frames_rows, events_rows, roi=None, cue_channel='audio', max_
         except (KeyError, ValueError):
             pass
     states = [frame_state(r) for r in frames_rows]
-    cues = [int(e['frame']) for e in events_rows if e.get('channel') == cue_channel]
+    channels = (cue_channel,) if isinstance(cue_channel, str) else tuple(cue_channel)
+    cues = [int(e['frame']) for e in events_rows if e.get('channel') in channels]
     presses = []
     for e in events_rows:
         if e.get('channel') not in ('mouse', 'key'):
@@ -377,6 +403,41 @@ def latency(lumas, frames_rows, events_rows, roi=None, cue_channel='audio', max_
     return {'presses': presses, 'pass': bool(presses) and all(p['pass'] for p in presses)}
 
 
+def sound(events_rows, max_frames=1, window=6, need_cue=False, cue_channels=CUE_CHANNELS):
+    """The press-to-sound check (GAME_FEEL_BIBLE check 2: "the cue fires on the press frame +-1"): for every press in
+    events.tsv (channel mouse or key), the first sound cue (CUE_CHANNELS) from one frame before the press to `window`
+    frames after it. A press is 'on time' when that cue is at most max_frames after it, 'late' when it comes later in
+    the window, and 'silent' with no cue in the window. Late presses fail; silent ones fail only with need_cue (not
+    every press answers with a sound: a view key moves the camera). Returns {'presses': [...], 'cues': n, 'pass': ...}
+    with each press's frame, name, the cue's offset in frames ('cue_frames', None when silent), its name and state."""
+    cues = []
+    for e in events_rows:
+        if e.get('channel') in cue_channels:
+            try:
+                cues.append((int(e['frame']), e.get('name', '')))
+            except (KeyError, ValueError):
+                pass
+    cues.sort()
+    presses = []
+    for e in events_rows:
+        if e.get('channel') not in ('mouse', 'key'):
+            continue
+        try:
+            frame = int(e['frame'])
+        except (KeyError, ValueError):
+            continue
+        answer = next(((f, n) for f, n in cues if frame - 1 <= f <= frame + window), None)
+        if answer is None:
+            state, offset, name = 'silent', None, ''
+        else:
+            offset, name = answer[0] - frame, answer[1]
+            state = 'on time' if offset <= max_frames else 'late'
+        ok = state == 'on time' or (state == 'silent' and not need_cue)
+        presses.append({'frame': frame, 'name': e.get('name', ''), 'cue_frames': offset, 'cue': name, 'state': state,
+                        'pass': ok})
+    return {'presses': presses, 'cues': len(cues), 'pass': all(p['pass'] for p in presses)}
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Frozen frames (BUG-31) and single-frame cuts (BUG-32)
 
@@ -395,13 +456,50 @@ def frozen(lumas, still=0.5, fps=FPS):
     return {'frames': best + 1 if best else 0, 'seconds': (best + 1) / fps if best else 0.0, 'start': best_start}
 
 
-def cuts(lumas, th=40.0, area=0.6):
-    """Frames where at least `area` of the pixels change by more than th at once (a full-screen jump)."""
+def cuts(lumas, th=15.0):
+    """Single-frame jumps (BUG-32: nothing pops): the frames whose mean luma changes by more than th (0..255; the knob,
+    seqtools --cut-th) from the frame before, in one frame, against steady neighbours. Frame i is a cut when
+    |m[i] - m[i-1]| > th, the change into frame i-1 is at most th/2, and either the change out of frame i is at most th/2
+    (a step) or the next frame comes back (|m[i+1] - m[i-1]| <= th/2: a one-frame pop). An eased move or fade spreads
+    its change over frames, so its neighbours never hold and it is no cut. Returns [(i, the jump in luma)]."""
+    m = [float(np.asarray(lum, dtype=np.float32).mean()) for lum in lumas]
+    n = len(m)
     out = []
-    for i in range(1, len(lumas)):
-        frac = float((np.abs(lumas[i] - lumas[i - 1]) > th).mean())
-        if frac >= area:
-            out.append((i, round(frac, 3)))
+    for i in range(1, n):
+        jump = abs(m[i] - m[i - 1])
+        if jump <= th:
+            continue
+        before = abs(m[i - 1] - m[i - 2]) if i >= 2 else 0.0
+        after = abs(m[i + 1] - m[i]) if i + 1 < n else 0.0
+        back = i + 1 < n and abs(m[i + 1] - m[i - 1]) <= th / 2
+        if before <= th / 2 and (after <= th / 2 or back):
+            out.append((i, round(jump, 1)))
+    return out
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Frame colour (GATE-05: a captured frame must show the game's colour, as a still of the same frame does)
+
+def colour_match(frame_rgb, still_rgb, roi=None):
+    """A captured frame against the full-size still of the same picture (SeqRecorder's 'still' row): the still is box
+    filtered to the frame's size, then the mean R, G, B of each are compared, over the whole picture and over roi
+    (x0, y0, x1, y1 fractions, origin top-left) when given. Returns {'frame': (r, g, b), 'still': (r, g, b), 'diff': the
+    largest channel difference, 'roi_frame', 'roi_still', 'roi_diff' (None without roi)}."""
+    frame = np.asarray(frame_rgb, dtype=np.float32)[..., :3]
+    h, w = frame.shape[:2]
+    still = np.asarray(Image.fromarray(np.asarray(still_rgb, dtype=np.uint8)[..., :3]).resize((w, h), Image.BOX), dtype=np.float32)
+
+    def means(a, box):
+        if box is not None:
+            x0, y0, x1, y1 = box
+            a = a[int(y0 * h):max(int(y0 * h) + 1, int(y1 * h)), int(x0 * w):max(int(x0 * w) + 1, int(x1 * w))]
+        return tuple(round(float(v), 1) for v in a.reshape(-1, 3).mean(axis=0))
+
+    out = {'frame': means(frame, None), 'still': means(still, None), 'roi_frame': None, 'roi_still': None, 'roi_diff': None}
+    out['diff'] = round(max(abs(a - b) for a, b in zip(out['frame'], out['still'])), 1)
+    if roi is not None:
+        out['roi_frame'], out['roi_still'] = means(frame, roi), means(still, roi)
+        out['roi_diff'] = round(max(abs(a - b) for a, b in zip(out['roi_frame'], out['roi_still'])), 1)
     return out
 
 
@@ -450,12 +548,13 @@ def blockiness(rgba):
 # ----------------------------------------------------------------------------------------------------------------------
 # Gate results (Library/QA/results/<id>.json, read by DemoGate; the C# QaGateResult's fields)
 
-def gate_result(rid, owner, ok, measured, detail, commit='', source='', built_player=False, dirty=False):
+def gate_result(rid, owner, ok, measured, detail, commit='', source='', built_player=False, dirty=False, na=False):
     """A gate result dict in QaGateResult's shape (dirty: measured on uncommitted changes, so not a measurement of
-    commit; DemoGate counts it as stale)."""
-    return {'id': rid, 'owner': owner, 'pass': bool(ok), 'measured': measured, 'detail': detail, 'commit': commit or '',
-            'dirty': bool(dirty), 'written': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'), 'source': source,
-            'builtPlayer': bool(built_player)}
+    commit; DemoGate counts it as stale. na: the check did not apply, a neutral result the gate lists and counts in
+    neither pass nor fail; it is written with pass true, so a reader that knows no n/a never sees it as red)."""
+    return {'id': rid, 'owner': owner, 'pass': bool(ok) or bool(na), 'measured': measured, 'detail': detail,
+            'commit': commit or '', 'dirty': bool(dirty), 'written': datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+            'source': source, 'builtPlayer': bool(built_player), 'na': bool(na)}
 
 
 def result_file_name(rid):
@@ -478,7 +577,7 @@ def results_from_run(run, commit, source, built_player, dirty=False):
     for a in run.get('assertions', []):
         rid = ('bp.' if built_player else '') + a.get('id', '')
         out.append(gate_result(rid, a.get('owner', ''), a.get('pass', False), a.get('measured', ''), a.get('detail', ''),
-                               commit, source, built_player, dirty))
+                               commit, source, built_player, dirty, a.get('na', False)))
     return out
 
 

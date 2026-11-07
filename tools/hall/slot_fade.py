@@ -16,13 +16,12 @@ and the red wall behind it), so this measures it in colour, on the pixels where 
          of that face's distance from it: max(0, min(|O - P|, |N - P|) - |C - P|) / min(|O - P|, |N - P|); 0 while
          the colour stays between the faces or away from the painting, 0.25 for a quarter of the painting showing.
 
-Frames are read with QA-RIG's extra sRGB encode undone (region_luma.decode), and colours are compared in linear
-light, where the blend happens. Prints the worst frame's mean share and the share of mask pixels over --max-share
+Frames are read as the screen showed them (a sequence from before QA-RIG's recorder fix has its extra sRGB encode
+undone: region_luma.extra_encode and decode), and colours are compared in linear light, where the blend happens. Prints the worst frame's mean share and the share of mask pixels over --max-share
 in it; exit 0 when the mean share stays at most --max-share (FIX_PLAN: the crossfade "steady (+-5%)").
 """
 import argparse
 import csv
-import glob
 import os
 import sys
 
@@ -31,7 +30,7 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from portal_check import PAINTING, homography, warp  # noqa: E402
-from region_luma import decode  # noqa: E402
+from region_luma import decode, extra_encode, frame_files  # noqa: E402
 from slot_mask import drawing_at  # noqa: E402
 
 
@@ -39,6 +38,11 @@ def linear(img):
     """0-255 sRGB (once encoded) to linear 0-1."""
     v = img / 255.0
     return np.where(v <= 0.04045, v / 12.92, ((v + 0.055) / 1.055) ** 2.4)
+
+
+def screen(rgb, extra):
+    """A frame's colour as the screen showed it: the old recorder's extra sRGB encode undone when the sequence carries it."""
+    return decode(rgb) if extra else rgb
 
 
 def main():
@@ -56,8 +60,9 @@ def main():
     with open(os.path.join(seq, 'frames.tsv'), encoding='utf-8') as f:
         row = next(csv.DictReader(f, delimiter='\t'))
     sw, sh, cw, ch = int(row['screenW']), int(row['screenH']), int(row['capW']), int(row['capH'])
-    files = sorted(glob.glob(os.path.join(seq, 'f*.png')))
-    frames = np.stack([linear(decode(np.asarray(Image.open(p).convert('RGB'), np.float32))) for p in files])
+    files = frame_files(seq)
+    extra = extra_encode(seq)
+    frames = np.stack([linear(screen(np.asarray(Image.open(p).convert('RGB'), np.float32), extra)) for p in files])
 
     # The painting under each capture pixel, by the drawing's projection.
     cwid, chei, corners = drawing_at(os.path.join(args.run, 'qa_report.txt'), sw, sh)

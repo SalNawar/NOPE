@@ -182,6 +182,47 @@ class LatencyTests(unittest.TestCase):
         self.assertFalse(seqlib.latency(lumas, rows, late, need_cue=True)['pass'])
         self.assertTrue(seqlib.latency(lumas, rows, on_time, need_cue=True)['pass'])
 
+    def test_the_recorders_cue_rows_are_cues(self):
+        lumas, rows, events = self.seq(10)
+        r = seqlib.latency(lumas, rows, events + [{'frame': '1010', 'channel': 'cue', 'name': 'stamp_approve'}], need_cue=True)
+        self.assertTrue(r['pass'])
+        self.assertEqual(0, r['presses'][0]['cue_frames'])
+
+
+class SoundTests(unittest.TestCase):
+    """The press-to-sound check (GAME_FEEL_BIBLE check 2: the cue fires on the press frame +-1; GATE-13)."""
+
+    PRESS = [{'frame': '500', 'channel': 'mouse', 'name': 'left'}]
+
+    def test_a_cue_on_the_press_frame_or_the_next_is_on_time(self):
+        for at in ('499', '500', '501'):
+            r = seqlib.sound(self.PRESS + [{'frame': at, 'channel': 'cue', 'name': 'stamp_approve'}])
+            self.assertTrue(r['pass'], at)
+            self.assertEqual('on time', r['presses'][0]['state'])
+            self.assertEqual('stamp_approve', r['presses'][0]['cue'])
+
+    def test_a_cue_later_in_the_window_is_late_and_fails(self):
+        r = seqlib.sound(self.PRESS + [{'frame': '504', 'channel': 'cue', 'name': 'stamp_approve'}])
+        self.assertFalse(r['pass'])
+        self.assertEqual(('late', 4), (r['presses'][0]['state'], r['presses'][0]['cue_frames']))
+
+    def test_no_cue_is_silent_and_fails_only_when_a_cue_is_needed(self):
+        far = self.PRESS + [{'frame': '520', 'channel': 'cue', 'name': 'footsteps_arrive'}, {'frame': '497', 'channel': 'cue', 'name': 'x'}]
+        r = seqlib.sound(far)
+        self.assertTrue(r['pass'])
+        self.assertEqual('silent', r['presses'][0]['state'])
+        self.assertEqual(2, r['cues'])
+        self.assertFalse(seqlib.sound(far, need_cue=True)['pass'])
+
+    def test_the_older_audio_channel_counts_and_other_channels_do_not(self):
+        self.assertEqual('on time', seqlib.sound(self.PRESS + [{'frame': '500', 'channel': 'audio', 'name': 'a'}])['presses'][0]['state'])
+        self.assertEqual('silent', seqlib.sound(self.PRESS + [{'frame': '500', 'channel': 'qa', 'name': 'a'}])['presses'][0]['state'])
+
+    def test_no_press_passes_with_nothing_to_judge(self):
+        r = seqlib.sound([{'frame': '500', 'channel': 'cue', 'name': 'a'}])
+        self.assertTrue(r['pass'])
+        self.assertEqual([], r['presses'])
+
 
 class FrozenCutsBlockTests(unittest.TestCase):
     def test_frozen_finds_the_longest_still_run(self):
@@ -193,6 +234,24 @@ class FrozenCutsBlockTests(unittest.TestCase):
     def test_cuts_finds_a_full_screen_jump(self):
         frames = flat(10, 5) + flat(200, 5)
         self.assertEqual([5], [i for i, _ in seqlib.cuts(frames)])
+
+    def test_a_one_frame_pop_is_one_cut(self):
+        frames = flat(60, 10)
+        frames[4] = frames[4].copy()
+        frames[4][:, :W // 2] = 200  # half the screen pops for one frame: the mean jumps by 70 and comes back
+        self.assertEqual([4], [i for i, _ in seqlib.cuts(frames)])
+
+    def test_an_eased_fade_or_a_steady_pan_is_no_cut(self):
+        fade = [np.full((H, W), float(v), dtype=np.float32) for v in (10, 10, 30, 70, 130, 180, 200, 200)]
+        self.assertEqual([], seqlib.cuts(fade))
+        x = np.arange(W, dtype=np.float32)
+        pan = [np.tile((x * 3 + i * 40) % 256, (H, 1)) for i in range(12)]  # a texture sliding 13 px a frame
+        self.assertEqual([], seqlib.cuts(pan))
+
+    def test_the_threshold_is_a_knob(self):
+        frames = flat(100, 5) + flat(110, 5)  # a 10-level step
+        self.assertEqual([], seqlib.cuts(frames))
+        self.assertEqual([5], [i for i, _ in seqlib.cuts(frames, th=8)])
 
     def test_blockiness_is_about_one_for_smooth_art_and_high_for_blocks(self):
         x = np.linspace(0, 255, 64)
@@ -222,8 +281,17 @@ class ResultTests(unittest.TestCase):
         self.assertTrue(r['builtPlayer'])
         self.assertEqual('abc', r['commit'])
         self.assertFalse(r['dirty'])
-        self.assertEqual(set(r), {'id', 'owner', 'pass', 'measured', 'detail', 'commit', 'dirty', 'written', 'source', 'builtPlayer'})
+        self.assertEqual(set(r), {'id', 'owner', 'pass', 'measured', 'detail', 'commit', 'dirty', 'written', 'source', 'builtPlayer', 'na'})
+        self.assertFalse(r['na'])
         self.assertTrue(seqlib.results_from_run(run, 'abc', 'dir', True, True)[0]['dirty'])
+
+    def test_a_not_applicable_assertion_is_a_neutral_result_never_a_red_one(self):
+        run = {'assertions': [{'id': 'desk_plan_homes.visible.ring', 'owner': 'DESK-PLAN', 'pass': True, 'na': True,
+                               'measured': 'n/a: not applicable on the painted desk', 'detail': 'the panel shows nothing'}]}
+        r = seqlib.results_from_run(run, 'abc', 'dir', False)[0]
+        self.assertTrue(r['na'])
+        self.assertTrue(r['pass'], 'written as pass, so a reader that knows no n/a never counts it red')
+        self.assertTrue(seqlib.gate_result('x', 'o', False, 'm', 'd', na=True)['pass'])
 
     def test_file_names_match_the_csharp_side(self):
         self.assertEqual('bp.a_b.c.json', seqlib.result_file_name('bp.a b.c'))
@@ -267,6 +335,18 @@ class KnownRedTests(unittest.TestCase):
             self.assertFalse(any(seqlib.matches(p, rid) for p in pats), rid)
 
 
+class FrameFileTests(unittest.TestCase):
+    def test_only_numbered_frames_are_frames(self):
+        root = tempfile.mkdtemp(prefix='qarig_frames_')
+        try:
+            for name in ('f0000.png', 'f0001.png', 'f12345.png', 'flicker_heat.png', 'static_flicker_heat.png', 'f.png', 'f01.png', 'f0002.jpg'):
+                Image.fromarray(np.zeros((4, 4, 3), dtype=np.uint8)).save(os.path.join(root, name))
+            self.assertEqual(['f0000.png', 'f0001.png', 'f12345.png'], [os.path.basename(f) for f in seqlib.frame_files(root)])
+            self.assertEqual([], seqlib.frame_files(os.path.join(root, 'missing')))
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+
+
 class CliTests(unittest.TestCase):
     """seqtools.py end to end on a sequence folder written like SeqRecorder writes it."""
 
@@ -301,6 +381,60 @@ class CliTests(unittest.TestCase):
 
     def test_all_passes_at_the_default_limits_and_skips_latency_without_presses(self):
         self.assertEqual(0, seqtools.main(['all', self.seq]))
+
+    def test_all_runs_cuts_and_sound_and_never_reads_its_heat_map_as_a_frame(self):
+        results = os.path.join(self.root, 'results')
+        seqtools.main(['flicker', self.seq])  # writes flicker_heat.png into the sequence
+        self.assertTrue(os.path.exists(os.path.join(self.seq, 'flicker_heat.png')))
+        Image.fromarray(np.full((H, W, 3), 255, dtype=np.uint8)).save(os.path.join(self.seq, 'flicker_heat.png'))
+        with open(os.path.join(self.seq, 'events.tsv'), 'a', encoding='utf-8') as f:
+            f.write('510\t10\t1\tmouse\tleft\n510\t10\t1\tcue\tstamp_approve\n')
+        self.assertEqual(0, seqtools.main(['all', self.seq, '--result-dir', results, '--commit', 'abc']))
+        names = sorted(os.listdir(results))
+        self.assertIn('smoke_day1.seq.idle.cuts.json', names)
+        self.assertIn('smoke_day1.seq.idle.sound.json', names)
+        with open(os.path.join(results, 'smoke_day1.seq.idle.cuts.json'), encoding='utf-8') as f:
+            cut = json.load(f)
+        self.assertTrue(cut['pass'], 'a white heat map read as a last frame would be a cut')
+        self.assertIn('in 30 frames', cut['measured'])
+
+    def test_all_skips_cuts_on_a_sequence_recorded_with_motion_off(self):
+        with open(os.path.join(self.seq, 'meta.json'), 'w', encoding='utf-8') as f:
+            f.write('{"fixedStep": true, "frames": true, "fps": 30, "motionStill": true}\n')
+        self.assertTrue(seqlib.motion_still(self.seq))
+        Image.fromarray(np.full((H, W, 3), 250, dtype=np.uint8)).save(os.path.join(self.seq, 'f0015.png'))
+        results = os.path.join(self.root, 'results')
+        self.assertEqual(1, seqtools.main(['cuts', self.seq]))
+        seqtools.main(['all', self.seq, '--result-dir', results, '--commit', 'abc'])
+        self.assertNotIn('smoke_day1.seq.idle.cuts.json', os.listdir(results))
+
+    def test_colour_holds_a_frame_to_the_still_of_the_same_picture(self):
+        # The still is the screen at twice the frame's size; frame 12 was captured with it (the recorder's 'still' row).
+        stills = os.path.join(self.root, 'smoke_day1_20261020_120000', 'stills')
+        os.makedirs(stills)
+        still = np.zeros((H * 2, W * 2, 3), dtype=np.uint8)
+        still[:, :, 0], still[:, :, 1], still[:, :, 2] = 55, 64, 36  # the mat's colour in a still (GATE-05)
+        still[: H, : W] = (180, 120, 40)
+        Image.fromarray(still).save(os.path.join(stills, 'rest_1920x1080.png'))
+        with open(os.path.join(self.seq, 'events.tsv'), 'a', encoding='utf-8') as f:
+            f.write('512\t12\t1\tstill\trest_1920x1080.png\n')
+        once = np.asarray(Image.fromarray(still).resize((W, H), Image.BOX))
+        Image.fromarray(once).save(os.path.join(self.seq, 'f0012.png'))
+        results = os.path.join(self.root, 'results')
+        self.assertEqual(0, seqtools.main(['colour', self.seq, '--result-dir', results, '--commit', 'abc', '--colour-roi', '0.6,0.6,0.9,0.9']))
+        with open(os.path.join(results, 'smoke_day1.seq.idle.colour.json'), encoding='utf-8') as f:
+            self.assertIn('worst mean RGB difference 0 ', json.load(f)['measured'])
+        # The old recorder's second sRGB encode: 55, 64, 36 read 127, 137, 105.
+        twice = np.round(255 * np.where(once / 255 <= 0.0031308, once / 255 * 12.92, 1.055 * (once / 255) ** (1 / 2.4) - 0.055)).astype(np.uint8)
+        Image.fromarray(twice).save(os.path.join(self.seq, 'f0012.png'))
+        self.assertEqual(1, seqtools.main(['colour', self.seq]))
+        c = seqlib.colour_match(twice, still, (0.6, 0.6, 0.9, 0.9))
+        self.assertEqual((55.0, 64.0, 36.0), c['roi_still'])
+        self.assertGreater(c['roi_diff'], 60)
+
+    def test_colour_skips_a_sequence_with_no_still(self):
+        self.assertEqual(0, seqtools.main(['colour', self.seq]))
+        self.assertEqual([], seqtools.still_rows(self.seq))
 
     def test_dirty_marks_the_result(self):
         results = os.path.join(self.root, 'results')

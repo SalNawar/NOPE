@@ -25,13 +25,18 @@ using Object = UnityEngine.Object;
 /// <c>rackOverPaper</c> column.</item>
 /// <item><c>stampPaper</c> (n = paper index, -1 the passport; x2, y2 = where on the screen, fractions; path) and
 /// <c>stampFolderOver</c> (f = how far the rulebook's edge goes over the passport, metres, default 0.03): the
-/// set-ups, by real drags (the last paper touched lies on top).</item>
+/// set-ups, by real drags (the last paper touched lies on top); stampFolderOver asserts its own
+/// <c>setup.folderOver.&lt;name&gt;</c> (red on the overlap not reached, the reading view gone off under it, or
+/// the desk holding the rulebook back).</item>
 /// <item><c>stampAim</c> (text = the dater: Approved, Denied or correct; n = the aimed paper, -1 the passport; x,
 /// y = where on it, fractions of its face, default its middle; target "folderEdge" aims f (default 8 mm) inside
 /// the rulebook's edge where it lies over the passport, "stack" also asserts the passport lies on at least two
 /// papers there; path): one try, asserted as <c>aim.&lt;name&gt;</c> (R4): the stamp lands on the aimed document
 /// within 3 mm of the pointer's spot on it; an accepted press prints exactly once, in its verdict's ink, and the
-/// die's face stops within 0.5 mm of the surface it met (no sink); a refused one prints nothing.</item>
+/// die's face stops within 0.5 mm of the surface it met (no sink); a refused one prints nothing. The case's
+/// layout is its own line, <c>setup.&lt;name&gt;</c> (GATE-20: a set-up failure is never an aim miss): red when the
+/// case asked was not laid out (no rulebook over the passport, no 3-paper stack, no pressable point, or the aim
+/// point could not be found); the aim is then n/a unless its stroke failed too.</item>
 /// <item><c>stampRegrab</c> (as stampAim): the same try, then the dater pressed again 2 frames after the let-go
 /// and dragged (R4 c): asserted as <c>aim.&lt;name&gt;</c>, also that the re-grab carried nothing until the stroke
 /// ended and the print landed.</item>
@@ -606,7 +611,9 @@ public static class StampRig
     /// rulebook beside a passport in its middle, so a rulebook the desk holds back more than 6 cm over the passport
     /// (or one the papers cover) gets room: the passport is dragged away from it by the rest (at most twice), and
     /// the rulebook is dragged after it. Each round starts in the reading view and logs what the press meets and
-    /// whether the drag ran.
+    /// whether the drag ran. The set-up writes its own line, <c>setup.folderOver.&lt;name&gt;</c> (GATE-20 of
+    /// 2026-10-28: it stepped around faults with no red line): red when the overlap was not reached, when the reading
+    /// view went off under it, or when the desk held the rulebook back; each fault named with its count.
     /// </summary>
     private static IEnumerator FolderOver(QaRunner runner, QaStep step)
     {
@@ -625,9 +632,20 @@ public static class StampRig
         }
         string state = "not checked";
         var screen = new Vector2(Screen.width, Screen.height);
-        int began = 0, ended = 0, cancelled = 0, passportMoves = 0;
-        bool makeRoom = false;
+        int began = 0, ended = 0, cancelled = 0, passportMoves = 0, viewOff = 0, heldBack = 0;
+        bool makeRoom = false, met = false;
         float sign = 0f;
+        // How far the rulebook's edge facing the passport reaches over it now (metres), and whether the rulebook lies on top there.
+        (float now, bool onTop) Overlap()
+        {
+            var fo = Footprint(tray, folder);
+            var po = Footprint(tray, passport, folder.transform.right);
+            float reach = sign > 0f ? fo.maxA - po.minA : po.maxA - fo.minA;
+            Vector3 edgeMid = fo.across * (sign > 0f ? fo.maxA - reach / 2f : fo.minA + reach / 2f)
+                              + fo.along * ((Mathf.Max(fo.minB, po.minB) + Mathf.Min(fo.maxB, po.maxB)) / 2f)
+                              + Up(tray) * ((Surface(tray) is Transform s ? Vector3.Dot(s.position, Up(tray)) : 0f) + fo.top);
+            return (reach, OnTopAt(folder, passport, edgeMid, Cam()));
+        }
         Action<DeskDraggable> onBegan = d => began++, onCancelled = d => cancelled++;
         Action<DeskDraggable, Vector3> onEnded = (d, w) => ended++;
         if (folder.Drag != null)
@@ -642,6 +660,8 @@ public static class StampRig
             {
                 // The set-up works in the reading view: a paper's drop, the hand-over or a press on the view's catcher can leave the office view in front.
                 var view = QaGame.Field(tray, "deskView") as DeskView;
+                if (view != null && !view.IsOn)
+                    viewOff++; // the game left the reading view under the set-up: a fault the line names
                 for (int k = 0; k < 3 && view != null && !view.IsOn; k++)
                 {
                     log.Append("the reading view on; ");
@@ -655,17 +675,16 @@ public static class StampRig
                 if (round == 0)
                     sign = pa - fa >= 0f ? 1f : -1f;
                 // How far the rulebook's edge facing the passport reaches over it now, and the move that makes it overlap.
-                float now = sign > 0f ? f.maxA - p.minA : p.maxA - f.minA;
+                (float now, bool onTop) = Overlap();
                 // Along the view the rulebook stays where it lies while it already meets the passport over 8 cm (the view's area narrows away from the chair, so a move along it can push the rulebook back over the passport).
                 float meetB = Mathf.Min(f.maxB, p.maxB) - Mathf.Max(f.minB, p.minB);
                 Vector3 delta = f.across * (sign * (overlap - now)) + f.along * (meetB >= 0.08f ? 0f : pb - fb);
-                Vector3 edgeMid = f.across * (sign > 0f ? f.maxA - now / 2f : f.minA + now / 2f)
-                                  + f.along * ((Mathf.Max(f.minB, p.minB) + Mathf.Min(f.maxB, p.maxB)) / 2f)
-                                  + Up(tray) * ((Surface(tray) is Transform s ? Vector3.Dot(s.position, Up(tray)) : 0f) + f.top);
-                bool onTop = OnTopAt(folder, passport, edgeMid, cam);
                 state = $"overlap {Mm(now)} (asked {Mm(overlap)}), rulebook on top {onTop}";
-                if (round > 0 && now >= 0.015f && now <= 0.06f && onTop)
+                if (round > 0 && Met(now, onTop))
+                {
+                    met = true;
                     break;
+                }
                 Vector2 from = Vector2.zero;
                 Vector3 grab = Vector3.zero;
                 bool covered = false;
@@ -727,10 +746,14 @@ public static class StampRig
                 var p2 = Footprint(tray, passport, folder.transform.right);
                 float after = sign > 0f ? f2.maxA - p2.minA : p2.maxA - f2.minA;
                 log.Append($"round {round + 1}: {state}, moved by {V(delta)} ({from} to {path.End}); view on {(view != null && view.IsOn)}, the press meets {(hits.Length > 0 ? hits : "nothing")}; drag began {began - began0}, ended {ended - ended0}, cancelled {cancelled - cancelled0}; the rulebook moved {Mm(shift)}, overlap now {Mm(after)}; ");
-                if (after > 0.06f && passportMoves < 2)
+                if (after > 0.06f)
                 {
-                    makeRoom = true;
-                    passportMoves++;
+                    heldBack++; // the desk held the rulebook back over the passport (DeskController.RestOf): a fault the line names
+                    if (passportMoves < 2)
+                    {
+                        makeRoom = true;
+                        passportMoves++;
+                    }
                 }
             }
         }
@@ -743,8 +766,27 @@ public static class StampRig
                 folder.Drag.DragCancelled -= onCancelled;
             }
         }
-        Report(runner, log + "then " + state);
+        if (!met)
+        {
+            // The last round's drag may have met it: measured once more after the rounds.
+            (float last, bool lastOnTop) = Overlap();
+            met = Met(last, lastOnTop);
+            state = $"overlap {Mm(last)} (asked {Mm(overlap)}), rulebook on top {lastOnTop}";
+        }
+        var faults = new List<string>();
+        if (!met)
+            faults.Add($"the overlap was not reached ({state}; 15 to 60 mm with the rulebook on top asked)");
+        if (viewOff > 0)
+            faults.Add($"the reading view went off under the set-up {viewOff} time(s) (the rig turned it back on)");
+        if (heldBack > 0)
+            faults.Add($"the desk held the rulebook back over the passport {heldBack} time(s) (more than 60 mm over it after the drag; the rig moved the passport {passportMoves} time(s))");
+        runner.Assert($"setup.folderOver.{QaRunner.Safe(string.IsNullOrEmpty(step.name) ? "rulebook" : step.name)}", Owner, faults.Count == 0,
+            faults.Count == 0 ? $"held: {state}" : $"{faults.Count} set-up fault(s): {state}", faults.Count == 0 ? "the rulebook lies over the passport's edge, set up in the reading view with no fault" : string.Join("; ", faults));
+        Report(runner, log + "then " + state + (faults.Count > 0 ? "; SET-UP FAULTS: " + string.Join("; ", faults) : string.Empty));
     }
+
+    /// <summary>True when the rulebook's edge lies 15 to 60 mm over the passport (<paramref name="now"/>, metres) with the rulebook on top there.</summary>
+    private static bool Met(float now, bool onTop) => now >= 0.015f && now <= 0.06f && onTop;
 
     /// <summary>Where the pointer at <paramref name="screen"/> meets the desk's plane (DeskSurface.TryProject), or null.</summary>
     private static Vector3? OnDeskPlane(DeskStampTray tray, Camera cam, Vector2 screen) =>
@@ -829,8 +871,10 @@ public static class StampRig
         }
         catch (InvalidOperationException e)
         {
-            runner.Assert($"aim.{name}", Owner, false, "set-up failed", e.Message);
-            Report(runner, $"== aim.{name}: FAIL set-up: {e.Message}");
+            // A set-up failure is its own red line, never an aim miss (GATE-20): the stroke was never made, so the aim is n/a.
+            runner.Assert($"setup.{name}", Owner, false, "set-up failed", e.Message);
+            runner.NotApplicable($"aim.{name}", Owner, "n/a: not aimed, the set-up failed", $"see setup.{name}: {e.Message}");
+            Report(runner, $"== aim.{name}: SET-UP FAILED: {e.Message}");
             yield break;
         }
         // A point the player can press: on the screen, and there the aimed paper on top (on a stack, over two more papers;
@@ -1010,9 +1054,11 @@ public static class StampRig
         int newPassportPrints = Prints(passport) - passportPrints, newPrints = AllPrints() - allPrints;
         float surface = Height(tray, landed);
         float sink = surface - minFace;
-        var fails = new List<string>(setup);
+        // The set-up's own faults (the case asked was not laid out, or no point of the aimed paper could be pressed) go on
+        // their own line, never into the aim's (GATE-20); the aim's line judges the stroke alone.
         if (!aimedThere)
-            fails.Add("the pointer's spot was not on the aimed paper");
+            setup.Add("the pointer's spot was not on the aimed paper (no pressable point of it was found)");
+        var fails = new List<string>();
         string picked = Nearest(landed, out float nearest);
         bool aimedIsPassport = aimed == passport;
         StampPress want = !aimedIsPassport ? StampPress.NotPassport : hadVerdict ? StampPress.AlreadyStamped : StampPress.Stamped;
@@ -1046,8 +1092,14 @@ public static class StampRig
         string measured = $"{press}, {Mm(off)} off, sink {(press == StampPress.Stamped ? Mm(-sink) : "-")}, prints +{newPrints}, ink {ink}";
         string detail = $"{which} dater, {QaRunner.ParseKind(step.path)} path to paper {aimed.Index}{(folderEdge ? " at the rulebook's edge" : stack ? " on a stack" : string.Empty)} at {path.End} ({Screen.width}x{Screen.height}){moved}; under the spot: {string.Join(", ", under.Select(u => $"paper {u.paper.Index} at {u.distance:0.0000}"))}{(folderDistance < float.MaxValue ? $", rulebook at {folderDistance:0.0000}" : string.Empty)}; physics along the ray: {seen}; landed {V(landed)} on {picked} ({Mm(nearest)}), expected {V(expected)}; die face min {Mm(minFace)}, body min {Mm(minBody)}, surface {Mm(surface)}{edge}{(regrab ? $"; re-grab: {dragged}, carried during the stroke {carriedDuringStroke} frames" : string.Empty)}; cues {string.Join(",", sounds.Distinct())}" +
                         (fails.Count > 0 ? "; FAIL: " + string.Join("; ", fails) : string.Empty);
-        runner.Assert($"aim.{name}", Owner, fails.Count == 0, measured, detail);
-        Report(runner, $"== aim.{name}: {(fails.Count == 0 ? "PASS" : "FAIL")} {measured}; {detail}");
+        runner.Assert($"setup.{name}", Owner, setup.Count == 0, setup.Count == 0 ? "held" : $"{setup.Count} set-up fault(s)",
+            setup.Count == 0 ? $"paper {aimed.Index}{(folderEdge ? " at the rulebook's edge" : stack ? " on a stack" : string.Empty)} laid out as asked, its spot pressable" : string.Join("; ", setup));
+        if (setup.Count > 0 && fails.Count == 0)
+            // The stroke held, but not in the case asked: n/a, never a pass of that case.
+            runner.NotApplicable($"aim.{name}", Owner, "n/a: " + measured, $"not the case asked (see setup.{name}: {string.Join("; ", setup)}); {detail}");
+        else
+            runner.Assert($"aim.{name}", Owner, fails.Count == 0, measured, (setup.Count > 0 ? $"the set-up also failed (setup.{name}); " : string.Empty) + detail);
+        Report(runner, $"== aim.{name}: {(fails.Count == 0 ? setup.Count == 0 ? "PASS" : "N/A (set-up failed)" : "FAIL")} {measured}; {detail}{(setup.Count > 0 ? "; SET-UP: " + string.Join("; ", setup) : string.Empty)}");
     }
 
     /// <summary>The tray's own measure (DeskStampTray.EdgeDistance, the enabled boxes only): how far inside the rulebook's footprint <paramref name="world"/> lies, metres.</summary>
