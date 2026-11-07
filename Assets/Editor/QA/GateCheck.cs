@@ -85,6 +85,20 @@ public sealed class GateResult
     public static GateResult Of(string id, string owner, bool pass, string measured, string detail) =>
         new GateResult { Id = id, Owner = owner, Pass = pass, Measured = measured, Detail = detail };
 
+    /// <summary>
+    /// Adds the <see cref="Unmet"/> ids of <paramref name="parts"/> (a check
+    /// judged over several patterns) to this result and returns it, so a
+    /// known-red entry spares the check only for its own lines (GATE-18: a
+    /// composite check named none, so its entry spared it whole).
+    /// </summary>
+    public GateResult Naming(IEnumerable<GateResult> parts)
+    {
+        foreach (string id in (parts ?? Enumerable.Empty<GateResult>()).Where(p => p != null).SelectMany(p => p.Unmet))
+            if (!Unmet.Contains(id, StringComparer.OrdinalIgnoreCase))
+                Unmet.Add(id);
+        return this;
+    }
+
     /// <summary>One line for a report.</summary>
     public override string ToString() => $"{(Pass ? "PASS" : "FAIL")} {Id} [{Owner}] {Measured}{(string.IsNullOrEmpty(Detail) ? string.Empty : " - " + Detail)}";
 }

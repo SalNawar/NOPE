@@ -205,6 +205,6 @@ public static class QaRigChecks
         List<GateResult> parts = patterns.Select(p => GateResults.Require(id, owner, p, builtPlayer)).ToList();
         bool pass = parts.All(r => r.Pass);
         return GateResult.Of(id, owner, pass, string.Join("; ", patterns.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
-            string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
+            string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail))).Naming(parts);
     }
 }

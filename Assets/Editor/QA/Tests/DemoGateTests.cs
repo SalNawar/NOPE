@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 /// <summary>
@@ -174,7 +175,93 @@ public class DemoGateTests
         foreach (KeyValuePair<string, string> k in known)
         {
             Assert.IsTrue(ids.Any(id => GateResults.Matches(k.Key, id)), $"{k.Key} names no registered check");
-            StringAssert.Contains("BUG-", k.Value, $"{k.Key} names its BUG part");
+            Assert.IsTrue(Regex.IsMatch(k.Value, @"\b(BUG-\d+|N-[a-z0-9-]+-\d+|[A-Z]{2,5}-\d+)"), $"{k.Key} names its bug (a BUG part, an audit id or a night row)");
+        }
+    }
+
+    /// <summary>GATE-17 (the audit of 2026-10-28): "*.camera" and "*.seq.*.flicker" spared every run's camera and flicker lines. Each run pattern names its scenario (after "bp." for a built player's), never a leading wildcard.</summary>
+    [Test]
+    public void TheProjectsKnownRedList_NamesTheRunOfEveryPattern()
+    {
+        string text = File.ReadAllText(Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt"));
+        foreach (string pattern in DemoGate.KnownRedRunPatterns(text))
+        {
+            string run = (pattern.StartsWith("bp.", StringComparison.Ordinal) ? pattern.Substring(3) : pattern).Split('.')[0];
+            Assert.IsFalse(run.Length == 0 || run.Contains("*"), $"{pattern} names no run");
+        }
+    }
+
+    /// <summary>GATE-18: an entry with run patterns spared a check that never ran ("not measured" named no result). A pattern with no result now refuses the merge; an entry with no pattern still spares its static check whole.</summary>
+    [Test]
+    public void KnownRedEntry_NeverSparesAResultThatWasNotMeasured()
+    {
+        const string text = "flow.esc.home  flow_pause.settings.home  # BUG-34b, HOME\nqa.scenes.liberationSans  # BUG-3, TEXT-LANG\n";
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        Dictionary<string, List<string>> own = DemoGate.KnownRedPatternsByCheck(text);
+        GateResult never = GateResults.Judge("flow.esc.home", "FLOW", "flow_pause.settings.home", Array.Empty<QaGateResult>(), "abc", false);
+        CollectionAssert.AreEqual(new[] { GateResults.NotMeasuredPrefix + "flow_pause.settings.home" }, never.Unmet);
+        DemoGateReport merge = DemoGate.Evaluate(GateLevel.Merge, new[] { never }, 1, known, own);
+        Assert.IsTrue(merge.Refused, "a known-red line that was never measured refuses the merge");
+        StringAssert.Contains("not measured: flow_pause.settings.home", merge.Reasons.Single());
+
+        GateResult measured = GateResults.Judge("flow.esc.home", "FLOW", "flow_pause.settings.home", new[] { R("flow_pause.settings.home", false) }, "abc", false);
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { measured }, 1, known, own).Refused, "measured red, on the entry's own pattern: spared");
+
+        var whole = new[] { GateResult.Fail("qa.scenes.liberationSans", "TEXT-LANG", "7 texts", "...") };
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, whole, 1, known, own).Refused, "an entry with no pattern spares its static check whole");
+    }
+
+    /// <summary>GATE-18: a check judged over several patterns (CamChecks.Verdict, FlowChecks.Verdict, QaRigChecks.All ...) named no result, so its entry spared it whole, other lines too. It names its parts' lines now (GateResult.Naming), and a red check that names none refuses an entry with patterns.</summary>
+    [Test]
+    public void ACompositeCheck_NamesItsPartsLines_SoItsEntrySparesOnlyThose()
+    {
+        const string text = "cam.play.day12  cam_views.play.*  # BUG-17a, CAM\n";
+        Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
+        Dictionary<string, List<string>> own = DemoGate.KnownRedPatternsByCheck(text);
+        var results = new[] { R("cam_views.play.d12", false), R("cam_views.missingScripts.end", true) };
+        GateResult onlyPlay = CamChecks.Verdict("cam.play.day12", "CAM", false, results, "abc", "cam_views.play.*", "cam_views.missingScripts.end");
+        CollectionAssert.AreEqual(new[] { "cam_views.play.d12" }, onlyPlay.Unmet);
+        Assert.IsFalse(DemoGate.Evaluate(GateLevel.Merge, new[] { onlyPlay }, 1, known, own).Refused, "the entry's own line: spared");
+
+        var scriptRed = new[] { R("cam_views.play.d12", false), R("cam_views.missingScripts.end", false) };
+        GateResult both = CamChecks.Verdict("cam.play.day12", "CAM", false, scriptRed, "abc", "cam_views.play.*", "cam_views.missingScripts.end");
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { both }, 1, known, own).Refused, "a missing script in the same run is not the entry's");
+
+        GateResult unnamed = GateResult.Fail("cam.play.day12", "CAM", "red", "a check that names no line");
+        Assert.IsTrue(DemoGate.Evaluate(GateLevel.Merge, new[] { unnamed }, 1, known, own).Refused, "an entry with patterns cannot spare a red it cannot see");
+    }
+
+    /// <summary>GATE-01: a commit that touched only the docs or the known-red list made every result stale. MeasuredPaths names what a measurement reads: everything but the docs folder, Markdown outside Assets and the known-red list.</summary>
+    [Test]
+    public void MeasuredPaths_OnlyTheDocsAndTheKnownRedList_LeaveAResultCurrent()
+    {
+        foreach (string path in new[] { "docs/FEATURES.md", "docs/pending/QA-RIG.md", "tools/qa/gate_known_red.txt", "README.md", "tools/qa/NOTES.md", "" })
+            Assert.IsFalse(MeasuredPaths.Affects(path), path);
+        foreach (string path in new[] { "Assets/Scripts/GameManager.cs", "Assets/Art/UI/Kit/README.md", "Packages/manifest.json", "ProjectSettings/TagManager.asset", "tools/qa/scenarios/smoke_day1.json", "tools/qa/seqlib.py", ".gitattributes" })
+            Assert.IsTrue(MeasuredPaths.Affects(path), path);
+        Assert.IsTrue(MeasuredPaths.NoneAffected("docs/FEATURES.md\ntools/qa/gate_known_red.txt\n"));
+        Assert.IsTrue(MeasuredPaths.NoneAffected(string.Empty), "the same tree");
+        Assert.IsFalse(MeasuredPaths.NoneAffected("docs/FEATURES.md\nAssets/Editor/QA/DemoGate.cs\n"));
+    }
+
+    /// <summary>A result measured at another commit counts only when GateResults.SameMeasurement carries it (DemoGate.Run sets MeasuredPaths' git rule); the default is the exact commit.</summary>
+    [Test]
+    public void Judge_AResultCarriedFromAnOlderCommit_IsCurrent_OnlyWhenTheRuleCarriesIt()
+    {
+        QaGateResult older = R("smoke_day1.console", true, "old");
+        Assert.IsFalse(GateResults.Judge("c", "QA-RIG", "smoke_day1.*", new[] { older }, "abc", false).Pass, "the default: the exact commit only");
+        try
+        {
+            GateResults.SameMeasurement = (commit, head) => commit == "old" && head == "abc";
+            Assert.IsTrue(GateResults.Judge("c", "QA-RIG", "smoke_day1.*", new[] { older }, "abc", false).Pass);
+            Assert.IsFalse(GateResults.Judge("c", "QA-RIG", "smoke_day1.*", new[] { R("smoke_day1.console", true, "other") }, "abc", false).Pass);
+            QaGateResult dirty = R("smoke_day1.console", true, "old");
+            dirty.dirty = true;
+            Assert.IsFalse(GateResults.Judge("c", "QA-RIG", "smoke_day1.*", new[] { dirty }, "abc", false).Pass, "a carried result measured on uncommitted changes stays dirty");
+        }
+        finally
+        {
+            GateResults.SameMeasurement = GateResults.ExactCommitOnly;
         }
     }
 
@@ -229,13 +316,14 @@ public class DemoGateTests
     {
         string file = Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt");
         List<string> patterns = DemoGate.KnownRedRunPatterns(File.ReadAllText(file));
-        foreach (string id in new[] { "smoke_day1.camera", "smoke_day1.camera.handover", "smoke_day1.liberationSans.desk", "smoke_day1.seq.handover.flicker", "bp.bp_smoke.seq.office_h2_idle.flicker" })
+        foreach (string id in new[] { "smoke_day1.camera", "smoke_day1.camera.handover", "smoke_day1.seq.handover.flicker", "bp.bp_smoke.seq.office_h2_idle.flicker" })
             Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
-        foreach (string id in new[] { "smoke_day1.console", "smoke_day1.presses", "smoke_day1.quality", "smoke_day1.missingScripts.desk", "smoke_day1.materials.end", "smoke_day1.seq.handover.flash", "bp.bp_smoke.gc.steady", "bp.bp_smoke.seq.callnext.hitches" })
+        foreach (string id in new[] { "smoke_day1.console", "smoke_day1.presses", "smoke_day1.quality", "smoke_day1.missingScripts.desk", "smoke_day1.materials.end", "smoke_day1.seq.handover.flash", "bp.bp_smoke.gc.steady", "bp.bp_smoke.seq.callnext.hitches",
+                                      "smoke_day1.liberationSans.desk", "smoke_day1.seq.walk_in.flicker", "tools_torch.camera", "overlay_block.seq.overlay.flicker", "hall_fx_city.seq.office_a1_h2.flicker", "hall_fx_dusk.seq.dusk_office_a1.flicker" })
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
-    /// <summary>The entries ruled at the six tracks' landing (2026-10-21, and ruling 6 of 2026-10-27: stamp.aim and stamp.rackClear under CAM) spare only the result their check reads: tools.micro's own assertions, stamp_aim's sixteen edge tries (a1 to a10 and the six (c) strokes at the rulebook's edge, two to three red each run) and CAM's plate lines; desk.play.clicks and stamp.rackClear went at CAM's landing (2026-10-27); qa.play.camera still spares the camera lines; never QA-RIG's or STAMP's other assertions in those scenarios.</summary>
+    /// <summary>The entries ruled at the six tracks' landing (2026-10-21, and ruling 6 of 2026-10-27: stamp.aim and stamp.rackClear under CAM) spare only the result their check reads: tools.micro's own assertions, stamp_aim's sixteen edge tries (a1 to a10 and the six (c) strokes at the rulebook's edge, two to three red each run) and CAM's stamp hint plate lines; desk.play.clicks and stamp.rackClear went at CAM's landing (2026-10-27), cam.play.guidePlate and qa.play.liberationSans at gate-hygiene (2026-11-07: they pass); qa.play.camera spares only the smoke day's and desk_plan_homes' camera lines; never QA-RIG's or STAMP's other assertions in those scenarios.</summary>
     [Test]
     public void TheRuledKnownRedEntries_SpareOnlyWhatTheirChecksRead()
     {
@@ -243,20 +331,21 @@ public class DemoGateTests
         string text = File.ReadAllText(file);
         List<string> patterns = DemoGate.KnownRedRunPatterns(text);
         Dictionary<string, string> known = DemoGate.ParseKnownRed(text);
-        foreach (string id in new[] { "tools.micro", "textlang.kitSymbols", "stamp.aim", "cam.play.guidePlate", "cam.play.stampHint", "cam.bp.gc", "qa.play.camera", "cam.play.day12", "tools.lens" })
+        foreach (string id in new[] { "tools.micro", "textlang.kitSymbols", "stamp.aim", "cam.play.stampHint", "cam.bp.gc", "qa.play.camera", "cam.play.day12", "tools.lens" })
             Assert.IsTrue(known.ContainsKey(id), $"{id} is on the list");
+        Assert.IsFalse(known.ContainsKey("cam.play.guidePlate"), "cam.play.guidePlate went at gate-hygiene (its plate line passed: cam_chrome.plate.a1_d1.guide at ed6da29)");
+        Assert.IsFalse(known.ContainsKey("qa.play.liberationSans"), "qa.play.liberationSans went at gate-hygiene (the smoke day's three lines passed at 370352f)");
         StringAssert.Contains("CONTENT", known["textlang.kitSymbols"]);
         StringAssert.Contains("UI-PC", known["tools.micro"]);
         StringAssert.Contains("STAMP", known["stamp.aim"]);
         StringAssert.Contains("DOC-HANDLE", known["qa.play.camera"]);
         Assert.IsFalse(known.ContainsKey("desk.play.clicks"), "desk.play.clicks went at CAM's landing (the intercom pressed in the reading view)");
         Assert.IsFalse(known.ContainsKey("stamp.rackClear"), "stamp.rackClear went at CAM's landing (0 rack px over the paper in the reading view)");
-        StringAssert.Contains("CONTENT", known["cam.play.guidePlate"]);
         StringAssert.Contains("STAMP", known["cam.play.stampHint"]);
         StringAssert.Contains("QA-RIG", known["cam.bp.gc"]);
-        foreach (string id in new[] { "tools_microprint.tools.micro.read", "stamp_aim.aim.a6", "stamp_aim.aim.a9", "stamp_aim.aim.a1", "stamp_aim.aim.c3", "stamp_aim.aim.c9", "tools_lens.tools.lens.rulebook.revert", "cam_chrome.plate.a1_d1.guide", "cam_chrome.plate.a2.stamphint", "bp.cam_gc.gc.cam_cycle", "desk_plan_homes.camera.intercom_reading", "cam_views.camera", "cam_views.play.d12" })
+        foreach (string id in new[] { "tools_microprint.tools.micro.read", "stamp_aim.aim.a6", "stamp_aim.aim.a9", "stamp_aim.aim.a1", "stamp_aim.aim.c3", "stamp_aim.aim.c9", "tools_lens.tools.lens.rulebook.revert", "cam_chrome.plate.a2.stamphint", "bp.cam_gc.gc.cam_cycle", "desk_plan_homes.camera.intercom_reading", "cam_views.play.d12" })
             Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
-        foreach (string id in new[] { "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.presses", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses", "stamp_aim.console", "stamp_aim.presses", "stamp_aim.aim.b4_1", "stamp_aim.aim.b1_3", "stamp_aim.aim.c1", "stamp_aim.aim.c4", "tools_lens.tools.lens.newspaper.reach", "tools_lens.console", "stamp_aim.letGo.rack1", "stamp_case.console", "stamp_case.rackOverPaper.a1", "stamp_case.tab.a1.rackInFrame", "stamp_hold.hold.esc1", "cam_views.tilts.d12", "cam_views.frame.a1_d12_reading", "cam_chrome.console", "cam_chrome.chrome.a1", "cam_chrome.missingScripts.end", "cam_gc.cycle.cam_cycle", "bp.cam_gc.cycle.cam_cycle" })
+        foreach (string id in new[] { "cam_chrome.plate.a1_d1.guide", "cam_views.camera", "cam_views.camera.a1_city", "tools_torch.camera", "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.presses", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses", "stamp_aim.console", "stamp_aim.presses", "stamp_aim.aim.b4_1", "stamp_aim.aim.b1_3", "stamp_aim.aim.c1", "stamp_aim.aim.c4", "tools_lens.tools.lens.newspaper.reach", "tools_lens.console", "stamp_aim.letGo.rack1", "stamp_case.console", "stamp_case.rackOverPaper.a1", "stamp_case.tab.a1.rackInFrame", "stamp_hold.hold.esc1", "cam_views.tilts.d12", "cam_views.frame.a1_d12_reading", "cam_chrome.console", "cam_chrome.chrome.a1", "cam_chrome.missingScripts.end", "cam_gc.cycle.cam_cycle", "bp.cam_gc.cycle.cam_cycle" })
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
@@ -286,8 +375,21 @@ public class DemoGateTests
     {
         string output = "ProjectSettings/EditorBuildSettings.asset\r\nProjectSettings/QualitySettings.asset\nAssembly-CSharp.csproj\nNOPE-t6.sln\n"
                       + "ProjectSettings/ProjectSettings.asset\nProjectSettings/InputManager.asset\nPackages/manifest.json\n";
-        CollectionAssert.AreEqual(new[] { "ProjectSettings/ProjectSettings.asset", "ProjectSettings/InputManager.asset", "Packages/manifest.json" }, GitDirty.Filter(output));
+        CollectionAssert.AreEqual(new[] { "ProjectSettings/InputManager.asset", "Packages/manifest.json" }, GitDirty.Filter(output));
         CollectionAssert.IsEmpty(GitDirty.Filter("projectsettings/qualitysettings.asset\nProjectSettings/EditorBuildSettings.asset\n"));
+    }
+
+    /// <summary>GATE-16: every run after a build was DIRTY, because a build rewrites the URP assets and the graphics, project, Shader Graph and connect settings. The night fleet's noise list (AGENT_RULES; unity_run.py NOISE, which the fleet never commits) is all churn; a real change beside it still makes the tree dirty.</summary>
+    [Test]
+    public void GitDirty_Filter_DropsEveryFileAPlayerBuildRewrites()
+    {
+        const string buildWrites = "Assets/DefaultVolumeProfile.asset\nAssets/Settings/UniversalRP.asset\nAssets/UniversalRenderPipelineGlobalSettings.asset\n"
+                                 + "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset\n"
+                                 + "ProjectSettings/GraphicsSettings.asset\nProjectSettings/ProjectSettings.asset\nProjectSettings/QualitySettings.asset\n"
+                                 + "ProjectSettings/ShaderGraphSettings.asset\nProjectSettings/UnityConnectSettings.asset\nProjectSettings/EditorBuildSettings.asset\n"
+                                 + "Assembly-CSharp-Editor.csproj\nTimeDesk.Domain.csproj\n";
+        CollectionAssert.IsEmpty(GitDirty.Filter(buildWrites), "a run after a build is not dirty");
+        CollectionAssert.AreEqual(new[] { "Assets/Settings/OfficeFinishProfile.asset" }, GitDirty.Filter(buildWrites + "Assets/Settings/OfficeFinishProfile.asset\n"));
     }
 
     private static GateResult Throws() => throw new InvalidOperationException("boom");

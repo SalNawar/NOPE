@@ -39,6 +39,9 @@ public sealed class DemoGateReport
     /// <summary>Known-red entries whose check now passes: the list must drop them (INTEGRATION).</summary>
     public List<string> StaleKnownRed { get; } = new List<string>();
 
+    /// <summary>The older commits (short hashes) whose results counted at HEAD because no measured path changed since (MeasuredPaths; set by DemoGate.Run).</summary>
+    public List<string> Carried { get; } = new List<string>();
+
     /// <summary>The report as Markdown (Library/QA/DemoGate/report.md).</summary>
     public string ToMarkdown()
     {
@@ -47,6 +50,11 @@ public sealed class DemoGateReport
         sb.AppendLine();
         sb.AppendLine($"Written {DateTime.Now:yyyy-MM-dd HH:mm:ss}, HEAD {(string.IsNullOrEmpty(Head) ? "unknown" : Head)}. {Results.Count(r => r.Pass)} pass, {Results.Count(r => !r.Pass)} fail.");
         sb.AppendLine();
+        if (Carried.Count > 0)
+        {
+            sb.AppendLine($"Results measured at {string.Join(", ", Carried)} count at HEAD: no measured path changed since (MeasuredPaths: only the docs, Markdown outside Assets or the known-red list changed).");
+            sb.AppendLine();
+        }
         if (Reasons.Count > 0)
         {
             sb.AppendLine("## Refused because");
@@ -126,19 +134,36 @@ public static class DemoGate
     {
         List<RegisteredCheck> checks = GateChecks.All();
         var results = new List<GateResult>(GateChecks.Problems(checks));
-        foreach (RegisteredCheck c in checks.Where(c => level == GateLevel.Demo || !c.Info.DemoOnly))
+        var carried = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+        Func<string, string, bool> git = MeasuredPaths.Resolver(GateResults.ProjectRoot);
+        GateResults.SameMeasurement = (commit, head) =>
         {
-            try
+            bool same = git(commit, head);
+            if (same)
+                carried.Add(commit.Substring(0, Math.Min(8, commit.Length)));
+            return same;
+        };
+        try
+        {
+            foreach (RegisteredCheck c in checks.Where(c => level == GateLevel.Demo || !c.Info.DemoOnly))
             {
-                EditorUtility.DisplayProgressBar("DemoGate", c.Info.Id, 0.5f);
-                results.AddRange(c.Run());
-            }
-            finally
-            {
-                EditorUtility.ClearProgressBar();
+                try
+                {
+                    EditorUtility.DisplayProgressBar("DemoGate", c.Info.Id, 0.5f);
+                    results.AddRange(c.Run());
+                }
+                finally
+                {
+                    EditorUtility.ClearProgressBar();
+                }
             }
         }
+        finally
+        {
+            GateResults.SameMeasurement = GateResults.ExactCommitOnly;
+        }
         DemoGateReport report = Evaluate(level, results, checks.Count, KnownRedList(), KnownRedPatternsByCheck());
+        report.Carried.AddRange(carried);
         report.Head = GitHead.Read(GateResults.ProjectRoot);
         Directory.CreateDirectory(ReportFolder);
         File.WriteAllText(Path.Combine(ReportFolder, level == GateLevel.Demo ? "report_demo.md" : "report.md"), report.ToMarkdown());
@@ -272,8 +297,11 @@ public static class DemoGate
     /// matches one of that entry's own patterns; any other red result in the
     /// check refuses the merge (the code review's RG-01 of 2026-10-28: the
     /// entry for helix_before spared the whole Helix check, and
-    /// helix_after_drop went red unseen). An entry with no pattern, or a red
-    /// check that names no result, is spared whole.
+    /// helix_after_drop went red unseen). An entry with run patterns never
+    /// spares a result that was not measured (GateResults.NotMeasuredPrefix)
+    /// or a red check that names no result (GATE-18: entries spared checks
+    /// that never ran). An entry with no pattern (a static check) is spared
+    /// whole.
     /// </summary>
     public static DemoGateReport Evaluate(GateLevel level, IEnumerable<GateResult> results, int registered, IDictionary<string, string> knownRed = null, IDictionary<string, List<string>> knownRedPatterns = null)
     {
@@ -305,11 +333,19 @@ public static class DemoGate
         return report;
     }
 
-    /// <summary>The ids that made <paramref name="result"/> red and match none of entry <paramref name="known"/>'s own run patterns (empty when the entry has no pattern: it spares the check whole).</summary>
+    /// <summary>
+    /// The ids that made <paramref name="result"/> red and match none of entry
+    /// <paramref name="known"/>'s own run patterns, with every pattern that
+    /// was not measured (empty when the entry has no pattern: it spares the
+    /// check whole). A red check that names no result cannot show that its
+    /// red is the entry's, so it is outside too.
+    /// </summary>
     private static List<string> OutsideOwnPatterns(GateResult result, string known, IDictionary<string, List<string>> knownRedPatterns)
     {
         if (!knownRedPatterns.TryGetValue(known, out List<string> own) || own == null || own.Count == 0)
             return new List<string>();
-        return result.Unmet.Where(id => !own.Any(p => GateResults.Matches(p, id))).ToList();
+        if (result.Unmet.Count == 0)
+            return new List<string> { "no result named (the check does not say which result made it red)" };
+        return result.Unmet.Where(id => id.StartsWith(GateResults.NotMeasuredPrefix, StringComparison.Ordinal) || !own.Any(p => GateResults.Matches(p, id))).ToList();
     }
 }

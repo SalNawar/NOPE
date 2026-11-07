@@ -48,22 +48,37 @@ public static class UiPcChecks
     /// <summary>The results <c>uipc.poweron</c> requires: uipcPowerOn's two passes (full motion, Reduced Motion).</summary>
     public static readonly string[] PowerOnIds = { Session + ".poweron.full", Session + ".poweron.reduced" };
 
-    /// <summary>Every kit texture is block-compressed for desktop (BC7) and keeps its mips (BUG-65i: the kit was about 92 MB uncompressed; the mips stop the shimmer).</summary>
+    /// <summary>
+    /// Every kit texture is block-compressed for desktop (BC7) and keeps its
+    /// mips (BUG-65i: the kit was about 92 MB uncompressed; the mips stop the
+    /// shimmer). It reads the texture as imported as well as the importer's
+    /// request: Unity imports a texture it cannot block-compress as RGBA32
+    /// although the importer asks for BC7 (a non-power-of-two size with mips:
+    /// the BLD-05 probe of 2026-10-28, variant 3), and the request alone read
+    /// green over 91.8 MB of RGBA32 (BLD-08).
+    /// </summary>
     [GateCheck("uipc.kit.compressed", Owner)]
     public static GateResult KitCompressed()
     {
         var wrong = new List<string>();
+        var formats = new SortedDictionary<string, int>();
         string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { UiKitImporter.Folder.TrimEnd('/') });
         foreach (string path in guids.Select(AssetDatabase.GUIDToAssetPath))
         {
             if (!(AssetImporter.GetAtPath(path) is TextureImporter importer))
                 continue;
             TextureImporterPlatformSettings desktop = importer.GetPlatformTextureSettings("Standalone");
+            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            string imported = texture == null ? "not loaded" : texture.format.ToString();
+            formats[imported] = formats.TryGetValue(imported, out int n) ? n + 1 : 1;
             if (!importer.mipmapEnabled || !desktop.overridden || desktop.format != TextureImporterFormat.BC7)
-                wrong.Add(path);
+                wrong.Add($"{System.IO.Path.GetFileName(path)} (importer)");
+            else if (texture == null || texture.format != TextureFormat.BC7)
+                wrong.Add($"{System.IO.Path.GetFileName(path)} ({imported} as imported)");
         }
-        return GateResult.Of("uipc.kit.compressed", Owner, guids.Length > 0 && wrong.Count == 0, $"{guids.Length - wrong.Count}/{guids.Length} kit textures BC7 with mips",
-            wrong.Count == 0 ? "reimport the kit after UiKitImporter changes (its version bumps it)" : string.Join(", ", wrong.Take(10)));
+        return GateResult.Of("uipc.kit.compressed", Owner, guids.Length > 0 && wrong.Count == 0,
+            $"{guids.Length - wrong.Count}/{guids.Length} kit textures BC7 with mips; as imported: {string.Join(", ", formats.Select(f => $"{f.Value} {f.Key}"))}",
+            wrong.Count == 0 ? "reimport the kit after UiKitImporter changes (its version bumps it)" : string.Join(", ", wrong.Take(10)) + (wrong.Count > 10 ? $", ... {wrong.Count - 10} more" : string.Empty));
     }
 
     /// <summary>FIX_PLAN's pass line for the UI kit's texture memory (BUG-65i: "from ~92 MB to <= 25 MB"), in bytes (decimal MB, the stricter reading).</summary>
@@ -95,7 +110,7 @@ public static class UiPcChecks
         }
         string top = string.Join(", ", largest.OrderByDescending(t => t.size).Take(5).Select(t => $"{System.IO.Path.GetFileName(t.path)} {t.size / 1e6:0.00} MB"));
         return GateResult.Of("uipc.kit.memory", Owner, guids.Length > 0 && bytes <= KitBudgetBytes, $"{bytes / 1e6:0.0} MB in {guids.Length} kit textures (budget {KitBudgetBytes / 1e6:0} MB)",
-            bytes <= KitBudgetBytes ? "the largest: " + top : "over budget; the largest: " + top + ". Reimport the kit (UiKitImporter v2), then atlas or drop mip 0 of the largest panels");
+            bytes <= KitBudgetBytes ? "the largest: " + top : "over budget; the largest: " + top + ". The textures Unity imports as RGBA32 are counted at 4 bytes a pixel (uipc.kit.compressed names them); BC7 is 1");
     }
 
     /// <summary>Esc on the PC brings Settings to the front and the PC stays open (R3/R4).</summary>
