@@ -6,10 +6,11 @@ using UnityEngine.EventSystems;
 /// Drags a desk object across a DeskSurface with the EventSystem (its collider
 /// proxy is found by the office camera's PhysicsRaycaster): the pointer is
 /// projected onto the desk plane and the held point (a stamp: its centre)
-/// stays inside the desk area (Follow). The proxy is off during the drag, so the release is never over the
-/// object itself (no click follows a drag) and the drop is decided by the
-/// projected pointer (DragEnded). While disabled by its owner the EventSystem
-/// sends it nothing, so disabling it mid-drag ends the drag at once
+/// stays inside the desk area (Follow). The proxy is off during the drag, so
+/// the release is never over the object itself (no click follows a drag) and
+/// the drop is decided by the projected pointer (DragEnded). While disabled
+/// by its owner the EventSystem sends it nothing, so disabling it mid-drag
+/// ends the drag at once
 /// (DragCancelled; audit R5-002: the drag used to stay open for good, the proxy
 /// off); the moves and the release of that press are ignored if it is enabled
 /// again before the button comes up. While its owner takes it out of the
