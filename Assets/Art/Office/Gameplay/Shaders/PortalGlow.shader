@@ -216,7 +216,8 @@ Shader "TimeDesk/PortalGlow"
         half3 Horizon(float r, float angle, float d, float pixel, float iris)
         {
             float rings = max(_Pool.x, 0.5);
-            float wander = _Pool.y * (0.6 * sin(3.0 * angle + _Pool.z * TwoPi) + 0.4 * sin(5.0 * angle - 0.7 * _Pool.z * TwoPi + 2.0 * r));
+            // Whole turns of the wander's phase in both terms, so its wrap at 1 (PortalEffect) is seamless.
+            float wander = _Pool.y * (0.6 * sin(3.0 * angle + _Pool.z * TwoPi) + 0.4 * sin(5.0 * angle - _Pool.z * TwoPi + 2.0 * r));
             float s = r * rings + wander - _Gate.y;
             float share = saturate(_Pool.w);
             half3 col = lerp(_Mid.rgb, _Light.rgb, Band(s, 0.5 * share, 0.5 * share, 1.5 * rings * pixel));

@@ -2,6 +2,11 @@
 2026-11-07, DECISIONS D6; PortalGate, PortalEffect, TimeDesk/PortalGlow).
 
     python tools/hall/gate_check.py <run folder> [--ring 1] [--out DIR]
+    python tools/hall/gate_check.py <hall_fx_portals run folder> --fx
+
+With --fx it reads a hall_fx_portals run instead (BUG-26a's portal strobe): seqlib.flicker inside every ring's quad
+(qa_report.txt's "== portals at <hour> <w>x<h>" blocks) on each portals_* sequence; pass when no pixel there toggles
+more than twice in 10 s (the city in the hall's windows is the known red qa.play.flicker's, outside the quads).
 
 Reads what the scenario writes into a QA-RIG run folder: the sequences seq/gate_dial_h12 (the lock-in, the chevrons,
 the open, the kawoosh), seq/gate_pool_h12 and seq/gate_pool_h22 (10 s of the open event horizon by day and night) and
@@ -12,8 +17,12 @@ hole is the ellipse inside 0.95 opening radii, its chevrons' band the ring 1.05 
 
   steps     the ring's discrete changes (a chevron lit, the event horizon opening, a kawoosh starting) from the
             columns, with the frames where the chevrons' band changes on the pictures: pass when the chevrons step
-            at the calibration's rate (20 / 7 s: 85.7 frames, +-2), each change in one frame, and no two changes
-            closer than 2 s (60 frames).
+            at the calibration's rate (20 / 7 s, +-0.1 s), each change in one frame, and no two changes closer than
+            2 s. Each change is timed on the clock that drives it: the board calibrates on unscaled time
+            (SwitchboardView: a hit-stop never stops a calibration), so a chevron and the open are timed on the
+            frames' unscaled column; the ring's own motion (the dwell before a kawoosh, the kawoosh, the close) runs on
+            game time, one frame a 30th of a second in a fixed-step capture. In play both clocks run together; in
+            a capture the unscaled clock runs at the speed of the real frames, so the chevrons step in fewer frames.
   pool      the share of the hole's pixels whose luma moves more than 8 from one frame to the next, over each pool
             sequence: pass when it stays under 8 %.
   kawoosh   the 36 frames from the kawoosh's first: the envelope column and the hole's mean luma over the frame
@@ -38,8 +47,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 import seqlib  # noqa: E402
 
 FPS = seqlib.FPS
-STEP_FRAMES = 20.0 / 7.0 * FPS      # one chevron per calibration / 7
-DWELL_FRAMES = 2 * FPS              # no two changes closer than 2 s
+STEP_SECONDS = 20.0 / 7.0          # one chevron per calibration / 7 (unscaled seconds)
+DWELL_SECONDS = 2.0                 # no two changes closer than 2 s
 POOL_SHARE = 0.08
 KAWOOSH_FRAMES = 36
 PEAK = (10, 14)
@@ -111,18 +120,22 @@ def check_steps(seq, rows, lumas, band, ring, lines):
         if gate[i] == 'Sending' and gate[i - 1] != 'Sending':
             events.append((i, 'kawoosh'))
     events.sort()
+    unscaled = [float(r['unscaled']) for r in rows]
     chev = [i for i, e in events if e.startswith('chevron')]
-    spacing = [b - a for a, b in zip(chev, chev[1:])]
-    gaps = [b[0] - a[0] for a, b in zip(events, events[1:])]
+    spacing = [round(unscaled[b] - unscaled[a], 3) for a, b in zip(chev, chev[1:])]
+    # a board-driven change (a chevron, the open) on the unscaled clock; the kawoosh on game time (frames / 30)
+    gaps = [round((b[0] - a[0]) / FPS if b[1] == 'kawoosh' else unscaled[b[0]] - unscaled[a[0]], 3) for a, b in zip(events, events[1:])]
     # the band's changed pixels per frame: a chevron lights in one frame, then holds
     moved = [int(((np.abs(lumas[i] - lumas[i - 1]) > 24) & band).sum()) for i in range(1, len(lumas))]
     jumps = [i + 1 for i, n in enumerate(moved) if n >= 3]
     lines.append('steps: events ' + ', '.join('%s@%d' % (e, i) for i, e in events))
-    lines.append('steps: chevron spacing (frames) %s, expected %.1f' % (spacing, STEP_FRAMES))
-    lines.append('steps: smallest gap between changes %s frames (least %d)' % (min(gaps) if gaps else '-', DWELL_FRAMES))
+    lines.append('steps: chevron spacing (unscaled s) %s, expected %.3f; in frames %s' % (spacing, STEP_SECONDS, [b - a for a, b in zip(chev, chev[1:])]))
+    lines.append('steps: gaps between changes (s, each on its own clock) %s; smallest %s (least %.1f)' % (gaps, min(gaps) if gaps else '-', DWELL_SECONDS))
     lines.append('steps: frames where the chevrons\' band jumped (>= 3 px over 24 luma): %s' % jumps)
-    ok_rate = len(chev) >= 6 and all(abs(s - STEP_FRAMES) <= 2.0 for s in spacing)
-    ok_gap = bool(gaps) and min(gaps) >= DWELL_FRAMES
+    # the unscaled column steps a real frame at a time (about 0.07 s in a capture), so a step lands within one frame of its time
+    frame_real = max(unscaled[i] - unscaled[i - 1] for i in range(1, len(unscaled))) if len(unscaled) > 1 else 0.0
+    ok_rate = len(chev) >= 6 and all(abs(x - STEP_SECONDS) <= frame_real + 0.01 for x in spacing)
+    ok_gap = bool(gaps) and min(gaps) >= DWELL_SECONDS - frame_real
     # each chevron in one frame: before the open (whose light and bloom also reach the band), every frame the band
     # jumps is a chevron's step frame, and every step jumps in its own frame
     opened = next((i for i, e in events if e == 'open'), len(rows))
@@ -199,14 +212,65 @@ def check_flicker(lumas, rows, box, lines, name):
     return r['pass']
 
 
+def fx_quads(run):
+    """{(w, h, hour): [(ring, cx, cy, x0, y0, x1, y1)]} from a hall_fx_portals run's "== portals at" blocks."""
+    text = open(os.path.join(run, 'qa_report.txt'), encoding='utf-8').read()
+    out = {}
+    for m in re.finditer(r'== portals at (\d+) (\d+)x(\d+)\n((?:   PortalEffect.*\n)+)', text):
+        key = (int(m.group(2)), int(m.group(3)), int(m.group(1)))
+        out[key] = [(int(q.group(1)),) + tuple(float(v) for v in q.groups()[1:]) for q in re.finditer(
+            r'PortalEffect_(\d+) showing \w+ night [\d.]+ centre \(([-\d.]+),([-\d.]+)\) quad \(([-\d.]+),([-\d.]+)\)-\(([-\d.]+),([-\d.]+)\)', m.group(4))]
+    return out
+
+
+def check_fx(run, lines):
+    """Flicker inside every ring's quad on each portals_* sequence of a hall_fx_portals run."""
+    quads, results = fx_quads(run), {}
+    for name in sorted(os.listdir(os.path.join(run, 'seq'))):
+        path = os.path.join(run, 'seq', name)
+        rows = seqlib.read_tsv(os.path.join(path, 'frames.tsv'))
+        files = seqlib.frame_files(path)
+        n = min(len(files), len(rows))
+        if not name.startswith('portals_') or n < 3:
+            continue
+        lumas = [seqlib.load_luma(f) for f in files[:n]]
+        sw, sh = int(float(rows[0]['screenW'])), int(float(rows[0]['screenH']))
+        hour = int(name.rsplit('_h', 1)[1]) if '_h' in name else 12
+        h, w = lumas[0].shape
+        k = w / sw
+        box = np.zeros((h, w), dtype=bool)
+        for ring, cx, cy, x0, y0, x1, y1 in quads.get((sw, sh, hour), []):
+            a0, a1 = int(max(0, x0 * k)), int(min(w, x1 * k + 1))
+            b0, b1 = int(max(0, (sh - y1) * k)), int(min(h, (sh - y0) * k + 1))
+            if a0 < a1 and b0 < b1:
+                box[b0:b1, a0:a1] = True
+        r = seqlib.flicker(lumas, [seqlib.frame_state(x) for x in rows[:n]], static_mask=~box)
+        lines.append('flicker %s (inside the rings\' quads, %d px): %d px toggling > 2x in 10 s, worst %d' % (name, int(box.sum()), r['bad_px'], r['worst']))
+        results['flicker ' + name] = r['pass'] and box.any()
+    return results
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('run')
     ap.add_argument('--ring', type=int, default=1)
+    ap.add_argument('--fx', action='store_true')
     ap.add_argument('--out')
     a = ap.parse_args()
     run, ring = a.run, a.ring
     lines, results = [], {}
+    if a.fx:
+        results = check_fx(run, lines)
+        lines.append('')
+        for k, v in results.items():
+            lines.append('%s %s' % ('PASS' if v else 'FAIL', k))
+        text = '\n'.join(lines) + '\n'
+        out = a.out or run
+        os.makedirs(out, exist_ok=True)
+        with open(os.path.join(out, 'gate_check_fx.txt'), 'w', encoding='utf-8') as f:
+            f.write(text)
+        print(text)
+        sys.exit(0 if results and all(results.values()) else 1)
 
     def seq(name):
         path = os.path.join(run, 'seq', name)
