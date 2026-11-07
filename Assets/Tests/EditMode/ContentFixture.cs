@@ -40,6 +40,35 @@ public static class ContentFixture
             note = Text(n, "note")
         }).ToList();
 
+    /// <summary>The premades' ids (premades[].id), in order.</summary>
+    public static List<string> PremadeIds() => Root().Get("premades").Items.Select(n => Text(n, "id")).ToList();
+
+    /// <summary>Each day plan's premade fields (days[]: day, premades, famousPerDay, the forced slots' premades), in order.</summary>
+    public static List<DayPremades> DayPremadeFields() =>
+        Root().Get("days").Items.Select(n => new DayPremades
+        {
+            day = int.Parse(Text(n, "day")),
+            pool = (n.Get("premades")?.Items ?? new ContentNode[0]).Select(p => p.Text).ToList(),
+            famousPerDay = string.IsNullOrEmpty(Text(n, "famousPerDay")) ? 0 : int.Parse(Text(n, "famousPerDay")),
+            forced = (n.Get("forced")?.Items ?? new ContentNode[0]).Select(f => Text(f, "premade")).Where(p => p.Length > 0).ToList()
+        }).ToList();
+
+    /// <summary>One day plan's premade fields as the source holds them.</summary>
+    public sealed class DayPremades
+    {
+        /// <summary>The day number.</summary>
+        public int day;
+
+        /// <summary>The day's pool (days[].premades).</summary>
+        public List<string> pool;
+
+        /// <summary>How many famous travellers the run's draw seats (days[].famousPerDay; 0 when absent).</summary>
+        public int famousPerDay;
+
+        /// <summary>The premades of the day's forced slots (the authored story beats).</summary>
+        public List<string> forced;
+    }
+
     /// <summary>The issuing offices (agency.offices), in order.</summary>
     public static List<AgencyOffice> Offices() =>
         Root().Get("agency").Get("offices").Items.Select(n => new AgencyOffice
