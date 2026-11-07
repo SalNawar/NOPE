@@ -96,9 +96,9 @@ public sealed class CharacterArtImporter : AssetPostprocessor
     /// TimeDesk &gt; Reimport Character Art). Run it after a change of
     /// <see cref="Mipmaps"/> or <see cref="MaxSize"/>: a change of this
     /// importer's code alone reimports nothing. Commit the .meta files it
-    /// changes. It blocks the editor while it runs (measured: see
-    /// docs/FEATURES.md's Characters line); a batch job runner that watches the
-    /// editor's update loop needs its own heartbeat meanwhile.
+    /// changes. It blocks the editor while it runs (1439 textures in 1.1 min
+    /// on 2026-11-07); a batch job runner that watches the editor's update
+    /// loop sees no heartbeat meanwhile.
     /// </summary>
     [MenuItem("Tools/TimeDesk/Reimport Character Art")]
     public static void ReimportAll()
