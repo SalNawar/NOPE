@@ -258,9 +258,12 @@ class KnownRedTests(unittest.TestCase):
     def test_the_projects_list_spares_the_open_parts_only(self):
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gate_known_red.txt'), encoding='utf-8') as f:
             pats = seqlib.known_red_run_patterns(f.read())
-        for rid in ('bp_smoke.camera', 'bp_smoke.liberationSans.desk', 'bp.bp_smoke.seq.handover.flicker'):
+        for rid in ('bp_smoke.camera', 'bp.bp_smoke.seq.handover.flicker'):
             self.assertTrue(any(seqlib.matches(p, rid) for p in pats), rid)
-        for rid in ('bp_smoke.console', 'bp_smoke.presses', 'bp.bp_smoke.gc.steady', 'bp.bp_smoke.seq.callnext.hitches', 'bp.bp_smoke.seq.x.flash'):
+        # qa.play.liberationSans left the list (gate-hygiene, 2026-11-07: the smoke day's three lines pass), so the
+        # built player's smoke day reads its fallback lines strictly too.
+        for rid in ('bp_smoke.console', 'bp_smoke.presses', 'bp_smoke.liberationSans.desk', 'bp.bp_smoke.gc.steady', 'bp.bp_smoke.seq.callnext.hitches',
+                    'bp.bp_smoke.seq.x.flash'):
             self.assertFalse(any(seqlib.matches(p, rid) for p in pats), rid)
 
 

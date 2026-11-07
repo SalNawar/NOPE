@@ -394,14 +394,29 @@ public class DemoGateTests
     {
         string file = Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt");
         List<string> patterns = DemoGate.KnownRedRunPatterns(File.ReadAllText(file));
-        foreach (string id in new[] { "smoke_day1.camera", "smoke_day1.camera.handover", "smoke_day1.seq.handover.flicker", "bp.bp_smoke.seq.office_h2_idle.flicker" })
+        foreach (string id in new[] { "smoke_day1.camera", "smoke_day1.camera.handover", "bp_smoke.camera", "smoke_day1.seq.handover.flicker", "bp.bp_smoke.seq.office_h2_idle.flicker" })
             Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
         foreach (string id in new[] { "smoke_day1.console", "smoke_day1.presses", "smoke_day1.quality", "smoke_day1.missingScripts.desk", "smoke_day1.materials.end", "smoke_day1.seq.handover.flash", "bp.bp_smoke.gc.steady", "bp.bp_smoke.seq.callnext.hitches",
-                                      "smoke_day1.liberationSans.desk", "smoke_day1.seq.walk_in.flicker", "tools_torch.camera", "overlay_block.seq.overlay.flicker", "hall_fx_city.seq.office_a1_h2.flicker", "hall_fx_dusk.seq.dusk_office_a1.flicker" })
+                                      "smoke_day1.liberationSans.desk", "bp_smoke.liberationSans.desk", "smoke_day1.seq.walk_in.flicker", "tools_torch.camera", "overlay_block.camera", "overlay_block.seq.overlay.flicker" })
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
     }
 
-    /// <summary>The entries ruled at the six tracks' landing (2026-10-21, and ruling 6 of 2026-10-27: stamp.aim and stamp.rackClear under CAM) spare only the result their check reads: tools.micro's own assertions, stamp_aim's sixteen edge tries (a1 to a10 and the six (c) strokes at the rulebook's edge, two to three red each run) and CAM's stamp hint plate lines; desk.play.clicks and stamp.rackClear went at CAM's landing (2026-10-27), cam.play.guidePlate and qa.play.liberationSans at gate-hygiene (2026-11-07: they pass); qa.play.camera spares only the smoke day's and desk_plan_homes' camera lines; never QA-RIG's or STAMP's other assertions in those scenarios.</summary>
+    /// <summary>The four hall flicker entries (the director's ruling: the r17 city's motion is masked by the city view and window regions; gate-hygiene round 1) name every recording that holds the city: the city view's, and each office-view recording with the city in the hall's left window (each passes with that window masked at 81cc5c9). A recording with a second cause (sign_steady_idle: the red dater's top on the stamp rack, N-gate-hygiene-07), one without the window (helix_home, helix_tray_drop) and a new recording stay strict.</summary>
+    [Test]
+    public void TheHallFlickerEntries_NameTheRecordingsThatHoldTheCity_Only()
+    {
+        string file = Path.Combine(SoFieldReadersTests.ProjectRoot(), "tools", "qa", "gate_known_red.txt");
+        List<string> patterns = DemoGate.KnownRedRunPatterns(File.ReadAllText(file));
+        foreach (string id in new[] { "hall_fx_city.seq.city_a4_h2.flicker", "hall_fx_city.seq.office_a1_h2.flicker", "hall_fx_city.seq.office_a3_h2.flicker", "hall_fx_city.seq.office_a4_h5.flicker",
+                                      "hall_fx_dusk.seq.dusk_city_a1.flicker", "hall_fx_dusk.seq.dusk_office_a1.flicker", "hall_fx_helix.seq.helix_after_drop.flicker", "hall_fx_helix.seq.helix_warning_off.flicker",
+                                      "hall_fx_sign.seq.sign_steady_mid_case.flicker" })
+            Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} holds the city: known red under the ruling");
+        foreach (string id in new[] { "hall_fx_sign.seq.sign_steady_idle.flicker", "hall_fx_sign.seq.sign_steady_briefing.flicker", "hall_fx_helix.seq.helix_home.flicker", "hall_fx_helix.seq.helix_tray_drop.flicker",
+                                      "hall_fx_city.seq.office_a5_h2.flicker", "hall_fx_crossfade.seq.crossfade_art_to_art.flicker", "bp.hall_fx_city.seq.office_a1_h2.flicker" })
+            Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is strict");
+    }
+
+    /// <summary>The entries ruled at the six tracks' landing (2026-10-21, and ruling 6 of 2026-10-27: stamp.aim and stamp.rackClear under CAM) spare only the result their check reads (tools.micro, whose run never measures the microprint, spares its check whole since gate-hygiene round 1): stamp_aim's sixteen edge tries (a1 to a10 and the six (c) strokes at the rulebook's edge, two to three red each run) and CAM's stamp hint plate lines; desk.play.clicks and stamp.rackClear went at CAM's landing (2026-10-27), cam.play.guidePlate and qa.play.liberationSans at gate-hygiene (2026-11-07: they pass); qa.play.camera spares only the smoke day's and desk_plan_homes' camera lines; never QA-RIG's or STAMP's other assertions in those scenarios.</summary>
     [Test]
     public void TheRuledKnownRedEntries_SpareOnlyWhatTheirChecksRead()
     {
@@ -421,7 +436,9 @@ public class DemoGateTests
         Assert.IsFalse(known.ContainsKey("stamp.rackClear"), "stamp.rackClear went at CAM's landing (0 rack px over the paper in the reading view)");
         StringAssert.Contains("STAMP", known["cam.play.stampHint"]);
         StringAssert.Contains("QA-RIG", known["cam.bp.gc"]);
-        foreach (string id in new[] { "tools_microprint.tools.micro.read", "stamp_aim.aim.a6", "stamp_aim.aim.a9", "stamp_aim.aim.a1", "stamp_aim.aim.c3", "stamp_aim.aim.c9", "tools_lens.tools.lens.rulebook.revert", "cam_chrome.plate.a2.stamphint", "bp.cam_gc.gc.cam_cycle", "desk_plan_homes.camera.intercom_reading", "cam_views.play.d12" })
+        Assert.IsFalse(DemoGate.KnownRedPatternsByCheck(text).TryGetValue("tools.micro", out List<string> micro) && micro != null && micro.Count > 0,
+                       "tools.micro has no run pattern (gate-hygiene round 1): tools_microprint stops before it measures the microprint, so a pattern refused every merge gate; the entry spares the check whole under its ruling");
+        foreach (string id in new[] { "stamp_aim.aim.a6", "stamp_aim.aim.a9", "stamp_aim.aim.a1", "stamp_aim.aim.c3", "stamp_aim.aim.c9", "tools_lens.tools.lens.rulebook.revert", "cam_chrome.plate.a2.stamphint", "bp.cam_gc.gc.cam_cycle", "desk_plan_homes.camera.intercom_reading", "cam_views.play.d12" })
             Assert.IsTrue(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is known red");
         foreach (string id in new[] { "cam_chrome.plate.a1_d1.guide", "cam_views.camera", "cam_views.camera.a1_city", "tools_torch.camera", "tools_microprint.console", "tools_microprint.presses", "tools_microprint.quality", "tools_microprint.missingScripts.desk", "tools_microprint.materials.end", "desk_plan_homes.console", "desk_plan_homes.presses", "desk_plan_homes.clickboxes.d1", "desk_plan_homes.visible.intercom", "desk_plan_decor.presses", "stamp_aim.console", "stamp_aim.presses", "stamp_aim.aim.b4_1", "stamp_aim.aim.b1_3", "stamp_aim.aim.c1", "stamp_aim.aim.c4", "tools_lens.tools.lens.newspaper.reach", "tools_lens.console", "stamp_aim.letGo.rack1", "stamp_case.console", "stamp_case.rackOverPaper.a1", "stamp_case.tab.a1.rackInFrame", "stamp_hold.hold.esc1", "cam_views.tilts.d12", "cam_views.frame.a1_d12_reading", "cam_chrome.console", "cam_chrome.chrome.a1", "cam_chrome.missingScripts.end", "cam_gc.cycle.cam_cycle", "bp.cam_gc.cycle.cam_cycle" })
             Assert.IsFalse(patterns.Any(p => GateResults.Matches(p, id)), $"{id} is not known red");
