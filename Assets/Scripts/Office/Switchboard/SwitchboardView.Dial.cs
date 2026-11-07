@@ -49,6 +49,9 @@ public sealed partial class SwitchboardView
     private static readonly Color EmblemCream = new Color(0.94f, 0.9f, 0.8f, 1f);
     private static readonly Color PipDark = new Color(0.55f, 0.45f, 0.3f, 0.28f);
 
+    /// <summary>A dial not in service today: a darker veil than a Classic module's (a dial's brass reads bright under the Classic one).</summary>
+    private static readonly Color DialVeilColor = new Color(0.04f, 0.025f, 0.018f, 0.68f);
+
     /// <summary>One dial: its parts and how its ring moves.</summary>
     private sealed class Dial
     {
@@ -925,8 +928,20 @@ public sealed partial class SwitchboardView
     internal float DialTurn(int m, out bool resting)
     {
         Dial d = _dials != null && m >= 0 && m < _dials.Length ? _dials[m] : null;
-        resting = d != null && !d.Settling && _turning != d;
+        resting = d != null && !d.Settling && _turning != d && Mathf.Abs(d.Turn.Value - d.Turn.Target) < 0.05f && Mathf.Abs(d.Turn.Velocity) < 1f;
         return d != null ? d.Turn.Value : 0f;
+    }
+
+    /// <summary>True when the board is not shown at all (turned away and the turn finished).</summary>
+    internal bool Hidden => !_open && _openT <= 0f;
+
+    /// <summary>Dial <paramref name="m"/>'s ring on the screen (pixels, origin bottom left), for the rig's expected-motion mask.</summary>
+    internal Rect DialScreenRect(int m)
+    {
+        BoardPoint c = _gate.DialCentre(m);
+        float r = GateBoardLayout.RingOuter + 4f;
+        Vector2 a = ScreenOf(c.Plus(-r, r)), b = ScreenOf(c.Plus(r, -r));
+        return Rect.MinMaxRect(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
     }
 
     /// <summary>Dial <paramref name="m"/>'s chevron lenses this frame: the alpha of each (0 dark to 1 lit).</summary>

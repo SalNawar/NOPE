@@ -264,7 +264,7 @@ public sealed partial class SwitchboardView
         {
             LayoutModule module = _layout.Modules[m];
             _veils[m] = Dialer
-                ? Picture("Closed " + module.Id, layer, _discSprite, VeilColor, Local(_gate.DialCentre(m)), Vector2.one * 2f * (_gate.DialRadius(m) + 2f))
+                ? Picture("Closed " + module.Id, layer, _discSprite, DialVeilColor, Local(_gate.DialCentre(m)), Vector2.one * 2f * (_gate.DialRadius(m) + 2f))
                 : Picture("Closed " + module.Id, layer, null, VeilColor, Local(module.Rect.Centre), new Vector2(module.Rect.W - VeilInset, module.Rect.H - VeilInset));
             BoardPoint at = DisplayAt(m);
             var display = new Display { Glass = Picture("Display " + module.Id, layer, null, DisplayGlass, Local(at), new Vector2(Dialer ? 104f : Mathf.Min(104f, module.Rect.W - 70f), 26f)) };

@@ -378,7 +378,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
         LayoutModule module = _layout.Modules[e.Module];
         Flare(CallLampOf(e.Route.Destination).Centre, LampWarm, 5f);
         Flare(ModuleLampOf(e.Module).Centre, LampGreen, Dialer ? 5f : 3f);
-        BoardPoint rise = DisplayAt(e.Module);
+        BoardPoint rise = Dialer ? _gate.DialCentre(e.Module).Plus(0f, 10f) : DisplayAt(e.Module); // the dialer's tally rises out of the gate
         Rise(rise, Words(SwitchboardWords.Sent, e.Travellers), LampGreen);
         if (e.Bonus > 0 && _game != null && _game.World != null)
         {

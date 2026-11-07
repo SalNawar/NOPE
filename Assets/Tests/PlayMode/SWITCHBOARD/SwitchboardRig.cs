@@ -19,7 +19,7 @@ using UnityEngine.InputSystem.LowLevel;
 /// <item><c>boardDial</c> (n = the dial, 0 for 01; text = what to bring under its chevron: "call" (the waiting call's nation, top chevron), "callEra" (the era waiting at the dial's nation, chevron 2), "wrongEra" (an era nobody waits on there), "reset" (the origin under chevron 2), a nation id or an era id; f = seconds of the turn, default 0.9; name): presses on the ring and turns it along its arc to the glyph, lets go, waits for it to rest; asserts <c>dial.&lt;name&gt;</c> (the lock it should make).</item>
 /// <item><c>boardCells</c> (n = the dial; f = how many cells, 0 to its mark; name): carries rack cells into its cradle one by one; asserts <c>cells.&lt;name&gt;</c>.</item>
 /// <item><c>boardCellOut</c> (n = the dial; name): carries one of its cells back to the rack; asserts <c>cellOut.&lt;name&gt;</c> (the dial falls short of its mark at once).</item>
-/// <item><c>boardMaster</c> (f = how far, default 1): drags MASTER's handle down and lets go.</item>
+/// <item><c>boardMaster</c> (f = how far, default 1; n = frames to wait after, default 30): drags MASTER's handle down and lets go.</item>
 /// <item><c>boardHold</c> (n = the dial; key = Escape or RightClick; name): turns its ring half a turn of a slot, holding, then the key: asserts <c>hold.&lt;name&gt;</c> (the ring goes back, the locks unchanged, the board still turned to).</item>
 /// <item><c>boardCheat</c>: the cheat "Switchboard: 3 test calls". <c>boardRightClick</c>: a right-click where the pointer is.</item>
 /// <item><c>boardWait</c> (text = a condition; f = timeout, default 30 s) and <c>boardAssert</c> (name; text = a condition): conditions "open:N", "committed:N", "blown:N", "place:N", "period:N", "powered:N", "unpowered:N", "sent&gt;=K", "calls&gt;=K", "calls==K", "inService==K", "cells==K", "rack==K", "turned", "closed".</item>
@@ -75,7 +75,11 @@ public static class SwitchboardRig
     {
         SwitchboardView view = View();
         if (!view.IsOpen)
+        {
+            yield return QaGame.Until(() => view.Hidden, 3f, "the board to finish turning away");
+            yield return QaGame.Frames(3);
             yield return QaRunner.Active.Input.Tap(Key.D);
+        }
         yield return QaGame.Until(() => view.Turned, 5f, "the board to be turned to");
         yield return QaGame.Frames(5);
         Board();
@@ -166,13 +170,17 @@ public static class SwitchboardRig
             samples.Add(new QaPathSample(At(a0 + delta), true));
         for (int i = 0; i <= QaPaths.SettleFrames; i++)
             samples.Add(new QaPathSample(At(a0 + delta), false));
+        string track = "ring" + m;
+        runner.Recorder.Track(track, () => view.DialScreenRect(m)); // the turning glyphs are expected motion (the flicker check's mask)
         yield return Fixed(runner.Input.Play(new QaPath(QaPathKind.Plain, samples)));
         yield return QaGame.Until(() =>
         {
             view.DialTurn(m, out bool resting);
             return resting;
         }, 3f, "the ring to rest in its detent");
-        yield return QaGame.Frames(3);
+        yield return QaGame.Frames(2);
+        runner.Recorder.Forget(track);
+        yield return QaGame.Frames(1);
 
         float rest = view.DialTurn(m, out _);
         int top = GateDial.SlotUnderChevron(rest, GateDial.PlaceChevron, slots), second = GateDial.SlotUnderChevron(rest, GateDial.PeriodChevron, slots);
@@ -307,7 +315,7 @@ public static class SwitchboardRig
         Vector2 from = view.ScreenOf(view.MasterFrom), to = view.ScreenOf(view.MasterFrom.Lerp(view.MasterTo, f));
         QaPath path = QaPaths.Drag(QaPathKind.Plain, from, to, new Vector2(Screen.width, Screen.height));
         yield return Fixed(runner.Input.Play(path));
-        yield return QaGame.Frames(30);
+        yield return QaGame.Frames(step.n > 0 ? step.n : 30);
     }
 
     // ------------------------------------------------------------------ Esc and right-click
@@ -352,7 +360,12 @@ public static class SwitchboardRig
             yield return runner.Input.Tap((Key)Enum.Parse(typeof(Key), key, true));
         yield return QaGame.Frames(3);
         runner.Input.Set(At(290f), false);
-        yield return QaGame.Frames(20);
+        yield return QaGame.Until(() =>
+        {
+            view.DialTurn(m, out bool rest);
+            return rest;
+        }, 3f, "the ring to rest after the let-go");
+        yield return QaGame.Frames(3);
         float after = view.DialTurn(m, out bool resting);
         bool pass = held && resting && Mathf.Abs(GateDial.Delta(GateDial.Wrap360(before), GateDial.Wrap360(after))) < 0.5f
                     && module.PlaceJack == place && module.HasPeriod == period && view.Turned;

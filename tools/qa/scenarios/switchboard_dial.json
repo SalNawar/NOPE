@@ -235,20 +235,17 @@
     },
     {
       "op": "boardMaster",
-      "f": 1
+      "f": 1,
+      "n": 6
+    },
+    {
+      "op": "still",
+      "name": "d1_fuse"
     },
     {
       "op": "boardAssert",
       "name": "fuse",
       "text": "blown:0"
-    },
-    {
-      "op": "wait",
-      "f": 0.4
-    },
-    {
-      "op": "still",
-      "name": "d1_fuse"
     },
     {
       "op": "boardWait",
@@ -313,6 +310,14 @@
       "op": "boardAssert",
       "name": "escape_backs_out",
       "text": "closed"
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "d1_office_wall"
     },
     {
       "op": "boardOpen"

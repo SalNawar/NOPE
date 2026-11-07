@@ -119,8 +119,8 @@ public sealed partial class SwitchboardView
             LayoutModule module = _layout.Modules[m];
             if (Dialer)
             {
-                _wallVeils[m] = WallSprite("Closed " + module.Id, _discSprite, _gate.DialCentre(m), 2f * (_gate.DialRadius(m) + 2f), VeilLift, 1);
-                _wallVeils[m].color = VeilColor;
+                _wallVeils[m] = WallSprite("Closed " + module.Id, _discSprite, _gate.DialCentre(m), 2f * (_gate.DialRadius(m) + 2f), VeilLift, 3);
+                _wallVeils[m].color = DialVeilColor;
                 continue;
             }
             _wallVeils[m] = WallSprite("Closed " + module.Id, _wallWhite, module.Rect.Centre, 0f, VeilLift, 0);
@@ -186,6 +186,7 @@ public sealed partial class SwitchboardView
         if (_wallMaterial.HasProperty("_Cull"))
             _wallMaterial.SetFloat("_Cull", (float)CullMode.Off);
         _wallBoard.sharedMaterial = _wallMaterial;
+        _wallBoard.sortingOrder = -1; // under every live part on it, whatever the camera's distance to each (sprites write no depth)
         _wallBoard.shadowCastingMode = ShadowCastingMode.Off;
         _wallBoard.receiveShadows = false;
         _wallBoard.lightProbeUsage = LightProbeUsage.Off;
@@ -219,18 +220,18 @@ public sealed partial class SwitchboardView
         Graphics.Blit(texture, _wallPaint, new Vector2(uw, vh), new Vector2(u0, v0));
     }
 
-    /// <summary>The dialer on the wall: its slate face over the plate's jacks and each big dial's ring (turned as the board view turns it), in the booth's grade (unlit sprites, so tinted by wallGrade like the board's paint).</summary>
+    /// <summary>The dialer on the wall: its slate face over the plate's jacks and each big dial's ring (turned as the board view turns it), in the booth's grade (unlit sprites, so tinted by wallGrade like the board's paint), drawn over the board by their order.</summary>
     private void BuildWallGate()
     {
         Color grade = _config.wallGrade;
-        SpriteRenderer face = WallSprite("Dialer face", SpriteOf(_faceTexture), _gate.Cover.Centre, _gate.Cover.W, VeilLift * 0.5f, 0);
+        SpriteRenderer face = WallSprite("Dialer face", SpriteOf(_faceTexture), _gate.Cover.Centre, _gate.Cover.W, VeilLift * 0.5f, 1);
         face.color = grade;
         _wallRings = new SpriteRenderer[_dials.Length];
         for (int m = 0; m < _dials.Length; m++)
         {
             if (_dials[m].Ring == null)
                 continue;
-            _wallRings[m] = WallSprite("Ring " + _layout.Modules[m].Id, _ringSprite, _gate.DialCentre(m), _ringSprite != null ? _ringSprite.rect.width : 0f, VeilLift * 0.75f, 0);
+            _wallRings[m] = WallSprite("Ring " + _layout.Modules[m].Id, _ringSprite, _gate.DialCentre(m), _ringSprite != null ? _ringSprite.rect.width : 0f, VeilLift * 0.75f, 2);
             _wallRings[m].color = grade;
         }
     }
