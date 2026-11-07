@@ -107,6 +107,33 @@ public class DeskGeometryTests
     private static readonly DeskRect Layer = new DeskRect(0f, 0f, 1440f, 1020f);
 
     [Test]
+    public void Hold_PastAnEdge_StopsAtTheEdge_InsideStaysPut()
+    {
+        // pc-settings-clip: Settings (1040 wide, rest 40 units from the glass's
+        // right edge) carried 95 units right of its rest by its spring.
+        Assert.AreEqual(-55f, RectClamp.Hold(-425f, 615f, -520f, 520f, -560f, 560f), "past the high side");
+        Assert.AreEqual(30f, RectClamp.Hold(-590f, 450f, -520f, 520f, -560f, 560f), "past the low side (grown out of a taskbar button near it)");
+        Assert.AreEqual(0f, RectClamp.Hold(-500f, 540f, -520f, 520f, -560f, 560f), "past its rest but inside");
+        Assert.AreEqual(0f, RectClamp.Hold(-200f, 100f, -520f, 520f, -560f, 560f), "small, on the way in");
+    }
+
+    [Test]
+    public void Hold_ARestAlreadyPastTheEdge_HoldsAtTheRest_AndTheMaxSideWins()
+    {
+        Assert.AreEqual(-10f, RectClamp.Hold(-500f, 590f, -520f, 580f, -560f, 560f), "the rest pokes out: no further than the rest");
+        Assert.AreEqual(-12f, RectClamp.Hold(-572f, 572f, -560f, 560f, -560f, 560f), "grown on a full span: the high side (the close button, the title bar) stays on");
+    }
+
+    [Test]
+    public void Hold_BothAxes_ShiftsEachOnItsOwn()
+    {
+        var glass = new DeskRect(0f, 0f, 1120f, 760f);
+        var rest = new DeskRect(0f, 30f, 1040f, 697f);
+        Assert.AreEqual((-55f, -28.5f), RectClamp.Hold(new DeskRect(95f, 60f, 1040f, 697f), rest, glass));
+        Assert.AreEqual((0f, 0f), RectClamp.Hold(rest, rest, glass), "at rest");
+    }
+
+    [Test]
     public void Window_InsideTheLayer_StaysPut()
     {
         Assert.AreEqual((0f, 0f), RectClamp.Window(new DeskRect(0f, 0f, 1120f, 820f), Layer), "centred");

@@ -94,6 +94,35 @@ public static class RectClamp
         float dy = Shift(window.CentreY - halfH, window.CentreY + halfH, layer.CentreY - layerHalfH, layer.CentreY + layerHalfH, true);
         return (dx, dy);
     }
+
+    /// <summary>
+    /// The offset that holds a piece in motion (a window growing out of its
+    /// taskbar button, its spring's overshoot) inside [lo, hi]
+    /// (pc-settings-clip: the overshoot carried Settings past the glass). An
+    /// edge stops at the range's edge, or at the rest's edge when the rest
+    /// already passes it. A span that cannot fit keeps its max side inside (a
+    /// window's title bar and close button).
+    /// </summary>
+    public static float Hold(float min, float max, float restMin, float restMax, float lo, float hi)
+    {
+        float shift = 0f;
+        float floor = Math.Min(lo, restMin), ceiling = Math.Max(hi, restMax);
+        if (min < floor)
+            shift = floor - min;
+        if (max + shift > ceiling)
+            shift = ceiling - max;
+        return shift;
+    }
+
+    /// <summary>Hold on both axes: <paramref name="now"/> is the piece as drawn, <paramref name="rest"/> where it settles, <paramref name="bounds"/> what holds it.</summary>
+    public static (float dx, float dy) Hold(DeskRect now, DeskRect rest, DeskRect bounds)
+    {
+        float dx = Hold(now.CentreX - now.Width / 2f, now.CentreX + now.Width / 2f, rest.CentreX - rest.Width / 2f, rest.CentreX + rest.Width / 2f,
+                        bounds.CentreX - bounds.Width / 2f, bounds.CentreX + bounds.Width / 2f);
+        float dy = Hold(now.CentreY - now.Height / 2f, now.CentreY + now.Height / 2f, rest.CentreY - rest.Height / 2f, rest.CentreY + rest.Height / 2f,
+                        bounds.CentreY - bounds.Height / 2f, bounds.CentreY + bounds.Height / 2f);
+        return (dx, dy);
+    }
 }
 
 /// <summary>

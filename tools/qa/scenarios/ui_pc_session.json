@@ -23,6 +23,7 @@
     { "op": "uipcRoom" },
     { "op": "uipcEsc" },
     { "op": "still", "name": "d5_settings" },
+    { "op": "uipcOnGlass" },
     { "op": "uipcEscDark" },
     { "op": "uipcGate" },
     { "op": "uipcPowerOn" },
