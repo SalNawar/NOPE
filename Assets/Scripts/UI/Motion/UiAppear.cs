@@ -41,6 +41,12 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
     private Vector3 _from;
     private Vector3 _applied;
     private bool _posed, _closing, _finishing;
+
+    /// <summary>What holds the motion inside its rect (Within), or null.</summary>
+    private RectTransform _bounds;
+
+    /// <summary>The bounds' corners (reused).</summary>
+    private static readonly Vector3[] Corners = new Vector3[4];
     private MotionAmount _amount;
 
     /// <summary>The tuning of the running motion (its acceleration shapes the squash).</summary>
@@ -108,6 +114,19 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
         target.localPosition -= appear._applied;
         target.anchoredPosition = at;
         target.localPosition += appear._applied;
+    }
+
+    /// <summary>
+    /// Holds the drawn piece inside <paramref name="bounds"/>'s rect while it
+    /// moves (RectClamp.Hold): growing out of its start, the spring's
+    /// overshoot and the stretch never carry it past an edge its rest is
+    /// inside (pc-settings-clip: a desktop window and its close button stay
+    /// on the glass). Returns this.
+    /// </summary>
+    public UiAppear Within(RectTransform bounds)
+    {
+        _bounds = bounds;
+        return this;
     }
 
     /// <summary>Plays it in from its style's start, after <paramref name="delay"/> seconds (the object should be on).</summary>
@@ -237,12 +256,30 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
             sy = Mathf.Min(sy, 1f + knobs.appearGrowMax / rect.height);
         transform.localScale = new Vector3(_restScale.x * sx, _restScale.y * sy, _restScale.z * s);
         Vector3 offset = _from * _motion.Offset(1f, _amount);
+        if (_bounds != null && transform.parent != null)
+            offset += HoldInside(rect, sx, sy, offset);
         if (offset != _applied)
         {
             transform.localPosition += offset - _applied;
             _applied = offset;
         }
         _group.alpha = _restAlpha * _motion.Alpha;
+    }
+
+    /// <summary>The shift that keeps the piece, drawn at scale (sx, sy) and <paramref name="offset"/> from its rest, inside the bounds (RectClamp.Hold, in the parent's space).</summary>
+    private Vector3 HoldInside(Rect rect, float sx, float sy, Vector3 offset)
+    {
+        Transform parent = transform.parent;
+        _bounds.GetWorldCorners(Corners);
+        Vector3 a = parent.InverseTransformPoint(Corners[0]), b = parent.InverseTransformPoint(Corners[2]);
+        var bounds = new DeskRect((a.x + b.x) / 2f, (a.y + b.y) / 2f, Mathf.Abs(b.x - a.x), Mathf.Abs(b.y - a.y));
+        Vector3 rest = transform.localPosition - _applied;
+        float cx = rect.center.x * _restScale.x, cy = rect.center.y * _restScale.y;
+        float w = rect.width * _restScale.x, h = rect.height * _restScale.y;
+        var still = new DeskRect(rest.x + cx, rest.y + cy, w, h);
+        var now = new DeskRect(rest.x + offset.x + cx * sx, rest.y + offset.y + cy * sy, w * sx, h * sy);
+        (float dx, float dy) = RectClamp.Hold(now, still, bounds);
+        return new Vector3(dx, dy, 0f);
     }
 
     /// <summary>The rest pose exactly.</summary>

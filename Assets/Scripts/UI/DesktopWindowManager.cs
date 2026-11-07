@@ -229,7 +229,9 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// Applies the stack: which windows show, their order, the taskbar's
     /// buttons. A window that shows grows out of its taskbar button with a
     /// spring and window_open (pulled inside the layer first, so it shows on
-    /// the screen: DesktopWindow.KeepInside); one that goes (closed or minimised) shrinks
+    /// the screen: DesktopWindow.KeepInside; the motion held inside the
+    /// desktop canvas, so no frame carries it off the glass: UiAppear.Within);
+    /// one that goes (closed or minimised) shrinks
     /// into the taskbar with window_close, taking no clicks while it goes, then
     /// switches off (UiAppear, the game feel; the stack, not the object, says
     /// what is open).
@@ -274,13 +276,23 @@ public sealed class DesktopWindowManager : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(taskbarButtons);
         foreach (string id in _opened)
         {
-            UiAppear.Of(_windows[id].gameObject, AppearStyle.Pop).Open(TaskbarPoint(id, _windows[id]));
+            UiAppear.Of(_windows[id].gameObject, AppearStyle.Pop).Within(Glass).Open(TaskbarPoint(id, _windows[id]));
             Sounds.Play(SoundCues.WindowOpen);
         }
         foreach (string id in _closed)
         {
-            UiAppear.Of(_windows[id].gameObject, AppearStyle.Pop).Close(TaskbarPoint(id, _windows[id]));
+            UiAppear.Of(_windows[id].gameObject, AppearStyle.Pop).Within(Glass).Close(TaskbarPoint(id, _windows[id]));
             Sounds.Play(SoundCues.WindowClose);
+        }
+    }
+
+    /// <summary>The desktop canvas's rect, the glass (the frame camera draws it exactly there): a window's motion stays inside it.</summary>
+    private RectTransform Glass
+    {
+        get
+        {
+            Canvas canvas = GetComponentInParent<Canvas>();
+            return canvas != null ? canvas.rootCanvas.transform as RectTransform : null;
         }
     }
 
