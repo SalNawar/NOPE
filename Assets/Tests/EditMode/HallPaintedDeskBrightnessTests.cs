@@ -22,17 +22,20 @@ public class HallPaintedDeskBrightnessTests
     }
 
     [Test]
-    public void TheKnobsAsset_DrawsTheHallAt072At0900_And085At1600()
+    public void TheKnobsAsset_DrawsTheHallDarkerByDay_AndBrighterAtNight()
     {
+        // D9 (hall-night-light): the hall at luma 33 to 41 by day and 28 to 34 at night after the finish.
         string asset = Read("Assets/Data/Config/HallLighting_Default.asset");
         Match curve = Regex.Match(asset, @"\n  paintedDeskBrightness:\n(.*?)\n    m_PreInfinity: (\d+)\n    m_PostInfinity: (\d+)", RegexOptions.Singleline);
         Assert.IsTrue(curve.Success, "HallLighting_Default.asset carries the painted desk's brightness");
         MatchCollection keys = Regex.Matches(curve.Groups[1].Value, @"time: ([0-9.]+)\n\s+value: ([0-9.]+)");
-        Assert.AreEqual(2, keys.Count, "two keys: 09:00 and 16:00, a line between");
-        Assert.AreEqual(9f, F(keys[0].Groups[1].Value), 1e-4f);
-        Assert.AreEqual(0.72f, F(keys[0].Groups[2].Value), 1e-4f, "09:00: the hall read 1.39x the painting's (1 / 1.39)");
-        Assert.AreEqual(16f, F(keys[1].Groups[1].Value), 1e-4f);
-        Assert.AreEqual(0.85f, F(keys[1].Groups[2].Value), 1e-4f, "16:00: the hall read 1.15 to 1.3x the painting's");
+        float[] times = { 5.5f, 8.5f, 12f, 16f, 18.5f }, values = { 1.9f, 0.6f, 0.6f, 0.66f, 1.9f };
+        Assert.AreEqual(times.Length, keys.Count, "a line through the night, the day and the dusk");
+        for (int i = 0; i < times.Length; i++)
+        {
+            Assert.AreEqual(times[i], F(keys[i].Groups[1].Value), 1e-4f);
+            Assert.AreEqual(values[i], F(keys[i].Groups[2].Value), 1e-4f);
+        }
         Assert.AreEqual(curve.Groups[2].Value, curve.Groups[3].Value, "the hours outside keep their end's value on both sides");
     }
 
@@ -40,7 +43,7 @@ public class HallPaintedDeskBrightnessTests
     public void TheKnobsDefault_IsTheAssetsLine()
     {
         string source = Read("Assets/Scripts/Office/HallLightingSO.cs");
-        StringAssert.Contains("public AnimationCurve paintedDeskBrightness = AnimationCurve.Linear(9f, 0.72f, 16f, 0.85f);", source);
+        StringAssert.Contains("public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 0.6f), (12f, 0.6f), (16f, 0.66f), (18.5f, 1.9f));", source);
     }
 
     [Test]
@@ -58,11 +61,11 @@ public class HallPaintedDeskBrightnessTests
             Assert.AreEqual(BoothGrade[c - 1], F(value.Groups[c].Value), 1e-4f, "measured after the office finish (2026-10-28; PaintedBoothTests holds the measurement)");
             Assert.That(BoothGrade[c - 1], Is.LessThan(1f), "the booth's hall is darker than the open desk's");
         }
-        Assert.That(BoothGrade[2], Is.LessThan(BoothGrade[0]), "and warmer (the painting's amber)");
+        Assert.That(BoothGrade[2], Is.LessThan(BoothGrade[0]), "and warmer: the blue under the red (the painting's stone)");
     }
 
     /// <summary>The booth's grade (r, g, b), measured on screen after the office finish (2026-10-28, Saleh: "bg is dark"; PaintedBoothTests holds the measurement).</summary>
-    private static readonly float[] BoothGrade = { 0.81f, 0.82f, 0.64f };
+    private static readonly float[] BoothGrade = { 0.75f, 0.745f, 0.665f };
 
     [Test]
     public void TheBrightness_AppliesOnlyUnderThePaintedDesk()

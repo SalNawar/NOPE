@@ -170,6 +170,13 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>The lamp pool's radius on the desk (metres), centred on the mat; its share and its warm colour are full out to a quarter of it and fall off to nothing at the edge (1.35: the 1.45 x 1.02 m mat's corners keep about 0.47 of the lamp, so the pool reads and the corners stay readable).</summary>
     [Range(0.1f, 2f)] public float deskLampRadius = 1.35f;
 
+    /// <summary>
+    /// The traveller's light along the clock (x: the hour, 0 to 24; y: a share of the day's level), on the room's
+    /// colour without the desk lamp (DeskLightLevel.TravellerLight; D9: the traveller takes the hall's tint, 55 to
+    /// 70 % of the day's luma at night). 0.8 at night measured 0.675 of the noon luma after the finish, so 0.78 aims at the middle (hall-night-light).
+    /// </summary>
+    public AnimationCurve travellerLight = Line((5.5f, 0.78f), (8.5f, 1f), (16f, 1f), (18.5f, 0.78f));
+
     [Header("The hall at night (NOPE/Hall Deep Layout, through HallBakedLighting)")]
     /// <summary>The painted hall's tint at full night, away from the lamp pools.</summary>
     public Color hallNightTint = new Color(0.2f, 0.27f, 0.43f);
@@ -219,38 +226,31 @@ public sealed class HallLightingSO : ScriptableObject
     /// While the painted desk is installed (HallLightingRig.PaintedDesk, set
     /// by the office binder), how bright the lit hall shows on screen along
     /// the clock (x: the hour, 0 to 24; y: the scale of its sRGB values, 1
-    /// shows it as lit; HallBackdrop.Brightness). Measured against the
-    /// approved painting (mock_office.png) with the desk matching it within
-    /// 3%: the hall read about 1.4x the painting's at 09:00 and 1.15 to 1.3x
-    /// at 16:00 (docs/pending/DESK-V3.md, rounds 5 and 9), so 0.72 and 0.85;
-    /// the hours between follow the line, the hours outside keep the nearer
-    /// end's value. The art's desk (the painted desk off) keeps the hall as lit.
+    /// shows it as lit; HallBackdrop.Brightness). D9 (hall-night-light): the
+    /// hall between the bars at luma 33 to 41 by day and 28 to 34 at night,
+    /// after the office finish; a line through 05:30 1.9, 08:30 0.6, 12:00
+    /// 0.6, 16:00 0.66 and 18:30 1.9 (the night's lit hall is about a quarter
+    /// of the day's, so the night scale is above 1; solved from two Unity
+    /// runs, one log-linear fit per channel). The hours outside keep
+    /// the nearer end's value. The art's desk (the painted desk off) keeps
+    /// the hall as lit.
     /// </summary>
-    public AnimationCurve paintedDeskBrightness = AnimationCurve.Linear(9f, 0.72f, 16f, 0.85f);
+    public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 0.6f), (12f, 0.6f), (16f, 0.66f), (18.5f, 1.9f));
 
     /// <summary>
-    /// The enclosed booth's grade (desk v3 round 13; Saleh's concept B,
-    /// office_bars_v1.png): the painting shows the hall through the teller
-    /// bars darker and warmer than the open desk's painting
-    /// (mock_office.png) did. A per-channel scale of the lit hall's sRGB
-    /// values on top of paintedDeskBrightness, at every hour, while the
-    /// painted desk is installed (HallLightingRig.PaintedDesk;
-    /// HallBackdrop.Grade); white leaves paintedDeskBrightness as it was. A
-    /// colour, not one scale: the painting's hall is warmer (its blue falls
-    /// further than its red).
-    /// Measured on screen after LIGHT's finish (Saleh 2026-10-28, "bg is
-    /// dark"): the painting's hall between the bars, clear of the bars and
-    /// the traveller, reads sRGB (42.8, 36.4, 26.4), luma 37.0; the night
-    /// build's hall there under round 13's (0.48, 0.45, 0.37) read luma 16.8
-    /// at 09:00, 16.1 at 13:00 and 13.8 at 16:00. Each channel is the old
-    /// grade times the ratio of the two values before the office finish
-    /// (DeskLighting.GradedLuma inverted), between its 13:00 and 16:00 ratios:
-    /// the hall then shows 1.05, 1.03 and 0.93 times the painting's luma at 09:00, 13:00
-    /// and 16:00 (PaintedBoothTests holds the numbers). Round 13's value was
-    /// measured before the finish was merged, and the finish's contrast
-    /// pulls these dark values down.
+    /// The booth's grade: a per-channel scale of the lit hall's sRGB values
+    /// on top of paintedDeskBrightness, at every hour, while the painted
+    /// desk is installed (HallLightingRig.PaintedDesk; HallBackdrop.Grade).
+    /// Material.SetColor decodes the colour to linear in this linear project,
+    /// so the shader scales the hall's sRGB values by the decoded channels.
+    /// D9 (hall-night-light, Saleh "fix bg weird color issues"): the old
+    /// (0.81, 0.82, 0.64) left the noon hall olive (blue over red 0.40, green
+    /// near red); (0.75, 0.745, 0.665) puts the noon hall at the approved
+    /// painting's colour (sRGB 42.8, 36.4, 26.4: blue over red 0.62), solved
+    /// from three Unity runs at 12:00 (one log-linear fit per channel;
+    /// PaintedBoothTests holds the fit).
     /// </summary>
-    public Color paintedBoothGrade = new Color(0.81f, 0.82f, 0.64f, 1f);
+    public Color paintedBoothGrade = new Color(0.75f, 0.745f, 0.665f, 1f);
 
     /// <summary>The day-night cycle's knobs for HallDayCycle (fixture threshold, band and stagger included).</summary>
     public HallDayCycle.Settings Cycle => new HallDayCycle.Settings(sunriseHour, sunsetHour, twilightHours, fixturesOnBelow, fixtureFadeBand, fixtureStaggerMinutes);
@@ -291,6 +291,19 @@ public sealed class HallLightingSO : ScriptableObject
         var g = new Gradient();
         g.SetKeys(colours, new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) });
         return g;
+    }
+
+    /// <summary>A polyline through <paramref name="keys"/> (straight between keys, flat outside them).</summary>
+    private static AnimationCurve Line(params (float t, float v)[] keys)
+    {
+        var frames = new Keyframe[keys.Length];
+        for (int i = 0; i < keys.Length; i++)
+        {
+            float left = i > 0 ? (keys[i].v - keys[i - 1].v) / (keys[i].t - keys[i - 1].t) : 0f;
+            float right = i < keys.Length - 1 ? (keys[i + 1].v - keys[i].v) / (keys[i + 1].t - keys[i].t) : 0f;
+            frames[i] = new Keyframe(keys[i].t, keys[i].v, left, right);
+        }
+        return new AnimationCurve(frames);
     }
 
     private static AnimationCurve Curve(params (float t, float v)[] keys)

@@ -61,6 +61,9 @@ public sealed class CityR17 : MonoBehaviour
     /// <summary>The rendered city (a linear-format texture holding gamma-space colour: show it through <see cref="PresentMaterial"/>).</summary>
     public RenderTexture Output => _stage?.Output;
 
+    /// <summary>The config this city was built from (its knobs, read each frame by the city view's hour tint).</summary>
+    public CityR17ConfigSO Config => _config;
+
     /// <summary>The material a UI image shows <see cref="Output"/> with (decodes it once).</summary>
     public Material PresentMaterial => _present;
 
