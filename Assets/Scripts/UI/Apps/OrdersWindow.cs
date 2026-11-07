@@ -44,7 +44,7 @@ using UnityEngine.UI;
 /// on a day Orders.CanOrder says no (BUG-28d: an order on the last day
 /// would never arrive).
 /// </summary>
-public sealed class OrdersWindow : MonoBehaviour
+public sealed class OrdersWindow : MonoBehaviour, IKitUser
 {
     /// <summary>The tree's sizes (cell, node, band head, link width) and its zoom levels and text floor.</summary>
     [SerializeField] private DesktopConfigSO config;
@@ -102,6 +102,9 @@ public sealed class OrdersWindow : MonoBehaviour
 
     /// <summary>The UI kit (run 7): a node's card and state badge come from it (UiKitNames.UpgradeCard and UpgradeBadge, one card for Orders and the House); without it the template's card stays and the badges are code-drawn.</summary>
     [SerializeField] private UiKitSO kit;
+
+    /// <summary>Draws with <paramref name="use"/> from now on (PcSkin: the PC's look).</summary>
+    public void UseKit(UiKitSO use) => kit = use;
 
     /// <summary>A locked node's card alpha.</summary>
     [SerializeField, Range(0.2f, 1f)] private float lockedAlpha = 0.55f;

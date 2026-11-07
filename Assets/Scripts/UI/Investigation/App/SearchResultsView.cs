@@ -21,7 +21,7 @@ using UnityEngine.UI;
 /// (Choose; Ctrl+Enter: the other pane); the drawer closes it. SearchBox fills
 /// it; its rows are clones of inactive templates.
 /// </summary>
-public sealed class SearchResultsView : MonoBehaviour
+public sealed class SearchResultsView : MonoBehaviour, IKitUser
 {
     /// <summary>The header's chip row.</summary>
     [SerializeField] private RectTransform chipRow;
@@ -49,6 +49,9 @@ public sealed class SearchResultsView : MonoBehaviour
 
     /// <summary>The UI kit (run 7): the chosen chip is its slate chip, the others bone (sheet 02 C3); without it the chosen chip takes <see cref="chosenTint"/>.</summary>
     [SerializeField] private UiKitSO kit;
+
+    /// <summary>Draws with <paramref name="use"/> from now on (PcSkin: the PC's look).</summary>
+    public void UseKit(UiKitSO use) => kit = use;
 
     private readonly List<GameObject> _rows = new List<GameObject>();
     private readonly List<Button> _hitRows = new List<Button>();

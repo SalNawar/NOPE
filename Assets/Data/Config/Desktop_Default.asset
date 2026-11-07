@@ -19,3 +19,5 @@ MonoBehaviour:
   taskbarButtonWidth: 220
   doubleClickSeconds: 0.4
   doubleClickDistance: 6
+  taskbarLabelLeast: 170
+  theme: {fileID: 11400000, guid: d20a72e052724a6da17b9844531d7511, type: 2}

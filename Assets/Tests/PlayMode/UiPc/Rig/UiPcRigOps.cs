@@ -686,18 +686,27 @@ public static class UiPcRigOps
             yield return ClickObject(runner, FindDeep(orders.Window.transform, "TitleText") ?? orders.Window.transform); // bring it forward as a player would: its title bar
             yield return QaGame.Frames(5);
         }
+        // The first orderable card the player can see (GATE-27: a card scrolled out of the tree's view is not one a player double-clicks).
         UpgradeSO pick = null;
+        Vector2? at = null;
+        bool any = false;
         foreach (UpgradeSO u in OrderBook.Catalogue(lib))
-            if (OrderBook.StateOf(world, lib, u) == OrderState.Orderable)
+        {
+            if (OrderBook.StateOf(world, lib, u) != OrderState.Orderable)
+                continue;
+            any = true;
+            Transform node = FindDeep(orders.transform, "Node_" + u.id);
+            Vector2? point = node != null ? QaGame.ScreenPoint(node.gameObject) : null;
+            if (point.HasValue && InView(orders, node))
             {
                 pick = u;
+                at = point;
                 break;
             }
-        Transform card = pick != null ? FindDeep(orders.transform, "Node_" + pick.id) : null;
-        Vector2? at = card != null ? QaGame.ScreenPoint(card.gameObject) : null;
+        }
         if (!at.HasValue)
         {
-            runner.Assert("order", Owner, false, pick == null ? "nothing orderable" : "the card is off screen",
+            runner.Assert("order", Owner, false, !any ? "nothing orderable" : "no orderable card is in the tree's view",
                 "give the run money (cheat AddMoney) and a day with Orders before the step");
             yield break;
         }
@@ -847,6 +856,15 @@ public static class UiPcRigOps
     // -----------------------------
     // Input and lookups
     // -----------------------------
+
+    /// <summary>True when <paramref name="node"/>'s centre lies inside the Orders tree's viewport on the screen (not scrolled out of view).</summary>
+    private static bool InView(OrdersWindow orders, Transform node)
+    {
+        TreeScrollRect view = orders.GetComponentInChildren<TreeScrollRect>(true);
+        Rect? port = view != null && view.viewport != null ? QaGame.ScreenRect(view.viewport.gameObject) : null;
+        Vector2? centre = QaGame.ScreenPoint(node.gameObject);
+        return port.HasValue && centre.HasValue && port.Value.Contains(centre.Value);
+    }
 
     /// <summary>A left click at the middle of <paramref name="target"/> (skipped when it is not on screen).</summary>
     private static IEnumerator ClickObject(QaRunner runner, Transform target)

@@ -69,13 +69,6 @@ public static partial class OfficeSceneUIBuilder
         KitDeskProps();
         KitFallbackHud(o.Find("FallbackHud"));
         KitGuideArrow(o.Find("GuidePrompt/Arrow"));
-        foreach (Button close in o.GetComponentsInChildren<Button>(true))
-            if (close.name == "CloseButton" && close.GetComponentInParent<PcFrame>(true) != null)
-            {
-                // The PC frame's big X: the kit's red key with its cross.
-                KitSkin(close, "iconkey_red", _kit.overlayScale);
-                KitGlyph(close, "glyph_cross");
-            }
 
         // The taskbar's window button template at its own width (its row lays it out at run time; at build time it would take the row's rect).
         if (desktop.transform.Find("Taskbar/TrayRow/WindowButtons/WindowButtonTemplate") is RectTransform windowButton)

@@ -21,11 +21,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Where the desktop and its cameras live: far below the office floor, on their own layer.</summary>
     private static readonly Vector3 DesktopHome = new Vector3(0f, -100f, 0f);
 
-    /// <summary>The PC frame on the overlay canvas (reference px): the whole monitor, left of centre.</summary>
+    /// <summary>The PC frame on the overlay canvas (reference px): the whole monitor, centred on the screen (UI-17), the room in view on both sides.</summary>
     private static readonly Vector2 FrameSize = new Vector2(1240f, 1060f);
 
-    /// <summary>The frame's distance from the screen's left edge (reference px).</summary>
-    private const float FrameLeft = 20f;
+    /// <summary>The bezel's hover hint's place on the chin (reference px from the frame's bottom left): left of the brand plate, inside the frame at every aspect (UI-17).</summary>
+    private static readonly Vector2 FrameHintAt = new Vector2(150f, 78f);
 
     /// <summary>The placeholder bezel art's scale (it is drawn at half the frame's reference size).</summary>
     private const int FrameArtDivisor = 2;
@@ -137,12 +137,15 @@ public static partial class OfficeSceneUIBuilder
     /// full-screen room catcher (a click on the room beside the frame is taken
     /// and does nothing: Saleh's R3/R4, 2026-10-20, "To leave the PC, press Q
     /// or click the bezel", which overrides the 2026-09-30 click-outside
-    /// pass-through), the bezel (placeholder art; a click on it leaves the
-    /// PC, with a "Back to desk" hint: BUG-50a), the Glass the frame camera
+    /// pass-through), the bezel centred on the screen (UI-17; placeholder art
+    /// the PC's look redraws, PcSkin; a click on it leaves the PC, with a
+    /// "Back to desk" hint on its chin: BUG-50a), the Glass the frame camera
     /// draws into (4:3; the catcher and the bezel let clicks through there),
-    /// the red close X (on the bezel: it leaves as the bezel does), the power
-    /// button and LED, and the brand plate, in the neutral theme's
-    /// DiegeticDevice ink. Returns the power LED and button through out parameters.
+    /// the power switch and LED, and the brand plate, in the neutral theme's
+    /// DiegeticDevice ink. The red close X is gone (UI-09, D14: no UI button
+    /// on the monitor; Q and the bezel leave, and the power switch is the
+    /// monitor's one control). Returns the power LED and button through out
+    /// parameters.
     /// </summary>
     private static PcFrame BuildPcFrame(Transform overlay, Camera frameCamera, OfficeViewController view, ContentLibrarySO library, out Image powerLed, out Button powerButton)
     {
@@ -153,16 +156,16 @@ public static partial class OfficeSceneUIBuilder
         // The room beside the frame: its transparent plate takes a click there, which does nothing (only Q and the bezel leave the PC, R3/R4).
         Transform catcher = Panel(root, "RoomCatcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
 
-        Transform frame = Panel(root, "Frame", new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), Vector2.zero, FrameSize, Color.white, ThemeRoleId.DiegeticDevice);
+        Transform frame = Panel(root, "Frame", Center, Center, Vector2.zero, FrameSize, Color.white, ThemeRoleId.DiegeticDevice);
         var frameRect = (RectTransform)frame;
-        frameRect.pivot = new Vector2(0f, 0.5f);
-        frameRect.anchoredPosition = new Vector2(FrameLeft, 0f);
+        frameRect.pivot = Center;
+        frameRect.anchoredPosition = Vector2.zero;
         Image bezel = frame.GetComponent<Image>();
         bezel.sprite = EnsureOfficeShape("pc_frame", (int)FrameSize.x / FrameArtDivisor, (int)FrameSize.y / FrameArtDivisor, Center, FramePixel);
         bezel.type = Image.Type.Simple;
         ClickCatcher leave = frame.gameObject.AddComponent<ClickCatcher>();
         WirePersistentVoid(leave, "onClick", view, nameof(OfficeViewController.FocusOffice));
-        BuildHoverHint(leave, "taskbar.desk", null, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f));
+        BuildHoverHint(leave, "taskbar.desk", null, new Vector2(FrameHintAt.x / FrameSize.x, FrameHintAt.y / FrameSize.y), Center);
 
         Transform glass = Panel(frame, "Glass", Vector2.zero, Vector2.zero, Vector2.zero, FrameGlass.size, null);
         var glassRect = (RectTransform)glass;
@@ -177,15 +180,6 @@ public static partial class OfficeSceneUIBuilder
             SetRef(soFilter, "hole", glassRect);
             soFilter.ApplyModifiedProperties();
         }
-
-        Button close = MakeButton(frame, "CloseButton", "", new Vector2(1f, 1f), new Vector2(1f, 1f), Color.white, ThemeRoleId.DiegeticDevice);
-        var closeRect = (RectTransform)close.transform;
-        closeRect.pivot = new Vector2(1f, 1f);
-        closeRect.sizeDelta = new Vector2(64f, 64f);
-        closeRect.anchoredPosition = new Vector2(-14f, -14f);
-        close.GetComponent<Image>().sprite = EnsureOfficeShape("pc_close", 48, 48, Center, CloseButtonPixel);
-        Object.DestroyImmediate(close.transform.Find("Label").gameObject); // its cross is drawn in the sprite: no text
-        WirePersistentVoid(close, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
 
         powerButton = MakeButton(frame, "PowerButton", "", new Vector2(1f, 0f), new Vector2(1f, 0f), Color.white, ThemeRoleId.DiegeticDevice);
         var powerRect = (RectTransform)powerButton.transform;
@@ -257,20 +251,6 @@ public static partial class OfficeSceneUIBuilder
         if (fromGlass < 16f)
             plastic = Color32.Lerp(new Color32(176, 163, 134, 255), plastic, (fromGlass - 9f) / 7f);
         return plastic;
-    }
-
-    /// <summary>Placeholder close button: a red rounded square with a white X.</summary>
-    private static Color32 CloseButtonPixel(int x, int y)
-    {
-        float cx = Mathf.Clamp(x + 0.5f, 8f, 40f), cy = Mathf.Clamp(y + 0.5f, 8f, 40f);
-        float corner = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(cx, cy));
-        if (corner > 8f)
-            return new Color32(0, 0, 0, 0);
-        if (corner > 6f || x < 2 || y < 2 || x > 45 || y > 45)
-            return new Color32(120, 28, 22, 255);
-        float u = x - 23.5f, v = y - 23.5f;
-        bool cross = (Mathf.Abs(u - v) < 3.6f || Mathf.Abs(u + v) < 3.6f) && Mathf.Abs(u) < 12f && Mathf.Abs(v) < 12f;
-        return cross ? new Color32(255, 250, 244, 255) : new Color32(214, 64, 50, 255);
     }
 
     /// <summary>Placeholder power button: a cream round face on a dark rim, with a power glyph.</summary>

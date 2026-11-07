@@ -133,6 +133,13 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// </summary>
     public static event System.Action LabelsChanged;
 
+    /// <summary>
+    /// Raised after the theme was applied to the loaded scenes (a scene's load,
+    /// a change of leader, a refresh): the PC's look (PcSkin) is laid over the
+    /// culture's colours then, so they never paint over it.
+    /// </summary>
+    public static event System.Action Applied;
+
     /// <summary>The culture table <see cref="Strings"/> was built over (null: the reading language's only), once built after Configure.</summary>
     private UiStringTableSO _stringsTable;
 
@@ -253,6 +260,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
                 ApplyScene(SceneManager.GetSceneAt(i));
         if (changed)
             LabelsChanged?.Invoke();
+        Applied?.Invoke();
     }
 
     private void Awake()
