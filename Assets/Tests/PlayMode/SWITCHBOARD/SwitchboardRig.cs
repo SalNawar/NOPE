@@ -170,17 +170,13 @@ public static class SwitchboardRig
             samples.Add(new QaPathSample(At(a0 + delta), true));
         for (int i = 0; i <= QaPaths.SettleFrames; i++)
             samples.Add(new QaPathSample(At(a0 + delta), false));
-        string track = "ring" + m;
-        runner.Recorder.Track(track, () => view.DialScreenRect(m)); // the turning glyphs are expected motion (the flicker check's mask)
         yield return Fixed(runner.Input.Play(new QaPath(QaPathKind.Plain, samples)));
         yield return QaGame.Until(() =>
         {
             view.DialTurn(m, out bool resting);
             return resting;
         }, 3f, "the ring to rest in its detent");
-        yield return QaGame.Frames(2);
-        runner.Recorder.Forget(track);
-        yield return QaGame.Frames(1);
+        yield return QaGame.Frames(3);
 
         float rest = view.DialTurn(m, out _);
         int top = GateDial.SlotUnderChevron(rest, GateDial.PlaceChevron, slots), second = GateDial.SlotUnderChevron(rest, GateDial.PeriodChevron, slots);

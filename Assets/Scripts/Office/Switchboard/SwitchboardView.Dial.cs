@@ -935,15 +935,6 @@ public sealed partial class SwitchboardView
     /// <summary>True when the board is not shown at all (turned away and the turn finished).</summary>
     internal bool Hidden => !_open && _openT <= 0f;
 
-    /// <summary>Dial <paramref name="m"/>'s ring on the screen (pixels, origin bottom left), for the rig's expected-motion mask.</summary>
-    internal Rect DialScreenRect(int m)
-    {
-        BoardPoint c = _gate.DialCentre(m);
-        float r = GateBoardLayout.RingOuter + 4f;
-        Vector2 a = ScreenOf(c.Plus(-r, r)), b = ScreenOf(c.Plus(r, -r));
-        return Rect.MinMaxRect(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y));
-    }
-
     /// <summary>Dial <paramref name="m"/>'s chevron lenses this frame: the alpha of each (0 dark to 1 lit).</summary>
     internal float[] DialLenses(int m)
     {
