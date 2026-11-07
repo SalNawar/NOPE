@@ -63,8 +63,27 @@ public sealed class CityR17ConfigSO : ScriptableObject
     [Tooltip("The hall windows' city redraws at most this often (fps) while the city view is not up (the loops run at 24).")]
     public float windowFps = 30f;
 
-    [Tooltip("How much the hall's hour tints the city in its windows (the hall's own _StateWeights; 0: always noon). The city view itself has no hour grade (Saleh: one daytime look).")]
+    [Tooltip("How much the hall's hour tints the city in its windows (the hall's own _StateWeights; 0: always noon). D9: the painted plate stays one daytime painting and the hour is a layer over it.")]
     [Range(0f, 1f)] public float windowHourTint = 1f;
+
+    [Tooltip("How much the hall's hour tints the full-screen city view, with the hall windows' blend (HourColour; D9, CITY-03). 0: the day city at every hour.")]
+    [Range(0f, 1f)] public float viewHourTint = 0.8f;
+
+    /// <summary>
+    /// The hour's colour on the city for the hall's four state shares (morning, noon, evening, night;
+    /// HallBakedCycle.Weights): the same colours CityR17Window.shader blends in the hall windows, so the windows
+    /// and the city view show one hour. White when the shares are all 0.
+    /// </summary>
+    public static Color HourColour(float morning, float noon, float evening, float night)
+    {
+        float sum = morning + noon + evening + night;
+        if (sum <= 1e-4f)
+            return Color.white;
+        Color c = new Color(0.95f, 0.97f, 1f) * morning + Color.white * noon + new Color(0.75f, 0.55f, 0.55f) * evening + new Color(0.22f, 0.29f, 0.43f) * night;
+        c /= sum;
+        c.a = 1f;
+        return c;
+    }
 
     [Tooltip("The left wall's windows (mask red): their box on the hall canvas (uv, y down: x, y, w, h).")]
     public Vector4 leftWindowsBox = new Vector4(0f, 0f, 0.3131f, 0.6809f);

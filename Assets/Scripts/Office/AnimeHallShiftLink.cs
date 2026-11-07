@@ -70,7 +70,7 @@ public sealed class AnimeHallShiftLink : MonoBehaviour
         if (lit)
             _lights.SetClock(shift.MinuteOfDay);
         float blend = lit ? _lights.Evening : CrowdPaletteBlend.Evening(shift.StandardProgress01, _config.hallEveningStartsAt, _config.hallEveningFullAt);
-        Color shade = lit && DeskLightLevel.Live != null ? DeskLightLevel.Live.Light : Color.white;
+        Color shade = lit && DeskLightLevel.Live != null ? DeskLightLevel.Live.TravellerLight : Color.white;
 
         if (_traveller != null && shade != _shade)
         {

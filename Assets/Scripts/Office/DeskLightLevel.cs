@@ -37,6 +37,9 @@ public sealed class DeskLightLevel : MonoBehaviour
     /// <summary>The uniform desk light (colour times level; white while unpublished): the sprite tint of the traveller (AnimeHallShiftLink) and, once DOC-LOOK applies it, of the passport photo.</summary>
     public Color Light { get; private set; } = Color.white;
 
+    /// <summary>The traveller's tint (D9: the traveller stands in the hall, not under the desk lamp): the room's colour without the lamp (white by day, deskNightTint at night) times HallLightingSO.travellerLight at the hour; white while unpublished.</summary>
+    public Color TravellerLight { get; private set; } = Color.white;
+
     private static readonly int TintId = Shader.PropertyToID("_DeskLightTint");
     private static readonly int LevelId = Shader.PropertyToID("_DeskLightLevel");
     private static readonly int KeyId = Shader.PropertyToID("_DeskLightKey");
@@ -107,6 +110,9 @@ public sealed class DeskLightLevel : MonoBehaviour
         float warm = HallDayCycle.WarmUp(_since, settings.deskLampWarmSeconds, MotionPreference.Reduced);
         DeskLighting.Light l = DeskLighting.Evaluate(hour, cycle, knobs, warm);
         Light = new Color(l.R * l.Level, l.G * l.Level, l.B * l.Level, 1f);
+        Color room = Color.Lerp(settings.deskNightTint, Color.white, HallDayCycle.Daylight(hour, cycle));
+        float share = settings.travellerLight != null && settings.travellerLight.length > 0 ? Mathf.Max(0f, settings.travellerLight.Evaluate(hour)) : 1f;
+        TravellerLight = new Color(room.r * share, room.g * share, room.b * share, 1f);
         Publish(new Vector4(l.R, l.G, l.B, 1f), l.Level, settings.deskKeyAtDay,
                 new Vector4(_poolCentre.x, _poolCentre.y, _poolCentre.z, settings.deskLampRadius), l.LampShare,
                 new Vector4(l.LampR, l.LampG, l.LampB, 1f));
@@ -127,6 +133,7 @@ public sealed class DeskLightLevel : MonoBehaviour
     private void Unpublish()
     {
         Light = Color.white;
+        TravellerLight = Color.white;
         if (_tint.w != 0f)
             Shader.SetGlobalVector(TintId, Vector4.zero);
         _tint = Vector4.zero;

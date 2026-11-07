@@ -145,6 +145,7 @@ public sealed class CityView : MonoBehaviour
     private Material _material;
     private bool _live;
     private CityR17 _r17;
+    private float _shownReveal = -1f;
     private float _clock;
     private float _pan = -1f;
     private float _cityPan;
@@ -408,6 +409,21 @@ public sealed class CityView : MonoBehaviour
         group.blocksRaycasts = group.interactable = alpha > 0f;
     }
 
+    /// <summary>
+    /// The hour on the city view (D9, CITY-03): the painted plate stays one daytime painting and the hall's hour
+    /// tints it, with the same blend as the hall windows (CityR17Window.shader's _StateWeights colours, through
+    /// <see cref="CityR17ConfigSO.HourColour"/>), scaled by <see cref="CityR17ConfigSO.viewHourTint"/> (0: the day city).
+    /// White without the r17 city or the hall's rig.
+    /// </summary>
+    private Color HourTint()
+    {
+        CityR17ConfigSO knobs = _r17 != null ? _r17.Config : null;
+        if (knobs == null || _lights == null)
+            return Color.white;
+        HallBakedCycle.Weights4 w = HallBakedCycle.Weights(_lights.Hour);
+        return Color.Lerp(Color.white, CityR17ConfigSO.HourColour(w.x, w.y, w.z, w.w), knobs.viewHourTint);
+    }
+
     /// <summary>Draws the timeline at <paramref name="clock"/>, the parallax's spring stepped by <paramref name="dt"/> (the frame's seconds on the game feel's clock).</summary>
     private void Draw(float clock, float dt)
     {
@@ -432,9 +448,12 @@ public sealed class CityView : MonoBehaviour
                 _hall.SetPan(pan);
             }
         }
-        if (panorama != null && panorama.color.a != reveal)
+        Color tint = HourTint();
+        if (panorama != null && panorama.color != new Color(tint.r, tint.g, tint.b, reveal))
+            panorama.color = new Color(tint.r, tint.g, tint.b, reveal);
+        if (panorama != null && _shownReveal != reveal)
         {
-            panorama.color = new Color(1f, 1f, 1f, reveal);
+            _shownReveal = reveal;
             foreach (Vehicle v in _traffic)
                 if (reveal <= 0f && v.Image != null)
                     v.Image.color = Color.clear;

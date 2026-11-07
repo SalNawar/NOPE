@@ -394,6 +394,48 @@ MonoBehaviour:
   deskLampLevel: 0.45
   deskLampColour: {r: 1, g: 0.82, b: 0.6, a: 1}
   deskLampRadius: 1.35
+  travellerLight:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 5.5
+      value: 0.8
+      inSlope: 0
+      outSlope: 0.06666667
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 8.5
+      value: 1
+      inSlope: 0.06666667
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 16
+      value: 1
+      inSlope: 0
+      outSlope: -0.08
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 18.5
+      value: 0.8
+      inSlope: -0.08
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   hallNightTint: {r: 0.2, g: 0.27, b: 0.43, a: 1}
   hallPoolStrength: 0.35
   hallEmissionGain: 2.5
@@ -411,24 +453,51 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 9
-      value: 0.72
-      inSlope: 0.018571429
-      outSlope: 0.018571429
-      tangentMode: 0
+      time: 5.5
+      value: 1.5
+      inSlope: 0
+      outSlope: -0.3
+      tangentMode: 69
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 8.5
+      value: 0.6
+      inSlope: -0.3
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 12
+      value: 0.6
+      inSlope: 0
+      outSlope: 0.015
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 16
-      value: 0.85
-      inSlope: 0.018571429
-      outSlope: 0.018571429
-      tangentMode: 0
+      value: 0.66
+      inSlope: 0.015
+      outSlope: 0.336
+      tangentMode: 69
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 18.5
+      value: 1.5
+      inSlope: 0.336
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  paintedBoothGrade: {r: 0.81, g: 0.82, b: 0.64, a: 1}
+  paintedBoothGrade: {r: 0.77, g: 0.67, b: 0.85, a: 1}
