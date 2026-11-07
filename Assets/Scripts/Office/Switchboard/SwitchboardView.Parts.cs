@@ -469,7 +469,7 @@ public sealed partial class SwitchboardView
 
     // ------------------------------------------------------------------ the turn
 
-    /// <summary>The turn to the board and back (eased, cut under Reduced Motion): the plate grows from the painted board on the wall (squeezed as the wall is seen at an angle) until it fills the screen (whole: at 16:9 exactly, on another shape with the dark matte beside it), fading in over its first third, the matte darkening behind.</summary>
+    /// <summary>The turn to the board and back (eased, cut under Reduced Motion): the plate grows from the painted board on the wall (squeezed as the wall is seen at an angle) until it fills the screen (whole: at 16:9 exactly, on another shape with the dark matte beside it), fading in over its first third, the matte darkening behind to opaque (the desk and its HUD hidden at every shape).</summary>
     private void StepTurn(float dt)
     {
         if (_boardLayer == null)
@@ -496,7 +496,7 @@ public sealed partial class SwitchboardView
         _plate.anchoredPosition = Vector2.Lerp(start, Vector2.zero, e) + jitter;
         _boardGroup.alpha = Mathf.Clamp01(_openT / 0.3f);
         _boardGroup.blocksRaycasts = _open;
-        _matte.color = new Color(MatteColor.r, MatteColor.g, MatteColor.b, e * 0.97f);
+        _matte.color = new Color(MatteColor.r, MatteColor.g, MatteColor.b, e); // opaque once turned: the letterbox is the board's own frame, never a window onto the desk (at 0.97 the linear blend let the desk HUD read through at 5:4 and 21:9)
     }
 
     /// <summary>Where the turn to the board starts (the canvas's units, its centre at the origin): the board on the wall where it stands on the screen, else the painting's board (WallRect).</summary>
