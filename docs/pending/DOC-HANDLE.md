@@ -234,7 +234,7 @@ The round 3 verifier's report: E:/unity/NOPE-tools/reports/night/s1_fixes/FOLD01
 
 **G3 (by design, unchanged):** a paper let go before it lies wholly on the desk slides onto the desk, eased.
 
-**FOLD-02:** measured on the day 12 entry ticket let go mid-mat in the reading view, from the counter and from the desk (counter_drag `d12_e1_ticket_near_mat`, `d12_fold02_ticket_on_desk`): the root moves 0.0 px after the release and rests 0.7 and 0.4 px from the pointer; cam_views' `d12_desk_work` drop 2 (the audit's case) shifts 0.4 px at 1080p (the audit's run: about 150 px over 5 frames). The report (REPORT.md) gives the run names.
+**FOLD-02:** measured on the day 12 entry ticket let go mid-mat in the reading view, from the counter and from the desk (counter_drag `d12_e1_ticket_near_mat`, `d12_fold02_ticket_on_desk`): the root moves 0.0 px after the release and rests 0.7 and 0.4 px from the pointer (run counter_drag_20261107_145132 at b18c350, slot n2). cam_views' `d12_desk_work` drop 2 (the audit's case, the camera still) shifts 0.2 px at 1080p over the 10 frames after the release; only the lift's shadow changes, for 5 frames (run cam_views_20261107_150033). The audit's run slid about 150 px over 5 frames; the base 370352f was already clean.
 
 **The rig (the verifier's path 5):**
 - `counterDrag` presses the paper's visible click box at (`x`, `y`) shares of its half size (the middle, the near edge -0.95, the far edge 0.9), takes any path (`path`), any paper by index (`target` "index:N", on the counter or the desk) and a release at a desk point (`target2` "m:x,y", DeskLayout.Frame metres).
