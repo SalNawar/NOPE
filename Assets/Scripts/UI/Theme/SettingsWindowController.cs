@@ -31,7 +31,7 @@ using UnityEngine.UI;
 /// DesktopPreferences; Ctrl+0 goes back to it). The Keyboard section's "Show
 /// shortcuts" opens the shortcut card (the F1 card: the one shortcut table).
 /// </summary>
-public sealed class SettingsWindowController : MonoBehaviour
+public sealed class SettingsWindowController : MonoBehaviour, IKitUser
 {
     /// <summary>Chooses "Follow history" (the papers take the world's language from the culture day).</summary>
     [SerializeField] private Button followHistoryButton;
@@ -77,6 +77,9 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     /// <summary>The UI kit (run 7): a chosen option is its oxblood plate, the others bone (sheet 02's segmented pairs); without it the theme's colours mark the choice.</summary>
     [SerializeField] private UiKitSO kit;
+
+    /// <summary>Draws with <paramref name="use"/> from now on (PcSkin: the PC's look).</summary>
+    public void UseKit(UiKitSO use) => kit = use;
 
     /// <summary>The zoom levels.</summary>
     [SerializeField] private DesktopConfigSO config;

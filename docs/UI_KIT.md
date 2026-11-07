@@ -31,3 +31,13 @@ Also in `docs/ui-kit/`:
 - Button states rest / hover / pressed / locked map to SpriteSwap normal / highlighted / pressed / disabled.
 - Stability is never shown to the player as a number; the Helix River shows it.
 - New pieces are rendered with the kit exporter (`E:\unity\NOPE-tools\art-gen\`) in the same style. They are never drawn ad hoc.
+
+## The PC's cyberpunk look (D2, 2026-11-07)
+
+Saleh dropped the XP direction for the PC: "I'm going full cyberpunk futristic 80s retro scifi". The PC keeps this kit's sprite names, fonts and type scale, and wears another look over them at run time:
+
+- One theme asset, `PcThemeSO` (`Assets/Data/UI/PcTheme_Cyberpunk.asset`, named by `DesktopConfigSO.theme`). `PcTheme_Cel.asset` keeps this kit's look.
+- Tokens: glass in near-black blue, phosphor cyan (the primary), magenta (the accent, tinted by the leading culture), amber (warnings and money), the alert red, light ink.
+- The chrome is drawn in code from the tokens (`PcKit`, `PcChromeArt`): each piece keeps its kit sprite's name, pad, 9-slice border and size. The kit's colour words map to tones (`PcSkinRules`): oxblood to the accent, red to the alert, green to phosphor, brass to amber, bone, slate and lavender to the quiet edge.
+- The glyphs, tiles, the power glyph and the skyline wallpaper are PNGs in `Assets/Art/UI/PcCyber`, made with PIL (`E:/unity/NOPE-tools/art-gen/pc_cyber/glyphs.py`, `wallpaper.py`): white strokes the game tints.
+- The office, the desk, Home and the Title keep this kit's cel look.

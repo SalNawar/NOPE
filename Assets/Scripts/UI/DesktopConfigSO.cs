@@ -42,6 +42,13 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The chevron's width at the strip's end (the windows that do not fit wait behind it).</summary>
     [Min(1f)] public float taskbarChevronWidth = 64f;
 
+    /// <summary>The narrowest window button that still shows its title beside its glyph (UI-14); a narrower one shows the glyph only, its title in its hover hint, so a title is never cut mid-letter (PcSkinRules.TaskbarShowsLabel).</summary>
+    [Min(1f)] public float taskbarLabelLeast = 170f;
+
+    [Header("The look (D2: the PC as a cyberpunk 80s retro sci-fi terminal)")]
+    /// <summary>The PC's look: its theme asset (Assets/Data/UI/PcTheme_Cyberpunk.asset; PcTheme_Cel.asset gives the cel kit's look). PcSkin applies it at run time; null keeps the look the builder built.</summary>
+    public PcThemeSO theme;
+
     [Header("Desktop icons (the PC redesign DK2-DK5; desktop units)")]
     /// <summary>An icon's cell: the glyph over its label.</summary>
     public Vector2 iconCellSize = new Vector2(188f, 156f);
