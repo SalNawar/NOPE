@@ -172,13 +172,13 @@ def build_monitor(bm):
     tapered(bm, (-0.25, 0.13), (0.25, 0.53), (-0.16, 0.21), (0.16, 0.46), 0.07, 0.248, BODY, hull=True)
 
     # The cream bezel: a thick chin, the hole for the CRT dome (the screen's 36 x 29 cm with 2.8 cm corners).
-    outer = rounded_loop(0.0, 0.335, 0.62, 0.47, 0.045)
+    outer = rounded_loop(0.0, 0.335, 0.58, 0.45, 0.042)
     inner = rounded_loop(0.0, SCREEN_Z, SCREEN_W, SCREEN_H, SCREEN_CORNER)
     ring(bm, outer, inner, BEZEL_FACE_Y, -0.192, CREAM)
     # The ink line round the glass, proud of the bezel; the bezel's outer ink edge.
     ring(bm, rounded_loop(0.0, SCREEN_Z, SCREEN_W + 0.016, SCREEN_H + 0.016, SCREEN_CORNER + 0.008), inner,
          BEZEL_FACE_Y - 0.0025, BEZEL_FACE_Y + 0.002, INK)
-    ring(bm, rounded_loop(0.0, 0.335, 0.634, 0.484, 0.052), outer, BEZEL_FACE_Y + 0.0005, -0.190, INK)
+    ring(bm, rounded_loop(0.0, 0.335, 0.594, 0.464, 0.049), outer, BEZEL_FACE_Y + 0.0005, -0.190, INK)
 
     # The chin: one neon line, the worn decal, the speaker grille, the power knob (right and low, where
     # GlassFrame.PowerKnob puts its click).
@@ -190,14 +190,16 @@ def build_monitor(bm):
     for i in range(4):
         z = 0.116 + 0.011 * i
         box(bm, (0.06, BEZEL_FACE_Y - 0.002, z), (0.19, BEZEL_FACE_Y + 0.001, z + 0.005), INK)
-    disc_y(bm, 0.272, 0.226, BEZEL_FACE_Y - 0.014, BEZEL_FACE_Y + 0.002, 0.025, INK)                     # the knob's rim
-    disc_y(bm, 0.272, 0.226, BEZEL_FACE_Y - 0.020, BEZEL_FACE_Y - 0.004, 0.019, CREAM)                   # the knob
-    box(bm, (0.269, BEZEL_FACE_Y - 0.0215, 0.214), (0.275, BEZEL_FACE_Y - 0.019, 0.240), NEON)           # its mark
+    disc_y(bm, 0.255, 0.226, BEZEL_FACE_Y - 0.014, BEZEL_FACE_Y + 0.002, 0.025, INK)                     # the knob's rim
+    disc_y(bm, 0.255, 0.226, BEZEL_FACE_Y - 0.020, BEZEL_FACE_Y - 0.004, 0.019, CREAM)                   # the knob
+    box(bm, (0.252, BEZEL_FACE_Y - 0.0215, 0.214), (0.258, BEZEL_FACE_Y - 0.019, 0.240), NEON)           # its mark
 
     # The cyberpunk twist: neon accent lines down both sides, side vents, the holo-strip on top.
     for side in (-1, 1):
         x = side * 0.3305
         box(bm, (x - 0.004, -0.17, 0.296), (x + 0.004, 0.05, 0.304), NEON)
+        box(bm, (x - 0.0035, -0.16, 0.12), (x + 0.0035, 0.04, 0.27), CREAM, bevel=0.002)   # the cream side panel
+        box(bm, (x - 0.0045, -0.14, 0.19), (x + 0.0045, -0.07, 0.205), INK)              # its hand grip slot
         for i in range(5):
             z = 0.40 + 0.03 * i
             box(bm, (x - 0.003, -0.12, z), (x + 0.003, 0.02, z + 0.012), INK)
