@@ -211,23 +211,57 @@ public sealed partial class SwitchboardView
         Fill(_matte.rectTransform);
         _plate = Layer("Plate", _boardLayer);
         Sprite plate = SlotArt.Sprite(ArtSlots.SwitchboardPlate);
-        Picture("Plate art", _plate, plate, plate != null ? Color.white : new Color(0.16f, 0.1f, 0.07f, 1f), Vector2.zero, new Vector2(_layout.Width, _layout.Height));
-        BuildWords(Layer("Words", _plate));
-        BuildModules(Layer("Modules", _plate));
-        BuildLamps(Layer("Lamps", _plate));
+        if (Dialer && plate != null)
+            PlateAround(plate, GateBoardLayout.CoverRect);
+        else
+            Picture("Plate art", _plate, plate, plate != null ? Color.white : new Color(0.16f, 0.1f, 0.07f, 1f), Vector2.zero, new Vector2(_layout.Width, _layout.Height));
+        if (Dialer)
+            BuildGateLayers(); // the dialer's face, calls, dials, displays and lamps: filled when the day knows today's nations (BuildGate)
+        else
+        {
+            BuildWords(Layer("Words", _plate));
+            BuildModules(Layer("Modules", _plate));
+            BuildLamps(Layer("Lamps", _plate));
+        }
         BuildHint(_plate);
         BuildLever(Layer("MASTER", _plate));
+        if (Dialer)
+            _cellLayer = Layer("Cells", _plate);
         _cordLayer = Layer("Cords", _plate);
         _ringLayer = Layer("Targets", _plate);
         _plugLayer = Layer("Plugs", _plate);
         _heldLayer = Layer("In the hand", _plate);
         _fxLayer = Layer("Flares", _plate);
-        BuildCords();
+        if (!Dialer)
+            BuildCords();
         _grab = Picture("Grab", _plate, null, Color.clear, Vector2.zero, new Vector2(60f, 60f), true).rectTransform;
         _grab.gameObject.AddComponent<Clickable>();
         _grab.gameObject.SetActive(false);
         _boardLayer.gameObject.SetActive(false);
         _lastLeft = new float[_layout.Modules.Count];
+    }
+
+    /// <summary>The dialer's plate: the plate's paint only around <paramref name="cover"/> (four pieces of its sprite), so none of the Classic jacks shows through the dialer's face while the board fades in.</summary>
+    private void PlateAround(Sprite plate, BoardRect cover)
+    {
+        float w = _layout.Width, h = _layout.Height;
+        Rect tr = plate.textureRect;
+        float sx = tr.width / w, sy = tr.height / h;
+        BoardRect[] pieces =
+        {
+            new BoardRect(0f, 0f, w, cover.Y), new BoardRect(0f, cover.Y + cover.H, w, h - cover.Y - cover.H),
+            new BoardRect(0f, cover.Y, cover.X, cover.H), new BoardRect(cover.X + cover.W, cover.Y, w - cover.X - cover.W, cover.H),
+        };
+        foreach (BoardRect r in pieces)
+        {
+            if (r.W <= 0f || r.H <= 0f)
+                continue;
+            var rect = new Rect(tr.x + r.X * sx, tr.y + (h - r.Y - r.H) * sy, r.W * sx, r.H * sy);
+            Sprite piece = UnityEngine.Sprite.Create(plate.texture, rect, new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
+            piece.name = "Switchboard plate piece";
+            _gateArt.Add(piece);
+            Picture("Plate art", _plate, piece, Color.white, Local(r.Centre), Size(r));
+        }
     }
 
     /// <summary>The blank name plates' and period tags' live words.</summary>
@@ -246,7 +280,7 @@ public sealed partial class SwitchboardView
         }
     }
 
-    /// <summary>Each module's veil (not in service today) and display (between its number plate and its sockets).</summary>
+    /// <summary>Each module's veil (not in service today: over its face, or the dialer's disc over its dial) and display (between its number plate and its sockets; the dialer's under its cradle).</summary>
     private void BuildModules(RectTransform layer)
     {
         int n = _layout.Modules.Count;
@@ -255,25 +289,36 @@ public sealed partial class SwitchboardView
         for (int m = 0; m < n; m++)
         {
             LayoutModule module = _layout.Modules[m];
-            _veils[m] = Picture("Closed " + module.Id, layer, null, VeilColor, Local(module.Rect.Centre), new Vector2(module.Rect.W - VeilInset, module.Rect.H - VeilInset));
-            BoardPoint at = DisplayCentre(module);
-            var display = new Display { Glass = Picture("Display " + module.Id, layer, null, DisplayGlass, Local(at), new Vector2(Mathf.Min(104f, module.Rect.W - 70f), 26f)) };
+            _veils[m] = Dialer
+                ? Picture("Closed " + module.Id, layer, _discSprite, DialVeilColor, Local(_gate.DialCentre(m)), Vector2.one * 2f * (_gate.DialRadius(m) + 2f))
+                : Picture("Closed " + module.Id, layer, null, VeilColor, Local(module.Rect.Centre), new Vector2(module.Rect.W - VeilInset, module.Rect.H - VeilInset));
+            BoardPoint at = DisplayAt(m);
+            var display = new Display { Glass = Picture("Display " + module.Id, layer, null, DisplayGlass, Local(at), new Vector2(Dialer ? 104f : Mathf.Min(104f, module.Rect.W - 70f), 26f)) };
             display.Text = Label("Display text " + module.Id, display.Glass.rectTransform, Vector2.zero, new Vector2(display.Glass.rectTransform.sizeDelta.x - 8f, 22f), LampAmber, 8f, 17f, _mono);
             _displays[m] = display;
         }
     }
 
-    /// <summary>The call lamps (full size), the modules' lamps (0.875) and MASTER's (1.42): the art's sizes, by each glass's radius.</summary>
+    /// <summary>The call lamps (full size), the modules' lamps (0.875) and MASTER's (1.42): the art's sizes, by each glass's radius (the dialer's call lamps in its call row, its module lamps at the hubs, seen on the wall).</summary>
     private void BuildLamps(RectTransform layer)
     {
-        _callLamps = new Lamp[_layout.Destinations.Count];
+        _callLamps = new Lamp[Dialer ? _gate.Nations : _layout.Destinations.Count];
         for (int d = 0; d < _callLamps.Length; d++)
-            _callLamps[d] = MakeLamp("Call lamp " + d, layer, _layout.Destinations[d].Lamp);
+            _callLamps[d] = MakeLamp("Call lamp " + d, layer, CallLampOf(d));
         _moduleLamps = new Lamp[_layout.Modules.Count];
         for (int m = 0; m < _moduleLamps.Length; m++)
-            _moduleLamps[m] = MakeLamp("Module lamp " + _layout.Modules[m].Id, layer, _layout.Modules[m].Lamp);
+            _moduleLamps[m] = MakeLamp("Module lamp " + _layout.Modules[m].Id, layer, ModuleLampOf(m));
         _masterLamp = MakeLamp("MASTER lamp", layer, _layout.Master.Lamp);
     }
+
+    /// <summary>Destination <paramref name="d"/>'s call lamp: the dialer's in its call row, else the plate's.</summary>
+    private BoardLamp CallLampOf(int d) => Dialer ? new BoardLamp(_gate.CallLamp(d), GateBoardLayout.CallLampGlass) : _layout.Destinations[d].Lamp;
+
+    /// <summary>Module <paramref name="m"/>'s lamp: the dialer's hub (seen from the desk on the wall), else the plate's.</summary>
+    private BoardLamp ModuleLampOf(int m) => Dialer ? new BoardLamp(_gate.DialCentre(m), 30f * _gate.DialScale(m)) : _layout.Modules[m].Lamp;
+
+    /// <summary>Where module <paramref name="m"/>'s display sits.</summary>
+    private BoardPoint DisplayAt(int m) => Dialer ? _gate.Display(m) : DisplayCentre(_layout.Modules[m]);
 
     /// <summary>A lamp's sizes (plate pixels): the glass radius the art's lamp sprites are drawn for, the lit dome's width and the glow's at that radius.</summary>
     private const float LampGlassPixels = 12f, LitPixels = 30f, GlowPixels = 96f;
@@ -387,12 +432,12 @@ public sealed partial class SwitchboardView
         }
     }
 
-    /// <summary>Hangs the hint card (or takes it down); a card with no words yet (Generate World not run) stays down.</summary>
+    /// <summary>Hangs the hint card (or takes it down); a card with no words yet (Generate World not run) stays down. The dialer's card says how to dial.</summary>
     private void ShowHint(bool show)
     {
         if (_hint == null)
             return;
-        string words = show ? Words(SwitchboardWords.Hint) : string.Empty;
+        string words = show ? Words(Dialer ? SwitchboardWords.HintDial : SwitchboardWords.Hint) : string.Empty;
         _hintText.text = words;
         _hint.gameObject.SetActive(words.Length > 0);
     }
@@ -537,16 +582,21 @@ public sealed partial class SwitchboardView
 
     // ------------------------------------------------------------------ drawing
 
-    /// <summary>Draws the board's live parts for this frame.</summary>
+    /// <summary>Draws the board's live parts for this frame (the dialer's once its day has built them).</summary>
     private void Draw(float dt)
     {
-        if (!Shown)
+        if (!Shown || _callLamps == null)
             return;
         DrawLamps(dt);
         DrawModules();
         DrawLever(dt);
-        DrawCords(dt);
-        DrawTargets();
+        if (Dialer)
+            DrawGate(dt);
+        else
+        {
+            DrawCords(dt);
+            DrawTargets();
+        }
         DrawFx(dt);
     }
 
@@ -625,11 +675,14 @@ public sealed partial class SwitchboardView
             SetLamp(_callLamps[d], CallLook(d), dt);
         bool running = false;
         for (int m = 0; m < _moduleLamps.Length; m++)
-            SetLamp(_moduleLamps[m], ModuleLook(m, ref running), dt);
+        {
+            LampLook look = ModuleLook(m, ref running);
+            SetLamp(_moduleLamps[m], Dialer ? new LampLook(look.Colour, 0f) : look, dt); // the dialer's dials show their own state (chevrons, horizon)
+        }
         SetLamp(_masterLamp, MasterLook(running), dt);
     }
 
-    /// <summary>Each module's veil (not in service, but for 04's and 05's painted placards) and display: PULL while MASTER waits for it, the calibration's countdown (alternating with POWER while it lacks a cord), OPEN, DONE, FUSE, CLOSED.</summary>
+    /// <summary>Each module's veil (not in service, but for 04's and 05's painted placards) and display: PULL while MASTER waits for it (the dialer: POWER while its bars are short of the mark), the calibration's countdown (alternating with POWER while it lacks a cord), OPEN, DONE, FUSE, CLOSED.</summary>
     private void DrawModules()
     {
         float now = Time.unscaledTime;
@@ -666,7 +719,7 @@ public sealed partial class SwitchboardView
                     ink = new Color(LampRed.r, LampRed.g, LampRed.b, 0.55f);
                     break;
                 case SwitchModuleState.Patching:
-                    text = module.Patched && flash ? Words(SwitchboardWords.Pull) : string.Empty;
+                    text = module.Patched && flash ? Words(!_board.Rules.MasterNeedsPower || module.Powered ? SwitchboardWords.Pull : SwitchboardWords.Power) : string.Empty;
                     break;
                 case SwitchModuleState.Committed:
                     string clock = (left / 60) + ":" + (left % 60).ToString("00");

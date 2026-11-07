@@ -192,6 +192,21 @@ public sealed class SwitchboardRules
     /// <summary>The first day each module (01 first) is in service; 0 = never (the plate paints 04 LOCKED and 05 OUT OF SERVICE). Ours: 01 from day 1, 02 from day 3, 03 from day 5 (LOOP_v5's ramp: "Day 5: power is short").</summary>
     public int[] ModuleFromDay = { 1, 3, 5, 0, 0 };
 
+    /// <summary>The bars a route of each period needs before its module counts as powered (index = the period; the Stargate dialer: the eras Ancient 3, Medieval 2, Early modern 2, Industrial 1, Modern 1, "Move the units"). Empty, or a period past its end: 1 bar (the Classic board's one power cord).</summary>
+    public int[] PeriodBars = new int[0];
+
+    /// <summary>How many power cords one module takes at once (the Classic board's POWER socket: 1; the dialer's cradle: 3 cells, one bar each).</summary>
+    public int CellsPerModule = 1;
+
+    /// <summary>True when MASTER engages only the patched modules whose power reaches their route's bars (the dialer: MASTER is the final lock); false: every patched module, powered or not (Classic).</summary>
+    public bool MasterNeedsPower;
+
+    /// <summary>True when a destination's place jack takes one module's PLACE plug (Classic); false lets several modules serve one destination, each on its own period (the dialer: one dial per route).</summary>
+    public bool PlaceTakesOnePlug = true;
+
+    /// <summary>The bars a route on <paramref name="period"/> needs (at least 1).</summary>
+    public int BarsFor(int period) => PeriodBars != null && period >= 0 && period < PeriodBars.Length ? Math.Max(1, PeriodBars[period]) : 1;
+
     /// <summary>True when module <paramref name="module"/> (0 = 01) is in service on <paramref name="day"/>.</summary>
     public bool ModuleOpen(int module, int day)
     {
@@ -223,8 +238,14 @@ public sealed class SwitchModule
     /// <summary>The period jack its PERIOD cord is plugged into (valid with <see cref="HasPeriod"/>).</summary>
     public SwitchRoute PeriodJack { get; internal set; }
 
-    /// <summary>The power cord in its POWER socket, or -1.</summary>
+    /// <summary>The power cord in its POWER socket (the lowest-numbered one when it takes several), or -1.</summary>
     public int PowerCord { get; internal set; } = -1;
+
+    /// <summary>How many power cords (the dialer's cells) are in it: one bar each.</summary>
+    public int Cells { get; internal set; }
+
+    /// <summary>The bars its period needs (SwitchboardRules.BarsFor; 1 with no period plugged).</summary>
+    public int Need { get; internal set; } = 1;
 
     /// <summary>The route MASTER locked in (valid while Committed or Open).</summary>
     public SwitchRoute Route { get; internal set; }
@@ -238,8 +259,8 @@ public sealed class SwitchModule
     /// <summary>Travellers sent on its current route (the DONE lamp shows once one left).</summary>
     public int Sent { get; internal set; }
 
-    /// <summary>True while a power cord is in it.</summary>
-    public bool Powered => PowerCord >= 0;
+    /// <summary>True while its power reaches its period's bars (Classic: a power cord is in it).</summary>
+    public bool Powered => Cells > 0 && Cells >= Need;
 
     /// <summary>True when both its PLACE and PERIOD cords are plugged.</summary>
     public bool Patched => PlaceJack >= 0 && HasPeriod;
@@ -291,6 +312,15 @@ public sealed class Switchboard
     /// <summary>The knobs this board runs on.</summary>
     public SwitchboardRules Rules => _rules;
 
+    /// <summary>A module's locked-in route finished calibrating and is live (the module, its route): the gate stands open. For the hall's portals; additive to TakeEvents' Opened.</summary>
+    public event Action<int, SwitchRoute> RouteOpened;
+
+    /// <summary>A live route sends a group (the module, its route, how many travellers): they leave through it now. Additive to TakeEvents' Departed.</summary>
+    public event Action<int, SwitchRoute, int> RouteSending;
+
+    /// <summary>A locked-in route (calibrating or live) was dropped (the module, the route it held): a plug or the ring moved, or the module closed for the day. The gate shuts.</summary>
+    public event Action<int, SwitchRoute> RouteClosed;
+
     /// <summary>The portal modules, 01 first.</summary>
     public IReadOnlyList<SwitchModule> Modules => _modules;
 
@@ -325,9 +355,12 @@ public sealed class Switchboard
         }
         m.PlaceJack = -1;
         m.HasPeriod = false;
-        if (m.PowerCord >= 0)
-            _powerCords[m.PowerCord] = -1;
+        for (int c = 0; c < _powerCords.Length; c++)
+            if (_powerCords[c] == module)
+                _powerCords[c] = -1;
         m.PowerCord = -1;
+        m.Cells = 0;
+        m.Need = 1;
         ClearRoute(m);
         m.State = SwitchModuleState.Closed;
     }
@@ -383,13 +416,13 @@ public sealed class Switchboard
 
     // ------------------------------------------------------------------ cords
 
-    /// <summary>True when <paramref name="module"/>'s PLACE cord may go into <paramref name="destination"/>'s place jack: the module is in service and the jack is free or already its own.</summary>
+    /// <summary>True when <paramref name="module"/>'s PLACE cord may go into <paramref name="destination"/>'s place jack: the module is in service and the jack is free or already its own (or, without PlaceTakesOnePlug, any jack).</summary>
     public bool CanPlugPlace(int module, int destination)
     {
         if (!Live(module) || destination < 0 || destination >= Destinations)
             return false;
         int holder = PlaceJackHolder(destination);
-        return holder < 0 || holder == module;
+        return holder < 0 || holder == module || !_rules.PlaceTakesOnePlug;
     }
 
     /// <summary>Plugs <paramref name="module"/>'s PLACE cord into <paramref name="destination"/> (false, and nothing changes, when it may not): a changed plug unlocks its route.</summary>
@@ -446,35 +479,50 @@ public sealed class Switchboard
         Repatched(_modules[module]);
     }
 
-    /// <summary>True when power cord <paramref name="cord"/> may go into <paramref name="module"/>'s POWER socket: the module is in service and its socket is free or already this cord's.</summary>
+    /// <summary>True when power cord <paramref name="cord"/> may go into <paramref name="module"/>: the module is in service and the cord is in it already, or it holds fewer than CellsPerModule cords (Classic: its one POWER socket is free).</summary>
     public bool CanPlugPower(int cord, int module)
     {
         if (cord < 0 || cord >= _powerCords.Length || !Live(module))
             return false;
-        int inIt = _modules[module].PowerCord;
-        return inIt < 0 || inIt == cord;
+        return _powerCords[cord] == module || _modules[module].Cells < Math.Max(1, _rules.CellsPerModule);
     }
 
-    /// <summary>Moves power cord <paramref name="cord"/> into <paramref name="module"/> (out of the module it was in; false, and nothing changes, when it may not). Power keeps a route: a calibrating module counts on, an open one sends.</summary>
+    /// <summary>Moves power cord <paramref name="cord"/> into <paramref name="module"/> (out of the module it was in; false, and nothing changes, when it may not). Power keeps a route: a calibrating module counts on, an open one sends, once its cords reach its period's bars.</summary>
     public bool PlugPower(int cord, int module)
     {
         if (!CanPlugPower(cord, module))
             return false;
+        if (_powerCords[cord] == module)
+            return true;
         UnplugPower(cord);
         _powerCords[cord] = module;
-        _modules[module].PowerCord = cord;
+        Recount(_modules[module]);
         return true;
     }
 
-    /// <summary>Parks power cord <paramref name="cord"/> on the power row: its module stops counting and sending, its route kept.</summary>
+    /// <summary>Parks power cord <paramref name="cord"/> on the power row (the dialer: the cell rack): its module stops counting and sending once its cords fall short of its bars, its route kept.</summary>
     public void UnplugPower(int cord)
     {
         if (cord < 0 || cord >= _powerCords.Length)
             return;
         int was = _powerCords[cord];
-        if (was >= 0)
-            _modules[was].PowerCord = -1;
         _powerCords[cord] = -1;
+        if (was >= 0)
+            Recount(_modules[was]);
+    }
+
+    /// <summary>How many power cords are in <paramref name="m"/>, and the lowest-numbered of them.</summary>
+    private void Recount(SwitchModule m)
+    {
+        m.Cells = 0;
+        m.PowerCord = -1;
+        for (int c = 0; c < _powerCords.Length; c++)
+            if (_powerCords[c] == m.Index)
+            {
+                m.Cells++;
+                if (m.PowerCord < 0)
+                    m.PowerCord = c;
+            }
     }
 
     /// <summary>The module whose PLACE cord is in <paramref name="destination"/>'s jack, or -1.</summary>
@@ -534,21 +582,22 @@ public sealed class Switchboard
         return true;
     }
 
-    /// <summary>True when a module is patched and waits for MASTER (its lamp asks for the pull).</summary>
+    /// <summary>True when a module is patched (and, with MasterNeedsPower, powered to its bars) and waits for MASTER (its lamp asks for the pull).</summary>
     public bool MasterPending
     {
         get
         {
             foreach (SwitchModule m in _modules)
-                if (m.State == SwitchModuleState.Patching && m.Patched)
+                if (Ready(m))
                     return true;
             return false;
         }
     }
 
     /// <summary>
-    /// MASTER: every patched module waiting for it locks its route in
-    /// (Committed: it calibrates while powered), unless its period jack is
+    /// MASTER: every patched module waiting for it (with MasterNeedsPower,
+    /// only those powered to their bars: the dialer's final lock) locks its
+    /// route in (Committed: it calibrates while powered), unless its period jack is
     /// another destination's or its destination is calling on other
     /// periods only: a wrong period, whose fuse pops (Blown for FuseSeconds:
     /// time only). A route to a destination nobody calls yet locks in
@@ -562,7 +611,7 @@ public sealed class Switchboard
         int committed = 0, fused = 0;
         foreach (SwitchModule m in _modules)
         {
-            if (m.State != SwitchModuleState.Patching || !m.Patched)
+            if (!Ready(m))
                 continue;
             var route = new SwitchRoute(m.PlaceJack, m.PeriodJack.Period);
             if (m.PeriodJack.Destination != m.PlaceJack || WrongPeriod(route, m.Index))
@@ -582,6 +631,9 @@ public sealed class Switchboard
         }
         return new MasterPull(committed, fused);
     }
+
+    /// <summary>True when <paramref name="m"/> waits for MASTER: patched, not locked in, and (with MasterNeedsPower) powered to its bars.</summary>
+    private bool Ready(SwitchModule m) => m.State == SwitchModuleState.Patching && m.Patched && (!_rules.MasterNeedsPower || m.Powered);
 
     /// <summary>True when <paramref name="route"/>'s destination has calls no locked-in module serves and none of them is on <paramref name="route"/>'s period.</summary>
     private bool WrongPeriod(SwitchRoute route, int module)
@@ -647,6 +699,7 @@ public sealed class Switchboard
                         m.CalibrationLeft = 0f;
                         m.State = SwitchModuleState.Open;
                         _events.Add(new SwitchEvent(SwitchEventKind.Opened, m.Index, m.Route));
+                        RouteOpened?.Invoke(m.Index, m.Route);
                     }
                     break;
             }
@@ -675,6 +728,7 @@ public sealed class Switchboard
         _waited.Remove(m.Route);
         m.Sent += k;
         _events.Add(new SwitchEvent(SwitchEventKind.Departed, m.Index, m.Route, k, GroupBonus(k)));
+        RouteSending?.Invoke(m.Index, m.Route, k);
     }
 
     // ------------------------------------------------------------------ lamps
@@ -731,21 +785,27 @@ public sealed class Switchboard
 
     // ------------------------------------------------------------------ helpers
 
-    /// <summary>A plug changed on <paramref name="m"/>: its route is unlocked (a popped fuse keeps cooling), and it is Free with no cord out.</summary>
+    /// <summary>A plug changed on <paramref name="m"/>: its route is unlocked (a popped fuse keeps cooling), its bars follow its period, and it is Free with no cord out.</summary>
     private void Repatched(SwitchModule m)
     {
         if (m.State == SwitchModuleState.Closed)
             return;
+        m.Need = m.HasPeriod ? _rules.BarsFor(m.PeriodJack.Period) : 1;
+        ClearRoute(m);
         if (m.State != SwitchModuleState.Blown)
             m.State = m.PlaceJack >= 0 || m.HasPeriod ? SwitchModuleState.Patching : SwitchModuleState.Free;
-        ClearRoute(m);
     }
 
-    private static void ClearRoute(SwitchModule m)
+    /// <summary>Drops <paramref name="m"/>'s route (RouteClosed when it held one).</summary>
+    private void ClearRoute(SwitchModule m)
     {
+        bool held = m.Holding;
+        SwitchRoute route = m.Route;
         m.Route = default;
         m.CalibrationLeft = 0f;
         m.Sent = 0;
+        if (held)
+            RouteClosed?.Invoke(m.Index, route);
     }
 
     private bool ValidModule(int module) => module >= 0 && module < _modules.Count;

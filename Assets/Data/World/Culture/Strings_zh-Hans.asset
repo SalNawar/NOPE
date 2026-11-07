@@ -3030,6 +3030,10 @@ MonoBehaviour:
       MASTER"
     gloss: 0
     tier: 0
+  - key: switchboard.hint.dial
+    text: "\u6307\u793A\u706F\u95EA\u70C1\uFF1A\u628A\u73AF\u8F6C\u5230\u5B83\u7684\u5FBD\u7AE0\uFF0C\u518D\u8F6C\u5230\u5B83\u7684\u65F6\u4EE3\u3002\u88C5\u5165\u7535\u6C60\u76F4\u5230\u523B\u5EA6\u3002\u62C9\u4E0B MASTER"
+    gloss: 0
+    tier: 0
   - key: switchboard.display.pull
     text: "\u62C9\u4E0B"
     gloss: 0
@@ -5960,3 +5964,15 @@ MonoBehaviour:
     english: switchboard
   - native: "\u7A7A\u95F2"
     english: free
+  - native: "\u8F6C\u5230"
+    english: turn to
+  - native: "\u5FBD\u7AE0"
+    english: emblem
+  - native: "\u88C5\u5165"
+    english: load
+  - native: "\u7535\u6C60"
+    english: cells
+  - native: "\u76F4\u5230"
+    english: until
+  - native: "\u523B\u5EA6"
+    english: mark

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b8fa9b4db1d4135aa613b5eab366c45, type: 3}
   m_Name: SwitchboardConfig
   m_EditorClassIdentifier: Assembly-CSharp::SwitchboardConfigSO
+  look: 1
   calibrationSeconds: 20
   fuseSeconds: 2
   bonusPerExtraTraveller: 5
@@ -39,6 +40,15 @@ MonoBehaviour:
   snapMagnet: 1.5
   moduleScale: 0.85
   heldScale: 1.12
+  powerCells: 4
+  cradleSlots: 3
+  eraBars: 0300000002000000020000000100000001000000
+  ringSettleSeconds: 0.16
+  cellSeatSeconds: 0.12
+  cellSettlePixels: 2
+  chevronFlashSeconds: 0.45
+  fuseFlickerHz: 1.5
+  horizonColour: {r: 0.62, g: 0.86, b: 1, a: 1}
   masterCommitAt: 0.8
   leverStiffness: 260
   leverDamping: 0.55
