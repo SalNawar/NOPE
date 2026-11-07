@@ -207,6 +207,6 @@ public static class FlowChecks
             ? GateResult.Fail(id, Owner, "not an id", $"'{r}' is not an exact result id: a pattern passes on whichever results exist (round 6)")
             : GateResults.Judge(id, Owner, r, all, head, builtPlayer)).ToList();
         return GateResult.Of(id, Owner, parts.All(g => g.Pass), string.Join("; ", ids.Zip(parts, (r, g) => $"{r}: {g.Measured}")),
-            string.Join("; ", parts.Where(g => !g.Pass).Select(g => g.Detail)));
+            string.Join("; ", parts.Where(g => !g.Pass).Select(g => g.Detail))).Naming(parts);
     }
 }

@@ -104,13 +104,13 @@ public static class DeskPlanChecks
     {
         const string id = "desk.play.decor";
         List<QaGateResult> all = (results ?? Enumerable.Empty<QaGateResult>()).ToList();
-        bool dropsAtHead = all.Any(r => GateResults.Matches("desk_plan_decor.drop.*", r.id) && string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase));
+        bool dropsAtHead = all.Any(r => GateResults.Matches("desk_plan_decor.drop.*", r.id) && GateResults.IsCurrent(r.commit, head));
         if (dropsAtHead)
             return GateResults.Judge(id, Owner, "desk_plan_decor.drop.*", all, head, false);
         GateResult shown = GateResults.Judge(id, Owner, DecorSpotsId, all, head, false);
         if (!shown.Pass)
             return GateResult.Fail(id, Owner, shown.Measured, $"no drop measured at HEAD and no '{DecorSpotsId}' line that passes: {shown.Detail}");
-        QaGateResult line = all.First(r => string.Equals(r.id, DecorSpotsId, StringComparison.OrdinalIgnoreCase) && string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase));
+        QaGateResult line = all.First(r => string.Equals(r.id, DecorSpotsId, StringComparison.OrdinalIgnoreCase) && GateResults.IsCurrent(r.commit, head));
         bool notApplicable = (line.measured ?? string.Empty).StartsWith("not applicable", StringComparison.OrdinalIgnoreCase);
         if (!notApplicable)
             return GateResult.Fail(id, Owner, line.measured, "the desk in use has decoration spots, but there is no drop measured at HEAD (desk_plan_decor.drop.*): run the recipe (docs/pending/QA-RIG.md)");

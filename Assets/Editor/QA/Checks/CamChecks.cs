@@ -362,6 +362,6 @@ public static class CamChecks
     {
         List<GateResult> parts = patterns.Select(p => GateResults.Judge(id, owner, p, results, head, builtPlayer)).ToList();
         return GateResult.Of(id, owner, parts.Count > 0 && parts.All(r => r.Pass), string.Join("; ", patterns.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
-                             parts.Count > 0 ? string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)) : "no pattern to judge");
+                             parts.Count > 0 ? string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)) : "no pattern to judge").Naming(parts);
     }
 }

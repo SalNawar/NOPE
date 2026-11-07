@@ -106,6 +106,6 @@ public static class RunSafeChecks
         List<string> list = patterns.ToList();
         List<GateResult> parts = list.Select(p => GateResults.Require(id, "RUN-SAFE", p)).ToList();
         return GateResult.Of(id, "RUN-SAFE", parts.All(r => r.Pass), string.Join("; ", list.Zip(parts, (p, r) => $"{p}: {r.Measured}")),
-            string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail)));
+            string.Join("; ", parts.Where(r => !r.Pass).Select(r => r.Detail))).Naming(parts);
     }
 }

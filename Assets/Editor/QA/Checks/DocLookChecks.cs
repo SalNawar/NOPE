@@ -141,7 +141,7 @@ public static class DocLookChecks
             ? GateResult.Fail(id, Owner, "not an id", $"'{r}' is not an exact result id: a pattern passes on whichever results exist")
             : GateResults.Judge(id, Owner, r, all, head, false)).ToList();
         return GateResult.Of(id, Owner, parts.All(g => g.Pass), string.Join("; ", ids.Zip(parts, (r, g) => $"{r}: {g.Measured}")),
-                             string.Join("; ", parts.Where(g => !g.Pass).Select(g => g.Detail)));
+                             string.Join("; ", parts.Where(g => !g.Pass).Select(g => g.Detail))).Naming(parts);
     }
 
     /// <summary>Every texture of the office's art (ArtSlots.OfficeImports: never the art side's hall layers) imports with mipmaps, trilinear and the high-quality compression (OfficeArtImporter; BUG-63).</summary>
