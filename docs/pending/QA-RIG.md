@@ -116,7 +116,7 @@ Screen positions are fractions of the screen (0..1, origin bottom-left), so a st
 | `title` | f timeout | Waits for the title, then sets RunConfig's seed to the scenario's (restored at the end) |
 | `newRun` | text = pet name, direct | Clicks New Run, names the pet and clicks Adopt, with the virtual mouse |
 | `waitOffice` | n day (0 any), f timeout | Waits for the art office, the gameplay layer and that day's briefing |
-| `startShift` / `sign` / `waitTraveller` | f, direct | Clicks Start Shift / clicks the AVAILABLE sign / waits for a traveller at the desk |
+| `startShift` / `sign` / `waitTraveller` | f, direct | Clicks Start Shift / clicks the AVAILABLE sign once it holds still on the screen (4 frames in a row, each moved 0.5 px at most, 3 s at most: a guided day's Start Shift tilts into the reading view, and a press aimed during the tilt loses its release; the step's note names a wait) / waits for a traveller at the desk |
 | `hour` | f hour (-1 = clock) | `DevToolsState.ForcedHour`, the one hour override (GATE-22: the clock's readouts, the hall's light and the window city's tint all show it; the shift's own clock runs on) (H1 9, H2 12, H3 16.75, H4 18.5, H5 22) |
 | `jumpDay` / `cheat` | n / name (DevCheat), n, f, text | `RunManager.JumpToDay` / `DevCheats.Run` |
 | `call` / `button` / `waitActive` | target `Type.Member`, direct | Calls a parameterless method / clicks a Button where it shows / waits until a GameObject or component is shown |
