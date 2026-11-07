@@ -53,10 +53,41 @@ public sealed class CharacterArtImporter : AssetPostprocessor
         if (width * LookCanvas.Height != height * LookCanvas.Width)
             Debug.LogWarning($"[CharacterArtImporter] '{assetPath}' is {width}x{height}; character art must be {LookCanvas.Width}x{LookCanvas.Height} (2:3). See docs/CHARACTER_ART_CONTRACT.md.");
 
+        Vector2Int imported = ImportedSize(width, height);
+        if (imported.x % 4 != 0 || imported.y % 4 != 0)
+            Debug.LogWarning($"[CharacterArtImporter] '{assetPath}' imports at {imported.x}x{imported.y}: BC7 needs both sides in multiples of 4, so Unity keeps it uncompressed (RGBA32). See MaxSize.");
+    }
+
+    /// <summary>The filter the character art samples with: trilinear between the mip levels when it has them, else bilinear (<see cref="Mipmaps"/>).</summary>
+    public static FilterMode Filter => Mipmaps ? FilterMode.Trilinear : FilterMode.Bilinear;
+
+    /// <summary>
+    /// The size Unity imports a <paramref name="width"/> x <paramref name="height"/>
+    /// source at: scaled in proportion so its longer side is at most
+    /// <see cref="MaxSize"/>, each side rounded (the 1024 x 1536 canvas: 680 x 1020).
+    /// The sprite keeps its registration: its pixels per unit is this height and
+    /// its pivot scales with it.
+    /// </summary>
+    public static Vector2Int ImportedSize(int width, int height)
+    {
         float scale = Mathf.Min(1f, MaxSize / (float)Mathf.Max(1, Mathf.Max(width, height)));
-        int importedWidth = Mathf.RoundToInt(width * scale), importedHeight = Mathf.RoundToInt(height * scale);
-        if (importedWidth % 4 != 0 || importedHeight % 4 != 0)
-            Debug.LogWarning($"[CharacterArtImporter] '{assetPath}' imports at {importedWidth}x{importedHeight}: BC7 needs both sides in multiples of 4, so Unity keeps it uncompressed (RGBA32). See MaxSize.");
+        return new Vector2Int(Mathf.RoundToInt(width * scale), Mathf.RoundToInt(height * scale));
+    }
+
+    /// <summary>
+    /// Whether <paramref name="importer"/> carries the character-art settings that
+    /// <see cref="Apply"/> writes, the sprite's registration aside (the imported
+    /// sprite shows that; CharacterLibraryValidation checks it).
+    /// </summary>
+    public static bool HasSettings(TextureImporter importer)
+    {
+        var settings = new TextureImporterSettings();
+        importer.ReadTextureSettings(settings);
+        return importer.textureType == TextureImporterType.Sprite && importer.spriteImportMode == SpriteImportMode.Single &&
+               settings.spriteMeshType == SpriteMeshType.FullRect && importer.isReadable &&
+               importer.mipmapEnabled == Mipmaps && importer.filterMode == Filter && importer.alphaIsTransparency &&
+               importer.textureCompression == TextureImporterCompression.CompressedHQ && !importer.crunchedCompression &&
+               importer.maxTextureSize == MaxSize;
     }
 
     /// <summary>
@@ -65,7 +96,9 @@ public sealed class CharacterArtImporter : AssetPostprocessor
     /// TimeDesk &gt; Reimport Character Art). Run it after a change of
     /// <see cref="Mipmaps"/> or <see cref="MaxSize"/>: a change of this
     /// importer's code alone reimports nothing. Commit the .meta files it
-    /// changes. It takes long (about a second per texture) and blocks the editor.
+    /// changes. It blocks the editor while it runs (measured: see
+    /// docs/FEATURES.md's Characters line); a batch job runner that watches the
+    /// editor's update loop needs its own heartbeat meanwhile.
     /// </summary>
     [MenuItem("Tools/TimeDesk/Reimport Character Art")]
     public static void ReimportAll()
@@ -98,7 +131,7 @@ public sealed class CharacterArtImporter : AssetPostprocessor
         importer.spriteImportMode = SpriteImportMode.Single;
         importer.isReadable = true;
         importer.mipmapEnabled = Mipmaps;
-        importer.filterMode = Mipmaps ? FilterMode.Trilinear : FilterMode.Bilinear;
+        importer.filterMode = Filter;
         importer.textureCompression = TextureImporterCompression.CompressedHQ;
         importer.crunchedCompression = false;
         importer.maxTextureSize = MaxSize;

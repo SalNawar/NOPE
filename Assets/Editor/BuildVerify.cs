@@ -21,7 +21,7 @@ using System.Threading;
 /// </summary>
 public static class BuildVerify
 {
-    /// <summary>The free space each drive needs before a build: the player (about 14 GB with the character art uncompressed) plus the player-data cache, with room to spare.</summary>
+    /// <summary>The free space each drive needs before a build: the player (about 3.6 GB with the character art as BC7, D11; 14 GB before) plus the player-data cache, with room to spare.</summary>
     public const long MinFreeBytes = 40L << 30;
 
     /// <summary>A zero run this long or longer in a data file is a hole the build failed to write (one failed chunk is 255 MiB; no real asset holds 32 MiB of zeros).</summary>
