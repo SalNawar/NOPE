@@ -18,7 +18,8 @@ using UnityEngine;
 /// its colours: the ring's light (HallLightingSO.portalOpenLight, the Return
 /// Gate's returnGateLight) and the close's fade (portalFadeSeconds). Then each
 /// frame each ring is fed (PortalEffect.Drive): with a switchboard in the
-/// office (HallGateFeed, read only), ring NN follows module NN: locked in, its
+/// office (HallGateFeed, read only), a departure ring on an open route (the
+/// day's Glow look) follows module NN: locked in, its
 /// chevrons light over the calibration; live, its event horizon opens; each
 /// group the module sends plays a kawoosh (PortalEffect.Send); a cleared or
 /// broken route closes it. The Return Gate in service keeps its warm event
@@ -110,10 +111,12 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
     }
 
     /// <summary>
-    /// Each ring's feed this frame: ring NN follows module NN of the office's
-    /// switchboard (a module's new send plays its kawoosh), or the day's look
-    /// without one; the Return Gate in service and the cheat keep the event
-    /// horizon open. The ring's light follows its event horizon.
+    /// Each ring's feed this frame (PortalGateFeed.ForRing): a departure ring
+    /// on an open route follows module NN of the office's switchboard (a
+    /// module's new send plays its kawoosh), or the day's look without one; a
+    /// closed ring stays dark whatever its module does; the Return Gate in
+    /// service and the cheat keep the event horizon open. The ring's light
+    /// follows its event horizon.
     /// </summary>
     private void Feed()
     {
@@ -128,11 +131,10 @@ public sealed class AnimeHallPortalLink : MonoBehaviour
             if (ring == null || effect == null)
                 continue;
             bool returnGate = _looks[i] == PortalLook.ReturnGate;
-            bool steady = AllOpen || returnGate || !_board && _looks[i] == PortalLook.Glow;
             SwitchModule module = HallGateFeed.Module(board, ring.portal);
-            PortalGateFeed feed = PortalGateFeed.Of(module, calibration, steady);
+            PortalGateFeed feed = PortalGateFeed.ForRing(_looks[i], module, calibration, _board, AllOpen);
             effect.Drive(feed);
-            if (PortalGateFeed.SentSince(module, ref _sent[i]))
+            if (PortalGateFeed.SentSince(module, ref _sent[i]) && PortalGateFeed.TakesDial(_looks[i]))
                 effect.Send();
             effect.Night = _lights != null ? _lights.PortalNight(ring.portal) : 0f;
             if (_lights != null)

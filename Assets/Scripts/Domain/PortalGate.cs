@@ -63,6 +63,26 @@ public readonly struct PortalGateFeed
         return new PortalGateFeed(steady, dialing, done, calibrationSeconds, module.State == SwitchModuleState.Open);
     }
 
+    /// <summary>
+    /// The feed of a ring whose look today is <paramref name="look"/>, dialed by
+    /// <paramref name="module"/> (null: none) on a board whose calibration takes
+    /// <paramref name="calibrationSeconds"/>. Only a departure ring on an open
+    /// route (Glow) takes its module's dial (<see cref="TakesDial"/>). A closed
+    /// ring (under maintenance, or CLOSED today) stays dark whatever its module
+    /// does (Saleh 2026-09-29: "hide a closed portal's halo"). The Return Gate
+    /// keeps its steady warm event horizon and takes no dial. Without a board
+    /// (<paramref name="board"/> false) a Glow ring holds its event horizon
+    /// open. The cheat (<paramref name="allOpen"/>) opens every ring. Read only.
+    /// </summary>
+    public static PortalGateFeed ForRing(PortalLook look, SwitchModule module, float calibrationSeconds, bool board, bool allOpen)
+    {
+        bool steady = allOpen || look == PortalLook.ReturnGate || !board && look == PortalLook.Glow;
+        return Of(TakesDial(look) ? module : null, calibrationSeconds, steady);
+    }
+
+    /// <summary>True when a ring whose look today is <paramref name="look"/> shows its module's dial and sends: a departure ring on an open route (Glow) only.</summary>
+    public static bool TakesDial(PortalLook look) => look == PortalLook.Glow;
+
     /// <summary>The switchboard module that dials ring <paramref name="portal"/>: the same number (module 01 dials ring 01, the front); -1 for none.</summary>
     public static int ModuleOf(int portal) => portal >= 1 ? portal - 1 : -1;
 

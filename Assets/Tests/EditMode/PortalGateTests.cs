@@ -241,4 +241,48 @@ public class PortalGateTests
         board.UnplugPlace(0);
         Assert.IsFalse(PortalGateFeed.Of(m, 20f, false).Horizon, "a cleared route closes the ring");
     }
+
+    [Test]
+    public void Feed_OnlyAnOpenDepartureRingTakesItsDial()
+    {
+        var board = new Switchboard(new SwitchboardRules(), 5, 4, 3);
+        board.SetInService(0, true);
+        board.PlugPower(0, 0);
+        var route = new SwitchRoute(0, 0);
+        board.AddCall(route);
+        board.PlugPlace(0, 0);
+        board.PlugPeriod(0, route);
+        board.PullMaster();
+        board.Tick(5f);
+        SwitchModule m = board.Modules[0];
+        Assert.AreEqual(SwitchModuleState.Committed, m.State);
+
+        Assert.IsTrue(PortalGateFeed.TakesDial(PortalLook.Glow));
+        Assert.IsFalse(PortalGateFeed.TakesDial(PortalLook.Empty));
+        Assert.IsFalse(PortalGateFeed.TakesDial(PortalLook.Dimmed));
+        Assert.IsFalse(PortalGateFeed.TakesDial(PortalLook.ReturnGate));
+
+        PortalGateFeed glow = PortalGateFeed.ForRing(PortalLook.Glow, m, 20f, true, false);
+        Assert.IsTrue(glow.Dialing && glow.Chevrons, "an open departure ring lights its chevrons");
+        Assert.IsFalse(glow.Horizon, "with a board it waits for the route to go live");
+
+        foreach (PortalLook closed in new[] { PortalLook.Empty, PortalLook.Dimmed })
+        {
+            PortalGateFeed f = PortalGateFeed.ForRing(closed, m, 20f, true, false);
+            Assert.IsFalse(f.Dialing || f.Chevrons || f.Horizon, closed + ": a closed ring stays dark while its module dials");
+        }
+        PortalGateFeed ret = PortalGateFeed.ForRing(PortalLook.ReturnGate, m, 20f, true, false);
+        Assert.IsTrue(ret.Horizon && ret.Steady, "the Return Gate keeps its steady horizon");
+        Assert.IsFalse(ret.Dialing || ret.Chevrons, "the Return Gate takes no dial");
+
+        board.Tick(15f);
+        Assert.AreEqual(SwitchModuleState.Open, m.State);
+        Assert.IsTrue(PortalGateFeed.ForRing(PortalLook.Glow, m, 20f, true, false).Live);
+        Assert.IsFalse(PortalGateFeed.ForRing(PortalLook.Dimmed, m, 20f, true, false).Horizon, "a live module does not open a ring under maintenance");
+        Assert.IsFalse(PortalGateFeed.ForRing(PortalLook.Empty, m, 20f, true, false).Horizon, "a live module does not open a CLOSED ring");
+
+        Assert.IsTrue(PortalGateFeed.ForRing(PortalLook.Glow, null, 20f, false, false).Horizon, "no board: an open route holds its horizon");
+        Assert.IsFalse(PortalGateFeed.ForRing(PortalLook.Glow, null, 20f, true, false).Horizon, "a board: an idle ring is dark");
+        Assert.IsTrue(PortalGateFeed.ForRing(PortalLook.Empty, m, 20f, true, true).Horizon, "the cheat opens every ring");
+    }
 }
