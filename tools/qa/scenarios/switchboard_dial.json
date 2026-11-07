@@ -1,0 +1,423 @@
+{
+  "name": "switchboard_dial",
+  "owner": "SWITCHBOARD",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "The Stargate dialer (D1, docs/pending/SWITCHBOARD.md 'Stargate dialer'). Day 1: a call (the traveller decided correctly; if denied, the board's call as an approval makes it), D turns to the board, the ring turns the nation under the top chevron (seq ring_place) and the era under chevron 2 (seq ring_era), cells carried to the mark (seq cell_seat), MASTER thrown (seq master), the 20 s calibration (seq strobe; a still at about 10 s), '+1 SENT'. Then a wrong era pops the fuse and one drag fixes it. Day 5: 3 dials and the rack. Esc and a right-click let go of a held ring and back out. Stills at 16:9, 5:4 and 21:9. board_day1.tsv logs every frame's ring turn, lenses and bars."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "wait",
+      "f": 5
+    },
+    {
+      "op": "still",
+      "name": "d1_office_call"
+    },
+    {
+      "op": "boardOpen"
+    },
+    {
+      "op": "boardCall",
+      "text": "ifNone",
+      "name": "d1"
+    },
+    {
+      "op": "wait",
+      "n": 10
+    },
+    {
+      "op": "still",
+      "name": "d1_board_call"
+    },
+    {
+      "op": "boardLog",
+      "n": 1,
+      "name": "day1"
+    },
+    {
+      "op": "mark",
+      "name": "input_start"
+    },
+    {
+      "op": "recstart",
+      "name": "ring_place"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "call",
+      "f": 0.9,
+      "name": "place"
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "recstart",
+      "name": "ring_era"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "callEra",
+      "f": 0.9,
+      "name": "era"
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "recstart",
+      "name": "cell_seat"
+    },
+    {
+      "op": "boardCells",
+      "n": 0,
+      "name": "d1"
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "still",
+      "name": "d1_ready"
+    },
+    {
+      "op": "boardAssert",
+      "name": "ready",
+      "text": "powered:0"
+    },
+    {
+      "op": "recstart",
+      "name": "master"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "boardMaster",
+      "f": 1
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "mark",
+      "name": "input_end"
+    },
+    {
+      "op": "boardAssert",
+      "name": "committed",
+      "text": "committed:0"
+    },
+    {
+      "op": "recstart",
+      "name": "strobe"
+    },
+    {
+      "op": "wait",
+      "f": 6.5
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "d1_calibrating_10s"
+    },
+    {
+      "op": "boardWait",
+      "text": "sent>=1",
+      "f": 20
+    },
+    {
+      "op": "wait",
+      "n": 8
+    },
+    {
+      "op": "still",
+      "name": "d1_sent"
+    },
+    {
+      "op": "boardAssert",
+      "name": "sent",
+      "text": "sent>=1"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d1_gate_open"
+    },
+    {
+      "op": "boardCall",
+      "text": "next",
+      "name": "d1_next"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "reset",
+      "name": "reset"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "call",
+      "name": "place2"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "wrongEra",
+      "name": "wrong_era"
+    },
+    {
+      "op": "boardCells",
+      "n": 0,
+      "name": "d1_wrong"
+    },
+    {
+      "op": "recstart",
+      "name": "fuse"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "boardMaster",
+      "f": 1
+    },
+    {
+      "op": "boardAssert",
+      "name": "fuse",
+      "text": "blown:0"
+    },
+    {
+      "op": "wait",
+      "f": 0.4
+    },
+    {
+      "op": "still",
+      "name": "d1_fuse"
+    },
+    {
+      "op": "boardWait",
+      "text": "period:0",
+      "f": 5
+    },
+    {
+      "op": "wait",
+      "f": 2.2
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "callEra",
+      "name": "fixed_era"
+    },
+    {
+      "op": "boardCells",
+      "n": 0,
+      "name": "d1_fixed"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "boardMaster",
+      "f": 1
+    },
+    {
+      "op": "boardAssert",
+      "name": "fixed",
+      "text": "committed:0"
+    },
+    {
+      "op": "boardWait",
+      "text": "sent>=2",
+      "f": 25
+    },
+    {
+      "op": "boardLog",
+      "n": 0
+    },
+    {
+      "op": "boardHold",
+      "n": 0,
+      "key": "Escape",
+      "name": "escape"
+    },
+    {
+      "op": "key",
+      "key": "Escape"
+    },
+    {
+      "op": "wait",
+      "n": 30
+    },
+    {
+      "op": "boardAssert",
+      "name": "escape_backs_out",
+      "text": "closed"
+    },
+    {
+      "op": "boardOpen"
+    },
+    {
+      "op": "boardHold",
+      "n": 0,
+      "key": "RightClick",
+      "name": "rightclick"
+    },
+    {
+      "op": "boardRightClick"
+    },
+    {
+      "op": "boardAssert",
+      "name": "rightclick_backs_out",
+      "text": "closed"
+    },
+    {
+      "op": "jumpDay",
+      "n": 5
+    },
+    {
+      "op": "waitOffice",
+      "n": 5
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "boardOpen"
+    },
+    {
+      "op": "boardAssert",
+      "name": "d5_dials",
+      "text": "inService==3"
+    },
+    {
+      "op": "boardAssert",
+      "name": "d5_cells",
+      "text": "cells==4"
+    },
+    {
+      "op": "boardAssert",
+      "name": "d5_rack",
+      "text": "rack==4"
+    },
+    {
+      "op": "boardCheat",
+      "name": "d5"
+    },
+    {
+      "op": "wait",
+      "n": 10
+    },
+    {
+      "op": "still",
+      "name": "d5_board"
+    },
+    {
+      "op": "res",
+      "w": 1350,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "d5_board_5x4"
+    },
+    {
+      "op": "res",
+      "w": 2520,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "d5_board_21x9"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "n": 10
+    },
+    {
+      "op": "key",
+      "key": "Escape"
+    },
+    {
+      "op": "wait",
+      "n": 30
+    },
+    {
+      "op": "still",
+      "name": "d5_office"
+    }
+  ]
+}
