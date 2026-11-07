@@ -158,4 +158,27 @@ public class HeldBoundTests
         Assert.AreEqual(0f, move.y, Eps, "back over the desk, growing: it follows the pointer");
         Assert.IsFalse(bound.Holding);
     }
+
+    [Test]
+    public void AWidePaperOverAMachine_IsNotHeldBack_SoItsCentreReachesTheBed()
+    {
+        // The bounce of 2026-11-07 (cam-legibility): the chip card at 0.6 m is 0.42 m wide. The scanner's bed stands at the
+        // reading view's right edge, so with the card wholly in view its centre stopped short of the bed and nothing scanned.
+        // Over a machine that takes a drop there (DockAt) the bound gives way; off it the card is held in view again.
+        const float w = 0.42f, h = 0.27f, bed = 0.92f;
+        var card = new DeskRect(0f, 0f, w, h);
+        var bound = new HeldBound();
+        bound.PickUp();
+        bound.Step(card, 0f, 0f, true, card, AreaFor);
+        Assert.IsTrue(bound.Holding, "picked up wholly on the desk");
+        var onBed = new DeskRect(bed, 0f, w, h);
+        (float x, float y) held = bound.Step(onBed, 0f, 0f, true, card, AreaFor);
+        Assert.Less(held.x, -0.05f, "off a machine the card is held wholly in the reading view");
+        (float x, float y) over = bound.Step(onBed, 0f, 0f, true, card, AreaFor, true);
+        Assert.AreEqual(0f, over.x, Eps);
+        Assert.AreEqual(0f, over.y, Eps, "over the machine its centre goes where the pointer takes it");
+        Assert.IsTrue(bound.Holding, "the bound still holds it once it leaves the machine");
+        (float x, float y) back = bound.Step(onBed, 0f, 0f, true, card, AreaFor);
+        Assert.AreEqual(held.x, back.x, Eps, "off the machine it is held where it was before");
+    }
 }
