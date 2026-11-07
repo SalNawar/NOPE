@@ -39,17 +39,24 @@ using UnityEngine;
 /// intensity (f; -1: the cheat's next step from the record), hallslots (n 1
 /// an override set, 2 the stand-ins on, 0 none), lens (n levels owned), language (text lock, unlock or
 /// ramp), dust (n 1 hidden), calls (n more waiting calls on the switchboard
-/// than the record), mode (text plain, pc, switchboard, city or inspect; n
-/// 1 Settings shown, 0 not, -1 either), first (the forced appearance stands
-/// first: cheatForce's), lawbreaker (today's cases hold someone else's photo
-/// and the switch is used up).</item>
+/// than the record), mode (text plain, pc, switchboard, city, inspect or
+/// wheel; n 1 Settings shown, 0 not, -1 either), pcapp (text a DesktopAppIds
+/// id; n 1 its window open and in front on the PC, 0 closed), redboxes (text
+/// the still's name: a still, and in it the red of every marked box on the
+/// desk's papers, at least 50 red pixels and 30 % of the boxes' middles on
+/// the screen), first (the forced appearance stands first: cheatForce's),
+/// lawbreaker (today's cases hold someone else's photo and the switch is used
+/// up).</item>
 /// <item><c>cheatForce</c> (text: "famous" or "D&lt;day&gt;"): picks the menu's
 /// first famous premade, or that day's first story beat, notes what must
 /// stand first and where, and runs "First traveller of the shift" on it.</item>
 /// <item><c>cheatFaults</c> (target: label; n: the most travellers to try):
 /// "Reveal faults" on the traveller at the desk until one is denied with at
-/// least one box named and marked in red on the desk's papers (a still),
-/// deciding each other one correctly.</item>
+/// least one box named and marked in red on the desk's papers, deciding each
+/// other one correctly, and a still. The papers still lie on the counter
+/// there (a shut passport hides its boxes): the scenario lays the marked
+/// paper on the mat (stampPaper) and checks the red in a still (cheatCheck
+/// redboxes).</item>
 /// </list>
 /// </summary>
 public static class CheatOps
@@ -363,12 +370,28 @@ public static class CheatOps
                         case "switchboard": mode = s.Switchboard && !s.PcOpen; break;
                         case "city": mode = s.CityView && !s.PcOpen; break;
                         case "inspect": mode = s.Inspecting && !s.PcOpen; break;
+                        case "wheel": mode = s.WheelOpen && !s.PcOpen; break;
                         default: mode = !s.PcOpen && !s.Switchboard && !s.CityView && !s.Inspecting && !s.WheelOpen && !s.ValueHeld; break;
                     }
                     return mode && (step.n < 0 || settings == (step.n == 1));
                 };
-                detail = $"D13, UI-23: the view is {step.text}{(step.n < 0 ? string.Empty : step.n == 1 ? " with Settings shown" : " and Settings is not shown")} (the first Esc backs out of a mode; Esc opens Settings from the plain desk; on the PC Esc closes the front window)";
+                detail = $"D13, UI-23: the view is {step.text}{(step.n < 0 ? string.Empty : step.n == 1 ? " with Settings shown" : " and Settings is not shown")} (the first Esc backs out of a mode; Esc opens Settings from the plain desk; on the PC Esc closes the front window but never Settings, R3/R4)";
                 break;
+            case "pcapp":
+                test = () =>
+                {
+                    DesktopApps apps = QaGame.Find<DesktopApps>();
+                    DesktopWindow window = apps != null ? UnityEngine.Object.FindObjectsByType<DesktopWindow>(FindObjectsInactive.Include).FirstOrDefault(w => apps.IdOf(w) == step.text) : null;
+                    DesktopWindow front = window != null && window.Manager != null ? window.Manager.FocusedWindow : null;
+                    bool open = window != null && window.IsOpen && !window.IsMinimised;
+                    measured = $"{step.text}: {(window == null ? "no window" : open ? "open" : "closed")}, front '{(front == null ? "none" : apps.IdOf(front) ?? front.Title)}', Settings shown {PauseMenu.SettingsShowing}";
+                    return window != null && (step.n == 1 ? open && front == window : !open);
+                };
+                detail = step.n == 1 ? $"the PC's {step.text} window is open and in front" : $"D13, UI-23: Esc closed the PC's {step.text} window (the front window, not Settings)";
+                break;
+            case "redboxes":
+                yield return RedBoxes(runner, step, id);
+                yield break;
             case "first":
                 test = () =>
                 {
@@ -532,21 +555,106 @@ public static class CheatOps
         }
     }
 
+    /// <summary>The papers of the active desks (DeskController's own list).</summary>
+    private static IEnumerable<DeskDocument> DeskPapers()
+    {
+        foreach (DeskController desk in UnityEngine.Object.FindObjectsByType<DeskController>())
+            if (desk.isActiveAndEnabled && QaGame.Field(desk, "_papers") is List<DeskDocument> papers)
+                foreach (DeskDocument paper in papers)
+                    if (paper != null)
+                        yield return paper;
+    }
+
     /// <summary>How many boxes of the papers on the desk carry a mark (DeskDocument.Marked: Reveal faults' red, a logged difference's).</summary>
     private static int MarkedBoxes()
     {
         int marked = 0;
-        foreach (DeskController desk in UnityEngine.Object.FindObjectsByType<DeskController>())
-        {
-            if (!desk.isActiveAndEnabled || !(QaGame.Field(desk, "_papers") is List<DeskDocument> papers))
-                continue;
-            foreach (DeskDocument paper in papers)
-                if (paper != null)
-                    for (int slot = 0; slot < paper.SlotCount; slot++)
-                        if (paper.Marked(slot))
-                            marked++;
-        }
+        foreach (DeskDocument paper in DeskPapers())
+            for (int slot = 0; slot < paper.SlotCount; slot++)
+                if (paper.Marked(slot))
+                    marked++;
         return marked;
+    }
+
+    /// <summary>
+    /// The middle of <paramref name="bounds"/> on the screen (pixels, from the
+    /// bottom left): the screen box of its eight corners shrunk to its middle
+    /// 60 % on each side, so a paper turned a few degrees still puts only the
+    /// box under it; empty when a corner is behind the camera.
+    /// </summary>
+    private static Rect MiddleOnScreen(Camera cam, Bounds bounds)
+    {
+        float x0 = float.MaxValue, y0 = float.MaxValue, x1 = float.MinValue, y1 = float.MinValue;
+        for (int i = 0; i < 8; i++)
+        {
+            Vector3 corner = bounds.center + Vector3.Scale(bounds.extents, new Vector3((i & 1) == 0 ? -1f : 1f, (i & 2) == 0 ? -1f : 1f, (i & 4) == 0 ? -1f : 1f));
+            Vector3 p = cam.WorldToScreenPoint(corner);
+            if (p.z <= 0f)
+                return Rect.zero;
+            x0 = Mathf.Min(x0, p.x);
+            y0 = Mathf.Min(y0, p.y);
+            x1 = Mathf.Max(x1, p.x);
+            y1 = Mathf.Max(y1, p.y);
+        }
+        float w = (x1 - x0) * 0.2f, h = (y1 - y0) * 0.2f;
+        return Rect.MinMaxRect(Mathf.Clamp(x0 + w, 0f, Screen.width), Mathf.Clamp(y0 + h, 0f, Screen.height), Mathf.Clamp(x1 - w, 0f, Screen.width), Mathf.Clamp(y1 - h, 0f, Screen.height));
+    }
+
+    /// <summary>
+    /// cheatCheck redboxes: a still (text: its name), then Reveal faults' red
+    /// in it. Each marked box of the desk's papers (DeskDocument.Marked,
+    /// TryBoundsOf through the pointer camera) gives its middle on the screen;
+    /// a pixel there counts as red when its red stands at least 40 of 255 over
+    /// its green and its blue (the mark: DeskInspect's mistakeMark, red at 32 %
+    /// over the paper). Passes with at least 50 red pixels, 30 % of the middles'
+    /// pixels on the screen.
+    /// </summary>
+    private static IEnumerator RedBoxes(QaRunner runner, QaStep step, string id)
+    {
+        yield return QaGame.Frames(15);
+        Camera cam = QaGame.PointerCamera() ?? Camera.main;
+        var boxes = new List<(DeskDocument paper, int slot, Rect rect)>();
+        if (cam != null)
+            foreach (DeskDocument paper in DeskPapers())
+                for (int slot = 0; slot < paper.SlotCount; slot++)
+                    if (paper.Marked(slot) && paper.TryBoundsOf(slot, out Bounds b))
+                        boxes.Add((paper, slot, MiddleOnScreen(cam, b)));
+        string path = Path.Combine(runner.OutDir, "stills", $"{(string.IsNullOrEmpty(step.text) ? "cheat_redboxes" : step.text)}_{Screen.width}x{Screen.height}.png");
+        runner.Recorder.Still(path);
+        yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the still");
+        long red = 0, all = 0;
+        var where = new List<string>();
+        var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        try
+        {
+            bool read = File.Exists(path) && tex.LoadImage(File.ReadAllBytes(path));
+            float sx = read ? tex.width / (float)Screen.width : 1f, sy = read ? tex.height / (float)Screen.height : 1f;
+            foreach ((DeskDocument paper, int slot, Rect rect) in boxes)
+            {
+                long boxRed = 0, boxAll = 0;
+                if (read)
+                    for (int y = Mathf.FloorToInt(rect.yMin * sy); y < Mathf.CeilToInt(rect.yMax * sy) && y < tex.height; y++)
+                        for (int x = Mathf.FloorToInt(rect.xMin * sx); x < Mathf.CeilToInt(rect.xMax * sx) && x < tex.width; x++)
+                        {
+                            Color c = tex.GetPixel(x, y);
+                            boxAll++;
+                            if (c.r - Mathf.Max(c.g, c.b) >= 40f / 255f)
+                                boxRed++;
+                        }
+                red += boxRed;
+                all += boxAll;
+                where.Add($"paper {paper.Index} ({paper.Zone}) box {slot}: {boxRed} of {boxAll} px red in x {rect.xMin:0}-{rect.xMax:0}, y {rect.yMin:0}-{rect.yMax:0} from the bottom");
+            }
+            if (!read)
+                where.Add($"no still read at {path}");
+        }
+        finally
+        {
+            UnityEngine.Object.Destroy(tex);
+        }
+        bool pass = boxes.Count > 0 && red >= 50 && red >= 0.3f * all;
+        runner.Assert(id, Owner, pass, $"{boxes.Count} marked box(es); {red} of {all} px red; {string.Join("; ", where)}",
+            "CHEATS.md Reveal faults: the boxes that show the fault are marked in red on the papers, seen in a still with the paper open on the mat");
     }
 
     private static IEnumerator Force(QaRunner runner, QaStep step)

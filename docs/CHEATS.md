@@ -1,6 +1,6 @@
 # Cheats: testing the game fast
 
-*2026-10-06 · Saleh: "I want cheats to test easy". The behaviour contract is `docs/FEATURES.md` ("The cheat menu"). Every line below is checked in play by the QA scenario `cheats_all` (`tools/qa/scenarios/cheats_all.json`, `CheatOps`; cheats-fix, 2026-11-07).*
+*2026-10-06 · Saleh: "I want cheats to test easy". The behaviour contract is `docs/FEATURES.md` ("The cheat menu"). The QA scenario `cheats_all` (`tools/qa/scenarios/cheats_all.json`, `CheatOps`; cheats-fix, 2026-11-07) checks in play every button of the Play tab and the "More (other tracks)" buttons Feel, Lens, Language, Hall FX: dust, Hall: tier, stand-ins and the run's, Switchboard: 3 test calls and Law-breaker next. It runs each through `DevCheats.Run`, the call the buttons queue, and asserts its effect; it clicks no button. Not played: the menu itself (F9, the confirm prompts, the last cheat's line), the More cheats tab, the Timeline Inspector, and Hall: culture, phase, event and exhibit.*
 
 ## Where it works
 
