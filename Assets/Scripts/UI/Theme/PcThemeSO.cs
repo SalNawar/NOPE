@@ -27,11 +27,11 @@ public sealed class PcThemeSO : ScriptableObject
     public UiKitSO baseKit;
 
     [Header("Tokens")]
-    /// <summary>Glass: window bodies and surfaces (near-black blue).</summary>
-    public Color glass = new Color(0.039f, 0.063f, 0.125f, 0.97f);
+    /// <summary>Glass: window bodies and surfaces (near-black blue; opaque: the UI blends in linear light, so a few per cent clear shows the window behind).</summary>
+    public Color glass = new Color(0.039f, 0.063f, 0.125f, 1f);
 
     /// <summary>Raised glass: title bars, buttons, plates, tooltips.</summary>
-    public Color glassRaised = new Color(0.071f, 0.110f, 0.200f, 0.98f);
+    public Color glassRaised = new Color(0.071f, 0.110f, 0.200f, 1f);
 
     /// <summary>The deepest glass: the deck, fields, the sidebar, the tube behind the picture.</summary>
     public Color glassDeep = new Color(0.016f, 0.027f, 0.055f, 1f);
@@ -103,7 +103,7 @@ public sealed class PcThemeSO : ScriptableObject
     [Min(0f)] public float scanlineSpeed = 10f;
 
     /// <summary>The phosphor bloom rising towards the glass's edges (0: none).</summary>
-    [Range(0f, 1f)] public float bloomStrength = 0.16f;
+    [Range(0f, 1f)] public float bloomStrength = 0.05f;
 
     /// <summary>The vignette's darkness in the glass's corners (0: none).</summary>
     [Range(0f, 1f)] public float vignetteStrength = 0.35f;

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PcThemeSO
   look: 0
   baseKit: {fileID: 11400000, guid: 293fe75c7d4472440b654c55ca31e277, type: 2}
-  glass: {r: 0.039, g: 0.063, b: 0.125, a: 0.97}
-  glassRaised: {r: 0.071, g: 0.11, b: 0.2, a: 0.98}
+  glass: {r: 0.039, g: 0.063, b: 0.125, a: 1}
+  glassRaised: {r: 0.071, g: 0.11, b: 0.2, a: 1}
   glassDeep: {r: 0.016, g: 0.027, b: 0.055, a: 1}
   phosphor: {r: 0.239, g: 0.949, b: 1, a: 1}
   accent: {r: 1, g: 0.243, b: 0.659, a: 1}
@@ -38,7 +38,7 @@ MonoBehaviour:
   scanlineStrength: 0.12
   scanlinePitch: 3
   scanlineSpeed: 10
-  bloomStrength: 0.16
+  bloomStrength: 0.05
   vignetteStrength: 0.35
   wallpaper: {fileID: 0}
   wallpaperTint: 0.3

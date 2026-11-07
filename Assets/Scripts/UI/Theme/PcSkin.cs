@@ -201,7 +201,7 @@ public sealed class PcSkin : MonoBehaviour
 
     /// <summary>
     /// Every chrome graphic under <paramref name="root"/> takes its role's token
-    /// (PcPalette; an image in its role's ink as a text), its alpha kept; a kit piece keeps the colours drawn in its
+    /// (PcPalette; an image in its role's ink as a text; <see cref="FillColour"/>, <see cref="TextColour"/>); a kit piece keeps the colours drawn in its
     /// sprite, a neon glyph glows phosphor, and a text with no role in the
     /// kit's dark ink (a line a view made at run time) takes the light ink
     /// unless it lies on evidence.
@@ -232,11 +232,58 @@ public sealed class PcSkin : MonoBehaviour
                 continue;
             if (ink == PcInk.Keep)
                 continue;
-            Color colour = ink == PcInk.Clear ? Color.clear : theme.Token(ink, accent);
             Color before = Before(graphic);
-            Paint(graphic, new Color(colour.r, colour.g, colour.b, ink == PcInk.Clear ? 0f : before.a * (text ? 1f : colour.a)));
+            Paint(graphic, text ? TextColour(graphic, theme, ink, accent, before) : FillColour(theme, ink, accent, before));
         }
     }
+
+    /// <summary>
+    /// An image's colour for <paramref name="ink"/>: the glass tokens opaque
+    /// wherever the image showed (the UI blends in linear light, so a glass
+    /// left a few per cent clear shows the window behind it); a tone on what
+    /// was a pale plate (a finding's, a note's, a side tag's) becomes glass
+    /// tinted by the tone (<see cref="PlateTint"/>), on a strong line or mark
+    /// the tone itself, its alpha kept.
+    /// </summary>
+    private static Color FillColour(PcThemeSO theme, PcInk ink, Color accent, Color before)
+    {
+        if (ink == PcInk.Clear || before.a <= 0.01f)
+            return Color.clear;
+        Color token = theme.Token(ink, accent);
+        switch (ink)
+        {
+            case PcInk.Glass:
+            case PcInk.GlassRaised:
+            case PcInk.GlassDeep:
+            case PcInk.Edge:
+                return new Color(token.r, token.g, token.b, token.a);
+        }
+        if (Luma(before) > PalePlate)
+        {
+            Color plate = Color.Lerp(theme.glassRaised, token, PlateTint);
+            return new Color(plate.r, plate.g, plate.b, 1f);
+        }
+        return new Color(token.r, token.g, token.b, before.a);
+    }
+
+    /// <summary>A text's colour for <paramref name="ink"/>: light on the glass, and the deep glass on a bright plate it lies on (a side tag, a badge), so a word never takes its own plate's colour.</summary>
+    private static Color TextColour(Graphic text, PcThemeSO theme, PcInk ink, Color accent, Color before)
+    {
+        Color token = theme.Token(ink, accent);
+        Transform parent = text.transform.parent;
+        if (parent != null && parent.TryGetComponent(out Image plate) && plate.sprite == null && plate.color.a > 0.5f && Luma(plate.color) > BrightPlate)
+            token = theme.glassDeep;
+        return new Color(token.r, token.g, token.b, before.a);
+    }
+
+    /// <summary>A plate this light (luma) in the cel look was a pale plate: it becomes tinted glass.</summary>
+    private const float PalePlate = 0.75f;
+
+    /// <summary>How far a pale plate's glass takes its tone.</summary>
+    private const float PlateTint = 0.22f;
+
+    /// <summary>A plate this bright (luma) behind a text makes the text dark.</summary>
+    private const float BrightPlate = 0.45f;
 
     /// <summary>
     /// Each app window's title shows its app's glyph at its left (the

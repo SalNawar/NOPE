@@ -137,7 +137,7 @@ public static class PcKit
         // A plate, by its state.
         Color rim = quiet ? Alpha(t.phosphor, 0.45f) : tone;
         Color top = quiet ? Alpha(t.phosphor, 0.85f) : Color.Lerp(tone, Color.white, 0.35f);
-        float tint = quiet ? 0f : 0.16f;
+        float tint = quiet ? 0f : 0.3f; // a toned plate (the chosen option, Quit, a buyable order) reads at a glance
         switch (part.State)
         {
             case KitState.Hover:

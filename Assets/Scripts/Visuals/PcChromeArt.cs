@@ -140,11 +140,14 @@ public static class PcChromeArt
         return Clamp01(strength) * Clamp01((dx * dx + dy * dy - 0.45f) / 1.55f);
     }
 
+    /// <summary>How far in from the glass's edges the bloom reaches, as a share of the glass.</summary>
+    private const float BloomReach = 0.07f;
+
     /// <summary>The glass's bloom at (<paramref name="u"/>, <paramref name="v"/>): a soft phosphor glow that rises towards the glass's edges.</summary>
     public static float Bloom(float u, float v, float strength)
     {
         float edge = Math.Min(Math.Min(u, 1f - u), Math.Min(v, 1f - v));
-        return Clamp01(strength) * Sq(Clamp01(1f - edge / 0.12f));
+        return Clamp01(strength) * Sq(Clamp01(1f - edge / BloomReach));
     }
 
     /// <summary>The signed distance from (px, py) to a rounded box (negative inside).</summary>
