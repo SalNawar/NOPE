@@ -16,16 +16,15 @@ the car's own pixels:
      was found, not only where it still stands out;
   3. a car's luma at an hour is the mean over its frames of the mean luma of its body cells.
 
-The frames are read with QA-RIG's extra sRGB encode undone (region_luma.decode: the sequence frames are encoded
-twice, so a ratio read on them is about its square root; a QA-RIG finding, integration 2026-10-21), so the ratio is
-the screen's.
+The frames are read as the screen showed them: a sequence from before QA-RIG's recorder fix has its extra sRGB encode
+undone (region_luma.extra_encode and decode: those frames are encoded twice, so a ratio read on them is about its
+square root; integration 2026-10-21, GATE-05), so the ratio is the screen's.
 
 Prints each car's H5 / H2 ratio and the mean over the cars seen in both; exit 0 when that mean is at most
 --max-ratio (the plan: mean traffic luma at H5 at most 50 % of H2). Writes nothing.
 """
 import argparse
 import csv
-import glob
 import os
 import sys
 
@@ -33,18 +32,21 @@ import numpy as np
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from region_luma import decode  # noqa: E402
+from region_luma import decode, extra_encode, frame_files  # noqa: E402
 
 GRID = 12
 
 
-def luma(path):
-    """A frame's luma (Rec. 601, 0-255) with the recorder's extra sRGB encode undone (region_luma.decode): the screen's own."""
-    return decode(np.asarray(Image.open(path).convert('RGB'), np.float32)) @ np.array([0.299, 0.587, 0.114], np.float32)
+def luma(path, extra=True):
+    """A frame's luma (Rec. 601, 0-255), the screen's own: the old recorder's extra sRGB encode undone when the sequence
+    carries it (extra: region_luma.extra_encode)."""
+    rgb = np.asarray(Image.open(path).convert('RGB'), np.float32)
+    return (decode(rgb) if extra else rgb) @ np.array([0.299, 0.587, 0.114], np.float32)
 
 
 def load(seq, names, step):
-    files = sorted(glob.glob(os.path.join(seq, 'f*.png')))
+    files = frame_files(seq)
+    extra = extra_encode(seq)
     with open(os.path.join(seq, 'frames.tsv'), encoding='utf-8') as f:
         rows = list(csv.DictReader(f, delimiter='\t'))
     frames = []
@@ -55,7 +57,7 @@ def load(seq, names, step):
                 n, c = part.split(':', 1)
                 if n in names:
                     rects[n] = tuple(float(v) for v in c.split(','))
-        frames.append((luma(files[i]), rects))
+        frames.append((luma(files[i], extra), rects))
     background = np.median(np.stack([f for f, _ in frames]), axis=0)
     return frames, background
 
