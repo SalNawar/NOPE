@@ -23,6 +23,7 @@ using UnityEngine.InputSystem.LowLevel;
 /// <item><c>boardHold</c> (n = the dial; key = Escape or RightClick; name): turns its ring half a turn of a slot, holding, then the key: asserts <c>hold.&lt;name&gt;</c> (the ring goes back, the locks unchanged, the board still turned to).</item>
 /// <item><c>boardCheat</c>: the cheat "Switchboard: 3 test calls". <c>boardRightClick</c>: a right-click where the pointer is.</item>
 /// <item><c>boardWait</c> (text = a condition; f = timeout, default 30 s) and <c>boardAssert</c> (name; text = a condition): conditions "open:N", "committed:N", "blown:N", "place:N", "period:N", "powered:N", "unpowered:N", "sent&gt;=K", "calls&gt;=K", "calls==K", "inService==K", "cells==K", "rack==K", "turned", "closed", "hidden" (turned away and the turn done).</item>
+/// <item><c>boardHud</c> (name, default "aspect.hudHidden"): at the frame's end, reads the screen in the desk HUD's probe rects (the tutorial card, the STAMPS tab) outside the board's plate, the letterbox bands; asserts <c>board.&lt;name&gt;</c> (the bands flat matte: no HUD through them, luma spread at most HudSpread).</item>
 /// <item><c>boardLog</c> (n 1 starts, 0 stops; name): every frame, dial 01 to 03's state, ring turn, chevron lenses, bars and calibration into board_&lt;name&gt;.tsv (the frame strips' numbers: ring steps, the strobe's rate, the lens holding).</item>
 /// </list>
 /// </summary>
@@ -54,6 +55,7 @@ public static class SwitchboardRig
         QaRunner.RegisterOp("boardWait", Wait);
         QaRunner.RegisterOp("boardAssert", AssertOp);
         QaRunner.RegisterOp("boardLog", Log);
+        QaRunner.RegisterOp("boardHud", Hud);
     }
 
     private static SwitchboardView View() =>
@@ -456,6 +458,66 @@ public static class SwitchboardRig
             return op == ">=" ? v >= k : v == k;
         }
         throw new ArgumentException($"Unknown board condition '{text}'.");
+    }
+
+    /// <summary>The desk HUD's parts boardHud probes (the tutorial card, the STAMPS tab): their scene paths.</summary>
+    private static readonly string[] HudProbes = { "OfficeOverlayCanvas/GuidePrompt/Plate", "OfficeOverlayCanvas/StampBar/Tab" };
+
+    /// <summary>The most a band's luma (0 to 255) may vary over the probes and still be the flat matte (a HUD card or tab through it varied about 40).</summary>
+    private const float HudSpread = 10f;
+
+    private static IEnumerator Hud(QaRunner runner, QaStep step)
+    {
+        yield return new WaitForEndOfFrame();
+        Rect plate = View().PlateOnScreen();
+        Texture2D shot = ScreenCapture.CaptureScreenshotAsTexture();
+        int seen = 0, probes = 0;
+        float lo = float.MaxValue, hi = float.MinValue;
+        try
+        {
+            foreach (string path in HudProbes)
+            {
+                Rect? r = QaGame.ScreenRect(Find(path));
+                if (r == null)
+                    continue; // not shown at all: nothing of it can show through
+                probes++;
+                int x0 = Mathf.Max(0, Mathf.FloorToInt(r.Value.xMin)), x1 = Mathf.Min(shot.width, Mathf.CeilToInt(r.Value.xMax));
+                int y0 = Mathf.Max(0, Mathf.FloorToInt(r.Value.yMin)), y1 = Mathf.Min(shot.height, Mathf.CeilToInt(r.Value.yMax));
+                for (int y = y0; y < y1; y += 2)
+                    for (int x = x0; x < x1; x += 2)
+                    {
+                        if (plate.Contains(new Vector2(x + 0.5f, y + 0.5f)))
+                            continue;
+                        Color c = shot.GetPixel(x, y);
+                        float luma = 255f * (0.2126f * c.r + 0.7152f * c.g + 0.0722f * c.b);
+                        lo = Mathf.Min(lo, luma);
+                        hi = Mathf.Max(hi, luma);
+                        seen++;
+                    }
+            }
+        }
+        finally
+        {
+            UnityEngine.Object.Destroy(shot);
+        }
+        float spread = seen > 0 ? hi - lo : 0f;
+        string measured = seen > 0
+            ? $"{probes} HUD probes, {seen} band pixels at {Screen.width}x{Screen.height}, luma {lo:0.0} to {hi:0.0} (spread {spread:0.0}); plate {plate.xMin:0},{plate.yMin:0} to {plate.xMax:0},{plate.yMax:0}"
+            : $"{probes} HUD probes shown, no band pixel under them at {Screen.width}x{Screen.height}";
+        runner.Assert("board." + Name(step, "aspect.hudHidden"), Owner, spread <= HudSpread, measured, $"luma spread <= {HudSpread:0} (flat matte)");
+    }
+
+    /// <summary>The loaded object at <paramref name="path"/>, or null when the scene has none (an office without that HUD part).</summary>
+    private static GameObject Find(string path)
+    {
+        try
+        {
+            return QaGame.GameObjectAt(path);
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
     }
 
     // ------------------------------------------------------------------ the frame log
