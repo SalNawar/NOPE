@@ -3,133 +3,621 @@
   "owner": "QA-FTUE",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "qa-ftue-day1 (night 2026-11-07): day 1 as a new player, by what the screen says only. A still at every step at 1920x1080, and a second still at 1280x1024 at the main steps. The run clicks the objects a hint names with the virtual mouse (click op), so a covered click box fails the presses assertion. The tutorial stays on (a new run). The wrong verdict lets in a traveller who should be turned away (textLangWrongCall); the citation is acknowledged by its own button. Do not fix: the findings go to BUGS." },
-    { "op": "title" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s01_title" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s01_title" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "newRun", "text": "Biscuit" },
-    { "op": "waitOffice", "n": 1 },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s02_paper" },
-    { "op": "probe", "name": "paper" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s02_paper" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "startShift" },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s03_available_hint" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s03_available_hint" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "sign" },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s04_after_available" },
-    { "op": "waitTraveller", "f": 90 },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s05_first_traveller" },
-    { "op": "probe", "name": "first_traveller" },
-    { "op": "wait", "f": 4 },
-    { "op": "still", "name": "s06_booth_hint" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s06_booth_hint" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "deskvisible", "target": "Rulebook", "name": "ftue_rulebook" },
-    { "op": "click", "target": "Rulebook" },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s07_rulebook" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s07_rulebook" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "key", "key": "Escape" },
-    { "op": "wait", "f": 1.5 },
-    { "op": "still", "name": "s08_after_rulebook_esc" },
-    { "op": "key", "key": "Tab" },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s09_reading_view_stamp" },
-    { "op": "deskvisible", "target": "StampRack", "name": "ftue_stamprack" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s09_reading_view_stamp" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "key", "key": "Tab" },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s10_office_view_back" },
-    { "op": "deskvisible", "target": "Intercom", "name": "ftue_intercom", "f": 0.85 },
-    { "op": "click", "target": "Intercom" },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s11_wheel" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s11_wheel" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "textLangWheel", "n": 0 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s12_wheel_closed" },
-    { "op": "key", "key": "Q" },
-    { "op": "wait", "f": 2.5 },
-    { "op": "still", "name": "s13_pc_first_open" },
-    { "op": "probe", "name": "pc" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s13_pc_first_open" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "key", "key": "Q" },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s14_pc_closed" },
-    { "op": "textLangWrongCall" },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s15_wrong_verdict" },
-    { "op": "waitActive", "target": "OfficeUIController.citationPanel", "f": 20 },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s16_citation" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s16_citation" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "button", "target": "OfficeUIController.citationContinueButton" },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s17_after_citation" },
-    { "op": "cheat", "name": "EndShift" },
-    { "op": "waitActive", "target": "DayFlowUIController.resultsPanel", "f": 120 },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s18_ledger" },
-    { "op": "probe", "name": "ledger" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s18_ledger" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "button", "target": "DayFlowUIController.goHomeButton" },
-    { "op": "waitScene", "name": "HomeScene", "f": 120 },
-    { "op": "wait", "f": 3 },
-    { "op": "still", "name": "s19_home" },
-    { "op": "probe", "name": "home" },
-    { "op": "res", "w": 1280, "h": 1024 },
-    { "op": "wait", "f": 1 },
-    { "op": "still", "name": "s19_home" },
-    { "op": "res", "w": 1920, "h": 1080 },
-    { "op": "wait", "f": 1 },
-    { "op": "call", "target": "RunManager.Sleep" },
-    { "op": "waitOffice", "n": 2, "f": 240 },
-    { "op": "wait", "f": 2 },
-    { "op": "still", "name": "s20_day2_paper" },
-    { "op": "probe", "name": "end" }
+    {
+      "op": "note",
+      "text": "qa-ftue-day1 (night 2026-11-07): day 1 as a new player, by what the screen says only. A still at every step at 1920x1080, and at 1280x1024 at the main steps. The run does what each hint says with the virtual mouse and keys where the rig can (click, counterDrag, key), so a covered click box fails the presses assertion. Round 2: the rulebook is the painted red book (Desk_RulebookFolded; a click brings the folder out), Esc is left out (Esc opens the PC's Settings by design), the wheel is opened by the intercom in the office view with the PC shut, and closing time needs the traveller at the desk decided (DecideCorrectly) before the ledger. The wrong verdict lets in a traveller who should be turned away (textLangWrongCall, the desk's own verdict path); the citation is acknowledged by its own button. Home's Sleep is RunManager.Sleep (the rig has no bed op). Do not fix: the findings go to BUGS."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s01_title"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s01_title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "probe",
+      "name": "paper"
+    },
+    {
+      "op": "still",
+      "name": "s02_paper"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s02_paper"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s03_available_hint"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s03_available_hint"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s04_after_available"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "probe",
+      "name": "first_traveller"
+    },
+    {
+      "op": "still",
+      "name": "s05_first_traveller_booth_hint"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s05_first_traveller_booth_hint"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "counterDrag",
+      "name": "ftue_passport",
+      "text": "office"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s06_passport_on_desk"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s06_passport_on_desk"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "s07_inspect_space"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s07_inspect_space"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "s08_inspect_off"
+    },
+    {
+      "op": "deskvisible",
+      "target": "Desk_RulebookFolded",
+      "name": "ftue_redbook"
+    },
+    {
+      "op": "click",
+      "target": "Desk_RulebookFolded"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s09_rulebook"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s09_rulebook"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "deskvisible",
+      "target": "StampRack",
+      "name": "ftue_stamprack"
+    },
+    {
+      "op": "still",
+      "name": "s10_reading_view_stamp"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s10_reading_view_stamp"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s11_office_view_back"
+    },
+    {
+      "op": "deskvisible",
+      "target": "Intercom",
+      "name": "ftue_intercom",
+      "f": 0.85
+    },
+    {
+      "op": "click",
+      "target": "Intercom"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s12_wheel"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s12_wheel"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "textLangWheel",
+      "n": 0
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s13_wheel_closed"
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "probe",
+      "name": "pc"
+    },
+    {
+      "op": "still",
+      "name": "s14_pc_first_open"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s14_pc_first_open"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s15_pc_closed"
+    },
+    {
+      "op": "textLangWrongCall"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s16_wrong_verdict"
+    },
+    {
+      "op": "waitActive",
+      "target": "OfficeUIController.citationPanel",
+      "f": 20
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s17_citation"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s17_citation"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "button",
+      "target": "OfficeUIController.citationContinueButton"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s18_after_citation"
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s19_closing_time"
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "probe",
+      "name": "ledger"
+    },
+    {
+      "op": "still",
+      "name": "s20_ledger"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s20_ledger"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "probe",
+      "name": "home"
+    },
+    {
+      "op": "still",
+      "name": "s21_home"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s21_home"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitOffice",
+      "n": 2,
+      "f": 240
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "s22_day2_paper"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
   ]
 }
