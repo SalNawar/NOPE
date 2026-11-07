@@ -11,7 +11,8 @@ using UnityEngine;
 /// without), high-quality compression (BC7 on Standalone: no block artefacts
 /// on the line art), no crunch, at most <see cref="MaxSize"/> px. A source
 /// that is not 2:3 is reported. <see cref="ReimportAll"/> writes these
-/// settings into every character texture's .meta after a change.
+/// settings into every character texture's .meta after a change;
+/// <see cref="GetVersion"/> makes an editor import them again.
 /// </summary>
 public sealed class CharacterArtImporter : AssetPostprocessor
 {
@@ -40,6 +41,19 @@ public sealed class CharacterArtImporter : AssetPostprocessor
     /// fallback when the outlines alias is 504 (336 x 504).
     /// </summary>
     public const int MaxSize = 1020;
+
+    /// <summary>
+    /// The importer's version: a new one makes Unity import every texture
+    /// again once this code has loaded. 1: D11 (the importer before it had
+    /// none, so 0). A live editor imports the changed .meta files of a
+    /// checkout with the importer it has loaded, before the new code
+    /// compiles, and that importer writes its own settings back into them
+    /// (VERIFY0 P1: 1439 .meta files with mipmaps, trilinear, 2048). The new
+    /// version then imports them again with these settings, and the .meta
+    /// files come back to the committed ones. Raise it with every change of
+    /// <see cref="Apply"/>.
+    /// </summary>
+    public override uint GetVersion() => 1;
 
     private void OnPreprocessTexture()
     {
@@ -94,7 +108,7 @@ public sealed class CharacterArtImporter : AssetPostprocessor
     /// Writes the character-art settings into every texture under
     /// Assets/Art/Characters/ and reimports them in one batch (Tools &gt;
     /// TimeDesk &gt; Reimport Character Art). Run it after a change of
-    /// <see cref="Mipmaps"/> or <see cref="MaxSize"/>: a change of this
+    /// <see cref="Mipmaps"/> or <see cref="MaxSize"/> (with a new <see cref="GetVersion"/>): a change of this
     /// importer's code alone reimports nothing. Commit the .meta files it
     /// changes. It blocks the editor while it runs (1439 textures in 1.1 min
     /// on 2026-11-07); a batch job runner that watches the editor's update

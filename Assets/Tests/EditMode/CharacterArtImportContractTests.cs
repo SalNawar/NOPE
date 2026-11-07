@@ -71,6 +71,17 @@ public sealed class CharacterArtImportContractTests
     }
 
     [Test]
+    public void TheImporter_HasAVersion_SoALiveEditorImportsTheArtAgain()
+    {
+        // VERIFY0 P1 (fix round 1): a live editor imports the changed .meta files with the old
+        // importer before the new code loads, and that importer writes its own settings back.
+        // Only a new GetVersion makes Unity import the art again once the new code has loaded.
+        Match version = Regex.Match(Read(ImporterPath), @"public override uint GetVersion\(\) => (\d+);");
+        Assert.IsTrue(version.Success, "CharacterArtImporter overrides GetVersion");
+        Assert.GreaterOrEqual(int.Parse(version.Groups[1].Value), 1, "above the importer's version before D11 (0, no override)");
+    }
+
+    [Test]
     public void TheMetaWriter_WritesTheImportersSettings()
     {
         (bool mipmaps, int maxSize) = Importer();
