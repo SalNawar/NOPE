@@ -6,19 +6,35 @@ using UnityEngine;
 /// every import (authoritative): a Single, FullRect sprite one unit tall (its
 /// pixels per unit is its own height, so any resolution of the 2:3 canvas
 /// lays out the same), pivoted at the feet (LookCanvas.FeetPivotY), readable
-/// (the photo crop and alpha tests), mipmapped with trilinear filtering (the
-/// office draws a figure at about a third of its size and the passport photo
-/// smaller: without mips the thin outlines break up and shimmer), high-quality
-/// compression (BC7: no block artefacts on the line art), no crunch, at most
-/// 2048 px. A source that is not 2:3 is reported.
+/// (the photo crop and alpha tests), mipmapped or not by
+/// <see cref="Mipmaps"/> (trilinear filtering with mipmaps, bilinear
+/// without), high-quality compression (BC7 on Standalone: no block artefacts
+/// on the line art), no crunch, at most <see cref="MaxSize"/> px. A source
+/// that is not 2:3 is reported. <see cref="ReimportAll"/> writes these
+/// settings into every character texture's .meta after a change.
 /// </summary>
 public sealed class CharacterArtImporter : AssetPostprocessor
 {
     /// <summary>The folder whose textures are character art.</summary>
     private const string Folder = "Assets/Art/Characters/";
 
-    /// <summary>The largest texture side kept (the canvas is 1024 x 1536).</summary>
-    private const int MaxSize = 2048;
+    /// <summary>
+    /// Whether character art has mipmaps. Off by the director's call D11
+    /// (BLD-05, night of 2026-11-07; reversible by Saleh): the 1024 x 1536
+    /// canvas is not a power of two, and Unity cannot block-compress a
+    /// mipmapped texture that is not, so with mipmaps every character
+    /// texture shipped as RGBA32 (10.5 MB each, 12 GB of a 13.9 GB player).
+    /// Without them it ships as BC7.
+    /// </summary>
+    public const bool Mipmaps = false;
+
+    /// <summary>
+    /// The largest texture side kept: 1024 by the director's call D11 (BLD-05,
+    /// night of 2026-11-07; reversible by Saleh). Without mipmaps a smaller
+    /// texture keeps the outlines clean where the office draws the figure
+    /// small. The fallback D11 names, when the outlines alias, is 512.
+    /// </summary>
+    public const int MaxSize = 1024;
 
     private void OnPreprocessTexture()
     {
@@ -26,20 +42,59 @@ public sealed class CharacterArtImporter : AssetPostprocessor
             return;
 
         var importer = (TextureImporter)assetImporter;
+        Apply(importer);
+
+        importer.GetSourceTextureWidthAndHeight(out int width, out int height);
+        if (width * LookCanvas.Height != height * LookCanvas.Width)
+            Debug.LogWarning($"[CharacterArtImporter] '{assetPath}' is {width}x{height}; character art must be {LookCanvas.Width}x{LookCanvas.Height} (2:3). See docs/CHARACTER_ART_CONTRACT.md.");
+    }
+
+    /// <summary>
+    /// Writes the character-art settings into every texture under
+    /// Assets/Art/Characters/ and reimports them in one batch (Tools &gt;
+    /// TimeDesk &gt; Reimport Character Art). Run it after a change of
+    /// <see cref="Mipmaps"/> or <see cref="MaxSize"/>: a change of this
+    /// importer's code alone reimports nothing. Commit the .meta files it
+    /// changes. It takes long (about a second per texture) and blocks the editor.
+    /// </summary>
+    [MenuItem("Tools/TimeDesk/Reimport Character Art")]
+    public static void ReimportAll()
+    {
+        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { Folder.TrimEnd('/') });
+        int count = 0;
+        AssetDatabase.StartAssetEditing();
+        try
+        {
+            foreach (string guid in guids)
+            {
+                if (!(AssetImporter.GetAtPath(AssetDatabase.GUIDToAssetPath(guid)) is TextureImporter importer))
+                    continue;
+                Apply(importer);
+                importer.SaveAndReimport();
+                count++;
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+        Debug.Log($"[CharacterArtImporter] Reimported {count} character textures (mipmaps {(Mipmaps ? "on" : "off")}, max size {MaxSize}).");
+    }
+
+    /// <summary>Sets <paramref name="importer"/> to the character-art settings (see the class).</summary>
+    private static void Apply(TextureImporter importer)
+    {
         importer.textureType = TextureImporterType.Sprite;
         importer.spriteImportMode = SpriteImportMode.Single;
         importer.isReadable = true;
-        importer.mipmapEnabled = true;
-        importer.filterMode = FilterMode.Trilinear;
+        importer.mipmapEnabled = Mipmaps;
+        importer.filterMode = Mipmaps ? FilterMode.Trilinear : FilterMode.Bilinear;
         importer.textureCompression = TextureImporterCompression.CompressedHQ;
         importer.crunchedCompression = false;
         importer.maxTextureSize = MaxSize;
         importer.alphaIsTransparency = true;
 
         importer.GetSourceTextureWidthAndHeight(out int width, out int height);
-        if (width * LookCanvas.Height != height * LookCanvas.Width)
-            Debug.LogWarning($"[CharacterArtImporter] '{assetPath}' is {width}x{height}; character art must be {LookCanvas.Width}x{LookCanvas.Height} (2:3). See docs/CHARACTER_ART_CONTRACT.md.");
-
         var settings = new TextureImporterSettings();
         importer.ReadTextureSettings(settings);
         settings.spriteMeshType = SpriteMeshType.FullRect;
