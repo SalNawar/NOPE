@@ -53,6 +53,15 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>Starts the shift.</summary>
     [SerializeField] private Button startShiftButton;
 
+    /// <summary>The space (overlay units) kept between the small story's last line and the Bureau memo's top edge.</summary>
+    [SerializeField] private float memoClearGap = 12f;
+
+    /// <summary>How far (overlay units) the Bureau memo may drop below its home to clear a long small story; at 16:9 its foot then stays on screen.</summary>
+    [SerializeField] private float memoMaxDrop = 80f;
+
+    /// <summary>The smallest size of the small story's type, as a fraction of its built size, when the memo at its lowest still covers it.</summary>
+    [SerializeField, Range(0.5f, 1f)] private float storyMinScale = 0.85f;
+
     [Header("Results Panel")]
     /// <summary>Root of the results panel.</summary>
     [SerializeField] private GameObject resultsPanel;
@@ -65,6 +74,12 @@ public sealed class DayFlowUIController : MonoBehaviour
 
     /// <summary>Leaves the office for the home phase.</summary>
     [SerializeField] private Button goHomeButton;
+
+    /// <summary>The Bureau memo's built place (its anchored position), read on the first briefing.</summary>
+    private Vector2 _memoHome;
+
+    /// <summary>The small story's built type size (its smallest auto size; 0 until the first briefing reads it).</summary>
+    private float _storySize;
 
     /// <summary>Pending callback for the briefing start button.</summary>
     private Action _onStartShift;
@@ -148,6 +163,7 @@ public sealed class DayFlowUIController : MonoBehaviour
             briefingStoryFiller.SetActive(page.StoryLines.Count == 0);
 
         briefingPanel.SetActive(true);
+        ClearMemo();
         UiAppear.Of(briefingPanel, AppearStyle.Drop).Open(); // the morning paper drops in and settles like paper (the game feel)
         Sounds.Play(SoundCues.DayStart);
     }
@@ -225,6 +241,78 @@ public sealed class DayFlowUIController : MonoBehaviour
     }
 
     /// <summary>Briefing start clicked: close and begin the shift.</summary>
+    /// <summary>
+    /// The briefing's layout rule (nothing on the briefing hides a line the
+    /// player must read): the Bureau memo drops below the small story's last
+    /// line, plus <see cref="memoClearGap"/>, at most <see cref="memoMaxDrop"/>
+    /// below its home; when it still covers the story there, the story's type
+    /// steps down, to <see cref="storyMinScale"/> of its built size at least.
+    /// Measured in the panel's own space, so the paper's drop-in motion and
+    /// the screen's aspect do not change it.
+    /// </summary>
+    private void ClearMemo()
+    {
+        if (briefingMemo == null || briefingStoryText == null)
+            return;
+        var memo = (RectTransform)briefingMemo.transform;
+        if (_storySize <= 0f)
+        {
+            _memoHome = memo.anchoredPosition;
+            _storySize = StorySize;
+        }
+        memo.anchoredPosition = _memoHome;
+        StorySize = _storySize;
+        if (!briefingMemo.activeSelf)
+            return;
+
+        float overlap = MemoOverlap(memo);
+        if (overlap <= 0f)
+            return;
+        float drop = Mathf.Min(overlap, memoMaxDrop);
+        memo.anchoredPosition = _memoHome - new Vector2(0f, drop);
+        float floor = _storySize * storyMinScale;
+        while (MemoOverlap(memo) > 0f && StorySize - 1f >= floor)
+            StorySize -= 1f;
+    }
+
+    /// <summary>The small story's type size that sets its lines: its smallest auto size when it sizes itself to its column (the built story does), else its size.</summary>
+    private float StorySize
+    {
+        get => briefingStoryText.enableAutoSizing ? briefingStoryText.fontSizeMin : briefingStoryText.fontSize;
+        set
+        {
+            if (briefingStoryText.enableAutoSizing)
+                briefingStoryText.fontSizeMin = value;
+            else
+                briefingStoryText.fontSize = value;
+        }
+    }
+
+    /// <summary>How far (panel units) the memo's highest corner reaches above the small story's last line less the gap; 0 or less when clear.</summary>
+    private float MemoOverlap(RectTransform memo)
+    {
+        briefingStoryText.ForceMeshUpdate(true);
+        if (briefingStoryText.textInfo.characterCount == 0)
+            return 0f;
+        Transform space = memo.parent;
+        Bounds b = briefingStoryText.textBounds;
+        float textBottom = InSpace(briefingStoryText.transform, space, new Vector3(b.center.x, b.min.y, 0f)).y;
+        var corners = new Vector3[4];
+        memo.GetLocalCorners(corners);
+        float memoTop = float.MinValue;
+        foreach (Vector3 c in corners)
+            memoTop = Mathf.Max(memoTop, InSpace(memo, space, c).y);
+        return memoTop + memoClearGap - textBottom;
+    }
+
+    /// <summary>A point of <paramref name="t"/>'s local space in <paramref name="space"/> (an ancestor), through the local transforms only.</summary>
+    private static Vector3 InSpace(Transform t, Transform space, Vector3 p)
+    {
+        for (; t != null && t != space; t = t.parent)
+            p = t.localPosition + t.localRotation * Vector3.Scale(t.localScale, p);
+        return p;
+    }
+
     private void HandleStartShiftClicked()
     {
         if (briefingPanel != null)
