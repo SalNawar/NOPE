@@ -261,7 +261,7 @@ public sealed class GateBoardLayout
     public const float CallEmblemSize = 40f;
 
     /// <summary>Call slot <paramref name="d"/>'s pip for period <paramref name="period"/> of <paramref name="periods"/>.</summary>
-    public BoardPoint CallPip(int d, int period, int periods) => new BoardPoint(CallX(d) + (period - (periods - 1) / 2f) * 20f, 208f);
+    public BoardPoint CallPip(int d, int period, int periods) => new BoardPoint(CallX(d) + (period - (periods - 1) / 2f) * 22f, 208f);
 
     /// <summary>An era pip's size.</summary>
     public const float PipSize = 16f;

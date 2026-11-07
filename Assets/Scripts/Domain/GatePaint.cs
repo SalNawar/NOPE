@@ -251,7 +251,7 @@ public static class GatePaint
             for (int p = 0; p < periods; p++)
             {
                 BoardPoint pip = layout.CallPip(d, p, periods);
-                canvas.Annulus(pip.X - ox, pip.Y - oy, 0f, 9f, SlateWell, Ink);
+                canvas.Annulus(pip.X - ox, pip.Y - oy, 0f, 8f, SlateWell, Ink);
             }
         }
 
