@@ -1,0 +1,1366 @@
+{
+ "name": "qa_pc_aspects",
+ "owner": "qa-pc",
+ "seed": 12345,
+ "steps": [
+  {
+   "op": "note",
+   "text": "qa-pc (the night of 2026-11-07, v2): the cyberpunk PC (D2, D50) at four aspects (A1 1920x1080, A3 2560x1080, A4 1280x1024, A5 1920x1200): the desktop, each of the eight apps alone in front (a still and every text read at each aspect), the Notes window moved by its title bar, maximised and restored, minimised and restored, closed; the Investigation search drawer; the culture tint for greece and egypt; Reduced Motion (the open and close recorded with it). Measure only: findings go to BUGS.md, nothing is asserted here."
+  },
+  {
+   "op": "title"
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "newRun",
+   "text": "Biscuit"
+  },
+  {
+   "op": "waitOffice",
+   "n": 1
+  },
+  {
+   "op": "jumpDay",
+   "n": 5
+  },
+  {
+   "op": "waitOffice",
+   "n": 5
+  },
+  {
+   "op": "startShift"
+  },
+  {
+   "op": "cheat",
+   "name": "AddMoney",
+   "n": 500
+  },
+  {
+   "op": "recStart",
+   "name": "qp_open_full"
+  },
+  {
+   "op": "key",
+   "key": "Q"
+  },
+  {
+   "op": "wait",
+   "f": 1.0
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_desktop"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_desktop_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_desktop"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_desktop_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_desktop"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_desktop_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_desktop"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_desktop_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_investigation"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_investigation"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_investigation_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_investigation"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_investigation_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_investigation"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_investigation_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_investigation"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_investigation_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "click",
+   "target": "SearchButton",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "still",
+   "name": "qp_search"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_search_A1",
+   "n": 0
+  },
+  {
+   "op": "key",
+   "key": "Escape"
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_investigation"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_orders"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_orders"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_orders_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_orders"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_orders_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_orders"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_orders_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_orders"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_orders_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_orders"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_mail"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_mail"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_mail_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_mail"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_mail_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_mail"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_mail_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_mail"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_mail_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_mail"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_settings"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_settings"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_settings_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_settings"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_settings_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_settings"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_settings_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_settings"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_settings_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_settings"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_notes"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_notes"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_notes_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_notes"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_notes_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_notes"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_notes_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_notes"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_notes_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_win_move"
+  },
+  {
+   "op": "drag",
+   "target": "Header",
+   "x2": 0.3,
+   "y2": 0.7,
+   
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "still",
+   "name": "qp_win_moved"
+  },
+  {
+   "op": "click",
+   "target": "MaxBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "still",
+   "name": "qp_win_max"
+  },
+  {
+   "op": "click",
+   "target": "MaxBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "still",
+   "name": "qp_win_restored"
+  },
+  {
+   "op": "recStart",
+   "name": "qp_win_min"
+  },
+  {
+   "op": "click",
+   "target": "MinBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "still",
+   "name": "qp_win_min"
+  },
+  {
+   "op": "click",
+   "target": "WindowButton",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "still",
+   "name": "qp_win_back"
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_notes"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_portals"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_portals"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_portals_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_portals"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_portals_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_portals"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_portals_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_portals"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_portals_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_portals"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_internet"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_internet"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_internet_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_internet"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_internet_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_internet"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_internet_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_internet"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_internet_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_internet"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_citizen_account"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_citizen_account"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_citizen_account_A1",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 2560,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_citizen_account"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_citizen_account_A3",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_citizen_account"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_citizen_account_A4",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1200
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "still",
+   "name": "qp_citizen_account"
+  },
+  {
+   "op": "qaTexts",
+   "name": "qp_citizen_account_A5",
+   "n": 0
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_citizen_account"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.6
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "still",
+   "name": "qp_after_close"
+  },
+  {
+   "op": "cheat",
+   "name": "ForceLeader",
+   "text": "greece"
+  },
+  {
+   "op": "wait",
+   "f": 1.0
+  },
+  {
+   "op": "still",
+   "name": "qp_tint_greece"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_orders"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "still",
+   "name": "qp_tint_greece_orders"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "cheat",
+   "name": "ForceLeader",
+   "text": "egypt"
+  },
+  {
+   "op": "wait",
+   "f": 1.0
+  },
+  {
+   "op": "still",
+   "name": "qp_tint_egypt"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_orders"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "still",
+   "name": "qp_tint_egypt_orders"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "cheat",
+   "name": "ForceLeader"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_settings"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "button",
+   "target": "SettingsWindowController.reducedMotionButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "still",
+   "name": "qp_settings_reduced"
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_reduced"
+  },
+  {
+   "op": "key",
+   "key": "Q"
+  },
+  {
+   "op": "wait",
+   "f": 1.0
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "recStart",
+   "name": "qp_open_reduced"
+  },
+  {
+   "op": "key",
+   "key": "Q"
+  },
+  {
+   "op": "wait",
+   "f": 1.0
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "still",
+   "name": "qp_desktop_reduced"
+  },
+  {
+   "op": "click",
+   "target": "StartButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.3
+  },
+  {
+   "op": "click",
+   "target": "App_settings"
+  },
+  {
+   "op": "wait",
+   "f": 0.8
+  },
+  {
+   "op": "button",
+   "target": "SettingsWindowController.fullMotionButton"
+  },
+  {
+   "op": "wait",
+   "f": 0.4
+  },
+  {
+   "op": "click",
+   "target": "CloseBtn",
+   "direct": true
+  },
+  {
+   "op": "wait",
+   "f": 0.5
+  },
+  {
+   "op": "recStart",
+   "name": "qp_close_full"
+  },
+  {
+   "op": "key",
+   "key": "Q"
+  },
+  {
+   "op": "wait",
+   "f": 1.0
+  },
+  {
+   "op": "recStop"
+  },
+  {
+   "op": "still",
+   "name": "qp_office_after"
+  }
+ ]
+}
