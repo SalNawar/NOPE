@@ -213,6 +213,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The last day the wheel note shows (0 = never).</summary>
     [Min(0)] public int wheelHintUntilDay = 1;
 
+    /// <summary>The wheel note's height above the traveller's feet in metres. It is fixed and does not follow travellerHeight: above the 2.45 m traveller's head in the office view, and whole in the 5:4 reading view.</summary>
+    [Min(0f)] public float wheelHintHeight = 2.64f;
+
     [Header("Speech bubble (the traveller's lines, one after another)")]
     /// <summary>Seconds the traveller's last line stays up once fully shown, when no other line follows.</summary>
     [Min(0.1f)] public float bubbleSeconds = 4f;

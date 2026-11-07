@@ -42,6 +42,7 @@ MonoBehaviour:
   wheelItemGap: 8
   wheelHintKey: desk.wheelHint
   wheelHintUntilDay: 1
+  wheelHintHeight: 2.64
   bubbleSeconds: 4
   bubbleCharsPerSecond: 40
   bubbleMinSeconds: 1.5

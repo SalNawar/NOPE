@@ -632,7 +632,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Vector3 feet = At(OfficeAnchorId.Traveller).Position;
         traveller.Stand(feet, viewer, config.travellerHeight, config.travellerTint, deskTop);
         if (wheelHint != null)
-            PlaceBeforeTheBars(wheelHint, feet + Vector3.up * (config.travellerHeight + HintHeight), viewer, At(OfficeAnchorId.HandOver).Position);
+            PlaceBeforeTheBars(wheelHint, feet + Vector3.up * config.wheelHintHeight, viewer, At(OfficeAnchorId.HandOver).Position);
     }
 
     /// <summary>The wheel note's scale as built (PlaceBeforeTheBars scales from it).</summary>
