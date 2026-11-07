@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_lanyer
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_lanyer
+    label: Ask about their work >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_lanyer.start.1
+        speaker: 1
+        text: I wrote a book of poems and printed it myself. The printers were very
+          surprised.
+        expression: neutral
+      choices:
+      - id: more1
+        label: Go on.
+        lines: []
+        next: line2
+        effect: 
+      - id: bye1
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: line2
+      lines:
+      - id: dlg_lanyer.line2.1
+        speaker: 1
+        text: Eve was framed. It is all in the second poem. You may borrow a copy.
+        expression: happy
+      choices:
+      - id: more2
+        label: Go on.
+        lines: []
+        next: line3
+        effect: 
+      - id: bye2
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: line3
+      lines:
+      - id: dlg_lanyer.line3.1
+        speaker: 1
+        text: My school is losing its rent. Is there a desk in your century for a
+          teacher?
+        expression: worried
+      choices:
+      - id: done
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+  conditions: []

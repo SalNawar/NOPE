@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_fellini
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_fellini
+    label: Ask about their work >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_fellini.start.1
+        speaker: 1
+        text: This hall! The lamps, the queue, the clerk. You are all in my next
+          film.
+        expression: happy
+      choices:
+      - id: more1
+        label: Go on.
+        lines: []
+        next: line2
+        effect: 
+      - id: bye1
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: line2
+      lines:
+      - id: dlg_fellini.line2.1
+        speaker: 1
+        text: I write down every dream in a notebook. Last night I dreamt of your
+          stamp.
+        expression: neutral
+      choices:
+      - id: more2
+        label: Go on.
+        lines: []
+        next: line3
+        effect: 
+      - id: bye2
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: line3
+      lines:
+      - id: dlg_fellini.line3.1
+        speaker: 1
+        text: No! Do not stamp yet. The light is wrong. We do it again.
+        expression: angry
+      choices:
+      - id: more3
+        label: Go on.
+        lines: []
+        next: line4
+        effect: 
+      - id: bye3
+        label: Safe travels.
+        lines: []
+        next: 
+        effect: 
+    - id: line4
+      lines:
+      - id: dlg_fellini.line4.1
+        speaker: 1
+        text: The producers want an ending. I never know the ending.
+        expression: worried
+      choices:
+      - id: done
+        label: Next!
+        lines: []
+        next: 
+        effect: 
+  conditions: []

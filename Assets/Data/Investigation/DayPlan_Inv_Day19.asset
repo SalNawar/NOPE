@@ -91,6 +91,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d67bb98d29d515e49aeaafff33126ec7, type: 2}
   - {fileID: 11400000, guid: ee10d0a508322f849a760661655397df, type: 2}
   - {fileID: 11400000, guid: d7dac8add03f81b4386aeac31d4655da, type: 2}
+  - {fileID: 11400000, guid: 63d9bbffc851fb347b581c77dd4d8a99, type: 2}
+  - {fileID: 11400000, guid: d54027570c3708c4daeef7fe89201972, type: 2}
+  - {fileID: 11400000, guid: 70b6338cd7c810c4986400f8c19e43c6, type: 2}
+  - {fileID: 11400000, guid: feb4a9c5877c6e244a092dc48c0f9aed, type: 2}
+  - {fileID: 11400000, guid: fec18288508e00946a974421dd5da9f1, type: 2}
+  - {fileID: 11400000, guid: e500dee3090985643a1742e62a9f6d26, type: 2}
+  - {fileID: 11400000, guid: 4c23c476a0011e642879254228dcdb66, type: 2}
+  - {fileID: 11400000, guid: bd8ca20977a3e5a4fb7351d054df7d78, type: 2}
+  - {fileID: 11400000, guid: 1aa850835826e1f40a561e7ebd7ec85f, type: 2}
+  - {fileID: 11400000, guid: f9d01632da8f6aa468f93688ee47eaf2, type: 2}
+  - {fileID: 11400000, guid: 6298fb3cd3f14664bb442266c01556a5, type: 2}
+  - {fileID: 11400000, guid: 062a071cae77d9f4a8111ccc1543066a, type: 2}
+  - {fileID: 11400000, guid: c61362e852d397b4494493a3b9b58621, type: 2}
+  - {fileID: 11400000, guid: 2d95ba5ad14a1a64b837414c2bf3e84d, type: 2}
+  famousPerDay: 1
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.05

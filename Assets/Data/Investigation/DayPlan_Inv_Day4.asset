@@ -41,6 +41,7 @@ MonoBehaviour:
   allowedNations: []
   legendaryBaseChance: 0
   availableLegendaries: []
+  famousPerDay: 0
   tellCount: 1
   tellChannels: 00000000
   costumeErrorChance: 0

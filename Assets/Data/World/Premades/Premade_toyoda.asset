@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Premade_toyoda
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  id: toyoda
+  displayName: Sakichi Toyoda
+  birthDate: 14 Feb 1867
+  gender: 1
+  trueEra: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  archetype: {fileID: 11400000, guid: 4ecaec54e9ac6c64588519617bd49e3b, type: 2}
+  nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
+  authoredImpacts: []
+  truePlace: {fileID: 0}
+  introLine: 'Priority arrival: Sakichi Toyoda, inventor of looms. He watches your
+    conveyor belt.'
+  recordNote: Inventor of Kosai. Built a loom that stops itself when a thread breaks.
+    Asks why five times.
+  dialogId: dlg_toyoda
+  oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 
+  pulls:
+  - factor: money
+    outcome: company_towns
+    amount: 10
+  - factor: future
+    outcome: cybernetic
+    amount: 4
