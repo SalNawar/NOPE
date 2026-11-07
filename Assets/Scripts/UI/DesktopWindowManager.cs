@@ -127,6 +127,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
         }
         if (config == null)
             Debug.LogWarning("[DesktopWindowManager] No DesktopConfigSO wired: maximise fills the whole desktop and title bars take no double-click. Run Tools > TimeDesk > Build Office UI.", this);
+        PcSkin.Install(gameObject, config); // the PC's look (D2), laid over the culture theme once it has themed the scene
     }
 
     private void OnDestroy()
@@ -348,6 +349,8 @@ public sealed class DesktopWindowManager : MonoBehaviour
                 size.minWidth = Mathf.Min(fit.Width, least);
                 size.preferredWidth = fit.Width;
             }
+            if (show)
+                Label(button, fit.Width);
         }
 
         if (overflowButton == null)
@@ -360,6 +363,41 @@ public sealed class DesktopWindowManager : MonoBehaviour
         if (chevronShown && waiting != null)
             waiting.text = TaskbarStrip.ChevronLabel(_hidden.Count); // a glyph and a count: no key, so a theme refresh never writes a template over it
     }
+
+    /// <summary>
+    /// A shown button's title (UI-14): beside its glyph while the button is at
+    /// least the config's label width (cut with an ellipsis, never mid-letter),
+    /// else the glyph alone, the title in its hover hint; a window with no
+    /// glyph always shows its title.
+    /// </summary>
+    private void Label(TaskbarButton button, float width)
+    {
+        if (button.Label == null)
+            return;
+        bool glyph = button.Glyph != null && button.Glyph.gameObject.activeSelf;
+        bool show = !glyph || PcSkinRules.TaskbarShowsLabel(width, config != null ? config.taskbarLabelLeast : 0f);
+        button.Label.overflowMode = TextOverflowModes.Ellipsis;
+        button.Label.textWrappingMode = TextWrappingModes.NoWrap;
+        if (button.Label.gameObject.activeSelf != show)
+            button.Label.gameObject.SetActive(show);
+        if (button.Glyph == null)
+            return;
+        RectTransform at = button.Glyph.rectTransform;
+        if (_glyphSize <= 0f)
+            _glyphSize = at.sizeDelta.x; // the builder's glyph beside a title
+        float size = show ? _glyphSize : Mathf.Max(_glyphSize, GlyphAloneSize);
+        at.sizeDelta = new Vector2(size, size);
+        at.anchoredPosition = new Vector2(show ? size / 2f + GlyphInset : width / 2f, at.anchoredPosition.y);
+    }
+
+    /// <summary>A taskbar glyph's inset from its button's left edge while the title shows beside it (the builder's PcSize.M).</summary>
+    private const float GlyphInset = 12f;
+
+    /// <summary>A taskbar glyph's size when it shows alone (desktop units): larger than beside a title, so a button with no title still reads.</summary>
+    private const float GlyphAloneSize = 48f;
+
+    /// <summary>The glyph's size beside a title (the built one), read from the first button.</summary>
+    private float _glyphSize;
 
     /// <summary>The chevron: the first window waiting behind it comes forward (restored and focused, so its button shows); each click brings the next.</summary>
     private void BringHiddenForward()
@@ -408,7 +446,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
                 button.Glyph.gameObject.SetActive(sprite != null);
             }
             if (button.Label != null)
-                button.Label.gameObject.SetActive(true); // every button names its window (BUG-21a), beside its glyph
+                button.Label.gameObject.SetActive(true); // a button names its window beside its glyph while it is wide enough (Label, UI-14)
             _buttons.Add(id, button);
         }
 

@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The PC frame (ReStory-style): clicking the PC opens a flat, front-facing
-/// monitor over the left of the office, with the room still visible on the
-/// right. The frame (bezel, close X, power button, the room catcher) is
+/// monitor centred over the office (UI-17), with the room still visible on
+/// both sides. The frame (bezel, power switch, the room catcher) is
 /// overlay UI; the desktop itself shows inside its glass through the frame
 /// camera, which renders only the desktop's layer into the glass's screen
 /// rectangle and is the desktop canvas's event camera, so clicks, dragging
@@ -36,7 +36,7 @@ using UnityEngine.UI;
 /// out. A move reversed while under way (Q or the bezel during the power-on,
 /// a click on the PC during the collapse, the afterglow or the fade out)
 /// picks up where the glass is (CrtPower.Resume), so it never pops. The
-/// bezel, its X and its power button, and the keys (DesktopKeyboard reads
+/// bezel and its power switch, and the keys (DesktopKeyboard reads
 /// MonitorScreen.IsInteractive, not the raycaster), take input from the
 /// press frame; the desktop takes clicks once the picture is whole
 /// (<see cref="PictureMoving"/>: MonitorScreen holds the desktop's raycaster
@@ -61,7 +61,7 @@ public sealed class PcFrame : MonoBehaviour
     /// <summary>The bezel's margin above and below on the screen (canvas units).</summary>
     private const float HeightMargin = 20f;
 
-    /// <summary>The frame's overlay objects (bezel, glass, close X, power button, room catcher), shown while open.</summary>
+    /// <summary>The frame's overlay objects (bezel, glass, power switch, room catcher), shown while open.</summary>
     [SerializeField] private GameObject root;
 
     /// <summary>The glass rectangle on the overlay canvas: the frame camera draws the desktop exactly there (4:3, like the desktop); its parent is the bezel.</summary>
@@ -184,7 +184,7 @@ public sealed class PcFrame : MonoBehaviour
         bool reversing = _moving || _afterglow >= 0 || _leaving;
         _open = open;
         if (_fade != null)
-            _fade.blocksRaycasts = open; // closing, the fading frame (its room catcher, X and power button) takes no click: the first click after Q reaches the room
+            _fade.blocksRaycasts = open; // closing, the fading frame (its room catcher and power switch) takes no click: the first click after Q reaches the room
         if (!open && root != null)
             Sounds.Play(SoundCues.PcOff); // the collapse; opening, the hum plays when it is due (Step)
         bool leaving = false;

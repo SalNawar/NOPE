@@ -52,7 +52,7 @@ public enum DevCheat
     Tutorial,
     /// <summary>The cheat menu: the text's appearance (an AppearanceChoices key) in slot 1 of the next shift (a running shift restarts with it).</summary>
     ForceAppearance,
-    /// <summary>The cheat menu: the hall's time of day, the next of TimeNames (HourOf).</summary>
+    /// <summary>The cheat menu: the time of day the clock, the hall and the city show, the next of TimeNames (HourOf; HourOverride).</summary>
     TimeOfDay,
     /// <summary>Another track's cheat (the text: its Register label).</summary>
     Extra
@@ -72,7 +72,8 @@ public enum DevCheat
 /// warning (<see cref="Warning"/>) the overlay shows for a confirm first; an
 /// item given by a cheat cancels and refunds its pending order (BUG-28c).
 /// Every change a cheat makes to the world is noted (Edit,
-/// RunManager.CheatEdits), so a skip or jump from Home keeps it.
+/// RunManager.CheatEdits), so a skip or jump from Home keeps it; another
+/// track's cheat is noted only when it changed the world (CheatEdits.NoteIfChanged).
 /// </summary>
 public static class DevCheats
 {
@@ -91,7 +92,7 @@ public static class DevCheats
         }
     }
 
-    /// <summary>The time-of-day choice the hall shows now (the one whose hour is DevToolsState.ForcedHour; the clock's when none is).</summary>
+    /// <summary>The time-of-day choice shown now (the one whose hour is DevToolsState.ForcedHour, the one hour override; the clock's when none is).</summary>
     public static int TimeChoice
     {
         get
@@ -253,7 +254,7 @@ public static class DevCheats
         {
             case DevCheat.SkipDay:
                 int skipped = world.day;
-                Say(run.SkipDay() ? $"Day {skipped} skipped: its shift closed, Home's night on the default care, Sleep." : "The run has ended: restart the day or jump back.");
+                Say(run.SkipDay() ? Landed(run, $"Day {skipped} skipped: its shift closed, Home's night on the default care, Sleep.") : "The run has ended: restart the day or jump back.");
                 break;
             case DevCheat.ForceLeader:
                 Say(text == null ? "No leader." : $"Force leader '{text}'.");
@@ -318,7 +319,7 @@ public static class DevCheats
                 break;
             case DevCheat.JumpToDay:
                 int target = RunRoutes.Clamp(number, lib != null ? lib.LastDay : 0);
-                Say(run.JumpToDay(number) ? $"Day {target}: the shift starts." : "The run has ended: jump back or restart the day.");
+                Say(run.JumpToDay(number) ? Landed(run, $"Day {target}: the shift starts.") : "The run has ended: jump back or restart the day.");
                 break;
             case DevCheat.RestartShift:
                 Say($"Day {world.day}: the shift starts over from its morning.");
@@ -374,8 +375,7 @@ public static class DevCheats
                 int on = ForceDay(lib, text, world.day);
                 if (on != world.day)
                 {
-                    Say($"'{CaseFactory.Describe(appearance)}' stands first on day {on}, their day.");
-                    run.JumpToDay(on);
+                    Say(run.JumpToDay(on) ? Landed(run, $"'{CaseFactory.Describe(appearance)}' stands first on day {on}, their day.") : "The run has ended: jump back or restart the day.");
                     break;
                 }
                 Say($"'{CaseFactory.Describe(appearance)}' stands first{(game != null ? ": today's shift starts over with them." : " in the next shift.")}");
@@ -384,7 +384,10 @@ public static class DevCheats
             case DevCheat.TimeOfDay:
                 int next = (TimeChoice + 1) % TimeNames.Length;
                 DevToolsState.ForcedHour = HourOf(next);
-                Say($"Time of day: {TimeNames[next]} (until the next morning).");
+                float? hour = DevToolsState.ForcedHour;
+                Say(hour.HasValue
+                    ? $"Time of day: {TimeNames[next]}: the clock, the hall and the city show {ShiftClock.Format(HourOverride.ShownMinute(hour, 0f))} until the next morning (the shift's own clock runs on)."
+                    : "Time of day: Clock: the clock, the hall and the city show the shift clock's hour.");
                 break;
             case DevCheat.Extra:
                 (string label, Action<RunManager> extra, bool restarts) = Extras.FirstOrDefault(e => e.label == text);
@@ -396,7 +399,7 @@ public static class DevCheats
                 if (restarts)
                     extra(run);   // its world change comes with its own restart (a route), or none outside a shift: nothing to replay
                 else
-                    Edit(run, label, w => run.RunOn(w, extra));
+                    run.CheatEdits.NoteIfChanged(label, w => run.RunOn(w, extra), run.World, JsonUtility.ToJson);   // replayed from Home only when it changed the world (the lens), never a setting or a punch twice
                 Say($"{label}: done.");
                 break;
         }
@@ -413,6 +416,10 @@ public static class DevCheats
         edit(run.World);
         run.CheatEdits.Note(label, edit);
     }
+
+    /// <summary>The line of a day route that ran: <paramref name="landed"/>, or the ending the route reached on the way (RewindWarnings.Landed: a jump or a skip whose nights end the run, the pet taken or the money gone).</summary>
+    private static string Landed(RunManager run, string landed) =>
+        RewindWarnings.Landed(landed, run.World != null ? run.World.endingId : null, run.World != null ? run.World.day : 0);
 
     /// <summary>A switch that applies from a shift's start: a running shift starts over with it (RunManager.RestartShift).</summary>
     private static void RestartIfInShift(RunManager run, GameManager game)

@@ -42,6 +42,13 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The chevron's width at the strip's end (the windows that do not fit wait behind it).</summary>
     [Min(1f)] public float taskbarChevronWidth = 64f;
 
+    /// <summary>The narrowest window button that still shows its title beside its glyph (UI-14); a narrower one shows the glyph only, its title in its hover hint, so a title is never cut mid-letter (PcSkinRules.TaskbarShowsLabel).</summary>
+    [Min(1f)] public float taskbarLabelLeast = 170f;
+
+    [Header("The look (D2: the PC as a cyberpunk 80s retro sci-fi terminal)")]
+    /// <summary>The PC's look: its theme asset (Assets/Data/UI/PcTheme_Cyberpunk.asset; PcTheme_Cel.asset gives the cel kit's look). PcSkin applies it at run time; null keeps the look the builder built.</summary>
+    public PcThemeSO theme;
+
     [Header("Desktop icons (the PC redesign DK2-DK5; desktop units)")]
     /// <summary>An icon's cell: the glyph over its label.</summary>
     public Vector2 iconCellSize = new Vector2(188f, 156f);
@@ -97,8 +104,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Notes window's size: the reading apps' one size.</summary>
     public Vector2 notesWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Settings window's size (1000 u tall: the desktop's 1080 less the 72 u taskbar and a margin; every row fits, the Reduce flashing row in the place of the Machine close-ups row that P0-C cut, the locked language line's three lines and the note's three, in the culture fonts too).</summary>
-    public Vector2 settingsWindowSize = new Vector2(800f, 1000f);
+    /// <summary>The Settings window's size: two columns (UI-16: the PC's own groups on the left, Sound, Display and Quit game on the right), 1340 x 900 u, inside the desktop above the 72 u taskbar with a margin (UI-15); every row fits, the locked language line's three lines and the note's three, in the culture fonts too.</summary>
+    public Vector2 settingsWindowSize = new Vector2(1340f, 900f);
 
     /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
     public Vector2 portalsWindowSize = new Vector2(880f, 600f);

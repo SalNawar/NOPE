@@ -210,6 +210,16 @@ public class CheatRoutingTests
     }
 
     [Test]
+    public void ARoutesLine_NamesTheEndingItReachedOnTheWay()
+    {
+        // cheats-fix: a jump forward whose nights cost the pet ("pet_taken" on day 4) said "Day 5: the shift starts." over the evening edition.
+        Assert.AreEqual("Day 5: the shift starts.", RewindWarnings.Landed("Day 5: the shift starts.", null, 5));
+        Assert.AreEqual("Day 5: the shift starts.", RewindWarnings.Landed("Day 5: the shift starts.", "", 5));
+        Assert.AreEqual("The run ended on day 4 on the way: 'pet_taken' (its evening edition shows). Jump back or restart the day.",
+                        RewindWarnings.Landed("Day 5: the shift starts.", "pet_taken", 4));
+    }
+
+    [Test]
     public void ASlipOpens_OnlyWhereSlipsAreShown()
     {
         Assert.IsTrue(EndShiftRule.SlipOpens(citationIssued: true, slipShown: true));

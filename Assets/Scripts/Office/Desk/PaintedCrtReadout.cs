@@ -235,11 +235,12 @@ public sealed class PaintedCrtReadout : MonoBehaviour
         }
 
         ShiftClock clock = _clock != null ? _clock.Clock : null;
-        int minute = clock != null ? Mathf.FloorToInt(clock.CurrentMinute) : -1;
+        float clockMinute = clock != null ? _clock.ShownMinute : -1f;
+        int minute = clock != null ? Mathf.FloorToInt(clockMinute) : -1;
         if (minute != _shownMinute)
         {
             _shownMinute = minute;
-            _time.text = clock != null ? ShiftClock.Format(clock.CurrentMinute) : string.Empty;
+            _time.text = clock != null ? ShiftClock.Format(clockMinute) : string.Empty;
         }
 
         WorldState world = RunManager.HasInstance ? RunManager.Instance.World : null;

@@ -1,0 +1,142 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d67ba323d4040b59f8b151ff8154eec, type: 3}
+  m_Name: PcTheme_Cyberpunk
+  m_EditorClassIdentifier: Assembly-CSharp::PcThemeSO
+  look: 1
+  baseKit: {fileID: 11400000, guid: 293fe75c7d4472440b654c55ca31e277, type: 2}
+  glass: {r: 0.039, g: 0.063, b: 0.125, a: 1}
+  glassRaised: {r: 0.071, g: 0.11, b: 0.2, a: 1}
+  glassDeep: {r: 0.016, g: 0.027, b: 0.055, a: 1}
+  phosphor: {r: 0.239, g: 0.949, b: 1, a: 1}
+  accent: {r: 1, g: 0.243, b: 0.659, a: 1}
+  amber: {r: 1, g: 0.71, b: 0.278, a: 1}
+  danger: {r: 1, g: 0.329, b: 0.408, a: 1}
+  ink: {r: 0.867, g: 0.969, b: 1, a: 1}
+  inkMuted: {r: 0.541, g: 0.655, b: 0.741, a: 1}
+  edge: {r: 0.141, g: 0.251, b: 0.369, a: 1}
+  cultureAccent: 0.65
+  cornerRadius: 10
+  edgeWidth: 2
+  haloWidth: 18
+  haloStrength: 0.55
+  bezel: {r: 0.075, g: 0.09, b: 0.125, a: 1}
+  bezelLow: {r: 0.035, g: 0.043, b: 0.067, a: 1}
+  bezelLit: {r: 0.239, g: 0.949, b: 1, a: 0.85}
+  gasket: {r: 0.008, g: 0.012, b: 0.024, a: 1}
+  bezelRadius: 22
+  gasketWidth: 9
+  scanlineStrength: 0.12
+  scanlinePitch: 3
+  scanlineSpeed: 10
+  bloomStrength: 0.05
+  vignetteStrength: 0.35
+  wallpaper: {fileID: 21300000, guid: 2ac73d775a814cff80890d0236c18714, type: 3}
+  wallpaperTint: 0.3
+  powerGlyph: {fileID: 21300000, guid: ec36623699ad4e87be5dc82c035c9086, type: 3}
+  glyphs:
+  - name: glyph_back
+    sprite: {fileID: 21300000, guid: 680f1921a0374c8787d593e0bd71c91a, type: 3}
+  - name: glyph_clock
+    sprite: {fileID: 21300000, guid: 76267d6fb77d43e58a4f59b0bb4274b7, type: 3}
+  - name: glyph_cross
+    sprite: {fileID: 21300000, guid: 7e1bea866fd94cf7b0253116f4aa4a35, type: 3}
+  - name: glyph_down
+    sprite: {fileID: 21300000, guid: 70d1b2b3917a4da995fafe5f1f5d5b0a, type: 3}
+  - name: glyph_max
+    sprite: {fileID: 21300000, guid: d0399470b2af4cdb99c9493cca484b9c, type: 3}
+  - name: glyph_menu
+    sprite: {fileID: 21300000, guid: 0ea4b6546a284ca29a985c5e4594eac7, type: 3}
+  - name: glyph_min
+    sprite: {fileID: 21300000, guid: e4aed68eb8c4464fac31e844de1e1014, type: 3}
+  - name: glyph_padlock
+    sprite: {fileID: 21300000, guid: 2a614e85f495413092913d63d04701d9, type: 3}
+  - name: glyph_plus
+    sprite: {fileID: 21300000, guid: 1cdb6a083be64544b895bdf246470ea3, type: 3}
+  - name: glyph_search
+    sprite: {fileID: 21300000, guid: 6b416ba746c94e6da79e331fd008491a, type: 3}
+  - name: glyph_tick
+    sprite: {fileID: 21300000, guid: 81ff9963d4a44b78aab710050aa8c54a, type: 3}
+  - name: glyph_up
+    sprite: {fileID: 21300000, guid: bf214a774f944097b46113d9689a8b32, type: 3}
+  - name: tile_ball_hover
+    sprite: {fileID: 21300000, guid: c6242492974b497d977563112b987c7c, type: 3}
+  - name: tile_ball_locked
+    sprite: {fileID: 21300000, guid: 657b5adfb5fd4bdba9171de916ed52b9, type: 3}
+  - name: tile_ball_rest
+    sprite: {fileID: 21300000, guid: 3365c2a237944564a93e59290711273f, type: 3}
+  - name: tile_crate_hover
+    sprite: {fileID: 21300000, guid: b709bcf1abc8493ba05936cc724bc5c5, type: 3}
+  - name: tile_crate_locked
+    sprite: {fileID: 21300000, guid: 89d32a7bd0fa4829b2e4fe1823b5c83e, type: 3}
+  - name: tile_crate_rest
+    sprite: {fileID: 21300000, guid: d82c822da6194233941330df2d0a6cc4, type: 3}
+  - name: tile_gear_hover
+    sprite: {fileID: 21300000, guid: 76db8be535cf4f598f8bf333e9885cc0, type: 3}
+  - name: tile_gear_locked
+    sprite: {fileID: 21300000, guid: a879747edfd1410890d7429a5c306634, type: 3}
+  - name: tile_gear_rest
+    sprite: {fileID: 21300000, guid: b31a9bae926743ffb72919e6cd42c25b, type: 3}
+  - name: tile_globe_hover
+    sprite: {fileID: 21300000, guid: 1487052d8c9a4825996d0abc447af27a, type: 3}
+  - name: tile_globe_locked
+    sprite: {fileID: 21300000, guid: b6cd4d42a7964b2c9900da7eab637613, type: 3}
+  - name: tile_globe_rest
+    sprite: {fileID: 21300000, guid: e7a5e0645e20466bb87f1be2eba1a93d, type: 3}
+  - name: tile_idcard_hover
+    sprite: {fileID: 21300000, guid: 38e1ae3e23de49c68818b02e5be35264, type: 3}
+  - name: tile_idcard_locked
+    sprite: {fileID: 21300000, guid: d66fc5396b314b6da1472569bfd10bfc, type: 3}
+  - name: tile_idcard_rest
+    sprite: {fileID: 21300000, guid: bcc4783ba9c7449bab6617fc2882187d, type: 3}
+  - name: tile_lamp_hover
+    sprite: {fileID: 21300000, guid: 998bd11cf8754e13ab646e7ac1a00796, type: 3}
+  - name: tile_lamp_locked
+    sprite: {fileID: 21300000, guid: e8f8472dd8d54bbc8b6e2a4d7be53f9d, type: 3}
+  - name: tile_lamp_rest
+    sprite: {fileID: 21300000, guid: 3d1861c3f46b4408935d0140ddf6596c, type: 3}
+  - name: tile_magnifier_hover
+    sprite: {fileID: 21300000, guid: 2f106611d8dd42f99ba10ef49edbb49c, type: 3}
+  - name: tile_magnifier_locked
+    sprite: {fileID: 21300000, guid: b257cb9f61024e018c366384d7a07d31, type: 3}
+  - name: tile_magnifier_rest
+    sprite: {fileID: 21300000, guid: 971925318aca417f8d0eb9fff1da0821, type: 3}
+  - name: tile_mail_hover
+    sprite: {fileID: 21300000, guid: d09897e61402402c9dead5df71c9c256, type: 3}
+  - name: tile_mail_locked
+    sprite: {fileID: 21300000, guid: c2f6f46dacd14dce8ceb093380b0f69b, type: 3}
+  - name: tile_mail_rest
+    sprite: {fileID: 21300000, guid: 1623893693c241cca89a2fe7039780ce, type: 3}
+  - name: tile_notes_hover
+    sprite: {fileID: 21300000, guid: 2ce816617cd0430fb732a61795517e79, type: 3}
+  - name: tile_notes_locked
+    sprite: {fileID: 21300000, guid: 48fd9f8c279a4bd6b2089ce47a7799f8, type: 3}
+  - name: tile_notes_rest
+    sprite: {fileID: 21300000, guid: 37c73000782747d9879034e5d67913c3, type: 3}
+  - name: tile_person_hover
+    sprite: {fileID: 21300000, guid: 002f8f7b54874d3b9f53d966618d74a3, type: 3}
+  - name: tile_person_locked
+    sprite: {fileID: 21300000, guid: 2278e9161b66448583c78aeedb34b1b2, type: 3}
+  - name: tile_person_rest
+    sprite: {fileID: 21300000, guid: 362e9bd718574a31bec59acecc4b3336, type: 3}
+  - name: tile_portal_hover
+    sprite: {fileID: 21300000, guid: 986de6bd7dd740bab8b34c5a03d04233, type: 3}
+  - name: tile_portal_locked
+    sprite: {fileID: 21300000, guid: 0e550e4f2f2e43dd8ee146ea1efb80be, type: 3}
+  - name: tile_portal_rest
+    sprite: {fileID: 21300000, guid: df69ee18c0ca4ef8ba9c121bcc202102, type: 3}
+  - name: tile_speech_hover
+    sprite: {fileID: 21300000, guid: 3b836f8e028a4e38a554bf031fc8fcdb, type: 3}
+  - name: tile_speech_locked
+    sprite: {fileID: 21300000, guid: 0703086cbb584c778dd97a97307ced8f, type: 3}
+  - name: tile_speech_rest
+    sprite: {fileID: 21300000, guid: a19aaebe3f084140b716865e764b52ae, type: 3}

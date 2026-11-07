@@ -20,7 +20,7 @@ A wrong period (another destination's period jack, or a period nobody at that de
 - "the power you will never move it you just connect it and that's it what's the point of it" (so power became the scarce runner: 2 power cords for 5 modules).
 - "20s to calibrate", calibration in real seconds; the fuse pop costs time only; "if many people go at once maybe you get a bonus payout".
 - "a minigame that should take seconds to figure out" (2026-10-21).
-- The view: Esc opens Settings everywhere (R3/R4); here Esc backs out exactly as it does from the city view, which is what the office does today.
+- The view: Esc backs out of the board first, exactly as from the city view (D13, UI-23, 2026-11-07); from the plain desk Esc opens Settings (R3/R4).
 
 ## Decisions
 

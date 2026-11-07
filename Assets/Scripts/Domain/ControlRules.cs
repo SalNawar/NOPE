@@ -168,11 +168,20 @@ public enum BackOutStep
 /// plug), a key that changes the view (TAB, Q, A, D, S, F1) first lets go of
 /// it and does nothing else, as a right-click or Esc does: no view ever
 /// changes under a held thing, and nothing held is committed by a key.
+/// Esc backs out as a right-click does (D13, UI-23; <see cref="EscBacksOutFirst"/>,
+/// GameConfigSO.escBacksOutFirst): with a mode open the first Esc leaves it;
+/// from the plain desk, with nothing to back out of, Esc opens Settings
+/// (EscapeChain, PauseMenu). The PC is the one mode Esc never leaves (R3: Q
+/// or the bezel): there Esc closes a menu, a field or the front window first
+/// (never Settings), then opens Settings, which stays (PcBackOut.ClosesFront).
 /// DeskCard is the F1 card's desk section, printed from the same constants
 /// as the tabs' hints. Pure; tested headless; OfficeControls applies it.
 /// </summary>
 public static class ControlRules
 {
+    /// <summary>The default of GameConfigSO.escBacksOutFirst (D13, UI-23): true, the first Esc backs out of an open mode and Esc opens Settings only from the plain desk; false, the rule of 2026-10-20 (Esc keeps every mode and opens Settings).</summary>
+    public const bool EscBacksOutFirst = true;
+
     /// <summary>The inspect key as printed on the red button and the card.</summary>
     public const string InspectKey = "SPACE";
 

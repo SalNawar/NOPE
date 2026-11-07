@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d67ba323d4040b59f8b151ff8154eec, type: 3}
+  m_Name: PcTheme_Cel
+  m_EditorClassIdentifier: Assembly-CSharp::PcThemeSO
+  look: 0
+  baseKit: {fileID: 11400000, guid: 293fe75c7d4472440b654c55ca31e277, type: 2}
+  glass: {r: 0.039, g: 0.063, b: 0.125, a: 1}
+  glassRaised: {r: 0.071, g: 0.11, b: 0.2, a: 1}
+  glassDeep: {r: 0.016, g: 0.027, b: 0.055, a: 1}
+  phosphor: {r: 0.239, g: 0.949, b: 1, a: 1}
+  accent: {r: 1, g: 0.243, b: 0.659, a: 1}
+  amber: {r: 1, g: 0.71, b: 0.278, a: 1}
+  danger: {r: 1, g: 0.329, b: 0.408, a: 1}
+  ink: {r: 0.867, g: 0.969, b: 1, a: 1}
+  inkMuted: {r: 0.541, g: 0.655, b: 0.741, a: 1}
+  edge: {r: 0.141, g: 0.251, b: 0.369, a: 1}
+  cultureAccent: 0.65
+  cornerRadius: 10
+  edgeWidth: 2
+  haloWidth: 18
+  haloStrength: 0.55
+  bezel: {r: 0.075, g: 0.09, b: 0.125, a: 1}
+  bezelLow: {r: 0.035, g: 0.043, b: 0.067, a: 1}
+  bezelLit: {r: 0.239, g: 0.949, b: 1, a: 0.85}
+  gasket: {r: 0.008, g: 0.012, b: 0.024, a: 1}
+  bezelRadius: 22
+  gasketWidth: 9
+  scanlineStrength: 0.12
+  scanlinePitch: 3
+  scanlineSpeed: 10
+  bloomStrength: 0.05
+  vignetteStrength: 0.35
+  wallpaper: {fileID: 0}
+  wallpaperTint: 0.3
+  powerGlyph: {fileID: 0}
+  glyphs: []
