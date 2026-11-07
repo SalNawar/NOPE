@@ -254,7 +254,7 @@ public static class DevCheats
         {
             case DevCheat.SkipDay:
                 int skipped = world.day;
-                Say(run.SkipDay() ? $"Day {skipped} skipped: its shift closed, Home's night on the default care, Sleep." : "The run has ended: restart the day or jump back.");
+                Say(run.SkipDay() ? Landed(run, $"Day {skipped} skipped: its shift closed, Home's night on the default care, Sleep.") : "The run has ended: restart the day or jump back.");
                 break;
             case DevCheat.ForceLeader:
                 Say(text == null ? "No leader." : $"Force leader '{text}'.");
@@ -319,7 +319,7 @@ public static class DevCheats
                 break;
             case DevCheat.JumpToDay:
                 int target = RunRoutes.Clamp(number, lib != null ? lib.LastDay : 0);
-                Say(run.JumpToDay(number) ? $"Day {target}: the shift starts." : "The run has ended: jump back or restart the day.");
+                Say(run.JumpToDay(number) ? Landed(run, $"Day {target}: the shift starts.") : "The run has ended: jump back or restart the day.");
                 break;
             case DevCheat.RestartShift:
                 Say($"Day {world.day}: the shift starts over from its morning.");
@@ -375,8 +375,7 @@ public static class DevCheats
                 int on = ForceDay(lib, text, world.day);
                 if (on != world.day)
                 {
-                    Say($"'{CaseFactory.Describe(appearance)}' stands first on day {on}, their day.");
-                    run.JumpToDay(on);
+                    Say(run.JumpToDay(on) ? Landed(run, $"'{CaseFactory.Describe(appearance)}' stands first on day {on}, their day.") : "The run has ended: jump back or restart the day.");
                     break;
                 }
                 Say($"'{CaseFactory.Describe(appearance)}' stands first{(game != null ? ": today's shift starts over with them." : " in the next shift.")}");
@@ -417,6 +416,10 @@ public static class DevCheats
         edit(run.World);
         run.CheatEdits.Note(label, edit);
     }
+
+    /// <summary>The line of a day route that ran: <paramref name="landed"/>, or the ending the route reached on the way (RewindWarnings.Landed: a jump or a skip whose nights end the run, the pet taken or the money gone).</summary>
+    private static string Landed(RunManager run, string landed) =>
+        RewindWarnings.Landed(landed, run.World != null ? run.World.endingId : null, run.World != null ? run.World.day : 0);
 
     /// <summary>A switch that applies from a shift's start: a running shift starts over with it (RunManager.RestartShift).</summary>
     private static void RestartIfInShift(RunManager run, GameManager game)

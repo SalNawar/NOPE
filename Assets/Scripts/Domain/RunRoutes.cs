@@ -162,6 +162,17 @@ public static class RewindWarnings
         $"Restart day {day} from its morning? Lost: {decisions} decision(s) today, {moneyChange:+0;-0;0} credits since the morning, " +
         $"{citations} citation(s), and every cheat change made since the morning.";
 
+    /// <summary>
+    /// What a day route says once it ran (DevCheats' line under the menu):
+    /// <paramref name="landed"/> when the run goes on, else the ending it
+    /// reached on the way (<paramref name="endingId"/>, on
+    /// <paramref name="day"/>: CheatRoute ends the run there, and the title
+    /// shows its evening edition), so the line never says a day starts over
+    /// an ending (cheats-fix: a jump whose nights cost the pet).
+    /// </summary>
+    public static string Landed(string landed, string endingId, int day) =>
+        string.IsNullOrEmpty(endingId) ? landed : $"The run ended on day {day} on the way: '{endingId}' (its evening edition shows). Jump back or restart the day.";
+
     /// <summary>A jump from <paramref name="today"/> back to an earlier <paramref name="target"/> (a jump to today is a restart: Restart's warning): the days from the target to today as played are lost; the run replays from day 1 with its seed and pet.</summary>
     public static string JumpBack(int today, int target) =>
         $"Jump back to day {target}? Lost: days {target}-{today} as played. The run replays from day 1 with its seed and pet, each day's travellers decided correctly and each night on the default care.";
