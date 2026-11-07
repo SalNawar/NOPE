@@ -1,0 +1,721 @@
+{
+  "name": "qa_desk_controls",
+  "owner": "QA-DESK",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "qa-desk-controls (night 2026-11-07, Saleh's item 14: \"things should never go some palce you dont want it to\"): every drag kind on the desk at 1920x1080 with a short drag, a long drag, a flick and a drop at each zone edge (the counter, the mat's edge, the tray, the bottom edge). It measures, it does not fix (D32). drop.<name>: the root's move from the release to the rest (px at 1080p, max 8: DOC-HANDLE D1). Five drops are red on purpose, on drop and restTrace: fo_counter and pa_counter (BUGS N-qa-desk-controls-02, the refused counter push) and fo_tray, pa_tray, d12_fo_tray (BUGS N-qa-desk-controls-01, the rail slide). They stay red until those rows close. restTrace.<name>: the desk's own rest trace (rests.tsv: footprint, area, keep-outs, move). counterDrag.<name>: the hold and the rest of a counter paper (counterdrag.tsv). stampHold: a carried dater backs out on a right-click and on Esc."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_pass_office_flick",
+      "text": "office",
+      "x": 0,
+      "y": 0,
+      "path": "Flick",
+      "target2": "m:0,-0.05"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "restTrace",
+      "text": "on"
+    },
+    {
+      "op": "still",
+      "name": "d1_reading_start"
+    },
+    {
+      "op": "recStart",
+      "name": "d1_folder"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_short_mid",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.5,
+      "y2": 0.45,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_short_mid",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_short_nudge",
+      "path": "Slow",
+      "target": "Rulebook",
+      "x2": 0.53,
+      "y2": 0.42,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_short_nudge",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_long_slow_left",
+      "path": "Slow",
+      "target": "Rulebook",
+      "x2": 0.26,
+      "y2": 0.31,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_long_slow_left",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_flick_right",
+      "path": "Flick",
+      "target": "Rulebook",
+      "x2": 0.66,
+      "y2": 0.45,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_flick_right",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_fast_mid",
+      "path": "Fast",
+      "target": "Rulebook",
+      "x2": 0.5,
+      "y2": 0.4,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_fast_mid",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_edge_bottom",
+      "path": "Edge",
+      "target": "Rulebook",
+      "x2": 0.55,
+      "y2": 0.02,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_edge_bottom",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_mat_bottom_lip",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.5,
+      "y2": 0.1,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_mat_bottom_lip",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_counter",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.4,
+      "y2": 0.86,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_counter",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_tray",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.8225,
+      "y2": 0.4383,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_tray",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "fo_back_mid",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.45,
+      "y2": 0.45,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "fo_back_mid",
+      "f": 8
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "recStart",
+      "name": "d1_passport"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_short_mid",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.62,
+      "y2": 0.5,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_short_mid",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_short_nudge",
+      "path": "Slow",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.65,
+      "y2": 0.47,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_short_nudge",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_long_slow",
+      "path": "Slow",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.3,
+      "y2": 0.3,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_long_slow",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_flick",
+      "path": "Flick",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.7,
+      "y2": 0.4,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_flick",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_fast",
+      "path": "Fast",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.6,
+      "y2": 0.35,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_fast",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_edge_bottom",
+      "path": "Edge",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.62,
+      "y2": 0.02,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_edge_bottom",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_mat_bottom_lip",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.62,
+      "y2": 0.1,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_mat_bottom_lip",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_over_folder",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.47,
+      "y2": 0.42,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_over_folder",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_tray",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.8225,
+      "y2": 0.4383,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_tray",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_back_mid",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.66,
+      "y2": 0.55,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_back_mid",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "pa_counter",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.55,
+      "y2": 0.86,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "pa_counter",
+      "f": 8
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d1_reading_end"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "recStart",
+      "name": "d1_office"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_short",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.45,
+      "y2": 0.15,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_short",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_long_slow",
+      "path": "Slow",
+      "target": "Rulebook",
+      "x2": 0.36,
+      "y2": 0.1,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_long_slow",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_flick",
+      "path": "Flick",
+      "target": "Rulebook",
+      "x2": 0.55,
+      "y2": 0.2,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_flick",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_fo_far_edge",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.45,
+      "y2": 0.27,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_fo_far_edge",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_short",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.58,
+      "y2": 0.15,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_short",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_long_slow",
+      "path": "Slow",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.66,
+      "y2": 0.1,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_long_slow",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_flick",
+      "path": "Flick",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.5,
+      "y2": 0.2,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_flick",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "of_pa_far_edge",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.58,
+      "y2": 0.27,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "of_pa_far_edge",
+      "f": 8
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d1_office_block_end"
+    },
+    {
+      "op": "restTrace",
+      "text": "off"
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "d1_office_end"
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "cheat",
+      "name": "UnlockEverything",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "still",
+      "name": "d12_office_start"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_idx0_flick",
+      "text": "reading",
+      "target": "index:0",
+      "x": 0,
+      "y": 0,
+      "path": "Flick",
+      "target2": "m:0.25,0.05"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_idx1_slow",
+      "text": "reading",
+      "target": "index:1",
+      "x": 0,
+      "y": 0,
+      "path": "Slow",
+      "target2": "m:-0.25,0.0"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_idx2_fast",
+      "text": "reading",
+      "target": "index:2",
+      "x": 0,
+      "y": 0,
+      "path": "Fast",
+      "target2": "m:0.1,0.15"
+    },
+    {
+      "op": "still",
+      "name": "d12_after_counter"
+    },
+    {
+      "op": "restTrace",
+      "text": "on"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "d12_fo_short",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.5,
+      "y2": 0.45,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "d12_fo_short",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "d12_fo_flick",
+      "path": "Flick",
+      "target": "Rulebook",
+      "x2": 0.3,
+      "y2": 0.35,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "d12_fo_flick",
+      "f": 8
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "d12_fo_tray",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.8225,
+      "y2": 0.4383,
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "name": "d12_fo_tray",
+      "f": 8
+    },
+    {
+      "op": "restTrace",
+      "text": "off"
+    },
+    {
+      "op": "still",
+      "name": "d12_end"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "RightClick",
+      "name": "d12_RightClick_A_reading"
+    },
+    {
+      "op": "stampHold",
+      "text": "Approved",
+      "key": "Escape",
+      "name": "d12_Escape_A_reading"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "RightClick",
+      "name": "d12_RightClick_D_office"
+    },
+    {
+      "op": "stampHold",
+      "text": "Denied",
+      "key": "Escape",
+      "name": "d12_Escape_D_office"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}
