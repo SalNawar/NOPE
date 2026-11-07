@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "CAM: every resize is the rig's own (camres). Both fixed poses frame what they must at A1, A2, 16:10, A3, A4 on days 1 and 12, home by home, each leg judged on the view it names and red when another is on (camframe), with the cap height at the reading pose reported for DOC-LOOK at A1 and A2 on day 12 (red outside the reading view), once the scripted day has laid its papers on the desk (camcap: day 1's handed papers wait on the counter, so a day-1 leg would measure nothing); the controls fade in over the last third of a move, at once when motion is still (camfade: full motion, Reduced Motion, a Motion intensity of 0); no view change while something is held, each refused on its own, from the office, the reading view and the city (camhold); the city's sweep and pointer parallax at most 1 px a 30 fps frame, the look landing within 2 s of an edge-to-edge pointer move, no bars, a click and Q return, F1 opens the PC with its keys card (camparallax, A1 and A4); each shake moment draws its own row and nothing else shakes, none when motion is still (camshake); the scripted day 12 (every counter paper dropped, every other one from the office view; the Auto-Feed tray clicked and its stack scanned; 10 scans and 5 chip reads, each finished; the intercom's wheel opened and a ring question answered; the Rolodex's right-click the one gap) with every landing with the view off tilting in once in its frame, none without a landing, and nothing turning while holding, counted from the views' own turns (camplay, camtilts); every camera move tagged (the run's camera assertion and each cameraCheck)."
+      "text": "CAM: every resize is the rig's own (camres). Both fixed poses frame what they must at A1, A2, 16:10, A3, A4 on days 1 and 12, home by home, each leg judged on the view it names and red when another is on (camframe), with the cap height at the reading pose reported for DOC-LOOK at A1 and A2 on day 12 (red outside the reading view), once the scripted day has laid its papers on the desk (camcap: day 1's handed papers wait on the counter, so a day-1 leg would measure nothing); the controls fade in over the last third of a move, at once when motion is still (camfade: full motion, Reduced Motion, a Motion intensity of 0); no view change while something is held, each refused on its own, from the office, the reading view and the city (camhold); the city's sweep and pointer parallax at most 1 px a 30 fps frame, the look landing within 2 s of an edge-to-edge pointer move, no bars, a click and Q return, F1 opens the PC with its keys card (camparallax, A1 and A4); each shake moment draws its own row and nothing else shakes, none when motion is still (camshake); the scripted day 12 (every counter paper dropped, every other one from the office view; the Auto-Feed tray clicked and its stack scanned; 10 scans and 5 chip reads, each finished; the intercom's wheel opened and a ring question answered; the Rolodex's right-click the one gap) with every landing with the view off tilting in once in its frame, none without a landing, and nothing turning while holding, counted from the views' own turns (camplay, camtilts); every camera move tagged (the run's camera assertion and each cameraCheck). CAM-LEGIBILITY: camcap also at A4 (1280x1024) on day 12, each leg writing its texts table; camtraveller reports the traveller's height on the office frame (D16: 29 to 32 % at 16:9)."
     },
     {
       "op": "title"
@@ -49,6 +49,10 @@
       "op": "camframe",
       "target": "office",
       "name": "a1_d1_office"
+    },
+    {
+      "op": "camtraveller",
+      "name": "a1_d1"
     },
     {
       "op": "call",
@@ -137,6 +141,10 @@
       "name": "a16x10_d1_office"
     },
     {
+      "op": "camtraveller",
+      "name": "a16x10_d1"
+    },
+    {
       "op": "call",
       "target": "DeskView.Toggle"
     },
@@ -180,6 +188,10 @@
       "name": "a3_d1_office"
     },
     {
+      "op": "camtraveller",
+      "name": "a3_d1"
+    },
+    {
       "op": "call",
       "target": "DeskView.Toggle"
     },
@@ -221,6 +233,10 @@
       "op": "camframe",
       "target": "office",
       "name": "a4_d1_office"
+    },
+    {
+      "op": "camtraveller",
+      "name": "a4_d1"
     },
     {
       "op": "call",
@@ -586,6 +602,10 @@
       "name": "a1_d12_office"
     },
     {
+      "op": "camtraveller",
+      "name": "a1_d12"
+    },
+    {
       "op": "call",
       "target": "DeskView.Toggle"
     },
@@ -766,6 +786,10 @@
       "name": "a4_d12_office"
     },
     {
+      "op": "camtraveller",
+      "name": "a4_d12"
+    },
+    {
       "op": "call",
       "target": "DeskView.Toggle"
     },
@@ -781,6 +805,10 @@
       "op": "camframe",
       "target": "reading",
       "name": "a4_d12_reading"
+    },
+    {
+      "op": "camcap",
+      "name": "a4_d12"
     },
     {
       "op": "call",
