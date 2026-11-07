@@ -1,0 +1,888 @@
+{
+  "name": "qa_endings",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "The four endings by play (qa-endings-saves, 2026-11-07; GATE-09; Saleh 2026-09-29: 'we dont make judgements ... the outcome depends on your choices', no ranking, no Retirement): Fired (stability 0, then a verdict), Bankrupt (Skip day, rent and no pay, until the wallet passes the threshold), the Welfare Office (the wallet held at the rent, so the pet goes unfed, until welfareNights nights at the worst), the world report (day 21, End Shift, Home, Sleep). Each: the evening edition, the Title's ending page and the world page, a still and every text read (qaTexts: no em dash, no cut text, no judgement word) at 1920x1080 and 1280x1024; the Fired pages and the world report's page at 2560x1080 and 1920x1200 too."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "cheat",
+      "name": "SetStability",
+      "f": 0
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "flowPayoff",
+      "f": 60
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "fired_report"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_report",
+      "n": 0
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "flowEdition",
+      "f": 30
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_edition_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_edition_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_edition_A3",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_edition_A5",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "click",
+      "target": "EveningEdition/Page/Buttons/TitleButton"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_page_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_page_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_page_A3",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_page_A5",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.endingWorldButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_world"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_world_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "fired_world"
+    },
+    {
+      "op": "qaTexts",
+      "name": "fired_world_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.worldNewRunButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "adopt_after_ending"
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.adoptButton"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "qaSkipUntil",
+      "name": "bankrupt",
+      "n": 12,
+      "f": -1,
+      "text": "bankrupt"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "flowEdition",
+      "f": 30
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "bankrupt_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "bankrupt_edition_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "bankrupt_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "bankrupt_edition_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "click",
+      "target": "EveningEdition/Page/Buttons/TitleButton"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "bankrupt_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "bankrupt_page_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "bankrupt_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "bankrupt_page_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.endingWorldButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "bankrupt_world"
+    },
+    {
+      "op": "qaTexts",
+      "name": "bankrupt_world_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "bankrupt_world"
+    },
+    {
+      "op": "qaTexts",
+      "name": "bankrupt_world_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.worldNewRunButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "adopt_after_ending"
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.adoptButton"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "qaSkipUntil",
+      "name": "welfare",
+      "n": 12,
+      "f": 30,
+      "text": "pet_taken"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "flowEdition",
+      "f": 30
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "welfare_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "welfare_edition_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "welfare_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "welfare_edition_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "click",
+      "target": "EveningEdition/Page/Buttons/TitleButton"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "welfare_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "welfare_page_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "welfare_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "welfare_page_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.endingWorldButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "welfare_world"
+    },
+    {
+      "op": "qaTexts",
+      "name": "welfare_world_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "welfare_world"
+    },
+    {
+      "op": "qaTexts",
+      "name": "welfare_world_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.worldNewRunButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "adopt_after_ending"
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.adoptButton"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 21
+    },
+    {
+      "op": "flowSettled"
+    },
+    {
+      "op": "waitOffice",
+      "n": 21,
+      "f": 400
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 60
+    },
+    {
+      "op": "still",
+      "name": "d21_report"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "d21_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "flowEdition",
+      "f": 30
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "world_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "world_edition_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "world_edition"
+    },
+    {
+      "op": "qaTexts",
+      "name": "world_edition_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "click",
+      "target": "EveningEdition/Page/Buttons/TitleButton"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "world_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "world_page_A1",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "world_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "world_page_A4",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "world_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "world_page_A3",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1200
+    },
+    {
+      "op": "wait",
+      "f": 0.6
+    },
+    {
+      "op": "still",
+      "name": "world_page"
+    },
+    {
+      "op": "qaTexts",
+      "name": "world_page_A5",
+      "n": 1,
+      "text": "ending"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    }
+  ]
+}

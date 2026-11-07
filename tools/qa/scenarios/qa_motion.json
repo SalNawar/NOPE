@@ -1,0 +1,412 @@
+{
+  "name": "qa_motion",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "Reduced Motion (qa-endings-saves, 2026-11-07): with it on, day 1's first traveller, the Tab tilt, the PC open, the board turn and Home's night; each recorded 1.5 s from the key and stilled before and after, so every motion is read to rest at once and nothing stuck mid-way (the analysis reads seq/). Then the same office actions on day 2 with full motion, the baseline. The player's own choice is put back at the end (qaMotion's marker)."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "qaMotion",
+      "n": 1
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "rm_d1_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "still",
+      "name": "rm_walkin_before"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_walkin"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_walkin_after"
+    },
+    {
+      "op": "still",
+      "name": "rm_tab_before"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_tab"
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_tab_after"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_tab_back"
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_tab_back_after"
+    },
+    {
+      "op": "still",
+      "name": "rm_pc_before"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_pc"
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_pc_after"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_pc_back"
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_pc_back_after"
+    },
+    {
+      "op": "still",
+      "name": "rm_board_before"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_board"
+    },
+    {
+      "op": "key",
+      "key": "S"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_board_after"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_board_back"
+    },
+    {
+      "op": "key",
+      "key": "S"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_board_back_after"
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 60
+    },
+    {
+      "op": "still",
+      "name": "rm_report"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_gohome"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_home"
+    },
+    {
+      "op": "recStart",
+      "name": "rm_night"
+    },
+    {
+      "op": "qaHome",
+      "name": "rm_night",
+      "f": 90
+    },
+    {
+      "op": "flowSettled"
+    },
+    {
+      "op": "waitOffice",
+      "n": 2,
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "rm_d2_briefing"
+    },
+    {
+      "op": "qaMotion",
+      "n": 0
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "still",
+      "name": "fm_walkin_before"
+    },
+    {
+      "op": "recStart",
+      "name": "fm_walkin"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "fm_walkin_after"
+    },
+    {
+      "op": "still",
+      "name": "fm_tab_before"
+    },
+    {
+      "op": "recStart",
+      "name": "fm_tab"
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "fm_tab_after"
+    },
+    {
+      "op": "recStart",
+      "name": "fm_tab_back"
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "fm_tab_back_after"
+    },
+    {
+      "op": "still",
+      "name": "fm_pc_before"
+    },
+    {
+      "op": "recStart",
+      "name": "fm_pc"
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "fm_pc_after"
+    },
+    {
+      "op": "recStart",
+      "name": "fm_pc_back"
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "fm_pc_back_after"
+    },
+    {
+      "op": "still",
+      "name": "fm_board_before"
+    },
+    {
+      "op": "recStart",
+      "name": "fm_board"
+    },
+    {
+      "op": "key",
+      "key": "S"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "fm_board_after"
+    },
+    {
+      "op": "recStart",
+      "name": "fm_board_back"
+    },
+    {
+      "op": "key",
+      "key": "S"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "fm_board_back_after"
+    }
+  ]
+}
