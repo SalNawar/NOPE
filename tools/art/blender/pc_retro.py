@@ -42,6 +42,11 @@ BEZEL_FACE_Y = SCREEN_FACE_Y + 0.007
 # The ink hull's thickness (metres): about 1.5 px at the desk camera.
 HULL = 0.0045
 
+# The exporter's -Z forward, Y up writes the FBX as (x, z, -y) and Unity reads that as (-x, z, -y): a half turn
+# from the bake's (x, z, y). Measured in Unity on n5 (the first build stood turned round: the PC and keyboard's
+# centre 338 mm off). The model is turned half round about z before the export, so Unity reads (x, z, y).
+UNITY_TURN = Matrix.Rotation(math.pi, 4, 'Z')
+
 
 def append(bm, src):
     """Copies src's geometry into bm (material indices kept)."""
@@ -328,10 +333,12 @@ def main():
 
     monitor = make_object("PcRetro_Monitor", mon, mats)
     keyboard = make_object("PcRetro_Keyboard", kb, mats)
-
-    # The measurements for the contract (the frame, from PC_Crt's pivot).
     for obj in (monitor, keyboard):
-        vs = [obj.matrix_world @ v.co for v in obj.data.vertices]
+        obj.data.transform(UNITY_TURN)
+
+    # The measurements for the contract (the frame, from PC_Crt's pivot; turned back for the print).
+    for obj in (monitor, keyboard):
+        vs = [UNITY_TURN.inverted() @ v.co for v in obj.data.vertices]
         lo = [min(v[i] for v in vs) for i in range(3)]
         hi = [max(v[i] for v in vs) for i in range(3)]
         print("PCRETRO", obj.name, "verts", len(vs), "tris", sum(len(p.vertices) - 2 for p in obj.data.polygons),
