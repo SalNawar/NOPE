@@ -34,7 +34,7 @@ MonoBehaviour:
   paperSlideSeconds: 0.25
   paperStackStep: 0.0015
   heldPaperLift: 0.02
-  travellerHeight: 2.4
+  travellerHeight: 2.45
   travellerTint: {r: 0.9, g: 0.88, b: 0.84, a: 1}
   wheelRadii: {x: 365, y: 225}
   wheelItemSize: {x: 240, y: 44}
