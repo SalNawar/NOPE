@@ -13,7 +13,10 @@ public enum AppearStyle
     Drop,
 
     /// <summary>Whips in from the right, elastic and fast (a verdict ribbon).</summary>
-    Whip
+    Whip,
+
+    /// <summary>Fades in and out in place over MotionKnobs.reducedFadeSeconds: no scale, no travel, no overshoot (the speech bubble: nothing in it moves while its line reveals, D26); Motion intensity 0 cuts.</summary>
+    Fade
 }
 
 /// <summary>
@@ -25,7 +28,8 @@ public enum AppearStyle
 /// its taskbar button, after a stagger's delay), Close to take it away (it
 /// shrinks or slides back, optionally toward a point, takes no clicks while
 /// it goes, then switches itself off). Its opacity is a CanvasGroup's (its
-/// own, or one added). Reduced Motion fades only; Motion intensity 0 cuts.
+/// own, or one added). Reduced Motion fades only, as the Fade style always
+/// does; Motion intensity 0 cuts.
 /// The object's rest pose (scale, place, opacity) comes back exactly when it
 /// settles or is switched off mid-motion.
 /// </summary>
@@ -127,7 +131,7 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
         Rest();
         _closing = false;
         _from = from;
-        _amount = UiMotion.Amount;
+        _amount = StyleAmount();
         if (_group != null)
             _group.blocksRaycasts = _restBlocks;
         if (!_motion.Open && !_motion.Moving || _motion.Gone)
@@ -145,7 +149,7 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
             return;
         }
         Rest();
-        _amount = UiMotion.Amount;
+        _amount = StyleAmount();
         if (_amount.Still && !_amount.Reduced)
         {
             Finish();
@@ -259,6 +263,13 @@ public sealed class UiAppear : MonoBehaviour, IMotionTick
             _group.blocksRaycasts = _restBlocks;
         }
         _posed = false;
+    }
+
+    /// <summary>The player's motion amount for this style: a Fade plays as Reduced Motion does (a fade only) unless the Motion intensity is 0 (a cut).</summary>
+    private MotionAmount StyleAmount()
+    {
+        MotionAmount amount = UiMotion.Amount;
+        return _style == AppearStyle.Fade && !amount.Still ? new MotionAmount(amount.Intensity, true) : amount;
     }
 
     /// <summary>Where the style starts from, as a local offset (reference px).</summary>

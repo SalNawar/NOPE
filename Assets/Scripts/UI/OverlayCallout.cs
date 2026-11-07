@@ -49,6 +49,9 @@ public sealed class OverlayCallout : MonoBehaviour
 
     /// <summary>True while the box's owner places it every frame (the speech bubble: TravellerWheel, BubbleLayout) instead of the projection plus the offset; it still hides when its time is up or its object goes.</summary>
     public bool PlacedByOwner { get; set; }
+
+    /// <summary>How the box comes in when it shows from hidden: Pop (the tooltips' slight overshoot, the default) or Fade (the speech bubble: its border, tail and lines keep their rects while it reveals, D26).</summary>
+    public AppearStyle Appear { get; set; } = AppearStyle.Pop;
     private Transform _follow;
     private Vector2 _offset;
     private float _remaining;
@@ -87,7 +90,7 @@ public sealed class OverlayCallout : MonoBehaviour
         bool popping = !panel.gameObject.activeSelf;
         panel.gameObject.SetActive(true);
         if (popping)
-            UiAppear.Of(panel.gameObject, AppearStyle.Pop).Open(); // the tooltip pops in with a slight overshoot (the game feel)
+            UiAppear.Of(panel.gameObject, Appear).Open(); // a tooltip pops in with a slight overshoot (the game feel); the speech bubble fades in place
         if (grows)
             UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(panel);
         if (!PlacedByOwner && !OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen, topInset))
