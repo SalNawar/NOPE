@@ -27,8 +27,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The Orders detail card's page kind (TC-980).</summary>
     private const string RequisitionFormPath = "Assets/Data/Forms/Form_Requisition.asset";
 
-    /// <summary>The wallet line's height and the action button's height (desktop units).</summary>
-    private const float OrdersHeader = 64f, OrdersActionHeight = 52f;
+    /// <summary>The wallet line's height (three Caption lines: UI-13, the lead never runs under the title bar or into the first band head) and the action button's height (desktop units).</summary>
+    private const float OrdersHeader = 108f, OrdersActionHeight = 52f;
 
     /// <summary>The header row's room for the wallet line before the closed note (desktop units).</summary>
     private const float OrdersWalletRoom = 360f;
@@ -50,9 +50,10 @@ public static partial class OfficeSceneUIBuilder
 
         // The header row: the wallet line, and the zoom bar at the tree's right end (UI-25: never over the tree's first band head).
         float treeRight = config.ordersDetailWidth + 2f * DocMargin;
-        TMP_Text wallet = Text(win, "WalletText", "", PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, style: FontStyles.Bold);
+        TMP_Text wallet = Text(win, "WalletText", "", PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody, style: FontStyles.Bold);
         PlaceRect(wallet.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(PcSize.L, -(top + OrdersHeader)), new Vector2(-(treeRight + OrdersZoomWidth + PcSize.L), -top));
         Chrome(wallet, PcType.Caption, true);
+        wallet.overflowMode = TextOverflowModes.Ellipsis; // a longer lead ends in an ellipsis inside its row, never under the title bar (UI-13)
         // On a day orders are closed (BUG-28d), the reason in the same row, right-aligned: its own keyed label, shown by OrdersWindow.
         TMP_Text closed = Text(win, "ClosedText", null, PcType.Caption, TextAlignmentOptions.MidlineRight, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody,
                                "app.orders.closed", FontStyles.Italic);
