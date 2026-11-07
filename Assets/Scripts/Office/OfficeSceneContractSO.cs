@@ -53,7 +53,7 @@ public sealed class OfficeSceneContractSO : ScriptableObject
     }
 
     /// <summary>The anime hall's credits readout, inside its till (Anchor_Till; the art side moved it there with the cashier's pulse).</summary>
-    public const string TillReadoutPath = "Anime terminal - registered art and preserved desk/Approved 3D desk \u2014 preserved art/Anchor_Till/CreditsNumber";
+    public const string TillReadoutPath = "Anime terminal - registered art and preserved desk/Approved 3D desk - preserved art/Anchor_Till/CreditsNumber";
 
     /// <summary>
     /// Every anchor the gameplay layer resolves. The first fallbacks are the old art

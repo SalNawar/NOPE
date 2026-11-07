@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlotOutcomeSO
   id: forgery_warning
   displayName: Forgery Warning
-  resultLine: "Static crackles across the line \u2014 forgeries may slip through
-    tomorrow."
+  resultLine: "Static crackles across the line: forgeries may slip through tomorrow."
   weight: 2
   moneyDelta: 0
   legendaryChanceBonus: 0

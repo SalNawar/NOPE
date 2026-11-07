@@ -44,7 +44,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.masthead
-    text: "\u503C\u73ED\u65E5\u5FD7 \u2014 \u665A\u95F4\u7248"
+    text: "\u503C\u73ED\u65E5\u5FD7: \u665A\u95F4\u7248"
     gloss: 0
     tier: 0
   - key: results.goHome
@@ -236,15 +236,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: briefing.title
-    text: "\u7B2C{0}\u5929 \u2014 \u6668\u95F4\u7B80\u62A5"
+    text: "\u7B2C{0}\u5929: \u6668\u95F4\u7B80\u62A5"
     gloss: 0
     tier: 0
   - key: results.title
-    text: "\u7B2C{0}\u5929 \u2014 \u503C\u73ED\u62A5\u544A"
+    text: "\u7B2C{0}\u5929: \u503C\u73ED\u62A5\u544A"
     gloss: 0
     tier: 0
   - key: briefing.newsHeader
-    text: "\u2014 \u65F6\u95F4\u7EBF\u65B0\u95FB \u2014"
+    text: "\u00B7 \u65F6\u95F4\u7EBF\u65B0\u95FB \u00B7"
     gloss: 0
     tier: 0
   - key: briefing.deskHeader
@@ -1876,11 +1876,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: compare.deviationLogged
-    text: "\u25CF  \u5DF2\u8BB0\u5F55\u504F\u5DEE \u2014 {0}"
+    text: "\u25CF  \u5DF2\u8BB0\u5F55\u504F\u5DEE: {0}"
     gloss: 0
     tier: 0
   - key: compare.alreadyDocumented
-    text: "\u25CF  \u5DF2\u8BB0\u5F55\u5728\u6848 \u2014 {0}\u5DF2\u5728\u504F\u5DEE\u62A5\u544A\u4E2D"
+    text: "\u25CF  \u5DF2\u8BB0\u5F55\u5728\u6848: {0}\u5DF2\u5728\u504F\u5DEE\u62A5\u544A\u4E2D"
     gloss: 0
     tier: 0
   - key: compare.pair
@@ -2353,7 +2353,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.warning
-    text: "\u8B66\u544A {0}/{1} \u2014 \u4E0D\u6263\u5DE5\u8D44\u3002"
+    text: "\u8B66\u544A {0}/{1}: \u4E0D\u6263\u5DE5\u8D44\u3002"
     gloss: 0
     tier: 0
   - key: citation.penalty
@@ -2606,54 +2606,51 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers
-    text: "{0}\u6709\u8BEF \u2014 \u8BC1\u4EF6\uFF1A\u201C{1}\u201D  /  \u5E94\u4E3A\uFF1A\u201C{2}\u201D"
+    text: "{0}\u6709\u8BEF \u00B7 \u8BC1\u4EF6\uFF1A\u201C{1}\u201D  /  \u5E94\u4E3A\uFF1A\u201C{2}\u201D"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.said
-    text: "{0}\u6709\u8BEF \u2014 \u65C5\u5BA2\u79F0\uFF1A\u201C{1}\u201D  /  \u5E94\u4E3A\uFF1A\u201C{2}\u201D"
+    text: "{0}\u6709\u8BEF \u00B7 \u65C5\u5BA2\u79F0\uFF1A\u201C{1}\u201D  /  \u5E94\u4E3A\uFF1A\u201C{2}\u201D"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.worn
-    text: "{0}\u6709\u8BEF \u2014 \u65C5\u5BA2\u7A7F\u7740\uFF1A\u201C{1}\u201D 
-      /  \u5E94\u4E3A\uFF1A\u201C{2}\u201D \u2014 \u4F1A\u5F15\u53D1\u6050\u614C"
+    text: "{0}\u6709\u8BEF \u00B7 \u65C5\u5BA2\u7A7F\u7740\uFF1A\u201C{1}\u201D  /  \u5E94\u4E3A\uFF1A\u201C{2}\u201D: \u4F1A\u5F15\u53D1\u6050\u614C"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.papers
-    text: "{0}\u6709\u8BEF \u2014 \u8BC1\u4EF6\u663E\u793A\u201C{1}\u201D\uFF0C\u8BE5\u9879\u5C5E\u4E8E{2}"
+    text: "{0}\u6709\u8BEF \u00B7 \u8BC1\u4EF6\u663E\u793A\u201C{1}\u201D\uFF0C\u8BE5\u9879\u5C5E\u4E8E{2}"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.said
-    text: "{0}\u6709\u8BEF \u2014 \u65C5\u5BA2\u79F0\u201C{1}\u201D\uFF0C\u8BE5\u9879\u5C5E\u4E8E{2}"
+    text: "{0}\u6709\u8BEF \u00B7 \u65C5\u5BA2\u79F0\u201C{1}\u201D\uFF0C\u8BE5\u9879\u5C5E\u4E8E{2}"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.worn
-    text: "{0}\u6709\u8BEF \u2014 \u65C5\u5BA2\u7A7F\u7740\u201C{1}\u201D\uFF0C\u8BE5\u9879\u5C5E\u4E8E{2}\uFF1A\u4F1A\u5F15\u53D1\u6050\u614C"
+    text: "{0}\u6709\u8BEF \u00B7 \u65C5\u5BA2\u7A7F\u7740\u201C{1}\u201D\uFF0C\u8BE5\u9879\u5C5E\u4E8E{2}\uFF1A\u4F1A\u5F15\u53D1\u6050\u614C"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.papers
-    text: "{0}\u6709\u8BEF \u2014 \u8BC1\u4EF6\uFF1A\u201C{1}\u201D  /  \u673A\u6784\u8BB0\u5F55\uFF1A\u201C{2}\u201D"
+    text: "{0}\u6709\u8BEF \u00B7 \u8BC1\u4EF6\uFF1A\u201C{1}\u201D  /  \u673A\u6784\u8BB0\u5F55\uFF1A\u201C{2}\u201D"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.said
-    text: "{0}\u6709\u8BEF \u2014 \u65C5\u5BA2\u79F0\uFF1A\u201C{1}\u201D  /  \u673A\u6784\u8BB0\u5F55\uFF1A\u201C{2}\u201D"
+    text: "{0}\u6709\u8BEF \u00B7 \u65C5\u5BA2\u79F0\uFF1A\u201C{1}\u201D  /  \u673A\u6784\u8BB0\u5F55\uFF1A\u201C{2}\u201D"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.worn
-    text: "{0}\u6709\u8BEF \u2014 \u65C5\u5BA2\u7A7F\u7740\uFF1A\u201C{1}\u201D 
-      /  \u673A\u6784\u8BB0\u5F55\uFF1A\u201C{2}\u201D"
+    text: "{0}\u6709\u8BEF \u00B7 \u65C5\u5BA2\u7A7F\u7740\uFF1A\u201C{1}\u201D  /  \u673A\u6784\u8BB0\u5F55\uFF1A\u201C{2}\u201D"
     gloss: 0
     tier: 0
   - key: deviation.crossMismatch.papers
-    text: "{0}\u4E0D\u4E00\u81F4 \u2014 \u8BC1\u4EF6\u4E92\u76F8\u77DB\u76FE\uFF1A\u201C{1}\u201D 
-      /  \u201C{2}\u201D"
+    text: "{0}\u4E0D\u4E00\u81F4 \u00B7 \u8BC1\u4EF6\u4E92\u76F8\u77DB\u76FE\uFF1A\u201C{1}\u201D  /  \u201C{2}\u201D"
     gloss: 0
     tier: 0
   - key: deviation.personMismatch.papers
-    text: "{0}\u6709\u8BEF \u2014 \u8BC1\u4EF6\u4E0A\u7684\u7167\u7247\u4E0D\u662F\u684C\u524D\u7684\u65C5\u5BA2"
+    text: "{0}\u6709\u8BEF \u00B7 \u8BC1\u4EF6\u4E0A\u7684\u7167\u7247\u4E0D\u662F\u684C\u524D\u7684\u65C5\u5BA2"
     gloss: 0
     tier: 0
   - key: deviation.hiddenMismatch.papers
-    text: "{0}\u6709\u8BEF \u2014 \u8BC1\u4EF6\uFF1A\u201C{1}\u201D  /  \u673A\u5668\u8BFB\u51FA\uFF1A\u201C{2}\u201D"
+    text: "{0}\u6709\u8BEF \u00B7 \u8BC1\u4EF6\uFF1A\u201C{1}\u201D  /  \u673A\u5668\u8BFB\u51FA\uFF1A\u201C{2}\u201D"
     gloss: 0
     tier: 0
   - key: category.Language
@@ -3059,7 +3056,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.title
-    text: "\u7B2C{0}\u5929 \u2014 \u5BB6"
+    text: "\u7B2C{0}\u5929: \u5BB6"
     gloss: 0
     tier: 0
   - key: home.breakIn
@@ -3520,7 +3517,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: doc.work_permit_debt_relief_labour
-    text: "\u5DE5\u4F5C\u8BB8\u53EF \u2013 \u503A\u52A1\u51CF\u514D\u52B3\u52A8"
+    text: "\u5DE5\u4F5C\u8BB8\u53EF: \u503A\u52A1\u51CF\u514D\u52B3\u52A8"
     gloss: 0
     tier: 0
   - key: doc.authorised_by

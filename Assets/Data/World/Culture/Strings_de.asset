@@ -44,7 +44,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.masthead
-    text: "SCHICHTBUCH \u2014 ABENDAUSGABE"
+    text: "SCHICHTBUCH: ABENDAUSGABE"
     gloss: 0
     tier: 0
   - key: results.goHome
@@ -237,15 +237,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: briefing.title
-    text: "Tag {0} \u2014 Morgenbesprechung"
+    text: "Tag {0}: Morgenbesprechung"
     gloss: 0
     tier: 0
   - key: results.title
-    text: "Tag {0} \u2014 Schichtbericht"
+    text: "Tag {0}: Schichtbericht"
     gloss: 0
     tier: 0
   - key: briefing.newsHeader
-    text: "\u2014 ZEITLINIEN-NACHRICHTEN \u2014"
+    text: "\u00B7 ZEITLINIEN-NACHRICHTEN \u00B7"
     gloss: 0
     tier: 0
   - key: briefing.deskHeader
@@ -1903,11 +1903,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: compare.deviationLogged
-    text: "\u25CF  ABWEICHUNG ERFASST \u2014 {0}"
+    text: "\u25CF  ABWEICHUNG ERFASST: {0}"
     gloss: 0
     tier: 0
   - key: compare.alreadyDocumented
-    text: "\u25CF  BEREITS BELEGT \u2014 {0} steht im Abweichungsbericht"
+    text: "\u25CF  BEREITS BELEGT: {0} steht im Abweichungsbericht"
     gloss: 0
     tier: 0
   - key: compare.pair
@@ -2382,7 +2382,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.warning
-    text: "Verwarnung {0}/{1} \u2014 kein Lohnabzug."
+    text: "Verwarnung {0}/{1}: kein Lohnabzug."
     gloss: 0
     tier: 0
   - key: citation.penalty
@@ -2634,56 +2634,51 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers
-    text: "{0} FALSCH \u2014 Papiere: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
+    text: "{0} FALSCH \u00B7 Papiere: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.said
-    text: "{0} FALSCH \u2014 Reisender sagte: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
+    text: "{0} FALSCH \u00B7 Reisender sagte: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.worn
-    text: "{0} FALSCH \u2014 Reisender tr\xE4gt: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C
-      \u2014 w\xFCrde eine Panik ausl\xF6sen"
+    text: "{0} FALSCH \u00B7 Reisender tr\xE4gt: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C: w\xFCrde eine Panik ausl\xF6sen"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.papers
-    text: "{0} FALSCH \u2014 Papiere zeigen \u201E{1}\u201C, das zu {2} geh\xF6rt"
+    text: "{0} FALSCH \u00B7 Papiere zeigen \u201E{1}\u201C, das zu {2} geh\xF6rt"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.said
-    text: "{0} FALSCH \u2014 Reisender sagte \u201E{1}\u201C, das zu {2} geh\xF6rt"
+    text: "{0} FALSCH \u00B7 Reisender sagte \u201E{1}\u201C, das zu {2} geh\xF6rt"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.worn
-    text: "{0} FALSCH \u2014 Reisender tr\xE4gt \u201E{1}\u201C, das zu {2} geh\xF6rt:
-      w\xFCrde eine Panik ausl\xF6sen"
+    text: "{0} FALSCH \u00B7 Reisender tr\xE4gt \u201E{1}\u201C, das zu {2} geh\xF6rt: w\xFCrde eine Panik ausl\xF6sen"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.papers
-    text: "{0} FALSCH \u2014 Papiere: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
+    text: "{0} FALSCH \u00B7 Papiere: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.said
-    text: "{0} FALSCH \u2014 Reisender sagte: \u201E{1}\u201C  /  Beh\xF6rdenakten:
-      \u201E{2}\u201C"
+    text: "{0} FALSCH \u00B7 Reisender sagte: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.worn
-    text: "{0} FALSCH \u2014 Reisender tr\xE4gt: \u201E{1}\u201C  /  Beh\xF6rdenakten:
-      \u201E{2}\u201C"
+    text: "{0} FALSCH \u00B7 Reisender tr\xE4gt: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.crossMismatch.papers
-    text: "{0} WIDERSPR\xDCCHLICH \u2014 die Papiere widersprechen sich: \u201E{1}\u201C 
-      /  \u201E{2}\u201C"
+    text: "{0} WIDERSPR\xDCCHLICH \u00B7 die Papiere widersprechen sich: \u201E{1}\u201C  /  \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.personMismatch.papers
-    text: "{0} FALSCH \u2014 das Foto in den Papieren ist nicht der Reisende am Schreibtisch"
+    text: "{0} FALSCH \u00B7 das Foto in den Papieren ist nicht der Reisende am Schreibtisch"
     gloss: 0
     tier: 0
   - key: deviation.hiddenMismatch.papers
-    text: "{0} FALSCH \u2014 Papiere: \u201E{1}\u201C  /  die Maschine liest: \u201E{2}\u201C"
+    text: "{0} FALSCH \u00B7 Papiere: \u201E{1}\u201C  /  die Maschine liest: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: category.Language
@@ -3090,7 +3085,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.title
-    text: "Tag {0} \u2014 Zuhause"
+    text: "Tag {0}: Zuhause"
     gloss: 0
     tier: 0
   - key: home.breakIn
@@ -3560,7 +3555,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: doc.work_permit_debt_relief_labour
-    text: "Arbeitserlaubnis \u2013 Schuldenerlass-Arbeit"
+    text: "Arbeitserlaubnis: Schuldenerlass-Arbeit"
     gloss: 0
     tier: 0
   - key: doc.authorised_by

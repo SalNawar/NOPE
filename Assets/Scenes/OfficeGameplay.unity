@@ -197149,7 +197149,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "SHIFT LEDGER \u2014 EVENING EDITION"
+  m_text: "SHIFT LEDGER: EVENING EDITION"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}
   m_sharedMaterial: {fileID: -8469071506916972853, guid: fb77052ab1c961049b15210f1a79eb9c, type: 2}

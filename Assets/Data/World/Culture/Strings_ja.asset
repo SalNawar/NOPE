@@ -44,7 +44,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.masthead
-    text: "\u52E4\u52D9\u53F0\u5E33 \u2014 \u5915\u520A"
+    text: "\u52E4\u52D9\u53F0\u5E33: \u5915\u520A"
     gloss: 0
     tier: 0
   - key: results.goHome
@@ -237,15 +237,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: briefing.title
-    text: "{0}\u65E5\u76EE \u2014 \u671D\u306E\u30D6\u30EA\u30FC\u30D5\u30A3\u30F3\u30B0"
+    text: "{0}\u65E5\u76EE \u00B7 \u671D\u306E\u30D6\u30EA\u30FC\u30D5\u30A3\u30F3\u30B0"
     gloss: 0
     tier: 0
   - key: results.title
-    text: "{0}\u65E5\u76EE \u2014 \u52E4\u52D9\u5831\u544A"
+    text: "{0}\u65E5\u76EE \u00B7 \u52E4\u52D9\u5831\u544A"
     gloss: 0
     tier: 0
   - key: briefing.newsHeader
-    text: "\u2014 \u6642\u9593\u7DDA\u30CB\u30E5\u30FC\u30B9 \u2014"
+    text: "\u00B7 \u6642\u9593\u7DDA\u30CB\u30E5\u30FC\u30B9 \u00B7"
     gloss: 0
     tier: 0
   - key: briefing.deskHeader
@@ -1886,11 +1886,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: compare.deviationLogged
-    text: "\u25CF  \u9038\u8131\u3092\u8A18\u9332 \u2014 {0}"
+    text: "\u25CF  \u9038\u8131\u3092\u8A18\u9332: {0}"
     gloss: 0
     tier: 0
   - key: compare.alreadyDocumented
-    text: "\u25CF  \u8A18\u9332\u6E08\u307F \u2014 {0}\u306F\u9038\u8131\u5831\u544A\u306B\u3042\u308A\u307E\u3059"
+    text: "\u25CF  \u8A18\u9332\u6E08\u307F: {0}\u306F\u9038\u8131\u5831\u544A\u306B\u3042\u308A\u307E\u3059"
     gloss: 0
     tier: 0
   - key: compare.pair
@@ -2367,7 +2367,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.warning
-    text: "\u8B66\u544A {0}/{1} \u2014 \u6E1B\u7D66\u306A\u3057\u3002"
+    text: "\u8B66\u544A {0}/{1}: \u6E1B\u7D66\u306A\u3057\u3002"
     gloss: 0
     tier: 0
   - key: citation.penalty
@@ -2620,60 +2620,51 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers
-    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E: \u300C{1}\u300D  /  \u672C\u6765:
-      \u300C{2}\u300D"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u66F8\u985E: \u300C{1}\u300D  /  \u672C\u6765: \u300C{2}\u300D"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.said
-    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u767A\u8A00: \u300C{1}\u300D 
-      /  \u672C\u6765: \u300C{2}\u300D"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u6E21\u822A\u8005\u306E\u767A\u8A00: \u300C{1}\u300D  /  \u672C\u6765: \u300C{2}\u300D"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.worn
-    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u7740\u8863: \u300C{1}\u300D 
-      /  \u672C\u6765: \u300C{2}\u300D \u2014 \u6DF7\u4E71\u3092\u62DB\u304F"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u6E21\u822A\u8005\u306E\u7740\u8863: \u300C{1}\u300D  /  \u672C\u6765: \u300C{2}\u300D: \u6DF7\u4E71\u3092\u62DB\u304F"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.papers
-    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E\u306E\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u66F8\u985E\u306E\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.said
-    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u767A\u8A00\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u6E21\u822A\u8005\u306E\u767A\u8A00\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.worn
-    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u7740\u8863\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E:
-      \u6DF7\u4E71\u3092\u62DB\u304F"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u6E21\u822A\u8005\u306E\u7740\u8863\u300C{1}\u300D\u306F{2}\u306E\u3082\u306E: \u6DF7\u4E71\u3092\u62DB\u304F"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.papers
-    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E: \u300C{1}\u300D  /  \u5C40\u306E\u8A18\u9332:
-      \u300C{2}\u300D"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u66F8\u985E: \u300C{1}\u300D  /  \u5C40\u306E\u8A18\u9332: \u300C{2}\u300D"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.said
-    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u767A\u8A00: \u300C{1}\u300D 
-      /  \u5C40\u306E\u8A18\u9332: \u300C{2}\u300D"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u6E21\u822A\u8005\u306E\u767A\u8A00: \u300C{1}\u300D  /  \u5C40\u306E\u8A18\u9332: \u300C{2}\u300D"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.worn
-    text: "{0} \u4E0D\u6B63 \u2014 \u6E21\u822A\u8005\u306E\u7740\u8863: \u300C{1}\u300D 
-      /  \u5C40\u306E\u8A18\u9332: \u300C{2}\u300D"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u6E21\u822A\u8005\u306E\u7740\u8863: \u300C{1}\u300D  /  \u5C40\u306E\u8A18\u9332: \u300C{2}\u300D"
     gloss: 0
     tier: 0
   - key: deviation.crossMismatch.papers
-    text: "{0} \u4E0D\u6574\u5408 \u2014 \u66F8\u985E\u304C\u98DF\u3044\u9055\u3046:
-      \u300C{1}\u300D  /  \u300C{2}\u300D"
+    text: "{0} \u4E0D\u6574\u5408 \u00B7 \u66F8\u985E\u304C\u98DF\u3044\u9055\u3046: \u300C{1}\u300D  /  \u300C{2}\u300D"
     gloss: 0
     tier: 0
   - key: deviation.personMismatch.papers
-    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E\u306E\u5199\u771F\u306F\u30C7\u30B9\u30AF\u306E\u6E21\u822A\u8005\u3067\u306F\u306A\u3044"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u66F8\u985E\u306E\u5199\u771F\u306F\u30C7\u30B9\u30AF\u306E\u6E21\u822A\u8005\u3067\u306F\u306A\u3044"
     gloss: 0
     tier: 0
   - key: deviation.hiddenMismatch.papers
-    text: "{0} \u4E0D\u6B63 \u2014 \u66F8\u985E: \u300C{1}\u300D  /  \u6A5F\u68B0\u306E\u8AAD\u307F\u53D6\u308A:
-      \u300C{2}\u300D"
+    text: "{0} \u4E0D\u6B63 \u00B7 \u66F8\u985E: \u300C{1}\u300D  /  \u6A5F\u68B0\u306E\u8AAD\u307F\u53D6\u308A: \u300C{2}\u300D"
     gloss: 0
     tier: 0
   - key: category.Language
@@ -3078,7 +3069,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.title
-    text: "{0}\u65E5\u76EE \u2014 \u81EA\u5B85"
+    text: "{0}\u65E5\u76EE \u00B7 \u81EA\u5B85"
     gloss: 0
     tier: 0
   - key: home.breakIn
@@ -3541,7 +3532,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: doc.work_permit_debt_relief_labour
-    text: "\u5C31\u52B4\u8A31\u53EF\u8A3C \u2013 \u50B5\u52D9\u6551\u6E08\u52B4\u50CD"
+    text: "\u5C31\u52B4\u8A31\u53EF\u8A3C: \u50B5\u52D9\u6551\u6E08\u52B4\u50CD"
     gloss: 0
     tier: 0
   - key: doc.authorised_by
