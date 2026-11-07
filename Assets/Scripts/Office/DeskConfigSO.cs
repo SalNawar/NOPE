@@ -42,6 +42,10 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How much of the glass the fitted desktop fills (below 1 keeps the picture off a curved glass's rounded edges).</summary>
     [Range(0.5f, 1f)] public float cloneFill = 0.92f;
 
+    [Header("The PC's model")]
+    /// <summary>The desk PC's model on the painted desk (PcRetro.fbx, built by tools/art/blender/pc_retro.py; PaintedPcModel.Wear): empty keeps the painted CRT and keyboard.</summary>
+    public GameObject pcModel;
+
     [Header("Scanner")]
     /// <summary>Seconds a desk scan takes per paper (the shift clock keeps running): a fast sweep (drop and go, the scanner app spec §1: about 0.8 s).</summary>
     [Min(0.1f)] public float scanSeconds = 0.8f;
