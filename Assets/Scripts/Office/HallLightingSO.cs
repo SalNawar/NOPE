@@ -245,11 +245,12 @@ public sealed class HallLightingSO : ScriptableObject
     /// so the shader scales the hall's sRGB values by the decoded channels.
     /// D9 (hall-night-light, Saleh "fix bg weird color issues"): the old
     /// (0.81, 0.82, 0.64) left the noon hall olive (blue over red 0.40, green
-    /// near red); (0.75, 0.745, 0.715) puts the noon hall at the approved
+    /// near red); (0.75, 0.745, 0.665) puts the noon hall at the approved
     /// painting's colour (sRGB 42.8, 36.4, 26.4: blue over red 0.62), solved
-    /// from two Unity runs at 12:00 (one log-linear fit per channel).
+    /// from three Unity runs at 12:00 (one log-linear fit per channel;
+    /// PaintedBoothTests holds the fit).
     /// </summary>
-    public Color paintedBoothGrade = new Color(0.75f, 0.745f, 0.715f, 1f);
+    public Color paintedBoothGrade = new Color(0.75f, 0.745f, 0.665f, 1f);
 
     /// <summary>The day-night cycle's knobs for HallDayCycle (fixture threshold, band and stagger included).</summary>
     public HallDayCycle.Settings Cycle => new HallDayCycle.Settings(sunriseHour, sunsetHour, twilightHours, fixturesOnBelow, fixtureFadeBand, fixtureStaggerMinutes);

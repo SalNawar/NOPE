@@ -298,26 +298,11 @@ public class PaintedBoothTests
         CollectionAssert.DoesNotContain(DeskPaintedMap.HallClosedByBooth, "03 Exterior placeholder single layer", "the back windows' city stays: it shows through the bars as the painting's does");
     }
 
-    /// <summary>An sRGB value (0-255) the hall draws at, as the screen shows it after the office finish (DeskLighting's model of URP's maths).</summary>
     /// <summary>The sRGB decode Material.SetColor applies to a colour in a linear project (0-1).</summary>
     private static float Decode(float c) => c <= 0.04045f ? c / 12.92f : (float)Math.Pow((c + 0.055f) / 1.055f, 2.4f);
 
-    private static float Finished(float srgb) => DeskLighting.GradedLuma(DeskLighting.LuminanceForLuma(srgb), DeskLighting.Finish.Office);
-
-    /// <summary>The sRGB value (0-255) the hall must draw at for the screen to show <paramref name="shown"/> after the office finish.</summary>
-    private static float Unfinished(float shown)
-    {
-        float lo = 0f, hi = 255f;
-        for (int i = 0; i < 40; i++)
-        {
-            float mid = (lo + hi) / 2f;
-            if (Finished(mid) < shown) lo = mid; else hi = mid;
-        }
-        return (lo + hi) / 2f;
-    }
-
     [Test]
-    public void TheBoothsGrade_ShowsThePaintingsHallBehindTheBars_AfterTheFinish_ReadWithTheBrightness_WhiteOffThePaintedDesk()
+    public void TheBoothsGrade_PutsTheNoonHallAtD9sTarget_ReadWithTheBrightness_WhiteOffThePaintedDesk()
     {
         string asset = Read("Assets/Data/Config/HallLighting_Default.asset");
         Match value = Regex.Match(asset, @"\n  paintedBoothGrade: \{r: ([0-9.]+), g: ([0-9.]+), b: ([0-9.]+), a: 1\}\n");
@@ -325,18 +310,22 @@ public class PaintedBoothTests
         var grade = new float[3];
         for (int c = 0; c < 3; c++)
             grade[c] = F(value.Groups[c + 1].Value);
-        // D9 (hall-night-light, 2026-11-07): the 12:00 still under the old grade (0.81, 0.82, 0.64) and brightness 0.7757
-        // showed the hall between the bars at sRGB (67, 62, 27), luma 60.5, blue over red 0.40 (olive). Material.SetColor
-        // decodes the grade to linear in this linear project, so the shader scales the sRGB values by the decoded channels.
-        // The same pixels at the new grade and the noon brightness 0.6 land in the target: luma 33 to 41, blue over red
-        // 0.55 to 0.65 on screen (this grey model of the finish reads about 0.03 bluer than the screen, so 0.68 here).
-        float[] oldShown = { 67f, 62f, 27f }, oldGrade = { 0.81f, 0.82f, 0.64f };
+        // D9 (hall-night-light, 2026-11-07): the hall between the bars at 12:00 (1920x1080, brightness 0.6) measured in Unity at
+        // two grades: (0.77, 0.67, 0.85) showed sRGB (45.8, 27.9, 49.8) and (0.75, 0.745, 0.715) showed (42.2, 36.5, 30.9).
+        // Material.SetColor decodes the grade to linear, so each channel is fitted as shown = a * Decode(grade)^gamma through
+        // the two runs. The asset's grade must land in the target: luma 33 to 41, blue over red 0.55 to 0.65, green under red.
+        // (The old grade, 0.81, 0.82, 0.64 at brightness 0.7757, showed 67, 62, 27: luma 60.5, blue over red 0.40, olive.)
+        float[] gradeA = { 0.77f, 0.67f, 0.85f }, shownA = { 45.8f, 27.9f, 49.8f };
+        float[] gradeB = { 0.75f, 0.745f, 0.715f }, shownB = { 42.2f, 36.5f, 30.9f };
         var shown = new float[3];
         for (int c = 0; c < 3; c++)
-            shown[c] = Finished(Unfinished(oldShown[c]) * 0.6f * Decode(grade[c]) / (0.7757f * Decode(oldGrade[c])));
+        {
+            double gamma = Math.Log(shownA[c] / shownB[c]) / Math.Log(Decode(gradeA[c]) / Decode(gradeB[c]));
+            shown[c] = shownB[c] * (float)Math.Pow(Decode(grade[c]) / Decode(gradeB[c]), gamma);
+        }
         float luma = 0.2126f * shown[0] + 0.7152f * shown[1] + 0.0722f * shown[2];
         Assert.That(luma, Is.InRange(33f, 41f), $"12:00: the hall's luma {luma:0.0}");
-        Assert.That(shown[2] / shown[0], Is.InRange(0.55f, 0.68f), "12:00: blue over red");
+        Assert.That(shown[2] / shown[0], Is.InRange(0.55f, 0.65f), "12:00: blue over red");
         Assert.That(shown[1], Is.LessThan(shown[0]), "the green under the red: warm stone, not olive");
         string rig = Read("Assets/Scripts/Office/HallLightingRig.cs");
         StringAssert.Contains("backdrop.Brightness = PaintedDesk && painted != null && painted.length > 0 ? painted.Evaluate(Hour) : 1f;\n            backdrop.Grade = PaintedDesk ? settings.paintedBoothGrade : Color.white;", rig,

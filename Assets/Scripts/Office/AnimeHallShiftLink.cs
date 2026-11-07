@@ -9,10 +9,9 @@ using UnityEngine;
 /// so their day-night cycle shows the shift's hour, and gives the art side's
 /// <see cref="AnimeHallPresentation.SetTime"/> (its ambient; its daylight is
 /// HallBakedLighting's) the cycle's evening, and the traveller's figure the
-/// desk's one light (DeskLightLevel.Light, BUG-14c: DeskLight()'s uniform
-/// value as a sprite tint, which the passport photo's sprites must take too,
-/// DOC-LOOK's tint, so the photo check is fair at every hour) over
-/// DeskConfigSO.travellerTint. Without them (or with them
+/// hall's light (DeskLightLevel.TravellerLight, D9: the room's colour without
+/// the desk lamp, scaled by HallLightingSO.travellerLight) as a sprite tint
+/// over DeskConfigSO.travellerTint. Without them (or with them
 /// switched off) the evening follows the old office's crowd curve
 /// (<see cref="CrowdPaletteBlend"/>: morning until DeskConfigSO's hall start,
 /// full evening from its full point, eased between) on the clock's hour as it

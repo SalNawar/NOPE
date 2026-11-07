@@ -65,7 +65,7 @@ public class HallPaintedDeskBrightnessTests
     }
 
     /// <summary>The booth's grade (r, g, b), measured on screen after the office finish (2026-10-28, Saleh: "bg is dark"; PaintedBoothTests holds the measurement).</summary>
-    private static readonly float[] BoothGrade = { 0.75f, 0.745f, 0.715f };
+    private static readonly float[] BoothGrade = { 0.75f, 0.745f, 0.665f };
 
     [Test]
     public void TheBrightness_AppliesOnlyUnderThePaintedDesk()
