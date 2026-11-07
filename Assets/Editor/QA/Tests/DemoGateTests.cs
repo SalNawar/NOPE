@@ -244,6 +244,24 @@ public class DemoGateTests
         Assert.IsFalse(MeasuredPaths.NoneAffected("docs/FEATURES.md\nAssets/Editor/QA/DemoGate.cs\n"));
     }
 
+    /// <summary>A check that picks results by commit itself (DeskPlanChecks.DecorVerdict) follows GateResults.IsCurrent, as Judge does: a carried line counts, and the check names it instead of throwing.</summary>
+    [Test]
+    public void TheDecorCheck_ReadsACarriedLine_AsJudgeDoes()
+    {
+        var line = new QaGateResult { id = DeskPlanChecks.DecorSpotsId, owner = "DESK-PLAN", pass = true, measured = "not applicable on the painted desk", commit = "old" };
+        try
+        {
+            GateResults.SameMeasurement = (commit, head) => commit == "old" && head == "abc";
+            GateResult r = DeskPlanChecks.DecorVerdict(new[] { line }, "abc");
+            Assert.IsFalse(r.Pass, "the cut is red");
+            CollectionAssert.AreEqual(new[] { DeskPlanChecks.DecorSpotsId }, r.Unmet, "the cut is named, so its known-red entry can spare it");
+        }
+        finally
+        {
+            GateResults.SameMeasurement = GateResults.ExactCommitOnly;
+        }
+    }
+
     /// <summary>A result measured at another commit counts only when GateResults.SameMeasurement carries it (DemoGate.Run sets MeasuredPaths' git rule); the default is the exact commit.</summary>
     [Test]
     public void Judge_AResultCarriedFromAnOlderCommit_IsCurrent_OnlyWhenTheRuleCarriesIt()

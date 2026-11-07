@@ -151,8 +151,8 @@ public static class GateResults
         return fail;
     }
 
-    /// <summary>True when a result measured at <paramref name="commit"/> counts at <paramref name="head"/>: the same commit, or one <see cref="SameMeasurement"/> carries.</summary>
-    private static bool IsCurrent(string commit, string head) =>
+    /// <summary>True when a result measured at <paramref name="commit"/> counts at <paramref name="head"/>: the same commit, or one <see cref="SameMeasurement"/> carries. Checks that pick results by commit use it, never a plain comparison.</summary>
+    public static bool IsCurrent(string commit, string head) =>
         string.Equals(commit, head, StringComparison.OrdinalIgnoreCase)
         || (!string.IsNullOrEmpty(commit) && SameMeasurement(commit, head));
 
