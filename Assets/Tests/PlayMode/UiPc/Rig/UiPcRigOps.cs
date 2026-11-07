@@ -22,6 +22,7 @@ using UnityEngine.UI;
 /// <item><c>uipcEscDark</c>: with the screen turned off by the frame's power button, Esc turns it on and brings Settings forward, a right-click does nothing, and the PC stays open (R3/R4).</item>
 /// <item><c>uipcGate</c>: with Notes' field focused, the cheat panel opened over the PC by its key (F9; it holds the InputGate) leaves the field with its text kept, and a right-click and Esc, each delivered, reach nothing on the PC: neither is taken by the desktop, Settings does not come forward and the PC stays open; F9 closes the panel and frees the gate (RUN-SAFE's BUG-68a contract).</item>
 /// <item><c>uipcRoom</c>: a click on the room beside the frame does not leave the PC (R3/R4: only Q and the bezel).</item>
+/// <item><c>uipcOnGlass</c>: Settings closed, then opened by Esc: on every frame of its open motion every shown window, and its close button, stays inside the glass (the desktop canvas; pc-settings-clip: the spring's overshoot carried the window past the glass's right edge).</item>
 /// <item><c>uipcBezel</c>: a click on the bezel leaves the PC (R3/R4: "press Q or click the bezel").</item>
 /// <item><c>uipcPowerOn</c>: a right-click and Esc a few frames after Q, while the picture still powers on (the desktop's clicks wait for it): each is taken by the desktop, the PC stays open and Esc brings Settings forward, with full motion and with Reduced Motion, and the player's motion choice is put back whatever the passes did (R3/R4: "Esc = Settings everywhere").</item>
 /// <item><c>uipcFullMotion</c>: before the session records the PC's moves (pc_open, pc_close, pc_reverse_open, pc_reverse_close), Reduced Motion is off, so the recordings show the CRT line.</item>
@@ -57,6 +58,7 @@ public static class UiPcRigOps
         QaRunner.RegisterOp("uipcEscDark", EscDark);
         QaRunner.RegisterOp("uipcGate", Gate);
         QaRunner.RegisterOp("uipcRoom", Room);
+        QaRunner.RegisterOp("uipcOnGlass", OnGlass);
         QaRunner.RegisterOp("uipcBezel", Bezel);
         QaRunner.RegisterOp("uipcPowerOn", PowerOn);
         QaRunner.RegisterOp("uipcFullMotion", FullMotion);
@@ -556,6 +558,81 @@ public static class UiPcRigOps
         bool open = PcOpen(view);
         runner.Assert("room", Owner, open, $"pc {(open ? "still open" : "closed")} after a click on the room at {point}",
             "only Q and the bezel leave the PC (R3/R4, 2026-10-20; the 2026-09-30 click-outside exit is overridden)");
+    }
+
+    /// <summary>The frames OnGlass watches after Esc: the window's whole open motion (about 0.75 s at 60 fps).</summary>
+    private const int OnGlassFrames = 45;
+
+    /// <summary>
+    /// Settings closed, then opened by Esc (asserts <c>onglass</c>). On each of
+    /// the next <see cref="OnGlassFrames"/> frames, every shown window's rect
+    /// and its close button's rect, scale and motion offset included, are
+    /// measured in the desktop canvas's space against the canvas's rect (the
+    /// glass). Passes when nothing passes an edge by more than half a unit.
+    /// The detail names the worst frame, window and edge.
+    /// </summary>
+    private static IEnumerator OnGlass(QaRunner runner, QaStep step)
+    {
+        DesktopWindow settings = Window<SettingsWindowController>();
+        Canvas canvas = settings != null ? settings.GetComponentInParent<Canvas>(true) : null;
+        RectTransform glass = canvas != null ? canvas.rootCanvas.transform as RectTransform : null;
+        if (settings == null || glass == null)
+        {
+            runner.Assert("onglass", Owner, false, "no Settings window or desktop canvas", "the PC must be open in the office");
+            yield break;
+        }
+        if (settings.IsOpen)
+            settings.Close();
+        yield return QaGame.Frames(40); // its close motion ends
+        yield return runner.Input.Tap(Key.Escape);
+        float worst = 0f;
+        string where = "nothing past an edge";
+        int watched = 0;
+        for (int f = 0; f < OnGlassFrames; f++)
+        {
+            yield return null;
+            foreach (DesktopWindow w in OpenWindows())
+            {
+                if (w == null || !w.gameObject.activeInHierarchy)
+                    continue;
+                watched++;
+                var close = (Button)typeof(DesktopWindow).GetField("closeButton", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(w);
+                foreach ((RectTransform part, string label) in new[] { ((RectTransform)w.transform, w.Title), (close != null ? (RectTransform)close.transform : null, w.Title + " close button") })
+                {
+                    if (part == null || !part.gameObject.activeInHierarchy)
+                        continue;
+                    (float past, string edge) = PastEdge(part, glass);
+                    if (past > worst)
+                    {
+                        worst = past;
+                        where = $"frame {f + 1}: {label} {past:0.0} past the {edge} edge";
+                    }
+                }
+            }
+        }
+        runner.Assert("onglass", Owner, watched > 0 && worst <= 0.5f,
+            $"{OnGlassFrames} frames after Esc, {watched} window frames: worst {worst:0.0} canvas units ({where})",
+            "a window is never off the glass, its close button always on it, during its open motion too (pc-settings-clip)");
+    }
+
+    /// <summary>How far <paramref name="part"/>'s drawn rect passes <paramref name="glass"/>'s rect, in the glass's units, and the edge it passes most.</summary>
+    private static (float past, string edge) PastEdge(RectTransform part, RectTransform glass)
+    {
+        var c = new Vector3[4];
+        part.GetWorldCorners(c);
+        Rect g = glass.rect;
+        float left = 0f, right = 0f, bottom = 0f, top = 0f;
+        foreach (Vector3 world in c)
+        {
+            Vector3 p = glass.InverseTransformPoint(world);
+            left = Mathf.Max(left, g.xMin - p.x);
+            right = Mathf.Max(right, p.x - g.xMax);
+            bottom = Mathf.Max(bottom, g.yMin - p.y);
+            top = Mathf.Max(top, p.y - g.yMax);
+        }
+        float most = Mathf.Max(Mathf.Max(left, right), Mathf.Max(bottom, top));
+        string edge = most == right ? "right" : most == left ? "left" : most == top ? "top" : "bottom";
+        return (most, edge);
     }
 
     /// <summary>A click on the bezel's left band (between its edge and the glass): the PC closes.</summary>

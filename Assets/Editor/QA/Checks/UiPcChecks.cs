@@ -125,6 +125,10 @@ public static class UiPcChecks
     [GateCheck("uipc.room", Owner, GateKind.Play)]
     public static GateResult Room() => RequireEach("uipc.room", Session + ".room");
 
+    /// <summary>Settings opened by Esc: on every frame of its open motion every shown window and its close button stay inside the glass (pc-settings-clip).</summary>
+    [GateCheck("uipc.window.onGlass", Owner, GateKind.Play)]
+    public static GateResult OnGlass() => RequireEach("uipc.window.onGlass", Session + ".onglass");
+
     /// <summary>8+ windows: a labelled button or a place behind the chevron for each, nothing over the tray, the chevron brings each forward (BUG-21a).</summary>
     [GateCheck("uipc.windows", Owner, GateKind.Play)]
     public static GateResult Windows() => RequireEach("uipc.windows", Session + ".windows");

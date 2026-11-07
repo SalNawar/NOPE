@@ -137,6 +137,7 @@ public class UiPcChecksTests
         ["uipc.esc"] = ("uipcEsc", new[] { "ui_pc_session.esc" }),
         ["uipc.escdark"] = ("uipcEscDark", new[] { "ui_pc_session.escdark" }),
         ["uipc.room"] = ("uipcRoom", new[] { "ui_pc_session.room" }),
+        ["uipc.window.onGlass"] = ("uipcOnGlass", new[] { "ui_pc_session.onglass" }),
         ["uipc.windows"] = ("uipcWindows", new[] { "ui_pc_session.windows" }),
         ["uipc.enter"] = ("uipcEnter", new[] { "ui_pc_session.enter" }),
         ["uipc.zoom"] = ("uipcZoom", new[] { "ui_pc_session.zoom" }),
