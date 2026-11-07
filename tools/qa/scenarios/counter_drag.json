@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "FOLD-01 rounds 3 and 4 (Papers, Please 1:1): a paper pressed on the counter follows the pointer one to one onto the desk, in the office view and the reading view, at 1920x1080 and 1280x1024, on days 1 and 12, with full motion and Reduced Motion, and rests with the point that was pressed under the pointer. Each counterDrag presses the paper's visible click box at its middle, near edge or far edge (round 3 pressed its root), drags it at P-SLOW, P-PLAIN, P-FAST or P-FLICK and lets it go mid-mat, at the far corners or near the counter. counterDrag.<name>.follow: the pressed point 8 px or less at 1080p from the pointer on every held frame. .hold: no held frame with the root more than 5 mm from where the pointer asks (G1: the desk surface's clamp; G2: the bound at the back step's lip while the size grows). .rest: on the desk; let go where it lies wholly on the desk once grown, the pressed point rests 8 px or less from the spot under the pointer (G4, FOLD-02); let go before, it slides onto the desk, eased, and rests wholly short of the back step (G3, by design). The drags carry the round 3 verifier's names where they repeat his (o2, o4, o7, r2, r6, r8, r9, c0, e0 to e2). counterdrag.tsv lists every frame."
+      "text": "FOLD-01 rounds 3 and 4 (Papers, Please 1:1): a paper pressed on the counter follows the pointer one to one onto the desk, in the office view and the reading view, at 1920x1080 and 1280x1024, on days 1 and 12, with full motion and Reduced Motion, and rests with the point that was pressed under the pointer. Each counterDrag presses the paper's visible click box at its middle, near edge or far edge (round 3 pressed its root), drags it at P-SLOW, P-PLAIN, P-FAST or P-FLICK and lets it go mid-mat, at the far corners or near the counter. counterDrag.<name>.follow: the pressed point 8 px or less at 1080p from the pointer on every held frame. .hold: no held frame with the root more than 5 mm from where the pointer asks (G1: the desk surface's clamp; G2: the bound at the back step's lip while the size grows). .rest: on the desk; let go where it lies wholly on the desk once grown, the pressed point rests 8 px or less from the spot under the pointer (G4, FOLD-02); let go before, it slides onto the desk, eased, and rests wholly short of the back step (G3, by design). The drags carry the round 3 verifier's names where they repeat his (o2, o4, o7, r2, r6, r8, r9, c0, e0 to e2). Round 4 fix 1 (the round 4 verifier's P1): a paper resting with a part past the desk surface's clamp area, pressed on that part, never moves at the pick-up: the edge block (d1_e1 to d1_e4: the passport laid at the reading view's bottom, pressed on its near part, dragged up at P-SLOW and sideways at P-PLAIN) and the far-part block (d12_f1, f3, f4: the day 12 large form pressed on the far part of its counter click box), both screens. counterdrag.tsv lists every frame."
     },
     {
       "op": "title"
@@ -312,6 +312,107 @@
       "name": "d1_r6_mid_slow_lip"
     },
     {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_e1_setup_near",
+      "text": "reading",
+      "x": 0,
+      "y": 0,
+      "path": "Plain",
+      "target2": "m:-0.3,-0.48",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d1_e1_setup_near"
+    },
+    {
+      "op": "track",
+      "name": "body",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)/Sheet/Paper/Depth/Body"
+    },
+    {
+      "op": "recStart",
+      "name": "d1_e2_near_part_slow_up"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_e2_near_part_slow_up",
+      "text": "reading",
+      "x": 0,
+      "y": -0.9,
+      "path": "Slow",
+      "target2": "m:-0.3,-0.15",
+      "target": "index:0"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d1_e2_near_part_slow_up"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_e3_setup_near_again",
+      "text": "reading",
+      "x": 0,
+      "y": 0,
+      "path": "Plain",
+      "target2": "m:0.1,-0.36",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d1_e3_setup_near_again"
+    },
+    {
+      "op": "track",
+      "name": "body",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)/Sheet/Paper/Depth/Body"
+    },
+    {
+      "op": "recStart",
+      "name": "d1_e4_near_part_plain_side"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_e4_near_part_plain_side",
+      "text": "reading",
+      "x": 0,
+      "y": -0.9,
+      "path": "Plain",
+      "target2": "m:0.4,-0.52",
+      "target": "index:0"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d1_e4_near_part_plain_side"
+    },
+    {
       "op": "cammotion",
       "n": 1
     },
@@ -610,6 +711,107 @@
     },
     {
       "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_54_e1_setup_near",
+      "text": "reading",
+      "x": 0,
+      "y": 0,
+      "path": "Plain",
+      "target2": "m:-0.3,-0.46",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d1_54_e1_setup_near"
+    },
+    {
+      "op": "track",
+      "name": "body",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)/Sheet/Paper/Depth/Body"
+    },
+    {
+      "op": "recStart",
+      "name": "d1_54_e2_near_part_slow_up"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_54_e2_near_part_slow_up",
+      "text": "reading",
+      "x": 0,
+      "y": -0.9,
+      "path": "Slow",
+      "target2": "m:-0.3,-0.15",
+      "target": "index:0"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d1_54_e2_near_part_slow_up"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_54_e3_setup_near_again",
+      "text": "reading",
+      "x": 0,
+      "y": 0,
+      "path": "Plain",
+      "target2": "m:0.1,-0.36",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d1_54_e3_setup_near_again"
+    },
+    {
+      "op": "track",
+      "name": "body",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)/Sheet/Paper/Depth/Body"
+    },
+    {
+      "op": "recStart",
+      "name": "d1_54_e4_near_part_plain_side"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d1_54_e4_near_part_plain_side",
+      "text": "reading",
+      "x": 0,
+      "y": -0.9,
+      "path": "Plain",
+      "target2": "m:0.3,-0.52",
+      "target": "index:0"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d1_54_e4_near_part_plain_side"
+    },
+    {
+      "op": "cheat",
       "name": "GiveAllItems"
     },
     {
@@ -750,6 +952,123 @@
     {
       "op": "still",
       "name": "d12_54_c2_near_plain"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_54_f1_far_slow_mat",
+      "text": "reading",
+      "x": 0,
+      "y": 0.9,
+      "path": "Slow",
+      "target2": "m:-0.3,-0.05",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d12_54_f1_far_slow_mat"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_54_f3_far_plain_side",
+      "text": "reading",
+      "x": 0,
+      "y": 0.95,
+      "path": "Plain",
+      "target2": "m:0.3,0.2",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d12_54_f3_far_plain_side"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_54_f4_farcorner_slow",
+      "text": "reading",
+      "x": 0.8,
+      "y": 0.9,
+      "path": "Slow",
+      "target2": "m:0.2,-0.1",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d12_54_f4_farcorner_slow"
     },
     {
       "op": "res",
@@ -924,6 +1243,135 @@
     {
       "op": "still",
       "name": "d12_c2_near_plain"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "track",
+      "name": "body",
+      "target": "Office/Desk/Papers/PaperTemplate(Clone)/Sheet/Paper/Depth/Body"
+    },
+    {
+      "op": "recStart",
+      "name": "d12_f1_far_slow_mat"
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_f1_far_slow_mat",
+      "text": "reading",
+      "x": 0,
+      "y": 0.9,
+      "path": "Slow",
+      "target2": "m:-0.3,-0.05",
+      "target": "index:0"
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "still",
+      "name": "d12_f1_far_slow_mat"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_f3_far_plain_side",
+      "text": "reading",
+      "x": 0,
+      "y": 0.95,
+      "path": "Plain",
+      "target2": "m:0.3,0.2",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d12_f3_far_plain_side"
+    },
+    {
+      "op": "cheat",
+      "name": "RestartShift"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 4
+    },
+    {
+      "op": "counterDrag",
+      "name": "d12_f4_farcorner_slow",
+      "text": "reading",
+      "x": 0.8,
+      "y": 0.9,
+      "path": "Slow",
+      "target2": "m:0.2,-0.1",
+      "target": "index:0"
+    },
+    {
+      "op": "still",
+      "name": "d12_f4_farcorner_slow"
     },
     {
       "op": "cheat",
