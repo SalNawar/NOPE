@@ -48,7 +48,8 @@ using UnityEngine;
 /// stand first and where, and runs "First traveller of the shift" on it.</item>
 /// <item><c>cheatFaults</c> (target: label; n: the most travellers to try):
 /// "Reveal faults" on the traveller at the desk until one is denied with at
-/// least one box marked in red (a still), deciding each other one correctly.</item>
+/// least one box named and marked in red on the desk's papers (a still),
+/// deciding each other one correctly.</item>
 /// </list>
 /// </summary>
 public static class CheatOps
@@ -531,6 +532,23 @@ public static class CheatOps
         }
     }
 
+    /// <summary>How many boxes of the papers on the desk carry a mark (DeskDocument.Marked: Reveal faults' red, a logged difference's).</summary>
+    private static int MarkedBoxes()
+    {
+        int marked = 0;
+        foreach (DeskController desk in UnityEngine.Object.FindObjectsByType<DeskController>())
+        {
+            if (!desk.isActiveAndEnabled || !(QaGame.Field(desk, "_papers") is List<DeskDocument> papers))
+                continue;
+            foreach (DeskDocument paper in papers)
+                if (paper != null)
+                    for (int slot = 0; slot < paper.SlotCount; slot++)
+                        if (paper.Marked(slot))
+                            marked++;
+        }
+        return marked;
+    }
+
     private static IEnumerator Force(QaRunner runner, QaStep step)
     {
         RunManager run = RunManager.Instance;
@@ -578,8 +596,10 @@ public static class CheatOps
             Match m = marked.Match(said);
             int boxes = m.Success ? int.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture) : 0;
             bool deny = said.Contains(": DENY (");
-            seen.Add(deny ? $"DENY, {boxes} box(es)" : said.Contains("APPROVE (no fault)") ? "APPROVE (no fault)" : said);
-            if (deny && boxes > 0)
+            yield return QaGame.Frames(2);
+            int red = MarkedBoxes();
+            seen.Add(deny ? $"DENY, {boxes} box(es) named, {red} box(es) marked on the desk's papers" : said.Contains("APPROVE (no fault)") ? "APPROVE (no fault)" : said);
+            if (deny && boxes > 0 && red > 0)
             {
                 pass = true;
                 yield return QaGame.Frames(15);
