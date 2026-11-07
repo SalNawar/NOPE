@@ -244,6 +244,66 @@ public class DemoGateTests
         Assert.IsFalse(MeasuredPaths.NoneAffected("docs/FEATURES.md\nAssets/Editor/QA/DemoGate.cs\n"));
     }
 
+    /// <summary>GATE-01, the round 0 verifier's probe 0e47682: git's rename detection listed only the new path of a scenario moved into docs/, so its results counted at a HEAD that no longer had it. MeasuredPaths runs git with --no-renames (even when diff.renames is on), so a rename out of a measured path keeps the result stale; a docs-only commit still carries it.</summary>
+    [Test]
+    public void MeasuredPaths_AMeasuredFileRenamedIntoTheDocs_KeepsTheResultStale()
+    {
+        StringAssert.Contains("--no-renames", MeasuredPaths.DiffArguments("a", "b"));
+        string root = Path.Combine(Path.GetTempPath(), "gate_renames_" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(Path.Combine(root, "tools", "qa", "scenarios"));
+        try
+        {
+            Git(root, "init -q");
+            Git(root, "config diff.renames true");
+            File.WriteAllText(Path.Combine(root, "tools", "qa", "scenarios", "overlay_block.json"), "{ \"name\": \"overlay_block\", \"steps\": [] }\n");
+            string measured = Commit(root, "a scenario");
+            Directory.CreateDirectory(Path.Combine(root, "docs", "pending"));
+            File.WriteAllText(Path.Combine(root, "docs", "NOTES.md"), "notes\n");
+            string docsOnly = Commit(root, "docs only");
+            Git(root, "mv tools/qa/scenarios/overlay_block.json docs/pending/overlay_block.json");
+            string moved = Commit(root, "the scenario moves into docs");
+            StringAssert.DoesNotContain("tools/qa/scenarios", Git(root, $"diff --name-only {docsOnly} {moved}"), "git's own rename detection hides the old path (the hole)");
+
+            Func<string, string, bool> same = MeasuredPaths.Resolver(root);
+            Assert.IsTrue(same(measured, docsOnly), "a docs-only commit carries the result");
+            Assert.IsFalse(same(docsOnly, moved), "a measured file renamed into docs/ leaves its path: the result is stale");
+            Assert.IsFalse(same(measured, moved));
+        }
+        finally
+        {
+            foreach (string file in Directory.GetFiles(root, "*", SearchOption.AllDirectories))
+                File.SetAttributes(file, FileAttributes.Normal);
+            Directory.Delete(root, true);
+        }
+    }
+
+    private static string Commit(string root, string message)
+    {
+        Git(root, "add -A");
+        Git(root, $"-c user.name=qa -c user.email=qa@example.invalid -c commit.gpgsign=false commit -q -m \"{message}\"");
+        return Git(root, "rev-parse HEAD").Trim();
+    }
+
+    private static string Git(string root, string arguments)
+    {
+        var start = new System.Diagnostics.ProcessStartInfo("git", arguments)
+        {
+            WorkingDirectory = root,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true,
+        };
+        using (System.Diagnostics.Process p = System.Diagnostics.Process.Start(start))
+        {
+            string output = p.StandardOutput.ReadToEnd();
+            string error = p.StandardError.ReadToEnd();
+            p.WaitForExit(60000);
+            Assert.AreEqual(0, p.ExitCode, $"git {arguments}: {error}");
+            return output;
+        }
+    }
+
     /// <summary>A check that picks results by commit itself (DeskPlanChecks.DecorVerdict) follows GateResults.IsCurrent, as Judge does: a carried line counts, and the check names it instead of throwing.</summary>
     [Test]
     public void TheDecorCheck_ReadsACarriedLine_AsJudgeDoes()

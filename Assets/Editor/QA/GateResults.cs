@@ -248,7 +248,8 @@ public static class GitDirty
 /// Which older commits a result still measures (GATE-01: a commit that only
 /// touched the docs made every result stale). A result taken at commit C
 /// counts at HEAD when no measured path differs between the two trees
-/// (git diff --name-only C HEAD). Every path is measured except the docs
+/// (git diff --no-renames --name-only C HEAD: a rename lists both paths).
+/// Every path is measured except the docs
 /// folder, Markdown files outside Assets and the known-red list (it decides
 /// the verdict, not what is measured), so the rule fails closed: a change
 /// anywhere under Assets, Packages, ProjectSettings or tools makes the result
@@ -294,11 +295,22 @@ public static class MeasuredPaths
         };
     }
 
+    /// <summary>
+    /// The git arguments that list every path changed between
+    /// <paramref name="commit"/> and <paramref name="head"/>. Rename detection
+    /// is off (--no-renames, whatever diff.renames says), so a measured file
+    /// moved into docs/ lists its old path too and the result stays stale
+    /// (the round 0 verifier's probe 0e47682: a scenario moved into docs/
+    /// carried its results).
+    /// </summary>
+    public static string DiffArguments(string commit, string head) =>
+        $"-c core.quotepath=off diff --no-renames --name-only {commit} {head}";
+
     private static bool Compare(string root, string commit, string head)
     {
         try
         {
-            var start = new System.Diagnostics.ProcessStartInfo("git", $"-c core.quotepath=off diff --name-only {commit} {head}")
+            var start = new System.Diagnostics.ProcessStartInfo("git", DiffArguments(commit, head))
             {
                 WorkingDirectory = root,
                 UseShellExecute = false,
