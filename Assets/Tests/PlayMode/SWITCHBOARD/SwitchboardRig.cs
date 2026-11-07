@@ -177,10 +177,15 @@ public static class SwitchboardRig
             samples.Add(new QaPathSample(At(a0 + delta), true));
         for (int i = 0; i <= QaPaths.SettleFrames; i++)
             samples.Add(new QaPathSample(At(a0 + delta), false));
-        // The refused chevron's red lasts 0.45 s from the detent: its lens is read on every frame from the release to the rest and 3 frames after.
+        // The refused chevron's red lasts 0.45 s from the detent: its lens is read on every frame of the turn, to the rest and 3 frames after.
         float lensPeak = 0f;
         void PeakLens() => lensPeak = Mathf.Max(lensPeak, view.DialLenses(m)[chevron]);
-        yield return Fixed(runner.Input.Play(new QaPath(QaPathKind.Plain, samples)));
+        IEnumerator turn = Fixed(runner.Input.Play(new QaPath(QaPathKind.Plain, samples)));
+        while (turn.MoveNext())
+        {
+            yield return turn.Current;
+            PeakLens();
+        }
         yield return QaGame.Until(() =>
         {
             PeakLens();
