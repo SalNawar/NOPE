@@ -52,7 +52,7 @@ public enum DevCheat
     Tutorial,
     /// <summary>The cheat menu: the text's appearance (an AppearanceChoices key) in slot 1 of the next shift (a running shift restarts with it).</summary>
     ForceAppearance,
-    /// <summary>The cheat menu: the hall's time of day, the next of TimeNames (HourOf).</summary>
+    /// <summary>The cheat menu: the time of day the clock, the hall and the city show, the next of TimeNames (HourOf; HourOverride).</summary>
     TimeOfDay,
     /// <summary>Another track's cheat (the text: its Register label).</summary>
     Extra
@@ -91,7 +91,7 @@ public static class DevCheats
         }
     }
 
-    /// <summary>The time-of-day choice the hall shows now (the one whose hour is DevToolsState.ForcedHour; the clock's when none is).</summary>
+    /// <summary>The time-of-day choice shown now (the one whose hour is DevToolsState.ForcedHour, the one hour override; the clock's when none is).</summary>
     public static int TimeChoice
     {
         get
@@ -384,7 +384,10 @@ public static class DevCheats
             case DevCheat.TimeOfDay:
                 int next = (TimeChoice + 1) % TimeNames.Length;
                 DevToolsState.ForcedHour = HourOf(next);
-                Say($"Time of day: {TimeNames[next]} (until the next morning).");
+                float? hour = DevToolsState.ForcedHour;
+                Say(hour.HasValue
+                    ? $"Time of day: {TimeNames[next]}: the clock, the hall and the city show {ShiftClock.Format(HourOverride.ShownMinute(hour, 0f))} until the next morning (the shift's own clock runs on)."
+                    : "Time of day: Clock: the clock, the hall and the city show the shift clock's hour.");
                 break;
             case DevCheat.Extra:
                 (string label, Action<RunManager> extra, bool restarts) = Extras.FirstOrDefault(e => e.label == text);

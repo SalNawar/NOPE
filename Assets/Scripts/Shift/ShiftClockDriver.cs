@@ -8,7 +8,8 @@ using UnityEngine;
 /// and re-raises Closed. The clock holds while any pause source holds it
 /// (PauseState.Shared: Settings open, the window's focus lost, a citation
 /// slip, the booth closed; BUG-34). GameManager
-/// starts and stops it; readouts (and later, lighting) read <see cref="Clock"/>.
+/// starts and stops it; readouts read <see cref="ShownMinute"/> (the forced
+/// hour of the cheat menu while one is forced), the shift's rules <see cref="Clock"/>.
 /// While enabled it is also the read-only shift hook for the art side
 /// (<see cref="Live"/>, <see cref="IShiftProgress"/>).
 /// </summary>
@@ -29,6 +30,17 @@ public sealed class ShiftClockDriver : MonoBehaviour, IShiftProgress
 
     /// <summary>The clock's minute of the day (<see cref="ShiftClock.CurrentMinute"/>); 09:00 until Configure.</summary>
     public float MinuteOfDay => Clock != null ? Clock.CurrentMinute : 540f;
+
+    /// <summary>
+    /// The minute the clock shows (GATE-22, D13; <see cref="HourOverride"/>):
+    /// the cheat menu's forced hour (DevToolsState.ForcedHour: "Time: Morning,
+    /// Dusk, Night", the QA rig's hour op) while one is forced, else
+    /// <see cref="MinuteOfDay"/>. Every readout of the clock reads it (the
+    /// desk's CRT, the wall clock, the PC's tray, a scanned page's strip), as
+    /// the hall's light reads the same hour; closing time and the last-hour
+    /// alarm keep the true minute.
+    /// </summary>
+    public float ShownMinute => HourOverride.ShownMinute(DevToolsState.ForcedHour, MinuteOfDay);
 
     /// <summary>Today's desk hours as the clock runs them (the standard day until Configure).</summary>
     public ShiftHours Hours => Clock != null ? new ShiftHours(Clock.StartMinute, Clock.EndMinute) : _standard;
