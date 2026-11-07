@@ -975,4 +975,12 @@ public sealed partial class SwitchboardView
 
     /// <summary>True when the view is fully turned to the board.</summary>
     internal bool Turned => _open && _openT >= 1f;
+
+    /// <summary>The board's plate on the screen (pixels, y up), the shapes' letterbox lying outside it (QA: no desk HUD in the bands).</summary>
+    internal Rect PlateOnScreen()
+    {
+        var corners = new Vector3[4];
+        _plate.GetWorldCorners(corners);
+        return Rect.MinMaxRect(corners[0].x, corners[0].y, corners[2].x, corners[2].y);
+    }
 }

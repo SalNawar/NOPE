@@ -400,6 +400,10 @@
       "name": "d5_board_5x4"
     },
     {
+      "op": "boardHud",
+      "name": "aspect.hudHidden"
+    },
+    {
       "op": "res",
       "w": 2520,
       "h": 1080
@@ -411,6 +415,10 @@
     {
       "op": "still",
       "name": "d5_board_21x9"
+    },
+    {
+      "op": "boardHud",
+      "name": "aspect.hudHidden21x9"
     },
     {
       "op": "res",
