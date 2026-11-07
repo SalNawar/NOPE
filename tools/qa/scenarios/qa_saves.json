@@ -1,0 +1,357 @@
+{
+  "name": "qa_saves",
+  "owner": "FLOW",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "Saves and loads (qa-endings-saves, 2026-11-07; GATE-09). A quit to the Title mid-shift (a traveller and papers at the desk, a verdict given, the board ringing) and Continue: the same day, its morning wallet, stability, clock, save, board, pet and papers (quitting forfeits the day: the shift replays from its briefing, the same first traveller with the same papers). The office has no Quit to Title control yet (FLOW's hand-off to UI-PC and TEXT-LANG), so the quit calls RunManager.LoadTitleScene, the path that control takes. Then a quit at Home and Continue: Home again with the same bill, care and wallet (the arrival is charged once). Then a day-9 save aged as a 2026-10-09 build left it (BLD-09) continues and plays; a version 2 save leaves Continue hidden and New Run works. The saves are the test checkout's own (Library/EditorSaves), never a player's."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_morning"
+    },
+    {
+      "op": "still",
+      "name": "d1_morning"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_first"
+    },
+    {
+      "op": "still",
+      "name": "d1_first_traveller"
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "wait",
+      "f": 5
+    },
+    {
+      "op": "waitTraveller",
+      "f": 60
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_second"
+    },
+    {
+      "op": "still",
+      "name": "d1_second_traveller"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.LoadTitleScene"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "still",
+      "name": "title_after_quit"
+    },
+    {
+      "op": "qaTexts",
+      "name": "title_after_quit",
+      "n": 1
+    },
+    {
+      "op": "qaTitle",
+      "name": "after_quit",
+      "n": 1
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.continueButton"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_continued",
+      "text": "d1_morning"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_continued_world",
+      "text": "d1_morning",
+      "target": "world"
+    },
+    {
+      "op": "still",
+      "name": "d1_continued"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_first_again",
+      "text": "d1_first",
+      "target": "scene,day,phase,money,stability,ending,board,desk,papers,pet,home"
+    },
+    {
+      "op": "still",
+      "name": "d1_first_again"
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 60
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_home"
+    },
+    {
+      "op": "still",
+      "name": "d1_home"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.LoadTitleScene"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "qaTitle",
+      "name": "from_home",
+      "n": 1
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.continueButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_home_continued",
+      "text": "d1_home",
+      "target": "scene,day,phase,money,stability,ending,save,pet,home"
+    },
+    {
+      "op": "still",
+      "name": "d1_home_continued"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "flowSettled"
+    },
+    {
+      "op": "waitOffice",
+      "n": 2,
+      "f": 120
+    },
+    {
+      "op": "qaSnap",
+      "name": "d2_morning"
+    },
+    {
+      "op": "jumpDay",
+      "n": 9
+    },
+    {
+      "op": "flowSettled"
+    },
+    {
+      "op": "waitOffice",
+      "n": 9,
+      "f": 300
+    },
+    {
+      "op": "qaSnap",
+      "name": "d9_morning"
+    },
+    {
+      "op": "qaOldSave",
+      "text": "aged"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.LoadTitleScene"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "qaTitle",
+      "name": "aged",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "title_aged_save"
+    },
+    {
+      "op": "button",
+      "target": "TitleUIController.continueButton"
+    },
+    {
+      "op": "waitOffice",
+      "n": 9,
+      "f": 120
+    },
+    {
+      "op": "qaSnap",
+      "name": "d9_aged_continued",
+      "text": "d9_morning",
+      "target": "day,phase,money,stability,ending,hour,board,pet"
+    },
+    {
+      "op": "still",
+      "name": "d9_aged_continued"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "d9_aged_desk"
+    },
+    {
+      "op": "probe",
+      "name": "d9_aged_desk"
+    },
+    {
+      "op": "qaOldSave",
+      "text": "v2"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.LoadTitleScene"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "qaTitle",
+      "name": "v2",
+      "n": 0
+    },
+    {
+      "op": "still",
+      "name": "title_v2_save"
+    },
+    {
+      "op": "qaTexts",
+      "name": "title_v2",
+      "n": 1
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_after_v2"
+    },
+    {
+      "op": "still",
+      "name": "d1_after_v2"
+    }
+  ]
+}
