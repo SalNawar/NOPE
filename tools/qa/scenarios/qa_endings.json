@@ -328,7 +328,6 @@
       "op": "qaSkipUntil",
       "name": "welfare",
       "n": 12,
-      "f": -1,
       "text": "pet_taken"
     },
     {
@@ -517,7 +516,7 @@
       "op": "qaSkipUntil",
       "name": "bankrupt",
       "n": 6,
-      "f": -75,
+      "target": "-75",
       "text": "bankrupt"
     },
     {

@@ -38,8 +38,9 @@ using Object = UnityEngine.Object;
 /// <item><c>qaMotion</c> (n 1 Reduced Motion on, 0 back to what the player
 /// had): the player's choice is kept in a marker preference and put back at
 /// the end of the run, or at the next play when the run was stopped.</item>
-/// <item><c>qaSkipUntil</c> (name; n the most skips, default 12; f the wallet
-/// set before each skip, -1 to leave it; text the ending expected): the cheat
+/// <item><c>qaSkipUntil</c> (name; n the most skips, default 12; target the
+/// wallet set before each skip, a whole number that may be a debt such as
+/// "-75", blank to leave it; text the ending expected): the cheat
 /// menu's Skip day until the run ends, every night's wallet and pet in
 /// nights.txt; asserts <c>ending.&lt;name&gt;</c>.</item>
 /// <item><c>qaOldSave</c> (text <c>aged</c> or <c>v2</c>): rewrites the
@@ -582,13 +583,15 @@ public static class FlowQaOps
         RunManager run = RunManager.Instance ?? throw new InvalidOperationException("No run.");
         string name = string.IsNullOrEmpty(step.name) ? "skips" : step.name;
         int most = step.n > 0 ? step.n : 12;
+        // The wallet held before each skip: target, a whole number (a debt is negative); blank leaves the wallet as the nights leave it.
+        int? hold = int.TryParse(step.target, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out int wallet) ? wallet : (int?)null;
         var nights = new List<string>();
         string reached = null;
         for (int i = 0; i < most && reached == null; i++)
         {
             WorldState before = run.World;
-            if (step.f >= 0f && before.money != Mathf.RoundToInt(step.f))
-                DevCheats.Run(DevCheat.AddMoney, run, Mathf.RoundToInt(step.f) - before.money, 0f, null);
+            if (hold.HasValue && before.money != hold.Value)
+                DevCheats.Run(DevCheat.AddMoney, run, hold.Value - before.money, 0f, null);
             int day = before.day, money = before.money;
             DevCheats.Run(DevCheat.SkipDay, run, 0, 0f, null);
             yield return QaGame.Until(() => !SceneTransit.Changing && (Ended(run)
