@@ -1,0 +1,32 @@
+{
+  "name": "cheats_jump_d7",
+  "owner": "CHEATS",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "cheats-d7-regress (2026-11-07): the D7 story beat forced from day 12 (a jump back to a guided day: Start Shift tilts into the reading view for the rulebook's new page) lands on a clean day with its first traveller at the desk after Start Shift and the AVAILABLE sign (DECISIONS D13). The sign op waits for the sign to hold still before it presses it." },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "flowSettled" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "cheat", "name": "AddMoney", "n": 1000 },
+    { "op": "cheat", "name": "JumpToDay", "n": 12 },
+    { "op": "flowSettled" },
+    { "op": "waitOffice", "n": 12, "f": 180 },
+    { "op": "startShift" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "still", "name": "jump_d12_first" },
+    { "op": "cheatForce", "text": "D7" },
+    { "op": "flowSettled" },
+    { "op": "waitOffice", "n": 7, "f": 180 },
+    { "op": "still", "name": "jump_d7_briefing" },
+    { "op": "startShift" },
+    { "op": "still", "name": "jump_d7_shift" },
+    { "op": "sign" },
+    { "op": "still", "name": "jump_d7_after_sign" },
+    { "op": "waitTraveller", "f": 20 },
+    { "op": "cheatCheck", "name": "first", "target": "d7", "w": 5 },
+    { "op": "still", "name": "jump_d7_first" }
+  ]
+}
