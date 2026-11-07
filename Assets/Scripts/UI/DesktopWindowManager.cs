@@ -383,12 +383,21 @@ public sealed class DesktopWindowManager : MonoBehaviour
         if (button.Glyph == null)
             return;
         RectTransform at = button.Glyph.rectTransform;
-        Vector2 centre = show ? new Vector2(at.sizeDelta.x / 2f + GlyphInset, at.anchoredPosition.y) : new Vector2(width / 2f, at.anchoredPosition.y);
-        at.anchoredPosition = centre;
+        if (_glyphSize <= 0f)
+            _glyphSize = at.sizeDelta.x; // the builder's glyph beside a title
+        float size = show ? _glyphSize : Mathf.Max(_glyphSize, GlyphAloneSize);
+        at.sizeDelta = new Vector2(size, size);
+        at.anchoredPosition = new Vector2(show ? size / 2f + GlyphInset : width / 2f, at.anchoredPosition.y);
     }
 
     /// <summary>A taskbar glyph's inset from its button's left edge while the title shows beside it (the builder's PcSize.M).</summary>
     private const float GlyphInset = 12f;
+
+    /// <summary>A taskbar glyph's size when it shows alone (desktop units): larger than beside a title, so a button with no title still reads.</summary>
+    private const float GlyphAloneSize = 48f;
+
+    /// <summary>The glyph's size beside a title (the built one), read from the first button.</summary>
+    private float _glyphSize;
 
     /// <summary>The chevron: the first window waiting behind it comes forward (restored and focused, so its button shows); each click brings the next.</summary>
     private void BringHiddenForward()
