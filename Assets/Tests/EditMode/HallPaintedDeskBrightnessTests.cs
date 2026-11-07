@@ -29,7 +29,7 @@ public class HallPaintedDeskBrightnessTests
         Match curve = Regex.Match(asset, @"\n  paintedDeskBrightness:\n(.*?)\n    m_PreInfinity: (\d+)\n    m_PostInfinity: (\d+)", RegexOptions.Singleline);
         Assert.IsTrue(curve.Success, "HallLighting_Default.asset carries the painted desk's brightness");
         MatchCollection keys = Regex.Matches(curve.Groups[1].Value, @"time: ([0-9.]+)\n\s+value: ([0-9.]+)");
-        float[] times = { 5.5f, 8.5f, 12f, 16f, 18.5f }, values = { 1.5f, 0.6f, 0.6f, 0.66f, 1.5f };
+        float[] times = { 5.5f, 8.5f, 12f, 16f, 18.5f }, values = { 1.9f, 0.6f, 0.6f, 0.66f, 1.9f };
         Assert.AreEqual(times.Length, keys.Count, "a line through the night, the day and the dusk");
         for (int i = 0; i < times.Length; i++)
         {
@@ -43,7 +43,7 @@ public class HallPaintedDeskBrightnessTests
     public void TheKnobsDefault_IsTheAssetsLine()
     {
         string source = Read("Assets/Scripts/Office/HallLightingSO.cs");
-        StringAssert.Contains("public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.5f), (8.5f, 0.6f), (12f, 0.6f), (16f, 0.66f), (18.5f, 1.5f));", source);
+        StringAssert.Contains("public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 0.6f), (12f, 0.6f), (16f, 0.66f), (18.5f, 1.9f));", source);
     }
 
     [Test]
@@ -61,11 +61,11 @@ public class HallPaintedDeskBrightnessTests
             Assert.AreEqual(BoothGrade[c - 1], F(value.Groups[c].Value), 1e-4f, "measured after the office finish (2026-10-28; PaintedBoothTests holds the measurement)");
             Assert.That(BoothGrade[c - 1], Is.LessThan(1f), "the booth's hall is darker than the open desk's");
         }
-        Assert.That(BoothGrade[1], Is.LessThan(BoothGrade[0]), "and the green under the red (D9: no olive cast)");
+        Assert.That(BoothGrade[2], Is.LessThan(BoothGrade[0]), "and warmer: the blue under the red (the painting's stone)");
     }
 
     /// <summary>The booth's grade (r, g, b), measured on screen after the office finish (2026-10-28, Saleh: "bg is dark"; PaintedBoothTests holds the measurement).</summary>
-    private static readonly float[] BoothGrade = { 0.77f, 0.67f, 0.85f };
+    private static readonly float[] BoothGrade = { 0.75f, 0.745f, 0.715f };
 
     [Test]
     public void TheBrightness_AppliesOnlyUnderThePaintedDesk()

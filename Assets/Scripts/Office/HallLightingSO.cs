@@ -173,9 +173,9 @@ public sealed class HallLightingSO : ScriptableObject
     /// <summary>
     /// The traveller's light along the clock (x: the hour, 0 to 24; y: a share of the day's level), on the room's
     /// colour without the desk lamp (DeskLightLevel.TravellerLight; D9: the traveller takes the hall's tint, 55 to
-    /// 70 % of the day's luma at night). 0.8 at night measured 0.6 of the noon luma after the finish (hall-night-light).
+    /// 70 % of the day's luma at night). 0.8 at night measured 0.675 of the noon luma after the finish, so 0.78 aims at the middle (hall-night-light).
     /// </summary>
-    public AnimationCurve travellerLight = Line((5.5f, 0.8f), (8.5f, 1f), (16f, 1f), (18.5f, 0.8f));
+    public AnimationCurve travellerLight = Line((5.5f, 0.78f), (8.5f, 1f), (16f, 1f), (18.5f, 0.78f));
 
     [Header("The hall at night (NOPE/Hall Deep Layout, through HallBakedLighting)")]
     /// <summary>The painted hall's tint at full night, away from the lamp pools.</summary>
@@ -228,25 +228,28 @@ public sealed class HallLightingSO : ScriptableObject
     /// the clock (x: the hour, 0 to 24; y: the scale of its sRGB values, 1
     /// shows it as lit; HallBackdrop.Brightness). D9 (hall-night-light): the
     /// hall between the bars at luma 33 to 41 by day and 28 to 34 at night,
-    /// after the office finish; a line through 05:30 1.5, 08:30 0.6, 12:00
-    /// 0.6, 16:00 0.66 and 18:30 1.5 (the night's lit hall is about a third
-    /// of the day's, so the night scale is above 1). The hours outside keep
+    /// after the office finish; a line through 05:30 1.9, 08:30 0.6, 12:00
+    /// 0.6, 16:00 0.66 and 18:30 1.9 (the night's lit hall is about a quarter
+    /// of the day's, so the night scale is above 1; solved from two Unity
+    /// runs, one log-linear fit per channel). The hours outside keep
     /// the nearer end's value. The art's desk (the painted desk off) keeps
     /// the hall as lit.
     /// </summary>
-    public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.5f), (8.5f, 0.6f), (12f, 0.6f), (16f, 0.66f), (18.5f, 1.5f));
+    public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 0.6f), (12f, 0.6f), (16f, 0.66f), (18.5f, 1.9f));
 
     /// <summary>
     /// The booth's grade: a per-channel scale of the lit hall's sRGB values
     /// on top of paintedDeskBrightness, at every hour, while the painted
     /// desk is installed (HallLightingRig.PaintedDesk; HallBackdrop.Grade).
+    /// Material.SetColor decodes the colour to linear in this linear project,
+    /// so the shader scales the hall's sRGB values by the decoded channels.
     /// D9 (hall-night-light, Saleh "fix bg weird color issues"): the old
     /// (0.81, 0.82, 0.64) left the noon hall olive (blue over red 0.40, green
-    /// near red); (0.77, 0.67, 0.85) puts blue over red at 0.55 to 0.65 and
-    /// the green under the red, a warm stone, solved through the office
-    /// finish's model (DeskLighting.GradedLuma's maths) from the 12:00 still.
+    /// near red); (0.75, 0.745, 0.715) puts the noon hall at the approved
+    /// painting's colour (sRGB 42.8, 36.4, 26.4: blue over red 0.62), solved
+    /// from two Unity runs at 12:00 (one log-linear fit per channel).
     /// </summary>
-    public Color paintedBoothGrade = new Color(0.77f, 0.67f, 0.85f, 1f);
+    public Color paintedBoothGrade = new Color(0.75f, 0.745f, 0.715f, 1f);
 
     /// <summary>The day-night cycle's knobs for HallDayCycle (fixture threshold, band and stagger included).</summary>
     public HallDayCycle.Settings Cycle => new HallDayCycle.Settings(sunriseHour, sunsetHour, twilightHours, fixturesOnBelow, fixtureFadeBand, fixtureStaggerMinutes);

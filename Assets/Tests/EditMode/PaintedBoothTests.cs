@@ -299,6 +299,9 @@ public class PaintedBoothTests
     }
 
     /// <summary>An sRGB value (0-255) the hall draws at, as the screen shows it after the office finish (DeskLighting's model of URP's maths).</summary>
+    /// <summary>The sRGB decode Material.SetColor applies to a colour in a linear project (0-1).</summary>
+    private static float Decode(float c) => c <= 0.04045f ? c / 12.92f : (float)Math.Pow((c + 0.055f) / 1.055f, 2.4f);
+
     private static float Finished(float srgb) => DeskLighting.GradedLuma(DeskLighting.LuminanceForLuma(srgb), DeskLighting.Finish.Office);
 
     /// <summary>The sRGB value (0-255) the hall must draw at for the screen to show <paramref name="shown"/> after the office finish.</summary>
@@ -323,15 +326,17 @@ public class PaintedBoothTests
         for (int c = 0; c < 3; c++)
             grade[c] = F(value.Groups[c + 1].Value);
         // D9 (hall-night-light, 2026-11-07): the 12:00 still under the old grade (0.81, 0.82, 0.64) and brightness 0.7757
-        // showed the hall between the bars at sRGB (67, 62, 27), luma 60.5, blue over red 0.40 (olive). The same pixels at
-        // the new grade and the noon brightness 0.6 land in the target: luma 33 to 41, blue over red 0.55 to 0.65.
+        // showed the hall between the bars at sRGB (67, 62, 27), luma 60.5, blue over red 0.40 (olive). Material.SetColor
+        // decodes the grade to linear in this linear project, so the shader scales the sRGB values by the decoded channels.
+        // The same pixels at the new grade and the noon brightness 0.6 land in the target: luma 33 to 41, blue over red
+        // 0.55 to 0.65 on screen (this grey model of the finish reads about 0.03 bluer than the screen, so 0.68 here).
         float[] oldShown = { 67f, 62f, 27f }, oldGrade = { 0.81f, 0.82f, 0.64f };
         var shown = new float[3];
         for (int c = 0; c < 3; c++)
-            shown[c] = Finished(Unfinished(oldShown[c]) * 0.6f * grade[c] / (0.7757f * oldGrade[c]));
+            shown[c] = Finished(Unfinished(oldShown[c]) * 0.6f * Decode(grade[c]) / (0.7757f * Decode(oldGrade[c])));
         float luma = 0.2126f * shown[0] + 0.7152f * shown[1] + 0.0722f * shown[2];
         Assert.That(luma, Is.InRange(33f, 41f), $"12:00: the hall's luma {luma:0.0}");
-        Assert.That(shown[2] / shown[0], Is.InRange(0.55f, 0.65f), "12:00: blue over red");
+        Assert.That(shown[2] / shown[0], Is.InRange(0.55f, 0.68f), "12:00: blue over red");
         Assert.That(shown[1], Is.LessThan(shown[0]), "the green under the red: warm stone, not olive");
         string rig = Read("Assets/Scripts/Office/HallLightingRig.cs");
         StringAssert.Contains("backdrop.Brightness = PaintedDesk && painted != null && painted.length > 0 ? painted.Evaluate(Hour) : 1f;\n            backdrop.Grade = PaintedDesk ? settings.paintedBoothGrade : Color.white;", rig,
