@@ -143,6 +143,53 @@ public class DeskV3InstallTests
         }
     }
 
+    /// <summary>
+    /// GATE-26 of 2026-10-28: the readout line the painted reader wears
+    /// (WearReadout) was not counted as painted, so the binder's audit warned
+    /// "Desk_ChipReader/ReadoutMount/Readout" on every office load and could
+    /// never catch a real stray part. The worn line is the painted look's: the
+    /// audit is quiet on the dressed reader, and names a stray old part the
+    /// moment one draws.
+    /// </summary>
+    [Test, Category("NeedsEditor")]
+    public void TheAudit_IsQuietOnTheWornReadout_AndNamesAFakeStrayPart()
+    {
+        var root = new GameObject("DeskPainted");
+        var reader = new GameObject("ChipReader");
+        try
+        {
+            GameObject painted = Cube("Desk_ChipReader", root.transform, new Vector3(0.9f, 1.12f, 0.35f), new Vector3(0.22f, 0.08f, 0.16f));
+            var desk = root.AddComponent<DeskPainted>();
+            desk.Configure(new[] { new DeskPainted.Part { name = "Desk_ChipReader", root = painted.transform, mesh = painted.transform } }, null, null, 1.069f, null);
+            reader.transform.SetParent(root.transform, false);
+            Renderer body = Cube("Body", reader.transform, new Vector3(0.5f, 1.1f, 0.2f), Vector3.one * 0.1f).GetComponent<Renderer>();
+            var readoutGo = new GameObject("Readout", typeof(RectTransform), typeof(TMPro.TextMeshPro));
+            readoutGo.transform.SetParent(body.transform, false);
+            var readout = readoutGo.GetComponent<TMPro.TextMeshPro>();
+            readout.text = "READY";
+            (_, Clickable readoutClick) = ClickBox("ReadoutClick", reader.transform);
+
+            // The binder's install order (InstallPainted): wear the look, silence the dead boxes, carry the box, wear the readout.
+            desk.Reskin("Desk_ChipReader", reader.transform, reader.transform, DeskPaintedMap.Kept(DeskHomeMap.ChipReader));
+            DeskPainted.Silence(reader.transform, DeskPaintedMap.DeadClicks(DeskHomeMap.ChipReader));
+            desk.EnsureClickable("Desk_ChipReader", null);
+            Assert.IsTrue(desk.WearReadout("Desk_ChipReader", readout, readoutClick.transform));
+            Assert.IsTrue(readout.GetComponent<Renderer>().enabled, "the worn line draws");
+            CollectionAssert.IsEmpty(desk.OldParts(reader.transform, DeskHomeMap.ChipReader), "quiet: the worn readout line is the painted look's");
+
+            Renderer stray = Cube("StrayLamp", reader.transform, Vector3.zero, Vector3.one * 0.03f).GetComponent<Renderer>();
+            Assert.IsTrue(stray.enabled);
+            CollectionAssert.AreEqual(new[] { "StrayLamp" }, desk.OldParts(reader.transform, DeskHomeMap.ChipReader), "loud: a stray old part is named");
+            stray.enabled = false;
+            CollectionAssert.IsEmpty(desk.OldParts(reader.transform, DeskHomeMap.ChipReader), "a part that does not draw is no stray");
+        }
+        finally
+        {
+            Object.DestroyImmediate(reader);
+            Object.DestroyImmediate(root);
+        }
+    }
+
     [Test, Category("NeedsEditor")]
     public void TheAudit_NamesEveryOldPartStillDrawnOrClicked_AndNothingOnACleanDesk()
     {

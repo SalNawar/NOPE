@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -23,13 +25,17 @@ using Debug = UnityEngine.Debug;
 /// mode; the saves set aside are also named in a file beside them, so an
 /// editor that crashed or restarted mid-run puts them back when it next loads
 /// (<see cref="RecoverSaves"/>). One run at a time; its folder is
-/// Library/QA/runs/&lt;scenario&gt;_&lt;time&gt;, named by Library/QA/last_run.txt,
-/// and it ends with harness.txt, whose first word is the run's verdict
-/// against the known-red list (DemoGate.JudgeRun: "ok" when nothing failed
-/// but known red). After the restore, <see cref="Analyze"/> runs
-/// tools/qa/seqtools.py on every recorded sequence (flicker, flash, latency
-/// on a captured one; hitches on a timing one), so the editor's runs are
-/// gated on their frames too (analysis.txt).
+/// Library/QA/runs/&lt;scenario&gt;_&lt;time&gt;, named by Library/QA/last_run.txt.
+/// After the restore, <see cref="Analyze"/> runs tools/qa/seqtools.py on
+/// every recorded sequence (flicker, flash, cuts, latency, press-to-sound
+/// and the frame-against-still colour on a captured one; hitches on a timing
+/// one; analysis.txt) and only then writes harness.txt, whose first word is
+/// the verdict on the run and its frames together (HarnessVerdict: the run's
+/// own line against the known-red list, DemoGate.JudgeRun, joined with every
+/// red analysis line; "ok" only when nothing failed but known red; GATE-07
+/// of 2026-10-28: the line was written before the analysis and ignored it).
+/// harness.txt is the run's last file: whoever waits for it reads a run whose
+/// frames are judged.
 /// </summary>
 [InitializeOnLoad]
 public static class QaPlayHarness
@@ -47,6 +53,11 @@ public static class QaPlayHarness
     private const string ResultKey = "QaRig.Result";
     private const string PreparedKey = "QaRig.Prepared";
     private const string DirtyKey = "QaRig.Dirty";
+    private const string RunLineKey = "QaRig.RunLine";
+    private const string RunOkKey = "QaRig.RunOk";
+    private const string ImportedKey = "QaRig.Imported";
+    private const string VerdictKey = "QaRig.Verdict";
+    private const string VerdictOkKey = "QaRig.VerdictOk";
     private const int Idle = 0, Playing = 1, Finishing = 2;
 
     /// <summary>The game view's resolution name while QA plays.</summary>
@@ -138,6 +149,11 @@ public static class QaPlayHarness
         SessionState.SetBool(BegunKey, false);
         SessionState.SetFloat(DeadlineKey, (float)(EditorApplication.timeSinceStartup + maxMinutes * 60f));
         SessionState.SetString(ResultKey, string.Empty);
+        SessionState.SetString(RunLineKey, string.Empty);
+        SessionState.SetBool(RunOkKey, false);
+        SessionState.SetInt(ImportedKey, -1);
+        SessionState.SetString(VerdictKey, string.Empty);
+        SessionState.SetBool(VerdictOkKey, false);
         // The tree's state before the rig touches a setting (the quality level below is saved into QualitySettings.asset).
         SessionState.SetBool(DirtyKey, GitDirty.Changed(GateResults.ProjectRoot).Count > 0);
 
@@ -178,26 +194,39 @@ public static class QaPlayHarness
 
     /// <summary>
     /// After the run ended (still in play mode): imports its assertions as
-    /// gate results and writes harness.txt, whose first line is the verdict
-    /// against the known-red list (<see cref="DemoGate.JudgeRun"/>: "ok" when
-    /// only known-red assertions failed; run.json's ok stays the strict one).
-    /// Returns its report (null when it did not finish).
+    /// gate results and keeps the run's own verdict against the known-red
+    /// list (<see cref="DemoGate.JudgeRun"/>: "ok" when only known-red
+    /// assertions failed; run.json's ok stays the strict one) for
+    /// <see cref="Analyze"/>, which writes harness.txt once the frames are
+    /// judged too. Returns its report (null when it did not finish).
     /// </summary>
     public static QaRunReport Collect()
     {
         QaRunner runner = QaRunner.Active;
         if (runner == null || !runner.Done)
         {
-            SessionState.SetString(ResultKey, "timeout");
-            File.WriteAllText(Path.Combine(OutDir, "harness.txt"), "timeout: the run did not finish before its deadline");
+            KeepRunVerdict("timeout: the run did not finish before its deadline", false, "timeout");
             return null;
         }
-        int imported = GateResults.Import(runner.Report, OutDir, false, SessionState.GetBool(DirtyKey, false));
+        SessionState.SetInt(ImportedKey, GateResults.Import(runner.Report, OutDir, false, SessionState.GetBool(DirtyKey, false)));
         RunVerdict verdict = DemoGate.JudgeRun(runner.Report, DemoGate.KnownRedRunPatterns());
-        SessionState.SetString(ResultKey, verdict.Ok ? "ok" : "failed");
-        File.WriteAllText(Path.Combine(OutDir, "harness.txt"), $"{verdict.Line}\n{imported} result(s) imported into {GateResults.Folder}\n");
+        KeepRunVerdict(verdict.Line, verdict.Ok, verdict.Ok ? "ok" : "failed");
         return runner.Report;
     }
+
+    /// <summary>Keeps the run's own verdict line for harness.txt (written by <see cref="Analyze"/>).</summary>
+    private static void KeepRunVerdict(string line, bool ok, string result)
+    {
+        SessionState.SetString(ResultKey, result);
+        SessionState.SetString(RunLineKey, line);
+        SessionState.SetBool(RunOkKey, ok);
+    }
+
+    /// <summary>The verdict harness.txt's first line gave on the last analysed run (HarnessVerdict), or empty before <see cref="Analyze"/>.</summary>
+    public static string VerdictLine => SessionState.GetString(VerdictKey, string.Empty);
+
+    /// <summary>True when the last analysed run and its frames passed but for known red (harness.txt's first word "ok").</summary>
+    public static bool VerdictOk => SessionState.GetBool(VerdictOkKey, false);
 
     /// <summary>The finished run's report, read back from its run.json (works after a domain reload), or null.</summary>
     public static QaRunReport ReadReport()
@@ -240,8 +269,7 @@ public static class QaPlayHarness
         }
         catch (Exception e)
         {
-            SessionState.SetString(ResultKey, "failed");
-            File.WriteAllText(Path.Combine(OutDir, "harness.txt"), $"failed: the run could not start: {e.Message}");
+            KeepRunVerdict($"failed: the run could not start: {e.Message}", false, "failed");
             Stop();
             return;
         }
@@ -290,30 +318,58 @@ public static class QaPlayHarness
 
     /// <summary>
     /// Runs tools/qa/seqtools.py (python on the PATH) on every sequence the
-    /// run recorded (<c>all</c>: flicker, flash and latency on a captured one,
-    /// hitches on a timing one), writing gate results stamped with HEAD and
-    /// the tree's state (ids &lt;scenario&gt;.seq.&lt;name&gt;.&lt;analysis&gt;) and the
-    /// output to the run's analysis.txt. Returns false when an analysis
-    /// failed or could not run.
+    /// run recorded (<c>all</c>: flicker, flash, cuts, latency, press-to-sound
+    /// and colour on a captured one, hitches on a timing one), writing gate
+    /// results stamped with HEAD and the tree's state (ids
+    /// &lt;scenario&gt;.seq.&lt;name&gt;.&lt;analysis&gt;) and the output to the run's
+    /// analysis.txt; then writes harness.txt: its first line the verdict on
+    /// the run and its frames together (<see cref="HarnessVerdict"/>, kept as
+    /// <see cref="VerdictLine"/>), then the results imported and each red
+    /// analysis line. A run that recorded no sequence gets its own verdict.
+    /// Returns false when an analysis failed or could not run.
     /// </summary>
     public static bool Analyze()
     {
         string seqRoot = Path.Combine(OutDir, "seq");
-        if (!Directory.Exists(seqRoot))
-            return true;
-        string tool = Path.Combine(GateResults.ProjectRoot, "tools", "qa", "seqtools.py");
-        string head = GitHead.Read(GateResults.ProjectRoot);
-        bool dirty = SessionState.GetBool(DirtyKey, false);
-        var log = new StringBuilder();
-        bool ok = true;
-        foreach (string seq in Directory.GetDirectories(seqRoot))
-            ok &= Python(log, tool, "all", seq, head, dirty);
-        File.WriteAllText(Path.Combine(OutDir, "analysis.txt"), log.ToString());
-        Debug.Log($"[QA] Frame analysis {(ok ? "passed" : "FAILED")}: {Path.Combine(OutDir, "analysis.txt")}");
+        var analyses = new List<SeqAnalysis>();
+        if (Directory.Exists(seqRoot))
+        {
+            string tool = Path.Combine(GateResults.ProjectRoot, "tools", "qa", "seqtools.py");
+            string head = GitHead.Read(GateResults.ProjectRoot);
+            bool dirty = SessionState.GetBool(DirtyKey, false);
+            var log = new StringBuilder();
+            foreach (string seq in Directory.GetDirectories(seqRoot))
+                analyses.Add(Python(log, tool, "all", seq, head, dirty));
+            File.WriteAllText(Path.Combine(OutDir, "analysis.txt"), log.ToString());
+        }
+        bool ok = analyses.All(a => a.Ran && a.ExitOk);
+        if (analyses.Count > 0)
+            Debug.Log($"[QA] Frame analysis {(ok ? "passed" : "FAILED")}: {Path.Combine(OutDir, "analysis.txt")}");
+        WriteHarness(analyses);
         return ok;
     }
 
-    private static bool Python(StringBuilder log, string tool, string command, string seq, string head, bool dirty)
+    /// <summary>harness.txt, the run's last file: the verdict on the run and its frames (line 1), the results imported, and every red analysis line.</summary>
+    private static void WriteHarness(List<SeqAnalysis> analyses)
+    {
+        HarnessVerdict verdict = HarnessVerdict.Judge(SessionState.GetString(RunLineKey, string.Empty), SessionState.GetBool(RunOkKey, false), OutDir,
+                                                      analyses, DemoGate.KnownRedRunPatterns());
+        SessionState.SetString(VerdictKey, verdict.Line);
+        SessionState.SetBool(VerdictOkKey, verdict.Ok);
+        var text = new StringBuilder(verdict.Line).Append('\n');
+        int imported = SessionState.GetInt(ImportedKey, -1);
+        if (imported >= 0)
+            text.Append($"{imported} result(s) imported into {GateResults.Folder}\n");
+        if (analyses.Count > 0)
+            text.Append($"frame analysis of {analyses.Count} sequence(s) (analysis.txt): {verdict.Unexpected.Count} red, {verdict.KnownRed.Count} known red\n");
+        foreach (string line in verdict.Unexpected)
+            text.Append("RED ").Append(line).Append('\n');
+        foreach (string line in verdict.KnownRed)
+            text.Append("KNOWN RED ").Append(line).Append('\n');
+        File.WriteAllText(Path.Combine(OutDir, "harness.txt"), text.ToString());
+    }
+
+    private static SeqAnalysis Python(StringBuilder log, string tool, string command, string seq, string head, bool dirty)
     {
         var start = new ProcessStartInfo("python", $"\"{tool}\" {command} \"{seq}\" --result-dir \"{GateResults.Folder}\" --commit \"{head}\"{(dirty ? " --dirty" : string.Empty)}")
         {
@@ -329,13 +385,13 @@ public static class QaPlayHarness
                 string output = p.StandardOutput.ReadToEnd() + p.StandardError.ReadToEnd();
                 p.WaitForExit(300000);
                 log.AppendLine($"$ seqtools {command} {seq}").AppendLine(output);
-                return p.HasExited && p.ExitCode == 0;
+                return new SeqAnalysis { Seq = seq, Ran = true, ExitOk = p.HasExited && p.ExitCode == 0, Output = output };
             }
         }
         catch (Exception e)
         {
             log.AppendLine($"$ seqtools {command} {seq}: could not run python ({e.Message})");
-            return false;
+            return new SeqAnalysis { Seq = seq, Ran = false, Output = $"could not run python ({e.Message})" };
         }
     }
 

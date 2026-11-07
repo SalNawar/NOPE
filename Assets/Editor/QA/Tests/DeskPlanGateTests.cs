@@ -51,6 +51,18 @@ public class DeskPlanGateTests
     }
 
     [Test]
+    public void TheLineWrittenAsNotApplicable_IsStillRed_ForTheCutFeature()
+    {
+        // Since GATE-12 the scenario writes the line as n/a (neutral); the decor check still turns the cut red (RG-03).
+        QaGateResult na = Result(DeskPlanChecks.DecorSpotsId, true, "not applicable on the painted desk");
+        na.na = true;
+        GateResult r = DeskPlanChecks.DecorVerdict(new[] { na }, Head);
+        Assert.IsFalse(r.Pass);
+        Assert.IsFalse(r.NotApplicable);
+        CollectionAssert.AreEqual(new[] { DeskPlanChecks.DecorSpotsId }, r.Unmet);
+    }
+
+    [Test]
     public void ADeskWithSpots_AndNoDropMeasured_IsRed()
     {
         GateResult r = DeskPlanChecks.DecorVerdict(new[] { Result(DeskPlanChecks.DecorSpotsId, true, "in play") }, Head);

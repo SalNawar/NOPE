@@ -71,6 +71,7 @@ public static class GateResults
             written = now,
             source = source,
             builtPlayer = builtPlayer,
+            na = a.na,
         }).ToList();
     }
 
@@ -92,7 +93,12 @@ public static class GateResults
     /// ('*' matches any run of characters) for check <paramref name="checkId"/>
     /// of <paramref name="owner"/>: it passes only when at least one result
     /// matches and every match passed, was measured at HEAD on a clean tree
-    /// and (when <paramref name="builtPlayer"/>) on a built player.
+    /// and (when <paramref name="builtPlayer"/>) on a built player. A result
+    /// that did not apply (n/a, <see cref="QaGateResult.na"/>) counts in
+    /// neither pass nor fail: the verdict lists it ("N/A id: why"); when every
+    /// match is n/a (and none is stale, dirty or not on a built player) the
+    /// verdict itself is n/a (<see cref="GateResult.NotApplicable"/>), never a
+    /// pass (GATE-12 of 2026-10-28).
     /// </summary>
     public static GateResult Require(string checkId, string owner, string idPattern, bool builtPlayer = false) =>
         Judge(checkId, owner, idPattern, ReadAll(), GitHead.Read(ProjectRoot), builtPlayer);
@@ -103,18 +109,25 @@ public static class GateResults
         List<QaGateResult> matches = results.Where(r => Matches(idPattern, r.id)).OrderBy(r => r.id, StringComparer.Ordinal).ToList();
         if (matches.Count == 0)
             return GateResult.Fail(checkId, owner, "not measured", $"No result matches '{idPattern}': run the recipe (docs/pending/QA-RIG.md).");
-        var red = matches.Where(r => !r.pass).ToList();
+        var na = matches.Where(r => r.na).ToList();
+        var red = matches.Where(r => !r.pass && !r.na).ToList();
         var stale = string.IsNullOrEmpty(head) ? new List<QaGateResult>() : matches.Where(r => !string.Equals(r.commit, head, StringComparison.OrdinalIgnoreCase)).ToList();
         // A result taken on uncommitted changes measured no commit (a stale one is already counted).
         var dirty = matches.Where(r => r.dirty && !stale.Contains(r)).ToList();
         var notBp = builtPlayer ? matches.Where(r => !r.builtPlayer).ToList() : new List<QaGateResult>();
-        string measured = $"{matches.Count} result(s): {matches.Count - red.Count} pass, {red.Count} fail, {stale.Count} stale, {dirty.Count} dirty" + (builtPlayer ? $", {notBp.Count} not on a built player" : string.Empty);
+        string measured = $"{matches.Count} result(s): {matches.Count - red.Count - na.Count} pass, {red.Count} fail, {na.Count} n/a, {stale.Count} stale, {dirty.Count} dirty" + (builtPlayer ? $", {notBp.Count} not on a built player" : string.Empty);
+        var naLines = na.Select(r => $"N/A {r.id} {r.measured}{(string.IsNullOrEmpty(r.detail) ? string.Empty : ": " + r.detail)}").ToList();
         if (red.Count == 0 && stale.Count == 0 && dirty.Count == 0 && notBp.Count == 0)
-            return GateResult.Ok(checkId, owner, measured, string.Join("; ", matches.Select(r => $"{r.id} {r.measured}")));
+        {
+            if (na.Count == matches.Count)
+                return GateResult.Na(checkId, owner, measured, string.Join("; ", naLines));
+            return GateResult.Ok(checkId, owner, measured, string.Join("; ", matches.Where(r => !r.na).Select(r => $"{r.id} {r.measured}").Concat(naLines)));
+        }
         var lines = red.Select(r => $"FAIL {r.id} [{r.owner}] {r.measured} {r.detail}")
                        .Concat(stale.Select(r => $"STALE {r.id} measured at {Short(r.commit)}, HEAD is {Short(head)}"))
                        .Concat(dirty.Select(r => $"DIRTY {r.id} measured on uncommitted changes at {Short(r.commit)}: commit, then measure again"))
-                       .Concat(notBp.Select(r => $"NOT-BP {r.id} was measured in the editor"));
+                       .Concat(notBp.Select(r => $"NOT-BP {r.id} was measured in the editor"))
+                       .Concat(naLines);
         GateResult fail = GateResult.Fail(checkId, owner, measured, string.Join("; ", lines));
         fail.Unmet.AddRange(red.Concat(stale).Concat(dirty).Concat(notBp).Select(r => r.id).Distinct(StringComparer.OrdinalIgnoreCase));
         return fail;

@@ -73,6 +73,21 @@ public sealed class GateResult
     /// </summary>
     public List<string> Unmet { get; } = new List<string>();
 
+    /// <summary>
+    /// True when the check did not apply (n/a: every result it reads said so,
+    /// GateResults.Judge): a neutral outcome with <see cref="Pass"/> true, so
+    /// it never refuses, which the report lists apart and counts in neither
+    /// pass nor fail (GATE-12 of 2026-10-28).
+    /// </summary>
+    public bool NotApplicable { get; set; }
+
+    /// <summary>True when it held and applied: a real pass (neither red nor n/a).</summary>
+    public bool Green => Pass && !NotApplicable;
+
+    /// <summary>A result that did not apply (n/a): neutral, never red, never a pass.</summary>
+    public static GateResult Na(string id, string owner, string measured, string detail) =>
+        new GateResult { Id = id, Owner = owner, Pass = true, NotApplicable = true, Measured = measured, Detail = detail };
+
     /// <summary>A passing result.</summary>
     public static GateResult Ok(string id, string owner, string measured, string detail = "") =>
         new GateResult { Id = id, Owner = owner, Pass = true, Measured = measured, Detail = detail };
@@ -86,7 +101,7 @@ public sealed class GateResult
         new GateResult { Id = id, Owner = owner, Pass = pass, Measured = measured, Detail = detail };
 
     /// <summary>One line for a report.</summary>
-    public override string ToString() => $"{(Pass ? "PASS" : "FAIL")} {Id} [{Owner}] {Measured}{(string.IsNullOrEmpty(Detail) ? string.Empty : " - " + Detail)}";
+    public override string ToString() => $"{(NotApplicable ? "N/A" : Pass ? "PASS" : "FAIL")} {Id} [{Owner}] {Measured}{(string.IsNullOrEmpty(Detail) ? string.Empty : " - " + Detail)}";
 }
 
 /// <summary>A registered check: its attribute and its method.</summary>

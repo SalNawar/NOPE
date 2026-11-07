@@ -174,6 +174,16 @@ public static class QaRigChecks
     [GateCheck("qa.play.latency", "QA-RIG", GateKind.Play, DemoOnly = true)]
     public static GateResult Latency() => GateResults.Require("qa.play.latency", "QA-RIG", "smoke_day1.seq.*.latency");
 
+    /// <summary>
+    /// The recorder's frames show the game's colour (GATE-05 of 2026-10-28:
+    /// a second sRGB encode made every frame about twice as bright, so every
+    /// motion and colour review judged the wrong picture): in qa_rig_truth the
+    /// frame captured with the office still matches the still, mean R, G and B
+    /// within 3 (seqtools colour).
+    /// </summary>
+    [GateCheck("qa.play.seqColour", "QA-RIG", GateKind.Play)]
+    public static GateResult SeqColour() => GateResults.Require("qa.play.seqColour", "QA-RIG", "qa_rig_truth.seq.*.colour");
+
     /// <summary>The per-call-site GC baseline was recorded at HEAD (QaJobs.GcSites; BUG-65a: it names each site's owner).</summary>
     [GateCheck("qa.perf.gcsites", "QA-RIG", GateKind.Play)]
     public static GateResult GcSites() => GateResults.Require("qa.perf.gcsites", "QA-RIG", "perf.gcsites");

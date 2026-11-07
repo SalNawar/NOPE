@@ -96,7 +96,7 @@ All Unity runs go through the persistent editor of the worktree, by job file. Ne
 | `QaJobs.Reset` | Unsticks the harness after a run that died: leaves play mode (the runner gives the input back as it is destroyed), then (run it again) restores the saves, view, input devices and quality | an empty scene, in edit mode |
 
 - **Play jobs** return at once. `Library/QA/last_run.txt` names the run folder `Library/QA/runs/<scenario>_<time>/`.
-- **The run folder holds:** `run.json`, `warnings.txt`, `camera.tsv`, `drags.tsv`, `seq/<name>/`, `stills/`, `analysis.txt` and `harness.txt`. Wait for `harness.txt`, then read `run.json` and `analysis.txt`. `harness.txt`'s first line is the verdict against the known-red list: `ok`, `ok (N known red: ...)` or `failed (...)`.
+- **The run folder holds:** `run.json`, `warnings.txt`, `camera.tsv`, `drags.tsv`, `seq/<name>/`, `stills/`, `analysis.txt` and `harness.txt`. Wait for `harness.txt`, then read `run.json` and `analysis.txt`. `harness.txt` is the run's last file: the harness writes it after the frame analysis (GATE-07, the night of 2026-11-07). Its first line is the verdict on the run and its frames together (`HarnessVerdict`): `ok`, `ok (N known red: ...)`, `ok (frame analysis: N known red: ...)`, or `failed (...)` when an assertion, a step or any analysis line is red and not on the known-red list (an analysis line's id is `<scenario>.seq.<name>.<analysis>`, matched against the list's run patterns; an analysis that could not run, or ended with an error and no FAIL line, is red). The next lines give the results imported, the analysis counts and each red line (`RED ...`, `KNOWN RED ...`). `QaPlayTest.AssertRun` fails on the same verdict (`QaPlayHarness.VerdictOk`).
 - **Built player [BP]:** run `python tools/qa/run_player.py tools/qa/scenarios/bp_smoke.json` after `QaJobs.BuildQaPlayer`. It opens a window, so run it only when Saleh is away. It plays in the QA player's own save folder and window settings (never the demo's). It imports `bp.`-prefixed results stamped with the built commit (dirty when the build was), runs `seqtools all` on every sequence (flicker, flash and latency on a captured one, hitches on a timing one), and exits 0 when nothing but known red failed.
 - **Outside Unity (every change):**
   - compile check;
@@ -140,8 +140,9 @@ Screen positions are fractions of the screen (0..1, origin bottom-left), so a st
 
 **What a run writes:**
 - **`frames.tsv`, one row per frame:** i, frame, time, unscaled, timeScale (the hit-stop log, G4), screenW/H, capW/H (0 in a timing sequence), mx/my (the pointer, in capture pixels; screen pixels in a timing sequence), down, gcBytes, mainMs, dtMs (real time since the previous frame ended), tracked (`name:x0,y0,x1,y1;`), and extra (`key=value;` from `Recorder.Column`); a timing sequence leaves tracked and extra empty.
-- **`meta.json`:** `fixedStep` and `frames` (false for a timing sequence), fps, capture width, screen.
-- **`events.tsv`:** frame, i, unscaled, channel, name. It holds every `QaSignals.Event`, every press the game saw (channel `mouse` or `key`), and the marks.
+- **`meta.json`:** `fixedStep` and `frames` (false for a timing sequence), fps, capture width, screen, `srgbEncodes` (1: the frames carry the screen's one sRGB encode, as a still does; a sequence without the key is from before the fix of 2026-11-07 and carries 2, GATE-05) and `motionStill` (Reduced Motion or a Motion intensity of 0: the views cut by design, so `all` skips `cuts`).
+- **The frames' colour:** each frame is the screenshot scaled down on the CPU from its own bytes (a box filter, no colour-space conversion), so a frame and a still of the same picture agree (GATE-05: the old GPU blit encoded the sRGB screenshot a second time, and frames read about twice as bright: the mat 127,137,105 against 55,64,36). tools/hall's `region_luma --decode`, `slot_fade` and `traffic_tint` undo the old extra encode only on a sequence that carries it (`region_luma.extra_encode`).
+- **`events.tsv`:** frame, i, unscaled, channel, name. It holds every `QaSignals.Event`, every press the game saw (channel `mouse` or `key`), the marks, every sound played (channel `cue`: each cue the sound bank was asked for, from `Sounds.Fired`, named by its id, "(no bank clip)" when the bank had none; and each sound the game plays outside the bank, `QaSignals.Sound(clip)`: the stamp tray's press and release clips, a DeskReaction's clip, the credits ding; GATE-13), and every still taken while a captured sequence records (channel `still`, named by the still's file, on the index of the frame that holds the same picture).
 - **`camera.tsv`:** frame, unscaled, camera, stepPx, causes, pose and fov.
 
 ## 5. The gate
@@ -161,12 +162,14 @@ Screen positions are fractions of the screen (0..1, origin bottom-left), so a st
 | `qa.play.liberationSans` | Play | TEXT-LANG | 0 LiberationSans glyphs on screen at the probes (known red) |
 | `qa.play.flicker` | Play | HALL-FX | The smoke day's sequences pass flicker (known red) |
 | `qa.play.flash` / `qa.play.latency` (demo) | Play | UI-PC / QA-RIG | ≤3 flashes/s and no red full-field flash / every press visible within 1 frame |
+| `qa.play.seqColour` | Play | QA-RIG | In `qa_rig_truth` the frame captured with the office still matches the still: mean R, G, B within 3 (`seqtools colour`; GATE-05) |
+| `stamp.setup` | Play | STAMP | Every `stamp_aim` case was laid out as asked (`stamp_aim.setup.*`: StampRig's set-up lines; GATE-20: a set-up failure is never an aim miss) |
 | `qa.perf.gcsites` | Play | QA-RIG | The per-call-site baseline was recorded at HEAD |
 | `qa.bp.smoke`, `qa.bp.flicker`, `qa.bp.flash`, `qa.bp.latency`, `qa.bp.perf` (demo) | BuiltPlayer | QA-RIG, HALL-FX, UI-PC, QA-RIG, QA-RIG | The same on the QA player (`smoke` with `presses`). `perf`: 0 B/frame steady-state, and no call-next frame over 33.4 ms (a timing sequence) |
 
 **How results are read:**
 - A Play or BuiltPlayer check reads `Library/QA/results/*.json` (`QaGateResult`).
-- It passes only when at least one result matches, every match passed, and every match was measured at HEAD on a clean tree (stale and dirty results fail).
+- It passes only when at least one result matches, every match passed, and every match was measured at HEAD on a clean tree (stale and dirty results fail). An n/a match counts in neither pass nor fail and is listed; when every match is n/a the check is n/a (§6).
 - A BuiltPlayer check also needs every match measured on a player.
 
 **Registering a check (each track, in `Assets/Editor/QA/Checks/<Track>Checks.cs`):**
@@ -194,14 +197,18 @@ public static class DocHandleChecks
 |---|---|---|
 | `flicker <seq> [--static] [--mask m.png]` | **A-B-A toggle:** luma moves more than 24/255 and returns within 8 of it within 3 frames. The expected-motion mask covers tracked rects that moved (±4 px) and the pointer (±24 px) | No pixel toggles more than twice in any 10 s (FIX_PLAN). Writes `flicker_heat.png` and `flicker.txt` |
 | `flash <seq>` | **Flash meter (G3, gap 2):** per 8×6 cell, fast luma swings ≥20 (steep part ≤6 frames); flashes/s = changes/2 in any 1 s; full-field changes (≥50% of cells together); red ones (≥25% of the screen saturated red) | ≤3 flashes/s, no red full-field flash |
-| `latency <seq> [--roi] [--track name] [--need-cue]` | **Latency probe (check 2, gap 6):** per press in `events.tsv`, frames to the first change (≥12 px over 12 luma; the pointer's area is excluded), and to the nearest `audio` event | First change ≤1 frame. With `--need-cue`, the cue is on the press frame ±1 |
+| `latency <seq> [--roi] [--track name] [--need-cue]` | **Latency probe (check 2, gap 6):** per press in `events.tsv`, frames to the first change (≥12 px over 12 luma; the pointer's area is excluded), and to the nearest sound cue (channel `cue` or `audio`) | First change ≤1 frame. With `--need-cue`, the cue is on the press frame ±1 |
+| `sound <seq> [--need-cue] [--max-frames 1] [--cue-window 6]` | **Press to sound (check 2, GATE-13):** per press, the first cue from one frame before it to `--cue-window` frames after it: on time (≤ `--max-frames`), late, or silent | No late cue; with `--need-cue`, no silent press |
+| `colour <seq> [--max-diff 3] [--colour-roi x0,y0,x1,y1]` | **Frame against still (GATE-05):** each frame captured with a still (`events.tsv` channel `still`) against the still box-filtered to the frame's size: mean R, G, B over the picture (and the region) | Every channel within 3 |
 | `hitches <seq>` | `dtMs` of a timing sequence (recorded after `realtime 1`) | No frame over 33.4 ms |
-| `frozen <seq>` / `cuts <seq>` | BUG-31's longest still run / BUG-32's single-frame full-screen jumps (≥60% of pixels change by more than 40) | ≤0.25 s / none |
-| `all <seq>` | flicker + flash + latency (when there are presses); on a timing sequence, hitches | All |
+| `frozen <seq>` / `cuts <seq> [--cut-th 15]` | BUG-31's longest still run / BUG-32's single-frame jumps: a frame whose mean luma moves more than `--cut-th` (the knob, 0..255) from the frame before while its neighbours hold (the change into the frame before and out of it each at most half the knob: a step), or that comes back on the next frame (a one-frame pop); an eased move or fade spreads its change and is no cut | ≤0.25 s / none |
+| `all <seq>` | flicker + flash + cuts (skipped when `meta.json` says `motionStill`) + latency and sound (when there are presses) + colour (when a still was taken while it recorded); on a timing sequence, hitches | All |
 | `gif`, `sheet`, `side`, `blockiness`, `import-run` | GIF with the pointer drawn; contact sheet; side by side with a reference; the 8×8 block ratio; run.json → results | - |
 
 - **Result ids:** with `--result-dir`, each analysis writes `<scenario>.seq.<name>.<analysis>` (`bp.`-prefixed with `--bp`), stamped with git HEAD and the tree's state, or `--commit` and `--dirty`.
-- **In the editor**, the harness runs `all` on every sequence after every run, with python on the PATH.
+- **In the editor**, the harness runs `all` on every sequence after every run, with python on the PATH, then writes `harness.txt` (§3).
+- **Frames only:** every analysis reads the files named like `f0000.png` (`seqlib.FRAME_NAME`), never its own pictures beside them (`flicker_heat.png`; GATE-15: flash and latency read it as a last frame).
+- **Not applicable (n/a, GATE-12):** an op that finds its check does not apply here records it with `runner.NotApplicable(id, owner, measured, detail)` (`QaAssertion.na`; DESK-PLAN's `deskhomeshown` and `deskvisible` on the painted desk). An n/a result is written with pass true, so it is never red; `GateResults.Judge` counts it in neither pass nor fail and lists it (`N/A id ...`); a check whose every result is n/a is n/a itself (`GateResult.NotApplicable`), never a pass. The gate report counts `N pass, M fail, K n/a` and lists the n/a checks apart.
 
 ## 7. Feel automation (GAME_FEEL_BIBLE §5.2 #4)
 
@@ -216,9 +223,9 @@ public static class DocHandleChecks
   - A switch to another camera is a cut, not a move.
   - **Reduced Motion check (#3):** an RM clip must show no `Impulse` tags, or 0 px offsets.
 - **Flash meter (G3, gap 2).** `seqtools flash` on any sequence. FlashPolicy (UI-PC) owns the effects. Each flash should also raise `QaSignals.Event("flash", name)`, so reviewers can line the meter up with its cause.
-- **Input-latency probe (check 2, gap 6).** Presses are logged on the frame the game sees them. Cues come from `QaSignals.Event("audio", cue)`, which FEEDBACK raises where it plays a cue. Then run `seqtools latency --track <object>` on the element's sequence.
+- **Input-latency probe (check 2, gap 6).** Presses are logged on the frame the game sees them. Cues come from the recorder itself (every `Sounds.Fired` cue and every `QaSignals.Sound(clip)`, channel `cue`; GATE-13); `QaSignals.Event("audio", cue)` still counts. Run `seqtools latency --track <object>` on the element's sequence; `seqtools sound` (in `all`) measures press to sound.
 - **Hit-stop log (check 6).** The `timeScale` column of `frames.tsv`. FEEDBACK can add `QaSignals.Event("hitstop", moment)`.
-- **Audio coverage (check 11, BUG-33).** `events.tsv` channel `audio`. FEEDBACK owns the coverage check, as a gate in its own Checks file.
+- **Audio coverage (check 11, BUG-33).** `events.tsv` channel `cue` (and the older `audio`). FEEDBACK owns the coverage check, as a gate in its own Checks file.
 
 ## 8. Recipes by track (use these; each adds its own scenario and checks)
 
@@ -259,7 +266,7 @@ The pass lines are the plan's. The rig only measures them.
 | `compile_check_t6.py` | 0 errors (Assembly-CSharp-Editor and TimeDeskEditMode) |
 | House runner | passed 3714, failed 0 (unchanged: the rig adds no TimeDeskEditMode test) |
 | `tools/qa/editor_runner` (QA_PROJECT set) | passed 68 (59 QA-RIG + the carve's 9 Editor-side seam tests), failed 0; 16 NeedsEditor skipped (12 carve + 4 QA-RIG) |
-| `python -m unittest discover -s tools/qa` | 34 tests OK (flicker, flash, latency, hitches, frozen, cuts, blockiness, results and dirty, the known-red verdict, timing sequences, the CLI end to end, scenario ops) |
+| `python -m unittest discover -s tools/qa` | 50 tests OK (flicker, flash, latency, press to sound, hitches, frozen, cuts, frame colour, frame names, blockiness, results, n/a and dirty, the known-red verdict, timing sequences, the CLI end to end, scenario ops) |
 | QA player compile (Assembly-CSharp without UNITY_EDITOR, with TIMEDESK_QA + DEMO_CHEATS) | 0 errors; the demo configuration (no TIMEDESK_QA) also 0 errors (a scratch csproj, editor DLLs removed) |
 | TDD | The SO scan found the 8 dead fields, now listed. After the review: the known-red verdict, dirty results and the churn filter, and the quality file's Standalone level have pure tests (DemoGateTests, QaQualityTests, test_seqlib) |
 
