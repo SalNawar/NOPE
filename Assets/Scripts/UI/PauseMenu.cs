@@ -12,14 +12,17 @@ using UnityEngine.SceneManagement;
 /// host, made once at startup and kept across scenes, does the rest.
 /// <list type="bullet">
 /// <item><b>Esc:</b> lets go of one thing first (EscapeChain: the desk's hold,
-/// the PC's own chain, a drag the office's back-out cancels, a track's
-/// step), and otherwise opens Settings: in the
+/// the PC's own chain, the office's back-out, a track's step), and otherwise
+/// opens Settings: in the
 /// office the PC with its Settings app in front (the PC opens by Q's rules, so
 /// not under the briefing or the report); in a scene without the PC, its
 /// Settings window, once that scene has one (HOME builds Title's and Home's).
-/// Esc never leaves a mode (R3: Q or the bezel leave the PC; a right-click
-/// backs out): EscapeWatch keeps the office's back-out off an Esc press that
-/// would (EscapeChain.KeepsTheOfficeOut).
+/// With a mode open the first Esc backs out of it (D13, UI-23,
+/// GameConfigSO.escBacksOutFirst: the switchboard, the city, the wheel,
+/// inspect mode, the reading view, a held value), so Settings opens from the
+/// plain desk; Esc never leaves the PC (R3: Q or the bezel). EscapeWatch keeps
+/// the office's back-out off an Esc press that must not run it
+/// (EscapeChain.KeepsTheOfficeOut).
 /// Nothing while a scene loads or the cheat overlay holds the input.</item>
 /// <item><b>Settings open</b> holds the game (PauseState Settings, Full): the
 /// shift clock stops and the looping beds (room tone, music) pause; one-shot
@@ -209,14 +212,21 @@ public sealed class PauseMenu : MonoBehaviour
         ControlState state = _controls.State();
         _officeBefore = state;
         bool desktopTookIt = _keyboard != null && _keyboard.EscapeTakenFrame == Time.frameCount;
-        if (!SceneTransit.Loading && !InputGate.Blocked && EscapeChain.KeepsTheOfficeOut(state, desktopTookIt, rightClick))
+        if (!SceneTransit.Loading && !InputGate.Blocked && EscapeChain.KeepsTheOfficeOut(state, desktopTookIt, rightClick, EscBacksOutFirst()))
         {
             _controls.enabled = false;
             _controlsKeptOut = true;
         }
     }
 
-    /// <summary>The chain's office step: the office's own back-out (OfficeControls, run on a right-click or Esc) let go of something on this press (a drag cancelled; EscapeWatch keeps every other back-out off Esc), so Settings waits for the next press.</summary>
+    /// <summary>GameConfigSO.escBacksOutFirst of the run's config (D13, UI-23), or its default (ControlRules.EscBacksOutFirst) without a run.</summary>
+    internal static bool EscBacksOutFirst()
+    {
+        GameConfigSO config = RunManager.HasInstance && RunManager.Instance.Config != null ? RunManager.Instance.Config.gameConfig : null;
+        return config != null ? config.escBacksOutFirst : ControlRules.EscBacksOutFirst;
+    }
+
+    /// <summary>The chain's office step: the office's own back-out (OfficeControls, run on a right-click or Esc) let go of something on this press (a mode left or a drag cancelled; EscapeWatch keeps the PC's back-out off Esc), so Settings waits for the next press.</summary>
     private bool OfficeLetGo() => _officeBefore.HasValue && _controls != null && !_controlsKeptOut && !_officeBefore.Value.Equals(_controls.State());
 
     /// <summary>One Esc press: nothing while a scene loads or the cheat overlay holds the input; else one thing let go (EscapeChain), or Settings opens.</summary>

@@ -16,8 +16,10 @@ using UnityEngine.InputSystem;
 /// desktop's context (the focused window, a text field, an open menu, the
 /// app's focus ring), then runs the command: Escape runs the one chain
 /// (DesktopEscapeRule: a context menu or the shelf's Books menu, the shortcut card, the search results,
-/// the search field's text, a focused field, the Start menu, a drag), and with
-/// nothing left to close brings the Settings app to the front (a right-click
+/// the search field's text, a focused field, the Start menu, a drag), then
+/// closes the front window (D13, UI-23, while GameConfigSO.escBacksOutFirst
+/// is on), and with nothing left to close brings the Settings app to the
+/// front (a right-click
 /// with nothing to close does nothing: PcBackOut; Saleh's R3/R4: Esc opens
 /// Settings, only Q and the bezel leave the PC); it stamps every back-out
 /// press, so the office's back-out (OfficeControls) never closes the PC.
@@ -329,8 +331,12 @@ public sealed class DesktopKeyboard : MonoBehaviour
             app != null && app.Holding);
         DesktopEscape step = DesktopEscapeRule.Resolve(state);
         EscapeTakenFrame = Time.frameCount; // every back-out on the PC is the desktop's: it never closes the PC (only Q and the bezel do)
-        switch (PcBackOut.Resolve(step, _backOutFromKey))
+        DesktopWindow front = manager != null ? manager.FocusedWindow : null;
+        switch (PcBackOut.Resolve(step, _backOutFromKey, front != null && PauseMenu.EscBacksOutFirst()))
         {
+            case PcBackOutStep.CloseWindow:
+                front.Close();
+                return;
             case PcBackOutStep.OpenSettings:
                 if (apps != null)
                     apps.OpenApp(DesktopAppIds.Settings);

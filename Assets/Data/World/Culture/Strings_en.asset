@@ -1416,8 +1416,8 @@ MonoBehaviour:
   - key: keys.escape
     text: 'Right-click or Esc: close a menu, this card or the search drawer; clear
       the search; leave a text field; let go of a held value; close the Start menu
-      or cancel a drag. With none of those, Esc opens Settings. Q or a click on the
-      bezel leaves the PC'
+      or cancel a drag. With none of those, Esc closes the front window, then opens
+      Settings. Q or a click on the bezel leaves the PC'
     gloss: 0
     tier: 1
   - key: keys.help
@@ -1539,7 +1539,8 @@ MonoBehaviour:
     tier: 1
   - key: keys.desk.back
     text: 'Back out: a drag, the wheel, a held value, inspect mode, the stamp bar,
-      the city, the reading view'
+      the switchboard, the city, the reading view. From the plain desk Esc opens
+      Settings'
     gloss: 0
     tier: 1
   - key: keys.desk.city

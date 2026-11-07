@@ -138,28 +138,59 @@ public class FlowRulesTests
     }
 
     [Test]
-    public void EscapeChain_EscNeverLeavesAMode_ItOpensSettings_RightClickStillBacksOut()
+    public void EscapeChain_EscBacksOutOfAModeFirst_ThePcStays_SettingsFromThePlainDesk()
     {
-        // R3: "Esc opens the same Settings window everywhere ... To leave the PC, press Q or click the bezel"; D20: Esc opens Settings.
+        // D13, UI-23 (GameConfigSO.escBacksOutFirst on): "with a mode open (the board, the city view, a PC window, the wheel,
+        // inspect) the first Esc backs out of the mode; from the plain desk Esc opens Settings; right-click backs out as before".
+        var modes = new[]
+        {
+            new ControlState(wheelOpen: true),
+            new ControlState(valueHeld: true),
+            new ControlState(inspecting: true),
+            new ControlState(switchboard: true),
+            new ControlState(cityView: true),
+            new ControlState(deskView: true),
+            new ControlState(inspecting: true, deskView: true),
+        };
+        foreach (ControlState s in modes)
+        {
+            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: false, escBacksOutFirst: true), $"{ControlRules.BackOut(s)}: the first Esc backs out of it");
+            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: true, escBacksOutFirst: true), "a right-click backs out as before");
+        }
+        // R3: "To leave the PC, press Q or click the bezel": Esc never leaves the PC (its own chain closes a window, then opens Settings: PcBackOut).
+        Assert.IsTrue(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true), false, false, true), "Esc never leaves the PC");
+        Assert.IsTrue(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, inspecting: true, deskView: true), false, false, true), "the PC is the innermost mode");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true), true, false, true), "the PC's own chain took the press");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(), false, false, true), "the plain desk: nothing to back out of, Settings opens");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, dragging: true), false, false, true), "a drag is a hold: the back-out cancels it first");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(switchboard: true, newsletter: true), false, false, true), "under a newsletter nothing backs out");
+        Assert.IsTrue(ControlRules.EscBacksOutFirst, "the knob's default is on (D13)");
+    }
+
+    [Test]
+    public void EscapeChain_KnobOff_EscNeverLeavesAMode_ItOpensSettings_RightClickStillBacksOut()
+    {
+        // GameConfigSO.escBacksOutFirst off: the rule of 2026-10-20 (R3: "Esc opens the same Settings window everywhere ... To leave the PC, press Q or click the bezel"; D20: Esc opens Settings).
         var modes = new[]
         {
             new ControlState(pcOpen: true),
             new ControlState(wheelOpen: true),
             new ControlState(valueHeld: true),
             new ControlState(inspecting: true),
+            new ControlState(switchboard: true),
             new ControlState(cityView: true),
             new ControlState(deskView: true),
             new ControlState(pcOpen: true, inspecting: true, deskView: true),
         };
         foreach (ControlState s in modes)
         {
-            Assert.IsTrue(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: false), $"{ControlRules.BackOut(s)}: Esc keeps the mode, Settings opens");
-            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: true), "a right-click still backs out");
-            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: true, rightClick: false), "the PC's own chain took the press (a menu, a field)");
+            Assert.IsTrue(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: false, escBacksOutFirst: false), $"{ControlRules.BackOut(s)}: Esc keeps the mode, Settings opens");
+            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: false, rightClick: true, escBacksOutFirst: false), "a right-click still backs out");
+            Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(s, desktopTookIt: true, rightClick: false, escBacksOutFirst: false), "the PC's own chain took the press (a menu, a field)");
         }
-        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, dragging: true), false, false), "a drag is a hold: the back-out cancels it first");
-        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(), false, false), "nothing to leave");
-        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, newsletter: true), false, false), "under a newsletter nothing backs out");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, dragging: true), false, false, false), "a drag is a hold: the back-out cancels it first");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(), false, false, false), "nothing to leave");
+        Assert.IsFalse(EscapeChain.KeepsTheOfficeOut(new ControlState(pcOpen: true, newsletter: true), false, false, false), "under a newsletter nothing backs out");
     }
 
     // --- ShiftEnd (BUG-28b: never abandon a decided slot; BUG-32a: payoff first; BUG-56a: the ending at the day's end) ---

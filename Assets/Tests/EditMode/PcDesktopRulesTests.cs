@@ -34,6 +34,16 @@ public class PcDesktopRulesTests
     public void BackOut_RightClickWithNothingToClose_IsSwallowed_NeverLeaves()
     {
         Assert.AreEqual(PcBackOutStep.Swallow, PcBackOut.Resolve(DesktopEscape.None, false));
+        Assert.AreEqual(PcBackOutStep.Swallow, PcBackOut.Resolve(DesktopEscape.None, false, windowToClose: true), "a right-click backs out as before: it closes no window");
+    }
+
+    [Test]
+    public void BackOut_EscWithAWindowInFront_ClosesIt_ThenSettings()
+    {
+        // D13, UI-23: "with a mode open (... a PC window ...) the first Esc backs out of the mode" (GameConfigSO.escBacksOutFirst on).
+        Assert.AreEqual(PcBackOutStep.CloseWindow, PcBackOut.Resolve(DesktopEscape.None, true, windowToClose: true));
+        Assert.AreEqual(PcBackOutStep.Chain, PcBackOut.Resolve(DesktopEscape.CloseMenu, true, windowToClose: true), "the chain (a menu, a field) still comes first");
+        Assert.AreEqual(PcBackOutStep.OpenSettings, PcBackOut.Resolve(DesktopEscape.None, true, windowToClose: false), "no window in front (or the knob off): Settings");
     }
 
     // --- One action per input (BUG-58a: "places then cancels on a double-click") ---
