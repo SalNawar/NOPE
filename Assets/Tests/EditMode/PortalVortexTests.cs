@@ -3,8 +3,9 @@ using NUnit.Framework;
 /// <summary>
 /// The portal rings' vortex (Saleh's demo 1018a, PortalVortex): the effect's
 /// quad sits on its opening in the drawing's local space, maps onto its ring's
-/// crop of the mask atlas, and the iris, flare and swirl behave (one step, or
-/// still, with reduced motion).
+/// crop of the mask atlas, the chevrons' ellipse maps to its own space, and the
+/// iris and swirl behave (at once, or still, with reduced motion; the kawoosh:
+/// PortalGateTests).
 /// </summary>
 public class PortalVortexTests
 {
@@ -96,18 +97,6 @@ public class PortalVortexTests
         Assert.Greater(PortalVortex.Iris(0.8f), 1f, "it overshoots the rim");
         Assert.Greater(PortalVortex.Iris(0.3f), 0.3f, "it opens fast");
         Assert.AreEqual(0f, PortalVortex.Iris(-1f));
-    }
-
-    [Test]
-    public void Pulse_FlaresUpAndDown_OneStepWithReducedMotion()
-    {
-        Assert.AreEqual(0f, PortalVortex.Pulse(0f, false));
-        Assert.AreEqual(1f, PortalVortex.Pulse(0.5f, false), 1e-5f);
-        Assert.AreEqual(0f, PortalVortex.Pulse(1f, false));
-        Assert.Greater(PortalVortex.Pulse(0.25f, false), 0.5f);
-        Assert.AreEqual(1f, PortalVortex.Pulse(0.1f, true), "reduced motion: one step up");
-        Assert.AreEqual(1f, PortalVortex.Pulse(0.9f, true));
-        Assert.AreEqual(0f, PortalVortex.Pulse(1f, true), "and down at its end");
     }
 
     [Test]

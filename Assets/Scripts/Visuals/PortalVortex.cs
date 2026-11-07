@@ -11,9 +11,9 @@ using System;
 /// ellipse, still fits on it. This class maps the opening to the drawing's
 /// local space and the quad to its ring's crop of the mask atlas (and the
 /// ring's chevron ellipse to the quad's own space, ChevronRing), and holds the
-/// effect's curves: the iris that opens and closes it, the departure flare,
-/// the night surge and the turning of its swirl (the gate's states and their
-/// curves: PortalGate). No UnityEngine, so it is tested headless
+/// effect's curves: the iris that opens and closes the old swirl and the
+/// turning of its swirl (the gate's states and their curves, the kawoosh that
+/// replaced the departure flare among them: PortalGate). No UnityEngine, so it is tested headless
 /// (PortalVortexTests).
 /// </summary>
 public static class PortalVortex
@@ -126,18 +126,6 @@ public static class PortalVortex
         const float back = 1.6f;
         float u = t - 1f;
         return 1f + u * u * ((back + 1f) * u + back);
-    }
-
-    /// <summary>
-    /// The departure flare at <paramref name="progress"/> (0 to 1 of its time):
-    /// 0 at both ends, 1 at its middle, eased; with <paramref name="reduced"/>
-    /// motion one step: 1 until its time is up, then 0.
-    /// </summary>
-    public static float Pulse(float progress, bool reduced)
-    {
-        if (progress <= 0f || progress >= 1f)
-            return 0f;
-        return reduced ? 1f : (float)Math.Sin(Math.PI * progress);
     }
 
     /// <summary>The swirl's angle (radians, kept in 0 to 2 pi) after <paramref name="dt"/> seconds turning <paramref name="degreesPerSecond"/>; still with <paramref name="reduced"/> motion.</summary>
