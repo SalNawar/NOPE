@@ -25532,7 +25532,7 @@
       },
       {
         "key": "keys.escape",
-        "text": "Right-click or Esc: close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Start menu or cancel a drag. With none of those, Esc closes the front window, then opens Settings. Q or a click on the bezel leaves the PC",
+        "text": "Right-click or Esc: close a menu, this card or the search drawer; clear the search; leave a text field; let go of a held value; close the Start menu or cancel a drag. With none of those, Esc closes the front window, then opens Settings, which stays open. Q or a click on the bezel leaves the PC",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -31138,7 +31138,7 @@
           },
           {
             "key": "keys.escape",
-            "text": "النقر الأيمن أو Esc: أغلق قائمة أو هذه البطاقة أو درج البحث, امسح البحث, اخرج من حقل نص, أفلت قيمة ممسوكة, أغلق القائمة أو ألغ السحب. وإن لم يكن شيء من ذلك, عد إلى المكتب"
+            "text": "النقر الأيمن أو Esc: أغلق قائمة أو هذه البطاقة أو درج البحث, امسح البحث, اخرج من حقل نص, أفلت قيمة ممسوكة, أغلق القائمة أو ألغ السحب. وإن لم يكن شيء من ذلك, يغلق Esc النافذة الأمامية ثم يفتح الإعدادات وتبقى مفتوحة. Q أو نقرة على الإطار تخرجك من الحاسوب"
           },
           {
             "key": "keys.help",
@@ -31250,7 +31250,7 @@
           },
           {
             "key": "keys.desk.back",
-            "text": "تراجع: السحب, العجلة, الحاسوب, القيمة الممسوكة, وضع الفحص, شريط الأختام, المدينة, عرض القراءة"
+            "text": "تراجع: السحب, العجلة, القيمة الممسوكة, وضع الفحص, شريط الأختام, لوحة التحويل, المدينة, عرض القراءة. من المكتب الخالي يفتح Esc الإعدادات"
           },
           {
             "key": "keys.desk.city",
@@ -38601,6 +38601,42 @@
           {
             "native": "أرسلوا",
             "english": "sent"
+          },
+          {
+            "native": "يغلق",
+            "english": "closes"
+          },
+          {
+            "native": "النافذة",
+            "english": "the window"
+          },
+          {
+            "native": "الأمامية",
+            "english": "front"
+          },
+          {
+            "native": "وتبقى",
+            "english": "and stays"
+          },
+          {
+            "native": "Q",
+            "english": "Q"
+          },
+          {
+            "native": "الإطار",
+            "english": "the frame"
+          },
+          {
+            "native": "تخرجك",
+            "english": "takes you out"
+          },
+          {
+            "native": "التحويل",
+            "english": "switching"
+          },
+          {
+            "native": "الخالي",
+            "english": "empty"
           }
         ]
       },
@@ -39890,7 +39926,7 @@
           },
           {
             "key": "keys.escape",
-            "text": "Δεξί κλικ ή Esc: κλείνει ένα μενού, αυτή την κάρτα ή την αναζήτηση· καθαρίζει την αναζήτηση· βγαίνει από πεδίο κειμένου· αφήνει μια τιμή που κρατάς· κλείνει το Μενού ή ακυρώνει ένα σύρσιμο. Αν δεν ισχύει τίποτα από αυτά, πίσω στο γραφείο"
+            "text": "Δεξί κλικ ή Esc: κλείνει ένα μενού, αυτή την κάρτα ή την αναζήτηση· καθαρίζει την αναζήτηση· βγαίνει από πεδίο κειμένου· αφήνει μια τιμή που κρατάς· κλείνει το Μενού ή ακυρώνει ένα σύρσιμο. Αν δεν ισχύει τίποτα από αυτά, το Esc κλείνει το μπροστινό παράθυρο και μετά ανοίγει τις Ρυθμίσεις, που μένουν ανοιχτές. Το Q ή ένα κλικ στο πλαίσιο σε βγάζει από τον υπολογιστή"
           },
           {
             "key": "keys.help",
@@ -40002,7 +40038,7 @@
           },
           {
             "key": "keys.desk.back",
-            "text": "Έξοδος: από σύρσιμο, τροχό, υπολογιστή, τιμή που κρατάς, λειτουργία επιθεώρησης, μπάρα με στάμπες, πόλη, προβολή ανάγνωσης"
+            "text": "Έξοδος: από σύρσιμο, τροχό, τιμή που κρατάς, λειτουργία επιθεώρησης, μπάρα με στάμπες, τηλεφωνικό πίνακα, πόλη, προβολή ανάγνωσης. Από το ελεύθερο γραφείο το Esc ανοίγει τις Ρυθμίσεις"
           },
           {
             "key": "keys.desk.city",
@@ -46769,6 +46805,38 @@
           {
             "native": "ΕΣΤΑΛΗΣΑΝ",
             "english": "sent"
+          },
+          {
+            "native": "μπροστινό",
+            "english": "front"
+          },
+          {
+            "native": "Ρυθμίσεις",
+            "english": "Settings"
+          },
+          {
+            "native": "ανοιχτές",
+            "english": "open"
+          },
+          {
+            "native": "Q",
+            "english": "Q"
+          },
+          {
+            "native": "βγάζει",
+            "english": "takes out"
+          },
+          {
+            "native": "τηλεφωνικό",
+            "english": "telephone"
+          },
+          {
+            "native": "πίνακα",
+            "english": "board"
+          },
+          {
+            "native": "ελεύθερο",
+            "english": "free"
           }
         ]
       },
@@ -48058,7 +48126,7 @@
           },
           {
             "key": "keys.escape",
-            "text": "Clic destro o Esc: chiudi un menu, questa scheda o il pannello di ricerca; cancella la ricerca; esci da un campo di testo; lascia un valore tenuto; chiudi il Menu o annulla un trascinamento. Altrimenti, torna alla scrivania"
+            "text": "Clic destro o Esc: chiudi un menu, questa scheda o il pannello di ricerca; cancella la ricerca; esci da un campo di testo; lascia un valore tenuto; chiudi il Menu o annulla un trascinamento. Altrimenti Esc chiude la finestra in primo piano, poi apre le Impostazioni, che restano aperte. Q o un clic sulla cornice lascia il PC"
           },
           {
             "key": "keys.help",
@@ -48170,7 +48238,7 @@
           },
           {
             "key": "keys.desk.back",
-            "text": "Esci da: un trascinamento, la ruota, il PC, un valore tenuto, la modalità ispezione, la barra dei timbri, la città, la vista di lettura"
+            "text": "Esci da: un trascinamento, la ruota, un valore tenuto, la modalità ispezione, la barra dei timbri, il centralino, la città, la vista di lettura. Dalla scrivania libera Esc apre le Impostazioni"
           },
           {
             "key": "keys.desk.city",
@@ -55041,6 +55109,30 @@
           {
             "native": "PARTITI",
             "english": "sent"
+          },
+          {
+            "native": "piano",
+            "english": "plane"
+          },
+          {
+            "native": "aperte",
+            "english": "open"
+          },
+          {
+            "native": "Q",
+            "english": "Q"
+          },
+          {
+            "native": "cornice",
+            "english": "frame"
+          },
+          {
+            "native": "centralino",
+            "english": "switchboard"
+          },
+          {
+            "native": "libera",
+            "english": "free"
           }
         ]
       },
@@ -56330,7 +56422,7 @@
           },
           {
             "key": "keys.escape",
-            "text": "Rechtsklick oder Esc: ein Menü, diese Karte oder die Suchleiste schließen; die Suche leeren; ein Textfeld verlassen; einen gehaltenen Wert loslassen; das Menü schließen oder ein Ziehen abbrechen. Ist nichts davon offen, zurück zum Schreibtisch"
+            "text": "Rechtsklick oder Esc: ein Menü, diese Karte oder die Suchleiste schließen; die Suche leeren; ein Textfeld verlassen; einen gehaltenen Wert loslassen; das Menü schließen oder ein Ziehen abbrechen. Ist nichts davon offen, schließt Esc das vordere Fenster und öffnet dann die Einstellungen, die offen bleiben. Q oder ein Klick auf den Rahmen verlässt den PC"
           },
           {
             "key": "keys.help",
@@ -56442,7 +56534,7 @@
           },
           {
             "key": "keys.desk.back",
-            "text": "Zurück: ein Ziehen, das Rad, der PC, ein gehaltener Wert, der Prüfmodus, die Stempelleiste, die Stadt, die Leseansicht"
+            "text": "Zurück: ein Ziehen, das Rad, ein gehaltener Wert, der Prüfmodus, die Stempelleiste, die Schalttafel, die Stadt, die Leseansicht. Vom freien Schreibtisch öffnet Esc die Einstellungen"
           },
           {
             "key": "keys.desk.city",
@@ -63517,6 +63609,34 @@
           {
             "native": "GESENDET",
             "english": "sent"
+          },
+          {
+            "native": "vordere",
+            "english": "front"
+          },
+          {
+            "native": "Fenster",
+            "english": "window"
+          },
+          {
+            "native": "Q",
+            "english": "Q"
+          },
+          {
+            "native": "Klick",
+            "english": "click"
+          },
+          {
+            "native": "Rahmen",
+            "english": "frame"
+          },
+          {
+            "native": "Schalttafel",
+            "english": "switchboard"
+          },
+          {
+            "native": "freien",
+            "english": "free"
           }
         ]
       },
@@ -64806,7 +64926,7 @@
           },
           {
             "key": "keys.escape",
-            "text": "右键或 Esc：关闭菜单、本卡片或搜索抽屉；清空搜索；离开文本框；放下选取的数值；关闭菜单或取消拖动。若都没有，则返回办公桌"
+            "text": "右键或 Esc：关闭菜单、本卡片或搜索抽屉；清空搜索；离开文本框；放下选取的数值；关闭菜单或取消拖动。若都没有，Esc 先关闭最前面的窗口，再打开设置（设置保持打开）。按 Q 或点击边框离开电脑"
           },
           {
             "key": "keys.help",
@@ -64918,7 +65038,7 @@
           },
           {
             "key": "keys.desk.back",
-            "text": "退出：拖动、轮盘、电脑、选取的数值、检查模式、印章栏、城市、阅读视图"
+            "text": "退出：拖动、轮盘、选取的数值、检查模式、印章栏、交换台、城市、阅读视图。在空闲的办公桌上按 Esc 打开设置"
           },
           {
             "key": "keys.desk.city",
@@ -71353,6 +71473,22 @@
           {
             "native": "保险丝",
             "english": "fuse"
+          },
+          {
+            "native": "最前面",
+            "english": "frontmost"
+          },
+          {
+            "native": "Q",
+            "english": "Q"
+          },
+          {
+            "native": "交换台",
+            "english": "switchboard"
+          },
+          {
+            "native": "空闲",
+            "english": "free"
           }
         ]
       },
@@ -72642,7 +72778,7 @@
           },
           {
             "key": "keys.escape",
-            "text": "右クリックかEsc: メニュー、このカード、検索ドロワーを閉じる; 検索をクリア; テキスト欄を離れる; 保持した値を放す; メニューを閉じるかドラッグを取消。どれもなければデスクに戻る"
+            "text": "右クリックかEsc: メニュー、このカード、検索ドロワーを閉じる; 検索をクリア; テキスト欄を離れる; 保持した値を放す; メニューを閉じるかドラッグを取消。どれもなければEscで手前のウィンドウを閉じ、次に設定を開く（設定は開いたまま）。QかベゼルのクリックでPCを離れる"
           },
           {
             "key": "keys.help",
@@ -72754,7 +72890,7 @@
           },
           {
             "key": "keys.desk.back",
-            "text": "戻る: ドラッグ、ホイール、PC、保持した値、検査モード、スタンプバー、街、閲覧画面"
+            "text": "戻る: ドラッグ、ホイール、保持した値、検査モード、スタンプバー、交換台、街、閲覧画面。何も開いていないデスクではEscで設定を開く"
           },
           {
             "key": "keys.desk.city",
@@ -79237,6 +79373,30 @@
           {
             "native": "送出",
             "english": "sent"
+          },
+          {
+            "native": "ウィンドウ",
+            "english": "window"
+          },
+          {
+            "native": "閉じ",
+            "english": "close"
+          },
+          {
+            "native": "Q",
+            "english": "Q"
+          },
+          {
+            "native": "ベゼル",
+            "english": "bezel"
+          },
+          {
+            "native": "交換台",
+            "english": "switchboard"
+          },
+          {
+            "native": "開いていない",
+            "english": "not open"
           }
         ]
       }
