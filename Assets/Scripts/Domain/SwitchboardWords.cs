@@ -11,6 +11,9 @@ public static class SwitchboardWords
     /// <summary>The day-1 hint card pinned to the board.</summary>
     public const string Hint = "switchboard.hint";
 
+    /// <summary>The day-1 hint card of the Stargate dialer (look Stargate).</summary>
+    public const string HintDial = "switchboard.hint.dial";
+
     /// <summary>A module's display when its cords are in and MASTER waits.</summary>
     public const string Pull = "switchboard.display.pull";
 
@@ -36,5 +39,5 @@ public static class SwitchboardWords
     public const string Bonus = "switchboard.bonus";
 
     /// <summary>Every key above (the tests check each is in ui.strings).</summary>
-    public static readonly string[] All = { Hint, Pull, Power, Open, Done, Fuse, Closed, Sent, Bonus };
+    public static readonly string[] All = { Hint, HintDial, Pull, Power, Open, Done, Fuse, Closed, Sent, Bonus };
 }

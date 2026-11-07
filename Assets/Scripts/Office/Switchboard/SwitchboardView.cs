@@ -47,8 +47,11 @@ public sealed partial class SwitchboardView : MonoBehaviour
     /// <summary>True while the view is turned to the board (or turning there).</summary>
     public bool IsOpen => _open;
 
-    /// <summary>True while a plug or MASTER is in the hand.</summary>
-    public bool IsDragging => _held != null || _leverHeld;
+    /// <summary>True while a plug, the dialer's ring or cell, or MASTER is in the hand.</summary>
+    public bool IsDragging => _held != null || _leverHeld || DialHolding;
+
+    /// <summary>Today's board rules (null until the shift's day begins; a new board each office load). The hall's portals follow its RouteOpened, RouteSending and RouteClosed.</summary>
+    public Switchboard Board => _board;
 
     // ------------------------------------------------------------------ install
 
@@ -131,6 +134,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
             Destroy(_config);
         DestroySounds();
         DestroyWall();
+        DestroyGateArt();
     }
 
     /// <summary>Starts the day once the shift knows it, then runs the rules, the turn, the office view's glow, the hand and the drawing (unscaled time: a hit-stop never stops a calibration).</summary>
@@ -210,6 +214,8 @@ public sealed partial class SwitchboardView : MonoBehaviour
             _lever.Target = LeverRest;
             return true;
         }
+        if (CancelDial())
+            return true;
         if (_held == null)
             return false;
         ReturnHeld();
@@ -228,6 +234,14 @@ public sealed partial class SwitchboardView : MonoBehaviour
         DayPlanSO plan = RunManager.Instance.GetCurrentDayPlan();
         _day = game.World.day;
         SwitchboardRules rules = _config.Rules();
+        if (Dialer)
+        {
+            BeginGateDay(game, library, plan, rules);
+            _game = game;
+            _game.Resolved += HandleResolved;
+            ShowHint(_day <= _config.hintUntilDay);
+            return;
+        }
         _board = new Switchboard(rules, _layout.Modules.Count, _layout.Destinations.Count, _layout.PeriodRows);
         for (int m = 0; m < _layout.Modules.Count; m++)
             if (rules.ModuleOpen(m, _day) && !_layout.Modules[m].Placarded)
@@ -295,6 +309,11 @@ public sealed partial class SwitchboardView : MonoBehaviour
     {
         if (!accepted || _board == null || inst == null || inst.claimedNation == null || inst.claimedEra == null)
             return;
+        if (Dialer)
+        {
+            GateCall(inst);
+            return;
+        }
         ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
         NationEraProfileSO profile = library != null ? library.GetProfile(inst.claimedNation, inst.claimedEra) : null;
         SwitchPlace place = profile != null && PlaceOf(library, profile, out SwitchPlace found)
@@ -332,7 +351,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
                     break;
                 case SwitchEventKind.Opened:
                     Play(SwitchSound.Opened, 0.7f);
-                    Flare(_layout.Modules[e.Module].Lamp.Centre, LampGreen, 2.6f);
+                    Flare(ModuleLampOf(e.Module).Centre, LampGreen, Dialer ? 4f : 2.6f);
                     break;
                 case SwitchEventKind.Departed:
                     Departed(e);
@@ -344,7 +363,7 @@ public sealed partial class SwitchboardView : MonoBehaviour
                     break;
                 case SwitchEventKind.FusePopped:
                     Play(SwitchSound.Fuse, 0.9f);
-                    Sparks(_layout.Modules[e.Module].Lamp.Centre);
+                    Sparks(Dialer ? _gate.ChevronAt(e.Module, GateDial.PeriodChevron) : _layout.Modules[e.Module].Lamp.Centre);
                     Shake(_config.fuseShake);
                     Debug.Log($"[Switchboard] Module {_layout.Modules[e.Module].Id}: wrong period, the fuse popped ({_board.Rules.FuseSeconds:0.#} s).");
                     break;
@@ -357,9 +376,9 @@ public sealed partial class SwitchboardView : MonoBehaviour
     {
         Play(SwitchSound.Departed, 0.8f);
         LayoutModule module = _layout.Modules[e.Module];
-        Flare(_layout.Destinations[e.Route.Destination].Lamp.Centre, LampWarm, 5f);
-        Flare(module.Lamp.Centre, LampGreen, 3f);
-        BoardPoint rise = DisplayCentre(module);
+        Flare(CallLampOf(e.Route.Destination).Centre, LampWarm, 5f);
+        Flare(ModuleLampOf(e.Module).Centre, LampGreen, Dialer ? 5f : 3f);
+        BoardPoint rise = DisplayAt(e.Module);
         Rise(rise, Words(SwitchboardWords.Sent, e.Travellers), LampGreen);
         if (e.Bonus > 0 && _game != null && _game.World != null)
         {
@@ -369,8 +388,8 @@ public sealed partial class SwitchboardView : MonoBehaviour
             WalletEvents.Raise();
             Rise(rise.Plus(0f, -34f), Words(SwitchboardWords.Bonus, e.Bonus, UiText.Currency(UiText.WalletForm.Short)), LampWarm, 0.35f);
         }
-        SwitchDestination d = e.Route.Destination < _directory.Destinations.Count ? _directory.Destinations[e.Route.Destination] : null;
-        string where = d != null && e.Route.Period < d.Periods.Count ? d.Label + ", " + d.Periods[e.Route.Period].Label : e.Route.ToString();
+        SwitchDestination d = _directory != null && e.Route.Destination < _directory.Destinations.Count ? _directory.Destinations[e.Route.Destination] : null;
+        string where = Dialer ? RouteName(e.Route) : d != null && e.Route.Period < d.Periods.Count ? d.Label + ", " + d.Periods[e.Route.Period].Label : e.Route.ToString();
         Debug.Log($"[Switchboard] Module {module.Id} sent {e.Travellers} to {where} (group bonus {e.Bonus}).");
     }
 
@@ -416,6 +435,8 @@ public sealed partial class SwitchboardView : MonoBehaviour
     /// </summary>
     public string AddTestCalls()
     {
+        if (_board != null && Dialer)
+            return GateTestCalls();
         if (_board == null || _directory == null || _directory.Destinations.Count == 0)
             return "The switchboard has no day yet (start the shift first).";
         for (int m = 0; m < 3 && m < _board.Modules.Count; m++)

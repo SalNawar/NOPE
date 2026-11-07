@@ -3070,6 +3070,10 @@ MonoBehaviour:
     text: 'Una spia lampeggia: collegaci un modulo, dagli corrente, tira il MASTER'
     gloss: 0
     tier: 0
+  - key: switchboard.hint.dial
+    text: "Una spia lampeggia: gira l'anello sul suo emblema, poi sulla sua epoca. Inserisci le celle fino al segno. Tira il MASTER"
+    gloss: 0
+    tier: 0
   - key: switchboard.display.pull
     text: TIRA
     gloss: 0
@@ -6229,3 +6233,15 @@ MonoBehaviour:
     english: MASTER
   - native: PARTITI
     english: sent
+  - native: gira
+    english: turn
+  - native: "l'anello"
+    english: the ring
+  - native: emblema
+    english: emblem
+  - native: inserisci
+    english: insert
+  - native: celle
+    english: cells
+  - native: segno
+    english: mark

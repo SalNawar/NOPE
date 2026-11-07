@@ -28315,6 +28315,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "switchboard.hint.dial",
+        "text": "A lamp blinks: turn the ring to its emblem, then its era. Seat cells to the mark. Pull MASTER",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "switchboard.display.pull",
         "text": "PULL",
         "gloss": "None",
@@ -32859,6 +32865,10 @@
           {
             "key": "switchboard.hint",
             "text": "مصباح يومض: صل به وحدة, زودها بالطاقة, اسحب الذراع الرئيسية"
+          },
+          {
+            "key": "switchboard.hint.dial",
+            "text": "مصباح يومض: أدر الحلقة إلى شعاره, ثم إلى عصره. ضع الخلايا حتى العلامة. اسحب الذراع الرئيسية"
           },
           {
             "key": "switchboard.display.pull",
@@ -38601,6 +38611,30 @@
           {
             "native": "أرسلوا",
             "english": "sent"
+          },
+          {
+            "native": "أدر",
+            "english": "turn"
+          },
+          {
+            "native": "الحلقة",
+            "english": "the ring"
+          },
+          {
+            "native": "شعاره",
+            "english": "its emblem"
+          },
+          {
+            "native": "عصره",
+            "english": "its era"
+          },
+          {
+            "native": "الخلايا",
+            "english": "the cells"
+          },
+          {
+            "native": "العلامة",
+            "english": "the mark"
           }
         ]
       },
@@ -41611,6 +41645,10 @@
           {
             "key": "switchboard.hint",
             "text": "Μια λάμπα αναβοσβήνει: σύνδεσε μια μονάδα, δώσ' της ρεύμα, τράβηξε το MASTER"
+          },
+          {
+            "key": "switchboard.hint.dial",
+            "text": "Μια λάμπα αναβοσβήνει: γύρισε τον δακτύλιο στο έμβλημά της, μετά στην εποχή της. Βάλε στοιχεία ως το σημάδι. Τράβηξε το MASTER"
           },
           {
             "key": "switchboard.display.pull",
@@ -46769,6 +46807,22 @@
           {
             "native": "ΕΣΤΑΛΗΣΑΝ",
             "english": "sent"
+          },
+          {
+            "native": "γύρισε",
+            "english": "turn"
+          },
+          {
+            "native": "δακτύλιο",
+            "english": "ring"
+          },
+          {
+            "native": "έμβλημα",
+            "english": "emblem"
+          },
+          {
+            "native": "σημάδι",
+            "english": "mark"
           }
         ]
       },
@@ -49779,6 +49833,10 @@
           {
             "key": "switchboard.hint",
             "text": "Una spia lampeggia: collegaci un modulo, dagli corrente, tira il MASTER"
+          },
+          {
+            "key": "switchboard.hint.dial",
+            "text": "Una spia lampeggia: gira l'anello sul suo emblema, poi sulla sua epoca. Inserisci le celle fino al segno. Tira il MASTER"
           },
           {
             "key": "switchboard.display.pull",
@@ -55041,6 +55099,30 @@
           {
             "native": "PARTITI",
             "english": "sent"
+          },
+          {
+            "native": "gira",
+            "english": "turn"
+          },
+          {
+            "native": "l'anello",
+            "english": "the ring"
+          },
+          {
+            "native": "emblema",
+            "english": "emblem"
+          },
+          {
+            "native": "inserisci",
+            "english": "insert"
+          },
+          {
+            "native": "celle",
+            "english": "cells"
+          },
+          {
+            "native": "segno",
+            "english": "mark"
           }
         ]
       },
@@ -58051,6 +58133,10 @@
           {
             "key": "switchboard.hint",
             "text": "Eine Lampe blinkt: Modul anschließen, Strom geben, MASTER ziehen"
+          },
+          {
+            "key": "switchboard.hint.dial",
+            "text": "Eine Lampe blinkt: Ring auf ihr Wappen drehen, dann auf ihre Epoche. Zellen bis zur Marke einsetzen. MASTER ziehen"
           },
           {
             "key": "switchboard.display.pull",
@@ -63517,6 +63603,26 @@
           {
             "native": "GESENDET",
             "english": "sent"
+          },
+          {
+            "native": "Wappen",
+            "english": "emblem"
+          },
+          {
+            "native": "drehen",
+            "english": "turn"
+          },
+          {
+            "native": "Zellen",
+            "english": "cells"
+          },
+          {
+            "native": "Marke",
+            "english": "mark"
+          },
+          {
+            "native": "einsetzen",
+            "english": "insert"
           }
         ]
       },
@@ -66527,6 +66633,10 @@
           {
             "key": "switchboard.hint",
             "text": "指示灯闪烁：接上一个模块，接通电源，拉下 MASTER"
+          },
+          {
+            "key": "switchboard.hint.dial",
+            "text": "指示灯闪烁：把环转到它的徽章，再转到它的时代。装入电池直到刻度。拉下 MASTER"
           },
           {
             "key": "switchboard.display.pull",
@@ -71353,6 +71463,30 @@
           {
             "native": "保险丝",
             "english": "fuse"
+          },
+          {
+            "native": "转到",
+            "english": "turn to"
+          },
+          {
+            "native": "徽章",
+            "english": "emblem"
+          },
+          {
+            "native": "装入",
+            "english": "load"
+          },
+          {
+            "native": "电池",
+            "english": "cells"
+          },
+          {
+            "native": "直到",
+            "english": "until"
+          },
+          {
+            "native": "刻度",
+            "english": "mark"
           }
         ]
       },
@@ -74363,6 +74497,10 @@
           {
             "key": "switchboard.hint",
             "text": "ランプが点滅したら：モジュールをつなぎ、電源を入れ、MASTERを引く"
+          },
+          {
+            "key": "switchboard.hint.dial",
+            "text": "ランプが点滅したら：リングをその紋章へ、次にその時代へ回す。印までセルを入れ、MASTERを引く"
           },
           {
             "key": "switchboard.display.pull",
@@ -79237,6 +79375,18 @@
           {
             "native": "送出",
             "english": "sent"
+          },
+          {
+            "native": "紋章",
+            "english": "emblem"
+          },
+          {
+            "native": "回す",
+            "english": "turn"
+          },
+          {
+            "native": "セル",
+            "english": "cell"
           }
         ]
       }

@@ -3051,6 +3051,10 @@ MonoBehaviour:
     text: "\u30E9\u30F3\u30D7\u304C\u70B9\u6EC5\u3057\u305F\u3089\uFF1A\u30E2\u30B8\u30E5\u30FC\u30EB\u3092\u3064\u306A\u304E\u3001\u96FB\u6E90\u3092\u5165\u308C\u3001MASTER\u3092\u5F15\u304F"
     gloss: 0
     tier: 0
+  - key: switchboard.hint.dial
+    text: "\u30E9\u30F3\u30D7\u304C\u70B9\u6EC5\u3057\u305F\u3089\uFF1A\u30EA\u30F3\u30B0\u3092\u305D\u306E\u7D0B\u7AE0\u3078\u3001\u6B21\u306B\u305D\u306E\u6642\u4EE3\u3078\u56DE\u3059\u3002\u5370\u307E\u3067\u30BB\u30EB\u3092\u5165\u308C\u3001MASTER\u3092\u5F15\u304F"
+    gloss: 0
+    tier: 0
   - key: switchboard.display.pull
     text: "\u5F15\u304F"
     gloss: 0
@@ -6000,3 +6004,9 @@ MonoBehaviour:
     english: pull
   - native: "\u9001\u51FA"
     english: sent
+  - native: "\u7D0B\u7AE0"
+    english: emblem
+  - native: "\u56DE\u3059"
+    english: turn
+  - native: "\u30BB\u30EB"
+    english: cell

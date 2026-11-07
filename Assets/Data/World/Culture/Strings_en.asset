@@ -3310,6 +3310,10 @@ MonoBehaviour:
     text: 'A lamp blinks: plug a module to it, give it power, pull MASTER'
     gloss: 0
     tier: 1
+  - key: switchboard.hint.dial
+    text: "A lamp blinks: turn the ring to its emblem, then its era. Seat cells to the mark. Pull MASTER"
+    gloss: 0
+    tier: 1
   - key: switchboard.display.pull
     text: PULL
     gloss: 0

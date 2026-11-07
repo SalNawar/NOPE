@@ -109,3 +109,49 @@ Other owners' files touched (small, for the PORTALS lease chain to confirm): `Do
 3. Waiting costs, the waiting room and the human-rights fine (the portals spec's P1 rest): not in this demo.
 4. The hall's ring pulse at approval vs at the board's send (decision 16).
 5. 04 and 05: painted placards for now (decision 3).
+
+## Stargate dialer (2026-11-07, night/stargate-switchboard)
+
+Saleh: "a switchboard that is intresting ( my friends suggested something based on stargate)" (2026-11-07). The director's D1 (`NOPE-tools/reports/night/n1107/DECISIONS.md`). The design check, the lo-fi mock and the interaction script: `NOPE-tools/reports/night/n1107/tasks/stargate-switchboard/design/`. One knob reverts it: `SwitchboardConfigSO.look = Classic`.
+
+### What the player does
+1. A traveller is approved: their nation's call lamp blinks in the call row and the pip of their era lights amber.
+2. D (or a click on the board on the wall) turns to the board.
+3. Drag the ring of a dial: let go with the nation's emblem under the top chevron. It eases into its detent and chevron 1 lights with a click (PLACE).
+4. Drag again: let go with the era's glyph under chevron 2. Chevron 2 lights (PERIOD). The brass mark over the cradle shows the bars the era needs.
+5. Carry cells from the rack into the cradle up to the mark. Each seats with a click and lights a bar. The display flashes PULL.
+6. Pull MASTER past 80 %: clunk. The 7 chevrons engage one every 2.86 s while the bars reach the mark.
+7. At 20 s the hub fills with the horizon, the chime, "+N SENT", the group bonus.
+
+A wrong era: at the pull the fuse pops for 2 s and the two lock chevrons flicker red. Drag the ring once to the right era and pull again. Moving the ring past the eras to any other glyph under chevron 2 opens both locks (the dial starts over). Esc or a right-click while holding the ring or a cell lets go with nothing changed; the next one backs out.
+
+### Decisions (ORCHESTRATOR unless marked)
+- D-S1. **SALEH (via D1):** the dial, the chevrons, the cells, MASTER as the final lock, the 20 s calibration, the eras' bars 3, 2, 2, 1, 1.
+- D-S2. 4 cells (`powerCells`), not D1's "the cell count equals today's power cord count (2)": with 2 cells an Ancient route (3 bars) could never open. 4 is the "Move the units" count Saleh picked on 2026-10-25. Power is still short: from day 3 two dials share 4 cells (Ancient + Medieval = 5), from day 5 three dials do.
+- D-S3. 14 glyph slots: the point of origin (the Bureau's hourglass, it locks nothing), the 8 nations and the 5 eras, nations and eras in turn. With 7 chevrons one stands every 2 slots, so every detent puts a glyph exactly under every chevron.
+- D-S4. The ring's rule (`GateDial.Resolve`): nothing locked, the nation under chevron 1 locks PLACE; PLACE locked, the era under chevron 2 locks PERIOD (a different era replaces the old one, so a wrong era costs one drag), anything else there opens both locks; a ring let go where it was taken changes nothing. The rules change when the ring lands in its detent, never while it is in the hand.
+- D-S5. A cell lifted out of a cradle leaves the rules at once (D1: "a cell taken out darkens the dial at once"); Esc or a right-click puts it back. Plugs on the Classic board still change the rules only when they land.
+- D-S6. MASTER engages only dials whose bars reach the mark (D1). A dial patched but short shows POWER and does not wait for MASTER; reaching the mark trips a closed breaker open, so the next pull engages it.
+- D-S7. Two dials may serve one nation on two eras; one route per dial (`PlaceTakesOnePlug` false).
+- D-S8. The call row shows every nation (fixed slots, the passport emblems) and the waiting eras as pips. The Classic board left the period to memory (decision 19); the dial is still two separate moves, and the board now reads in seconds (point 6).
+- D-S9. The eras' glyphs are code-drawn: Ancient a stepped pyramid, Medieval a tower, Early modern a ship, Industrial a gear, Modern a bolt. The nations wear their passport emblems (`EmblemArt`: the art when it lands, else the code-drawn stand-ins). No Higgsfield credits spent.
+- D-S10. The strobe: chevrons 1 and 2 are the locks; during the calibration every chevron engages in turn, one every 20/7 s, with a 0.45 s flash on the lens and a soft clunk; the passed ones hold. At 7 the gate opens. Below the mark they dim to 40 % and the count pauses.
+- D-S11. The calls of a traveller whose era has no glyph (the Future) find no route and leave at once (logged), as a call with no free jack did on the Classic board.
+- D-S12. The board on the wall shows the dialer's face as an unlit sprite tinted by `wallGrade` (the plate's paint is lit by the booth's material); the chevrons and cells are not drawn there, the hubs' lamps are.
+- D-S13. Esc and a right-click: the first lets go of a held ring or cell, the next backs out (ControlRules, unchanged).
+
+### Files
+| File | What |
+|---|---|
+| `Scripts/Domain/Switchboard.cs` | `PeriodBars`, `CellsPerModule`, `MasterNeedsPower`, `PlaceTakesOnePlug`; a module's `Cells` and `Need`; `RouteOpened`, `RouteSending`, `RouteClosed` |
+| `Scripts/Domain/GateDial.cs` | the ring, its rule, the strobe, `GateBoardLayout` |
+| `Scripts/Domain/GatePaint.cs` | the code-drawn face, ring, chevron, lens, cell, horizon, glyphs |
+| `Scripts/Office/Switchboard/SwitchboardView.Dial.cs` | the dialer's parts, hand and drawing |
+| `Scripts/Office/Switchboard/SwitchboardConfigSO.cs` | `look` and the dialer's knobs |
+| `Tests/PlayMode/SWITCHBOARD/SwitchboardRig.cs`, `tools/qa/scenarios/switchboard_dial.json` | the rig's ops and the scenario |
+| Tests: `SwitchboardTests` (the dialer's rules, the route events), `GateDialTests` | |
+
+### Open calls for Saleh
+1. 4 cells or 2 (D-S2). With 2, the eras' bars must drop (Ancient 2).
+2. The call row's era pips (D-S8): keep, or make the era a thing the player remembers.
+3. Painted art for the dial (a Higgsfield plate) once the mechanic is approved.

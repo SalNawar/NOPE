@@ -61,6 +61,7 @@ public sealed partial class SwitchboardView
     private WallLamp[] _wallModules;
     private WallLamp _wallMaster;
     private SpriteRenderer[] _wallVeils;
+    private SpriteRenderer[] _wallRings;
     private Sprite _wallWhite;
     private readonly Dictionary<Cord, WallCord> _wallCords = new Dictionary<Cord, WallCord>();
     private readonly List<BoardPoint> _wallCurve = new List<BoardPoint>();
@@ -79,8 +80,8 @@ public sealed partial class SwitchboardView
             return;
         _wallNextTry = Time.unscaledTime + WallRetrySeconds;
         DeskPainted desk = FindFirstObjectByType<DeskPainted>();
-        if (desk == null || _layout == null)
-            return;
+        if (desk == null || _layout == null || Dialer && _dials == null)
+            return; // the dialer's parts come with the day (BuildGate)
         Shader shader = Shader.Find(PaintedShader);
         Sprite plate = SlotArt.Sprite(ArtSlots.SwitchboardPlate);
         if (shader == null || plate == null)
@@ -102,18 +103,26 @@ public sealed partial class SwitchboardView
         Shader sprites = Shader.Find("Sprites/Default");
         if (sprites != null)
             _wallSprites = new Material(sprites) { name = "Switchboard on the wall (sprites)" };
-        _wallCalls = new WallLamp[_layout.Destinations.Count];
+        if (Dialer)
+            BuildWallGate();
+        _wallCalls = new WallLamp[_callLamps.Length];
         for (int d = 0; d < _wallCalls.Length; d++)
-            _wallCalls[d] = MakeWallLamp("Call lamp " + d, _layout.Destinations[d].Lamp);
+            _wallCalls[d] = MakeWallLamp("Call lamp " + d, CallLampOf(d));
         _wallModules = new WallLamp[_layout.Modules.Count];
         for (int m = 0; m < _wallModules.Length; m++)
-            _wallModules[m] = MakeWallLamp("Module lamp " + _layout.Modules[m].Id, _layout.Modules[m].Lamp);
+            _wallModules[m] = MakeWallLamp("Module lamp " + _layout.Modules[m].Id, ModuleLampOf(m));
         _wallMaster = MakeWallLamp("MASTER lamp", _layout.Master.Lamp);
         _wallWhite = UnityEngine.Sprite.Create(Texture2D.whiteTexture, new Rect(0f, 0f, 4f, 4f), new Vector2(0.5f, 0.5f), 4f);
         _wallVeils = new SpriteRenderer[_layout.Modules.Count];
         for (int m = 0; m < _wallVeils.Length; m++)
         {
             LayoutModule module = _layout.Modules[m];
+            if (Dialer)
+            {
+                _wallVeils[m] = WallSprite("Closed " + module.Id, _discSprite, _gate.DialCentre(m), 2f * (_gate.DialRadius(m) + 2f), VeilLift, 1);
+                _wallVeils[m].color = VeilColor;
+                continue;
+            }
             _wallVeils[m] = WallSprite("Closed " + module.Id, _wallWhite, module.Rect.Centre, 0f, VeilLift, 0);
             float mpp = SwitchboardWall.Painted.MetresPerPixel(_layout.Board);
             _wallVeils[m].transform.localScale = new Vector3((module.Rect.W - VeilInset) * mpp, (module.Rect.H - VeilInset) * mpp, 1f);
@@ -208,6 +217,22 @@ public sealed partial class SwitchboardView
         float v0 = (tr.y + (1f - (board.Y + board.H) / _layout.Height) * tr.height) / texture.height;
         float vh = board.H / _layout.Height * tr.height / texture.height;
         Graphics.Blit(texture, _wallPaint, new Vector2(uw, vh), new Vector2(u0, v0));
+    }
+
+    /// <summary>The dialer on the wall: its slate face over the plate's jacks and each big dial's ring (turned as the board view turns it), in the booth's grade (unlit sprites, so tinted by wallGrade like the board's paint).</summary>
+    private void BuildWallGate()
+    {
+        Color grade = _config.wallGrade;
+        SpriteRenderer face = WallSprite("Dialer face", SpriteOf(_faceTexture), _gate.Cover.Centre, _gate.Cover.W, VeilLift * 0.5f, 0);
+        face.color = grade;
+        _wallRings = new SpriteRenderer[_dials.Length];
+        for (int m = 0; m < _dials.Length; m++)
+        {
+            if (_dials[m].Ring == null)
+                continue;
+            _wallRings[m] = WallSprite("Ring " + _layout.Modules[m].Id, _ringSprite, _gate.DialCentre(m), _ringSprite != null ? _ringSprite.rect.width : 0f, VeilLift * 0.75f, 0);
+            _wallRings[m].color = grade;
+        }
     }
 
     /// <summary>A lamp on the wall at <paramref name="at"/>: its glow and its lit dome, the board view's sizes (by the glass's radius).</summary>
@@ -309,6 +334,9 @@ public sealed partial class SwitchboardView
             if (_wallVeils[m].enabled != veiled)
                 _wallVeils[m].enabled = veiled;
         }
+        for (int m = 0; _wallRings != null && m < _wallRings.Length; m++)
+            if (_wallRings[m] != null)
+                _wallRings[m].transform.localRotation = Quaternion.LookRotation(Vector3.right, Vector3.up) * Quaternion.Euler(0f, 0f, -_dials[m].Turn.Value);
         foreach (KeyValuePair<Cord, WallCord> pair in _wallCords)
             DrawWallCord(pair.Key, pair.Value);
     }
