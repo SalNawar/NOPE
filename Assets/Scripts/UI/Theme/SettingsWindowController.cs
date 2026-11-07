@@ -21,7 +21,9 @@ using UnityEngine.UI;
 /// while Reduced is chosen). The PC basics (BUG-62): the Master, Music and
 /// Effects volumes (SoundSettings), the window mode, the resolution, vsync,
 /// brightness and Reduce flashing (ScreenSettings), each applied at once;
-/// their rows are built by OfficeSceneUIBuilder.BuildSettingsBasics. The
+/// their rows are built by OfficeSceneUIBuilder.BuildSettingsBasics. Quit
+/// game (UI-16: the one Settings window, the PC's, carries it; a QuitControl
+/// as the Start menu's). The
 /// desktop's icons (the PC redesign DK5, DK6): open with a "Double click"
 /// (the default) or a "Single click" (DesktopPreferences), and "Reset icon
 /// positions" (DesktopIcons.Arrange). In each pair the chosen button shows
@@ -120,6 +122,9 @@ public sealed class SettingsWindowController : MonoBehaviour, IKitUser
     /// <summary>Reduce flashing off (the default), and on.</summary>
     [SerializeField] private Button reduceFlashingOffButton, reduceFlashingOnButton;
 
+    /// <summary>Quit game, under the Display group (UI-16: the one Settings window carries Quit; a QuitControl, as the Start menu's).</summary>
+    [SerializeField] private Button quitButton;
+
     /// <summary>The scene's Settings window controller (null when no Settings window is loaded).</summary>
     private static SettingsWindowController _instance;
 
@@ -208,6 +213,7 @@ public sealed class SettingsWindowController : MonoBehaviour, IKitUser
             reduceFlashingOffButton.onClick.AddListener(() => ChooseReduceFlashing(false));
         if (reduceFlashingOnButton != null)
             reduceFlashingOnButton.onClick.AddListener(() => ChooseReduceFlashing(true));
+        QuitControl.On(quitButton, config != null ? config.quitWarningSeconds : 0f);
     }
 
     /// <summary>Stores the papers' language choice and applies it at once (never locked, BUG-3a): the theme service re-reads the papers' language, and every text printed from a UI string follows (CultureThemeService.LabelsChanged).</summary>

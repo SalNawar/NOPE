@@ -104,8 +104,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Notes window's size: the reading apps' one size.</summary>
     public Vector2 notesWindowSize = new Vector2(1060f, 800f);
 
-    /// <summary>The Settings window's size (1000 u tall: the desktop's 1080 less the 72 u taskbar and a margin; every row fits, the Reduce flashing row in the place of the Machine close-ups row that P0-C cut, the locked language line's three lines and the note's three, in the culture fonts too).</summary>
-    public Vector2 settingsWindowSize = new Vector2(800f, 1000f);
+    /// <summary>The Settings window's size: two columns (UI-16: the PC's own groups on the left, Sound, Display and Quit game on the right), 1340 x 900 u, inside the desktop above the 72 u taskbar with a margin (UI-15); every row fits, the locked language line's three lines and the note's three, in the culture fonts too.</summary>
+    public Vector2 settingsWindowSize = new Vector2(1340f, 900f);
 
     /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
     public Vector2 portalsWindowSize = new Vector2(880f, 600f);

@@ -284,13 +284,17 @@ public static partial class OfficeSceneUIBuilder
     /// SettingsWindowController): Language (Follow history / Always English,
     /// and the lock's line under them, hidden until the Translation Lens's day),
     /// Motion (Full / Reduced, and the Motion intensity slider under them,
-    /// 0-100 %: the kit's sunk track and bone thumb; Camera sway Off / On;
-    /// Reduce flashing Off / On, FlashSettingRow), Desktop icons open with (Double click /
+    /// 0-100 %: the kit's sunk track and bone thumb; Camera sway Off / On),
+    /// Desktop icons open with (Double click /
     /// Single click) and Reset icon positions (its icons wired by
     /// WireIconSettings), Investigation's Text size (a choice per zoom level,
     /// redesign phase 20; the step hints' pair is gone with the hints),
     /// Keyboard (Show shortcuts, which opens the F1 card: BuildShortcutCard),
-    /// then the note at Caption size.
+    /// in the left column; in the right column (UI-16: one Settings window,
+    /// the PC's, which Esc opens too) the Sound and Display groups
+    /// (BuildSettingsBasics, Reduce flashing among them), a Quit game row (a
+    /// QuitControl, the Start menu's rule) and the note at Caption size.
+    /// The window fits the desktop above the taskbar (UI-15).
     /// </summary>
     private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
     {
@@ -300,15 +304,9 @@ public static partial class OfficeSceneUIBuilder
         Transform win = chrome.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);
 
-        Transform column = Panel(win, "Column", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(column, Vector2.zero, Vector2.one, new Vector2(PcSize.L + 8f, PcSize.L), new Vector2(-(PcSize.L + 8f), -(config.titleBarHeight + PcSize.M)));
-        VerticalLayoutGroup layout = GetOrAdd<VerticalLayoutGroup>(column.gameObject);
-        layout.spacing = 3f; // tight: every row, the locked language line and the note fit in the culture fonts' taller lines (CJK)
-        layout.childAlignment = TextAnchor.UpperLeft;
-        layout.childControlWidth = true;
-        layout.childControlHeight = true;
-        layout.childForceExpandWidth = true;
-        layout.childForceExpandHeight = false;
+        float inset = PcSize.L + 8f, top = -(config.titleBarHeight + PcSize.M);
+        Transform column = SettingsColumn(win, "Column", new Vector2(0f, 0f), new Vector2(0.5f, 1f), new Vector2(inset, PcSize.L), new Vector2(-SettingsGutter / 2f, top));
+        Transform right = SettingsColumn(win, "ColumnRight", new Vector2(0.5f, 0f), new Vector2(1f, 1f), new Vector2(SettingsGutter / 2f, PcSize.L), new Vector2(-inset, top));
 
         SettingsHeading(column, "LanguageLabel", "settings.language");
         Transform language = SettingsRow(column, "LanguageRow");
@@ -345,20 +343,6 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<LayoutElement>(swayLabel.gameObject).flexibleWidth = 1f;
         Button swayOff = SettingsSwitch(swayRow, "CameraSwayOffButton", "settings.cameraSwayOff");
         Button swayOn = SettingsSwitch(swayRow, "CameraSwayOnButton", "settings.cameraSwayOn");
-        // Reduce flashing (GAME_FEEL_BIBLE G3, gap 2), in the room the cut Machine close-ups row left: its word, then the Off / On pair.
-        Transform flashRow = SettingsRow(column, "ReduceFlashingRow");
-        TMP_Text flashLabel = Text(flashRow, "ReduceFlashingLabel", null, PcType.Body, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink,
-                                   ThemeRoleId.WindowBody, "settings.reduceFlashing");
-        Chrome(flashLabel, PcType.Body);
-        flashLabel.raycastTarget = false;
-        GetOrAdd<LayoutElement>(flashLabel.gameObject).flexibleWidth = 1f;
-        FlashSettingRow flash = GetOrAdd<FlashSettingRow>(flashRow.gameObject);
-        var soFlash = new SerializedObject(flash);
-        SetRef(soFlash, "offButton", SettingsSwitch(flashRow, "ReduceFlashingOffButton", "settings.cameraSwayOff"));
-        SetRef(soFlash, "onButton", SettingsSwitch(flashRow, "ReduceFlashingOnButton", "settings.cameraSwayOn"));
-        SetRef(soFlash, "kit", _kit);
-        soFlash.ApplyModifiedProperties();
-
         SettingsHeading(column, "DesktopLabel", "settings.desktop");
         Transform icons = SettingsRow(column, "IconOpenRow");
         Button iconDouble = SettingsSwitch(icons, "IconDoubleClickButton", "settings.iconDouble");
@@ -382,7 +366,18 @@ public static partial class OfficeSceneUIBuilder
         Button shortcuts = SettingsChoice(shortcutsRow, "ShowShortcutsButton", "settings.showShortcuts");
         SettingsChoice(shortcutsRow, GuideReplayButton, "settings.replayTutorial"); // wired to the desk's guide by BuildGuide
 
-        TMP_Text note = Text(column, "NoteText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
+        // The right column: the PC basics (BUG-62; Reduce flashing is the Display group's), then Quit game.
+        SettingsWindowController controller = GetOrAdd<SettingsWindowController>(win.gameObject);
+        BuildSettingsBasics(controller, right);
+        Button quit = SettingsChoice(SettingsRow(right, "QuitRow"), "QuitButton", "startmenu.quit");
+        TMP_Text quitLabel = quit.transform.Find("Label").GetComponent<TMP_Text>();
+        TMP_Text forfeit = Text(quit.transform, QuitControl.WarningName, null, PcType.Body, quitLabel.alignment, Vector2.zero, Vector2.one, quitLabel.color,
+                                ThemeRoleId.Button, "startmenu.quitForfeit", FontStyles.Bold, ThemeTextKind.Button, true);
+        forfeit.margin = quitLabel.margin;
+        forfeit.raycastTarget = false;
+        forfeit.gameObject.SetActive(false);
+
+        TMP_Text note = Text(right, "NoteText", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink,
                              ThemeRoleId.WindowBody, "settings.note");
         Chrome(note, PcType.Caption, true);
         note.margin = new Vector4(0f, PcSize.S / 2f, 0f, 0f);
@@ -391,7 +386,6 @@ public static partial class OfficeSceneUIBuilder
         // The shortcut card (F1; OfficeSceneUIBuilder.Keys), rebuilt fresh, so it keeps its place after the rebuilt windows.
         DesktopWindow card = BuildShortcutCard(windowLayer);
 
-        SettingsWindowController controller = GetOrAdd<SettingsWindowController>(win.gameObject);
         var so = new SerializedObject(controller);
         SetRef(so, "followHistoryButton", follow);
         SetRef(so, "alwaysEnglishButton", english);
@@ -410,6 +404,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "config", config);
         SetRef(so, "showShortcutsButton", shortcuts);
         SetRef(so, "shortcutsWindow", card);
+        SetRef(so, "quitButton", quit);
         so.ApplyModifiedProperties();
         win.gameObject.SetActive(false);
         return chrome;
@@ -417,6 +412,24 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>A Settings heading's height (reference px): 40 since the Camera sway row joined the Motion group, so the window still holds every row and the note.</summary>
     private const float SettingsHeadingHeight = 40f;
+
+    /// <summary>The gap between the Settings window's two columns (desktop units).</summary>
+    private const float SettingsGutter = 40f;
+
+    /// <summary>One of the Settings window's two columns: a top-down stack of groups between <paramref name="min"/> and <paramref name="max"/> (anchors) with the given offsets.</summary>
+    private static Transform SettingsColumn(Transform win, string name, Vector2 min, Vector2 max, Vector2 offsetMin, Vector2 offsetMax)
+    {
+        Transform column = Panel(win, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(column, min, max, offsetMin, offsetMax);
+        VerticalLayoutGroup layout = GetOrAdd<VerticalLayoutGroup>(column.gameObject);
+        layout.spacing = 3f; // tight: every row, the locked language line and the note fit in the culture fonts' taller lines (CJK)
+        layout.childAlignment = TextAnchor.UpperLeft;
+        layout.childControlWidth = true;
+        layout.childControlHeight = true;
+        layout.childForceExpandWidth = true;
+        layout.childForceExpandHeight = false;
+        return column;
+    }
 
     /// <summary>A Settings group's heading: Title size, bold, with room above it.</summary>
     private static void SettingsHeading(Transform column, string name, string key)
