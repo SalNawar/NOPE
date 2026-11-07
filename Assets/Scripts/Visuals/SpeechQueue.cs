@@ -11,7 +11,9 @@ using System.Collections.Generic;
 /// carry a tag (piece 10: the wheel's index of the DialogLine it says), read
 /// back as Tag while it shows. While held (the pointer on the bubble, piece
 /// 10) a fully shown line never ends and queued lines wait; its minimum or
-/// hold runs from the release. Pure, so the pacing is tested headless;
+/// hold runs from the release. A line reveals in place by TextReveal's
+/// count (D26); with ShowsAtOnce (Reduced Motion) it shows whole at once and
+/// its hold runs from its start. Pure, so the pacing is tested headless;
 /// TravellerWheel ticks it and draws it.
 /// </summary>
 public sealed class SpeechQueue
@@ -47,21 +49,14 @@ public sealed class SpeechQueue
     /// <summary>True while a line is up.</summary>
     public bool Showing => Text != null;
 
+    /// <summary>True shows each line whole at once (Reduced Motion: no typing), so it counts as fully shown at its start (or its reveal).</summary>
+    public bool ShowsAtOnce { get; set; }
+
     /// <summary>The line being shown (all of it), or null.</summary>
     public string Text { get; private set; }
 
     /// <summary>How many of the shown line's characters are typed out so far (0 when nothing shows).</summary>
-    public int VisibleCharacters
-    {
-        get
-        {
-            if (Text == null)
-                return 0;
-            if (_charsPerSecond <= 0f || _elapsed >= TypeSeconds)
-                return Text.Length;
-            return (int)(_elapsed * _charsPerSecond);
-        }
-    }
+    public int VisibleCharacters => Text != null ? TextReveal.Count(_charsPerSecond, _elapsed, Text.Length, ShowsAtOnce) : 0;
 
     /// <summary>How many lines have started so far (never counts back): a change means a new line is up.</summary>
     public int LineNumber { get; private set; }
@@ -76,7 +71,7 @@ public sealed class SpeechQueue
     public int Tag => Text != null ? _tag : -1;
 
     /// <summary>Seconds the shown line takes to type out.</summary>
-    private float TypeSeconds => _charsPerSecond > 0f && Text != null ? Text.Length / _charsPerSecond : 0f;
+    private float TypeSeconds => Text != null ? TextReveal.Seconds(_charsPerSecond, Text.Length, ShowsAtOnce) : 0f;
 
     /// <summary>When the shown line is fully shown, from its start: the later of its typing and its reveal.</summary>
     private float ShownSeconds => TypeSeconds > _reveal ? TypeSeconds : _reveal;
@@ -103,7 +98,7 @@ public sealed class SpeechQueue
             int i = 0;
             foreach (var (text, _, reveal, _) in _waiting)
             {
-                float type = _charsPerSecond > 0f ? text.Length / _charsPerSecond : 0f;
+                float type = TextReveal.Seconds(_charsPerSecond, text.Length, ShowsAtOnce);
                 total += (type > reveal ? type : reveal) + (++i < waiting ? _minSeconds : 0f);
             }
             return total;

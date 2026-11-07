@@ -181,6 +181,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (bubble != null)
         {
             bubble.PlacedByOwner = true; // the bubble belongs to the traveller and keeps clear of the wheel: PlaceBubble
+            bubble.Appear = AppearStyle.Fade; // laid out whole, then revealed in place: nothing in the bubble moves (D26)
             _tail = bubble.Panel != null ? bubble.Panel.Find("Tail") as RectTransform : null;
             if (_tail != null)
             {
@@ -210,6 +211,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     {
         if (_speech != null)
         {
+            _speech.ShowsAtOnce = UiMotion.Amount.Reduced; // Reduced Motion: each line shows whole at once
             _speech.Tick(Time.deltaTime);
             ShowSpeech();
         }
