@@ -367,10 +367,4 @@ public static class Seeds
                 value = Mix(value, c);
         return value;
     }
-
-    /// <summary>Salt for the day's weather ("WTHR").</summary>
-    public const int WeatherSalt = 0x57544852;
-
-    /// <summary>Seed for the day's weather (CityWeather.Rains), one per run and day, apart from every other stream.</summary>
-    public static int ForWeather(int daySeed) => Mix(daySeed, WeatherSalt);
 }

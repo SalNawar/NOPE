@@ -204,9 +204,6 @@ public sealed class CityR17Stage : IDisposable
 
         /// <summary>Reduced Motion: the smoke and the fire hold one drawing.</summary>
         public bool Reduced;
-
-        /// <summary>The day's weather: true draws the rain over the city (the cooler tint and the streaks).</summary>
-        public bool Rain;
     }
 
     private FrameState _f;
@@ -251,8 +248,6 @@ public sealed class CityR17Stage : IDisposable
                 case StepKind.Laundry: DrawLaundry(cmd); break;
             }
         }
-        if (state.Rain)
-            DrawRain(cmd, fr);
         cmd.Blit(_target, _output);
         cmd.GenerateMips(_output);
         long t1 = System.Diagnostics.Stopwatch.GetTimestamp();
@@ -386,54 +381,6 @@ public sealed class CityR17Stage : IDisposable
     }
 
     private static readonly Vector4 White = new Vector4(1, 1, 1, 1), NoHaze = Vector4.zero;
-
-    /// <summary>
-    /// A rainy day's weather over the whole view (CITY-WEATHER), last in the frame so the city view and the hall windows
-    /// both show it: the config's cooler tint, then the 256 px streak tile falling at rainSpeed (held under Reduced Motion).
-    /// </summary>
-    private void DrawRain(CommandBuffer cmd, CityR17Framing fr)
-    {
-        Matrix4x4 view = RectMatrix(_x0, _y0, fr.W, fr.H);
-        Color tint = _config.rainTint;
-        Sprite(cmd, PassAlpha, Texture2D.whiteTexture, 4, 4, new CityR17Rect(1, 1, 2, 2), view, new Vector4(tint.r, tint.g, tint.b, tint.a), NoHaze);
-        if (_rain == null)
-            _rain = RainTile();
-        float fall = _f.Reduced ? 0f : (float)(_f.Seconds * _config.rainSpeed % RainTileSize);
-        Sprite(cmd, PassAlpha, _rain, RainTileSize, RainTileSize, new CityR17Rect(0, fall, fr.W, fr.H), view, White, NoHaze);
-    }
-
-    private const int RainTileSize = 256;
-    private Texture2D _rain;
-
-    /// <summary>The streak tile: 36 slanted streaks, 2 px wide and 18 to 40 px long, wrapping on both edges (drawn once, from a fixed seed).</summary>
-    private static Texture2D RainTile()
-    {
-        var px = new Color32[RainTileSize * RainTileSize];
-        for (int i = 0; i < px.Length; i++)
-            px[i] = new Color32(200, 220, 255, 0);   // the colour under the clear pixels, so the filter never darkens a streak's edge
-        var rng = new System.Random(2353);
-        for (int i = 0; i < 36; i++)
-        {
-            int x = rng.Next(RainTileSize), y = rng.Next(RainTileSize), len = 18 + rng.Next(23);
-            byte a = (byte)(110 + rng.Next(70));
-            for (int k = 0; k < len; k++)
-                for (int w = 0; w < 2; w++)
-                {
-                    int cx = (x + w + k / 5) % RainTileSize, py = (y + k) % RainTileSize;
-                    px[py * RainTileSize + cx] = new Color32(200, 220, 255, a);
-                }
-        }
-        var tex = new Texture2D(RainTileSize, RainTileSize, TextureFormat.RGBA32, false, true)
-        {
-            name = "City R17 rain tile",
-            wrapMode = TextureWrapMode.Repeat,
-            filterMode = FilterMode.Bilinear,
-            hideFlags = HideFlags.DontSave,
-        };
-        tex.SetPixels32(px);
-        tex.Apply(false, true);
-        return tex;
-    }
 
     private void DrawPlane(CommandBuffer cmd, int p)
     {
@@ -828,8 +775,6 @@ public sealed class CityR17Stage : IDisposable
                 CityR17.Release(rt);
             }
         _target = _output = null;
-        if (_rain != null)
-            CityR17.Release(_rain);
         CityR17.Release(_sprite);
         CityR17.Release(_lamp);
         CityR17.Release(_quad);

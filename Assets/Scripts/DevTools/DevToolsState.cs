@@ -27,7 +27,7 @@ using UnityEngine;
 public static class DevToolsState
 {
     /// <summary>The switches cleared at every morning (ResetDay): the forced hour, auto-decide and the forced leader (the culture's day reset); the hall's overrides (HallSlotsDev) go with them.</summary>
-    public static readonly string[] DayScoped = { nameof(ForcedHour), nameof(ForcedRain), nameof(AutoDecide), nameof(ForcedLeaderId) };
+    public static readonly string[] DayScoped = { nameof(ForcedHour), nameof(AutoDecide), nameof(ForcedLeaderId) };
 
     /// <summary>The switches kept for the run until a new or continued one (ResetAll), shown on the cheat badge while on.</summary>
     public static readonly string[] RunScoped = { nameof(UnlockEverything), nameof(ForceStrandings), nameof(ForcedStrandingFate), nameof(ForcedPersonality) };
@@ -139,9 +139,6 @@ public static class DevToolsState
     /// </summary>
     public static float? ForcedHour;
 
-    /// <summary>The day's weather override (CityWeather.Rains): true Rain, false Clear, null the day's draw. The QA rig's weather op sets it; cleared at every morning (ResetDay).</summary>
-    public static bool? ForcedRain;
-
     /// <summary>
     /// Clears the day's switches at a morning (RunManager's every morning: the
     /// night's turn, a skip, a jump, a restart; BUG-27a): the forced hour (the
@@ -157,7 +154,6 @@ public static class DevToolsState
 
         AutoDecide = false;
         ForcedHour = null;
-        ForcedRain = null;
         CultureThemeService.ResetForNewDay();
         HallSlotsDev.ShowAllStandIns = false;
         HallSlotsDev.Clear();

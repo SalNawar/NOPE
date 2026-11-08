@@ -58,19 +58,6 @@ public sealed class CityR17 : MonoBehaviour
     /// <summary>True while the full-screen city view shows (the city view's fade is above 0).</summary>
     public bool ViewShown { get; set; }
 
-    /// <summary>True when today rains on the city (CityWeather.Rains over the day's seed and GameConfigSO.rainChance; the cheat's forced state wins; clear without a run).</summary>
-    public static bool Rains
-    {
-        get
-        {
-            RunManager run = RunManager.Instance;
-            if (run == null || run.World == null)
-                return DevToolsState.ForcedRain ?? false;
-            GameConfigSO game = run.Config != null ? run.Config.gameConfig : null;
-            return CityWeather.Rains(run.GetDaySeed(), game != null ? game.rainChance : 0.3f, DevToolsState.ForcedRain);
-        }
-    }
-
     /// <summary>The rendered city (a linear-format texture holding gamma-space colour: show it through <see cref="PresentMaterial"/>).</summary>
     public RenderTexture Output => _stage?.Output;
 
@@ -229,7 +216,6 @@ public sealed class CityR17 : MonoBehaviour
             ShiftY = _look.ShiftY(1),
             Pan = pan,
             Reduced = reduced,
-            Rain = Rains,
         };
         _stage.Render(state);
         Shader.SetGlobalTexture(CityTexId, _stage.Output);
