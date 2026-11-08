@@ -48615,7 +48615,7 @@ MonoBehaviour:
     phase: 56
     hold: 56
     opacity: 0.38
-  crowdOpacity: 0
+  crowdOpacity: 0.65
 --- !u!1 &1929973625
 GameObject:
   m_ObjectHideFlags: 0
