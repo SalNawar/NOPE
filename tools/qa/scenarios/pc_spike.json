@@ -1,0 +1,20 @@
+{
+  "name": "pc_spike",
+  "owner": "pc-spike",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "pc-spike (the night of 2026-11-08): the d1 desk still as smoke_day1 takes it, then a pick of the light-brown spike behind the monitor's top-left corner (x 195, y 637 at 1080p) and a pick on the monitor's cream plate (x 212, y 690) as the control." },
+    { "op": "title" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "startShift" },
+    { "op": "sign" },
+    { "op": "waitTraveller" },
+    { "op": "wait", "f": 1.5 },
+    { "op": "still", "name": "d1_desk" },
+    { "op": "pick", "name": "spike", "x": 195, "y": 637 },
+    { "op": "pick", "name": "spike_low", "x": 195, "y": 652 },
+    { "op": "pick", "name": "plate", "x": 212, "y": 690 }
+  ]
+}
