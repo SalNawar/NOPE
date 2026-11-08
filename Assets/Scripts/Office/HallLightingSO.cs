@@ -175,11 +175,11 @@ public sealed class HallLightingSO : ScriptableObject
     /// colour without the desk lamp (DeskLightLevel.TravellerLight; D9: the traveller takes the hall's tint, 55 to
     /// 70 % of the day's luma at night). 0.8 at night measured 0.675 of the noon luma after the finish, so 0.78 aims at the middle (hall-night-light).
     /// </summary>
-    public AnimationCurve travellerLight = Line((5.5f, 0.78f), (8.5f, 1f), (16f, 1f), (18.5f, 0.78f));
+    public AnimationCurve travellerLight = Line((5.5f, 0.78f), (8.5f, 1f), (19f, 1f), (20.5f, 0.78f));
 
     [Header("The hall at night (NOPE/Hall Deep Layout, through HallBakedLighting)")]
     /// <summary>The painted hall's tint at full night, away from the lamp pools.</summary>
-    public Color hallNightTint = new Color(0.2f, 0.27f, 0.43f);
+    public Color hallNightTint = new Color(0.45f, 0.5f, 0.65f);
 
     /// <summary>How strongly a lit fixture's pool lights the floor and the wall around it (the fixture's colour times its lit share).</summary>
     [Range(0f, 2f)] public float hallPoolStrength = 0.35f;
@@ -226,16 +226,16 @@ public sealed class HallLightingSO : ScriptableObject
     /// While the painted desk is installed (HallLightingRig.PaintedDesk, set
     /// by the office binder), how bright the lit hall shows on screen along
     /// the clock (x: the hour, 0 to 24; y: the scale of its sRGB values, 1
-    /// shows it as lit; HallBackdrop.Brightness). D9 (hall-night-light): the
-    /// hall between the bars at luma 33 to 41 by day and 28 to 34 at night,
-    /// after the office finish; a line through 05:30 1.9, 08:30 0.6, 12:00
-    /// 0.6, 16:00 0.66 and 18:30 1.9 (the night's lit hall is about a quarter
-    /// of the day's, so the night scale is above 1; solved from two Unity
-    /// runs, one log-linear fit per channel). The hours outside keep
+    /// shows it as lit; HallBackdrop.Brightness). D55 (hall-light-balance):
+    /// the hall window at luma 70 or more by day, 55 or more at 19:00 and 50
+    /// or more at night, after the office finish; a line through 05:30 1.9,
+    /// 08:30 1.3, 12:00 1.3, 16:00 1.3, 19:00 1.3 and 20:30 1.9 (the day holds
+    /// to the dusk's start at 19:00; the night's lit hall is darker than the
+    /// day's, so the night scale is above 1). The hours outside keep
     /// the nearer end's value. The art's desk (the painted desk off) keeps
     /// the hall as lit.
     /// </summary>
-    public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 0.6f), (12f, 0.6f), (16f, 0.66f), (18.5f, 1.9f));
+    public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 1.3f), (12f, 1.3f), (16f, 1.3f), (19f, 1.3f), (20.5f, 1.9f));
 
     /// <summary>
     /// The booth's grade: a per-channel scale of the lit hall's sRGB values
