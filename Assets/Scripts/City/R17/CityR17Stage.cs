@@ -405,17 +405,17 @@ public sealed class CityR17Stage : IDisposable
     private const int RainTileSize = 256;
     private Texture2D _rain;
 
-    /// <summary>The streak tile: 60 slanted streaks, 2 px wide and 18 to 40 px long, wrapping on both edges (drawn once, from a fixed seed).</summary>
+    /// <summary>The streak tile: 36 slanted streaks, 2 px wide and 18 to 40 px long, wrapping on both edges (drawn once, from a fixed seed).</summary>
     private static Texture2D RainTile()
     {
         var px = new Color32[RainTileSize * RainTileSize];
         for (int i = 0; i < px.Length; i++)
             px[i] = new Color32(200, 220, 255, 0);   // the colour under the clear pixels, so the filter never darkens a streak's edge
         var rng = new System.Random(2353);
-        for (int i = 0; i < 60; i++)
+        for (int i = 0; i < 36; i++)
         {
             int x = rng.Next(RainTileSize), y = rng.Next(RainTileSize), len = 18 + rng.Next(23);
-            byte a = (byte)(150 + rng.Next(80));
+            byte a = (byte)(110 + rng.Next(70));
             for (int k = 0; k < len; k++)
                 for (int w = 0; w < 2; w++)
                 {

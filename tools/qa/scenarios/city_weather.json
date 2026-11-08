@@ -93,9 +93,12 @@
       "name": "city_rain_1200"
     },
     {
-      "op": "record",
-      "name": "city_rain_1200",
-      "f": 1
+      "op": "wait",
+      "f": 0.5
+    },
+    {
+      "op": "still",
+      "name": "city_rain_1200_b"
     },
     {
       "op": "key",
