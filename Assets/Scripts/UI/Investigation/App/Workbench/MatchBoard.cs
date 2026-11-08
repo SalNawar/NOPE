@@ -424,13 +424,15 @@ public sealed class MatchBoard : MonoBehaviour
             lines.Clear();
     }
 
-    /// <summary>Everything goes: the findings, what is held, the line, the status line back to the hint.</summary>
+    /// <summary>Everything goes: the findings, what is held, the compare's picks and the office strip's kept line (item 14: it stays until the stamp), the line, the status line back to the hint.</summary>
     private void Reset()
     {
         _log.Clear();
         _special = null;
         _holdKey = null;
         _clearA = _clearB = null;
+        if (compare != null)
+            Quietly(compare.Clear);
         ClearLink();
         if (findings != null)
             findings.Show(_log);
