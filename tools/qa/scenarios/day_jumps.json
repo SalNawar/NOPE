@@ -108,6 +108,9 @@
       "name": "d12_jump"
     },
     {
+      "op": "briefingMemoClear"
+    },
+    {
       "op": "probe",
       "name": "d12_jump"
     },
