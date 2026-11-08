@@ -279,7 +279,7 @@ public static class DeskLighting
     public static bool LampOn(float hour, in HallDayCycle.Settings cycle, in Knobs k) =>
         HallDayCycle.SwitchedOn(hour, Clamp01(k.LampOnAtEvening), 0, 0f, cycle);
 
-    /// <summary>The hour the lamp switches on: the hall's evening reaches the lamp's knob (the sunset, 19:45, with the shipped knobs, D55: a quarter of an hour before the plan's afternoon dip, H3 16:45).</summary>
+    /// <summary>The hour the lamp switches on: the hall's evening reaches the lamp's knob (the sunset, 19:45, with the shipped knobs: deskLampOnAt 0.5 on the dusk of 19:00 to 20:30, D55).</summary>
     public static float LampOnHour(in HallDayCycle.Settings cycle, in Knobs k) => HallDayCycle.HourAtEvening(Clamp01(k.LampOnAtEvening), cycle);
 
     /// <summary>
