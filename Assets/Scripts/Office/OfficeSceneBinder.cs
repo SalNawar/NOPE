@@ -1547,9 +1547,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     private void BindPaintedPc(Camera office)
     {
         // The Blender PC (retro sci-fi 80s anime, cyberpunk twist) over the painted CRT and keyboard, first: the outline takes it in.
-        PaintedPcModel.Wear(paintedDesk, config != null ? config.pcModel : null);
+        GameObject worn = PaintedPcModel.Wear(paintedDesk, config != null ? config.pcModel : null);
         // The CRT face, the casing's recess and the glass's scanlines (desk v3 round 12), before the clone measures the glass.
         Vector2 visible = PaintedCrt.Fit(paintedDesk.Screen, config != null ? config.cloneFill : 1f);
+        // The recess plate is the painted casing's size: round the model's smaller face it showed as a flat card (item 4, verify 0).
+        if (worn != null)
+            PaintedPcModel.HideRecess(paintedDesk.Screen);
         if (screenClone != null)
         {
             screenClone.Bind(paintedDesk.Screen, 0, office);
@@ -1573,7 +1576,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             pcPower.gameObject.SetActive(false);
             return;
         }
-        PlaceBox(pcPower.transform, screenClone.Frame.PowerKnob, Vector3.one * PowerKnobSize);
+        // The click on the model's drawn knob (its face is parallel to the glass), else where the painted CRT has its knob.
+        Vector3 knob = worn != null ? screenClone.Frame.FromCentre(PaintedPcModel.KnobFromGlass) : screenClone.Frame.PowerKnob;
+        PlaceBox(pcPower.transform, knob, Vector3.one * PowerKnobSize);
+        Vector3 fromCentre = knob - screenClone.Frame.Centre;
+        Debug.Log($"[OfficeSceneBinder] PC power click {Vector3.Dot(fromCentre, screenClone.Frame.Right.normalized):0.000} m right, {Vector3.Dot(fromCentre, screenClone.Frame.Up.normalized):0.000} m up of the glass centre ({(worn != null ? "the model's drawn knob" : "the painted CRT's knob")}).", this);
         if (crt)
             InFrontOf(pcPower.transform, box, office.transform.position);
     }

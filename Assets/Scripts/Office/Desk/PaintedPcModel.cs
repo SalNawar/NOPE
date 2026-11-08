@@ -10,13 +10,23 @@ using UnityEngine.Rendering;
 /// builds it in the bake's frame from that pivot), under PC_Crt's mesh, so
 /// the PC's hover outline (DeskPainted.RenderersOf) takes it in. Only the
 /// painted renderers on PC_Crt itself and under PC_Keyboard hide: the CRT's
-/// screen quad, its dome, glass and recess (PaintedCrt.Fit), the CRT's click
-/// shape (its mesh) and the measured homes stay as they are.
+/// screen quad, its dome and glass (PaintedCrt.Fit), the CRT's click shape
+/// (its mesh) and the measured homes stay as they are. The CRT's recess plate
+/// (PaintedCrt.Fit, sized for the painted casing's opening) hides too
+/// (HideRecess): it is wider than the model's face and showed round it as a
+/// flat tan card. The power knob's click goes on the model's drawn knob
+/// (KnobFromGlass).
 /// </summary>
 public static class PaintedPcModel
 {
     /// <summary>The model's object name under PC_Crt (a second call finds it).</summary>
     public const string Name = "PcRetro";
+
+    /// <summary>The model's brightness knob from the glass's centre, in metres right and up (pc_retro.py: disc_y at x 0.165, z 0.182; the screen centre at z 0.355).</summary>
+    public static readonly Vector2 KnobFromGlass = new Vector2(0.165f, -0.173f);
+
+    /// <summary>The CRT's recess plate (PaintedCrt.Fit).</summary>
+    private const string Recess = "CrtRecess";
 
     /// <summary>The painted desk's CRT and keyboard (DeskPaintedMap.Objects).</summary>
     private const string Crt = "PC_Crt", Keyboard = "PC_Keyboard";
@@ -63,6 +73,18 @@ public static class PaintedPcModel
         Bounds after = Footprint(t, true);
         Debug.Log($"[PaintedPcModel] {model.name} on the desk: {after.size.x:0.000} x {after.size.z:0.000} m from above, {after.size.y:0.000} m high; the painted PC was {before.size.x:0.000} x {before.size.z:0.000} m, {before.size.y:0.000} m high; centre moved {Vector3.Distance(after.center, before.center) * 1000f:0} mm.");
         return worn;
+    }
+
+    /// <summary>
+    /// Hides the recess plate PaintedCrt.Fit made under <paramref name="screen"/>
+    /// (after Fit, when the model is worn): its 0.49 x 0.42 m quad is bigger
+    /// than the model's 0.43 x 0.38 m face and showed round it. Idempotent.
+    /// </summary>
+    public static void HideRecess(Renderer screen)
+    {
+        Transform recess = screen != null ? screen.transform.Find(Recess) : null;
+        if (recess != null && recess.TryGetComponent(out Renderer r))
+            r.enabled = false;
     }
 
     /// <summary>The world bounds of <paramref name="root"/>'s renderers (its own only, or with its children's).</summary>
