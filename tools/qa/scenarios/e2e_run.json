@@ -263,6 +263,18 @@
       "f": 2
     },
     {
+      "op": "call",
+      "target": "OfficeViewController.FocusOffice"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "dbg_after_pc"
+    },
+    {
       "op": "waitTraveller",
       "f": 90
     },
@@ -273,6 +285,14 @@
     {
       "op": "cheat",
       "name": "DecideCorrectly"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "dbg_pre_p07_d1"
     },
     {
       "op": "boardOpen"
@@ -582,6 +602,14 @@
     {
       "op": "cheat",
       "name": "DecideCorrectly"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "dbg_pre_p13_d12"
     },
     {
       "op": "boardOpen"
