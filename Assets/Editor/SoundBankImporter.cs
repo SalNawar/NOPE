@@ -14,9 +14,10 @@ using UnityEngine.Audio;
 /// SOUND_LIST.md, SoundList), copies every WAV next to it that the list names
 /// (&lt;id&gt;.wav or &lt;id&gt;_vN.wav) into Assets/Audio/&lt;group&gt;/ (a changed file
 /// is copied again), writes a small generated placeholder for each missing
-/// P1 one-shot the synthesiser covers (Assets/Audio/Placeholders/&lt;id&gt;_placeholder.wav:
-/// SoundSynth, mixed low; a real file replaces it in the bank the moment it
-/// is imported; the ambience stays silent), makes the mixer (Assets/Audio/
+/// one-shot the synthesiser covers (Assets/Audio/Placeholders/&lt;id&gt;_placeholder.wav:
+/// SoundSynth, mixed low, written again when its samples changed; a real
+/// file replaces it in the bank the moment it is imported; the ambience
+/// stays silent), makes the mixer (Assets/Audio/
 /// TimeDesk.mixer: Master with UI, Desk, Ambience and Music) once, and fills
 /// the bank (Assets/Data/Config/SoundBank_Default.asset: one cue per row,
 /// its clips by variant, its group, loop, priority and placeholder flag; each
@@ -93,9 +94,11 @@ public static class SoundBankImporter
                 if (kind != PlaceholderKind.None)
                 {
                     string target = $"{AudioFolder}/Placeholders/{row.Id}_placeholder.wav";
-                    if (!File.Exists(target))
+                    byte[] wav = Wav(SoundSynth.Make(kind, row.Id, PlaceholderRate), PlaceholderRate);
+                    if (!File.Exists(target) || !File.ReadAllBytes(target).AsSpan().SequenceEqual(wav))
                     {
-                        WriteWav(target, SoundSynth.Make(kind, row.Id, PlaceholderRate), PlaceholderRate);
+                        Directory.CreateDirectory(Path.GetDirectoryName(target));
+                        File.WriteAllBytes(target, wav);
                         placeholders++;
                     }
                     paths.Add(target);
@@ -195,11 +198,10 @@ public static class SoundBankImporter
         importer.SaveAndReimport();
     }
 
-    /// <summary>Writes <paramref name="samples"/> as a 16-bit mono PCM WAV at <paramref name="rate"/>.</summary>
-    private static void WriteWav(string path, float[] samples, int rate)
+    /// <summary>The bytes of <paramref name="samples"/> as a 16-bit mono PCM WAV at <paramref name="rate"/>.</summary>
+    private static byte[] Wav(float[] samples, int rate)
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(path));
-        using var stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+        using var stream = new MemoryStream();
         using var w = new BinaryWriter(stream);
         int bytes = samples.Length * 2;
         w.Write(Encoding.ASCII.GetBytes("RIFF"));
@@ -216,6 +218,8 @@ public static class SoundBankImporter
         w.Write(bytes);
         foreach (float s in samples)
             w.Write((short)Mathf.Clamp(Mathf.RoundToInt(s * 32767f), -32768, 32767));
+        w.Flush();
+        return stream.ToArray();
     }
 
     /// <summary>

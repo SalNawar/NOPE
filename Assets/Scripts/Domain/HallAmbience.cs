@@ -97,6 +97,9 @@ public static class SoundCues
     /// <summary>The scanner's PC app (the scanner app spec's "Feel"): a glow's soft tick (a cell that differs, a paper flagged) and a finding pinned to the board (evidence_pin: added to the list by Track SA).</summary>
     public const string InspectLink = "inspect_link", EvidencePin = "evidence_pin";
 
+    /// <summary>A desk prop clicked with nothing to do (the list's "other desk props clicked"): the glasses, the pocket's book with the folder already out, the chip reader's readout with nothing read.</summary>
+    public const string PropClick = "prop_click";
+
     /// <summary>The desk machine (the desk machine spec, Track DM): the date wheels' ratchet click, the re-ink squish, the DETAIN button's cover snapping open or shut, DETAIN's chirp.</summary>
     public const string DaterWheelClick = "dater_wheel_click", DaterReink = "dater_reink", DetainCover = "detain_cover", Detain = "detain";
 

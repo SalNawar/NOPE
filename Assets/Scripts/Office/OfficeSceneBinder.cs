@@ -1418,7 +1418,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (o.role == PaintedRole.Slider)
             {
                 paintedDesk.Show(o.name);
-                paintedDesk.EnsureClickable(o.name, () => Sounds.Play(SoundCues.UiPress));
+                paintedDesk.EnsureClickable(o.name, () => Sounds.Play(SoundCues.PropClick));
             }
         DeskLayout.Track(DeskHomeMap.Glasses, paintedDesk.SliderOf(PaintedGlasses));
         DeskLayout.Track(DeskHomeMap.Bell, paintedDesk.Mesh(PaintedBell));
@@ -1450,7 +1450,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             click.onClick.AddListener(() =>
             {
                 if (!rulebook.TakeOut())
-                    Sounds.Play(SoundCues.UiPress);
+                    Sounds.Play(SoundCues.PropClick);
             });
             PocketBook.Bind(click.gameObject, rulebook);
         }

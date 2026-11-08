@@ -221,15 +221,17 @@ public static class SoundList
     }
 
     /// <summary>
-    /// The placeholder a missing <paramref name="entry"/> plays: only a P1
-    /// one-shot of the kinds a few generated samples can stand for (clicks,
-    /// key taps, paper, the printer, beeps, bells, chimes, the alarm); None for
-    /// the rest (the stamps, whose reference Saleh is making, the shutters, the
-    /// river's stings, every loop), which stay silent until their files arrive.
+    /// The placeholder a missing <paramref name="entry"/> plays: a one-shot
+    /// the code plays, of the kinds a few generated samples can stand for
+    /// (clicks, key taps, paper, the printer, beeps, bells, chimes, the alarm;
+    /// its priority is Saleh's order of recording, not a gate); None for the
+    /// rest (the stamps, whose reference Saleh made, the shutters, the scanner
+    /// and the switchboard with their own stand-ins, every loop), which stay
+    /// silent until their files arrive.
     /// </summary>
     public static PlaceholderKind PlaceholderFor(SoundListEntry entry)
     {
-        if (entry.Loop || entry.Priority != 1)
+        if (entry.Loop)
             return PlaceholderKind.None;
         switch (entry.Id)
         {
@@ -241,6 +243,10 @@ public static class SoundList
             case "window_close":
             case "slot_lever":
             case "slot_stop":
+            case "prop_click":
+            case "ui_tab":
+            case "inspect_link":
+            case "evidence_pin":
                 return PlaceholderKind.Click;
             case "key_tap":
                 return PlaceholderKind.Key;
@@ -250,6 +256,9 @@ public static class SoundList
             case "rulebook_page":
             case "citation_tear":
             case "citation_land":
+            case "stamp_lift":
+            case "wheel_open":
+            case "ui_popup":
                 return PlaceholderKind.Paper;
             case "citation_print":
                 return PlaceholderKind.Printer;
@@ -259,14 +268,21 @@ public static class SoundList
             case "pc_error":
             case "ui_error":
             case "call_next":
+            case "pc_on":
+            case "pc_off":
+            case "slot_lose":
+            case "citation_hit":
                 return PlaceholderKind.Beep;
             case "shift_end_bell":
             case "inspect_match":
             case "slot_win":
                 return PlaceholderKind.Bell;
             case "pa_chime":
+            case "day_start":
+            case "famous_pass":
                 return PlaceholderKind.Chime;
             case "last_hour_alarm":
+            case "helix_breach":
                 return PlaceholderKind.Alarm;
             default:
                 return PlaceholderKind.None;

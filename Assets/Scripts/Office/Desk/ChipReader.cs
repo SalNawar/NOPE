@@ -268,7 +268,7 @@ public sealed class ChipReader : MonoBehaviour, IPaperDock
     {
         if (!_hasResult || _lines.Count == 0)
         {
-            Sounds.Play(SoundCues.UiPress);
+            Sounds.Play(SoundCues.PropClick);
             return;
         }
         ChipLine line = _lines[Mathf.Clamp(_line - 1, 0, _lines.Count - 1)];

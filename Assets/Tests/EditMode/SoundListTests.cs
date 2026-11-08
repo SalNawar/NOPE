@@ -96,11 +96,39 @@ public class SoundListTests
         Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(Row(rows, "stamp_approve")), "the stamps wait for Saleh's reference");
         Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(Row(rows, "scanner_sweep")), "no loop gets one");
         Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(Row(rows, "amb_hall_day")), "the ambience stays silent rather than cheap");
-        Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(Row(rows, "mug_set")), "P3");
-        Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(new SoundListEntry("ui_press", 4, 2, false, 2, SoundBus.Ui)), "P1 only");
+        Assert.AreEqual(PlaceholderKind.None, SoundList.PlaceholderFor(Row(rows, "mug_set")), "an id the code never plays stays silent");
+        Assert.AreEqual(PlaceholderKind.Click, SoundList.PlaceholderFor(new SoundListEntry("ui_press", 4, 2, false, 2, SoundBus.Ui)), "the priority is Saleh's order of recording, not a gate");
+        Assert.AreEqual(PlaceholderKind.Click, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.PropClick, 1, 1, false, 2, SoundBus.Desk)), "a desk prop's dead click");
+        Assert.AreEqual(PlaceholderKind.Beep, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.PcOn, 3, 1, false, 2, SoundBus.Ui)), "the PC's wake");
+        Assert.AreEqual(PlaceholderKind.Chime, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.DayStart, 5, 1, false, 2, SoundBus.Desk)), "the morning sting");
         Assert.AreEqual(PlaceholderKind.Click, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.SlotLever, 4, 2, false, 1, SoundBus.Ui)), "the slots' ratchet clicks");
         Assert.AreEqual(PlaceholderKind.Click, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.SlotStop, 4, 3, false, 1, SoundBus.Ui)), "a reel's stop clunks");
         Assert.AreEqual(PlaceholderKind.Bell, SoundList.PlaceholderFor(new SoundListEntry(SoundCues.SlotWin, 4, 1, false, 1, SoundBus.Ui)), "a win rings");
+    }
+
+    /// <summary>Every cue the importer gives a placeholder (item 17 of 2026-11-07: "everything has the same sfx").</summary>
+    private static readonly string[] PlaceholderIds =
+    {
+        "ui_press", "ui_release", "ui_toggle", "mouse_click", "window_open", "window_close", "slot_lever", "slot_stop", "prop_click", "ui_tab", "inspect_link", "evidence_pin",
+        "key_tap", "paper_pickup", "paper_drop", "paper_slide", "rulebook_page", "citation_tear", "citation_land", "stamp_lift", "wheel_open", "ui_popup", "citation_print",
+        "scanner_start", "scanner_done", "scanner_flag", "pc_error", "ui_error", "call_next", "pc_on", "pc_off", "slot_lose", "citation_hit",
+        "shift_end_bell", "inspect_match", "slot_win", "pa_chime", "day_start", "famous_pass", "last_hour_alarm", "helix_breach"
+    };
+
+    [Test]
+    public void Synth_NoTwoPlaceholders_ShareTheirSamples()
+    {
+        const int rate = 22050;
+        var seen = new Dictionary<string, string>();
+        foreach (string id in PlaceholderIds)
+        {
+            PlaceholderKind kind = SoundList.PlaceholderFor(new SoundListEntry(id, 1, 1, false, 1, SoundBus.Desk));
+            Assert.AreNotEqual(PlaceholderKind.None, kind, $"{id} has a placeholder");
+            float[] a = SoundSynth.Make(kind, id, rate);
+            string key = a.Length + ":" + string.Join(",", System.Array.ConvertAll(a, v => v.ToString("R", System.Globalization.CultureInfo.InvariantCulture)));
+            Assert.IsFalse(seen.TryGetValue(key, out string other), $"{id} and {other} play the same samples");
+            seen[key] = id;
+        }
     }
 
     [Test]

@@ -7,8 +7,10 @@ using System;
 /// beep, a bell, a station chime, an alarm ding-ding, each a few hundred
 /// milliseconds of mono samples peaking at <see cref="Level"/> (mixed low),
 /// starting at once, the same for the same cue every time (its noise seeded
-/// from the cue's id). The importer writes them as WAVs tagged as
-/// placeholders; a real file replaces one by being dropped in.
+/// from the cue's id) and its own (the id's hash also sets its pitch, so no
+/// two cues of one kind share a sample: item 17 of Saleh's playtest of
+/// 2026-11-07, "everything has the same sfx"). The importer writes them as
+/// WAVs tagged as placeholders; a real file replaces one by being dropped in.
 /// </summary>
 public static class SoundSynth
 {
@@ -19,18 +21,19 @@ public static class SoundSynth
     public static float[] Make(PlaceholderKind kind, string id, int rate)
     {
         var noise = new SeededRandom(Hash(id));
+        float p = Pitch(id);
         float[] s;
-        bool low = id == "scanner_flag" || id == "pc_error" || id == "ui_error";
+        bool low = id == "scanner_flag" || id == "pc_error" || id == "ui_error" || id == "pc_off" || id == "slot_lose" || id == "citation_hit";
         switch (kind)
         {
             case PlaceholderKind.Click:
                 s = Buffer(rate, 0.03f);
-                Tick(s, rate, 0f, id == "ui_release" ? 2600f : id == "ui_press" ? 1700f : 2100f, noise);
+                Tick(s, rate, 0f, p * (id == "ui_release" ? 2600f : id == "ui_press" ? 1700f : 2100f), noise);
                 break;
             case PlaceholderKind.Key:
                 s = Buffer(rate, 0.07f);
-                Tick(s, rate, 0f, 1300f, noise);
-                Tick(s, rate, 0.035f, 1900f, noise, 0.5f);
+                Tick(s, rate, 0f, p * 1300f, noise);
+                Tick(s, rate, 0.035f, p * 1900f, noise, 0.5f);
                 break;
             case PlaceholderKind.Paper:
                 s = Buffer(rate, id == "paper_slide" ? 0.45f : id == "citation_tear" ? 0.35f : 0.2f);
@@ -39,29 +42,29 @@ public static class SoundSynth
             case PlaceholderKind.Printer:
                 s = Buffer(rate, 1.1f);
                 for (float t = 0f; t < 1.05f; t += 0.04f)
-                    Tone(s, rate, t, 0.022f, 1150f, 0.6f, 0f, true);
+                    Tone(s, rate, t, 0.022f, p * 1150f, 0.6f, 0f, true);
                 break;
             case PlaceholderKind.Beep:
                 s = Buffer(rate, 0.32f);
-                Tone(s, rate, 0f, 0.12f, low ? 233f : 880f, 1f, 0f, low);
-                Tone(s, rate, 0.15f, 0.14f, low ? 196f : 1320f, 1f, 0f, low);
+                Tone(s, rate, 0f, 0.12f, p * (low ? 233f : 880f), 1f, 0f, low);
+                Tone(s, rate, 0.15f, 0.14f, p * (low ? 196f : 1320f), 1f, 0f, low);
                 break;
             case PlaceholderKind.Bell:
                 s = Buffer(rate, id == "shift_end_bell" ? 2.4f : 0.6f);
-                Bell(s, rate, 0f, id == "shift_end_bell" ? 420f : 1650f, id == "shift_end_bell" ? 1.4f : 0.25f);
+                Bell(s, rate, 0f, p * (id == "shift_end_bell" ? 420f : 1650f), id == "shift_end_bell" ? 1.4f : 0.25f);
                 break;
             case PlaceholderKind.Chime:
                 s = Buffer(rate, 1.5f);
-                Bell(s, rate, 0f, 784f, 0.45f);
-                Bell(s, rate, 0.42f, 659f * 1.004f, 0.45f);
-                Bell(s, rate, 0.84f, 523f * 0.996f, 0.6f);
+                Bell(s, rate, 0f, p * 784f, 0.45f);
+                Bell(s, rate, 0.42f, p * 659f * 1.004f, 0.45f);
+                Bell(s, rate, 0.84f, p * 523f * 0.996f, 0.6f);
                 break;
             case PlaceholderKind.Alarm:
                 s = Buffer(rate, 1.4f);
-                Bell(s, rate, 0f, 1380f, 0.35f);
-                Bell(s, rate, 0.3f, 1040f, 0.35f);
-                Bell(s, rate, 0.7f, 1380f, 0.35f);
-                Bell(s, rate, 1.0f, 1040f, 0.35f);
+                Bell(s, rate, 0f, p * 1380f, 0.35f);
+                Bell(s, rate, 0.3f, p * 1040f, 0.35f);
+                Bell(s, rate, 0.7f, p * 1380f, 0.35f);
+                Bell(s, rate, 1.0f, p * 1040f, 0.35f);
                 break;
             default:
                 return Array.Empty<float>();
@@ -81,6 +84,9 @@ public static class SoundSynth
             return (int)h;
         }
     }
+
+    /// <summary>The pitch factor of cue <paramref name="id"/> (0.8 to 1.25, from its hash): the same kind sounds a little different for each id.</summary>
+    public static float Pitch(string id) => 0.8f + 0.45f * ((uint)Hash(id) & 0xFFFF) / 65535f;
 
     private static float[] Buffer(int rate, float seconds) => new float[Math.Max(1, (int)(rate * seconds))];
 
