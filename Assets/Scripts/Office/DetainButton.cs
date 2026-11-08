@@ -115,7 +115,7 @@ public sealed class DetainButton : MonoBehaviour
         Aim(ref _press, knobs.detainPress);
         if (stamps == null || !stamps.TravellerHere || !stamps.Commit(DeskStamp.Detained))
         {
-            Sounds.Play(SoundCues.UiPress);
+            Sounds.Play(SoundCues.UiError);
             return;
         }
         CueSounds.Play(SoundCues.Detain, sound);
