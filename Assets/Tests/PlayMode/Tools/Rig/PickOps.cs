@@ -13,7 +13,10 @@ using UnityEngine;
 /// its rect on the still, its first material with its base colour and its
 /// layer, in pick_&lt;name&gt;_&lt;w&gt;x&lt;h&gt;.txt in the run folder. The
 /// rect is the bounds', not the drawn shape, so the list names candidates:
-/// the object drawn at the pixel is among them.
+/// the object drawn at the pixel is among them. <c>hide</c> (target: an
+/// object's path from its scene root, or its name; n = 1 hides, 0 shows)
+/// turns that object's renderers off or on, so a still with one candidate
+/// hidden says which one draws the pixel.
 /// </summary>
 public static class PickOps
 {
@@ -22,7 +25,20 @@ public static class PickOps
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
 #endif
-    private static void Register() => QaRunner.RegisterOp("pick", Pick);
+    private static void Register()
+    {
+        QaRunner.RegisterOp("pick", Pick);
+        QaRunner.RegisterOp("hide", Hide);
+    }
+
+    /// <summary>The renderers under the target off (n = 1) or on (n = 0).</summary>
+    private static IEnumerator Hide(QaRunner runner, QaStep s)
+    {
+        GameObject go = QaGame.GameObjectAt(s.target);
+        foreach (Renderer r in go.GetComponentsInChildren<Renderer>(true))
+            r.enabled = s.n == 0;
+        yield return QaGame.Frames(3);
+    }
 
     /// <summary>The renderers under the pixel (x, y from the top left), nearest first, to the run folder.</summary>
     private static IEnumerator Pick(QaRunner runner, QaStep s)
