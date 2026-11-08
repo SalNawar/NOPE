@@ -22,7 +22,7 @@ MonoBehaviour:
   amber: {r: 0.8, g: 0.6, b: 0.25, a: 1}
   danger: {r: 0.68, g: 0.2, b: 0.16, a: 1}
   ink: {r: 0.09, g: 0.22, b: 0.25, a: 1}
-  inkMuted: {r: 0.34, g: 0.44, b: 0.46, a: 1}
+  inkMuted: {r: 0.25, g: 0.35, b: 0.37, a: 1}
   edge: {r: 0.4, g: 0.24, b: 0.12, a: 1}
   cultureAccent: 0.3
   cornerRadius: 10
