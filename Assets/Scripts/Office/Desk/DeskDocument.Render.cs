@@ -231,11 +231,11 @@ public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
     /// <summary>How far into its held sag the paper is (0 lying, 1 held; Feel eases it at DeskConfigSO.heldSagSeconds).</summary>
     private float _sagShare;
 
-    /// <summary>The bend the physics gives the paper now: its bow along its travel (the trailing end lagging, MotionKnobs.paperBowLag), its corners' twist and its ripple, by its kind's flex (none on a card: PaperBend.FlexOf, D3), plus its sag under the hand (every kind, a card too: PaperPhysics.HeldSag, D63; along its long side while it does not move).</summary>
+    /// <summary>The bend the physics gives the paper now: its bow along its travel (the trailing end lagging, MotionKnobs.paperBowLag), its corners' twist and its ripple, by its kind's flex (none on a card: PaperBend.FlexOf, D3), plus its sag under the hand (a card, a ticket, a form; not the passport, whose pages bend with the physics alone: PaperPhysics.HeldSag, D63; along its long side while it does not move).</summary>
     private PaperBend BendNow(MotionKnobs knobs)
     {
         float flex = PaperBend.FlexOf(_kind, knobs.sheetFlex, knobs.bookletFlex);
-        float sag = _config != null ? PaperPhysics.HeldSag(_sagShare, _config.heldSag) : 0f;
+        float sag = _config != null && _kind != PaperKind.Booklet ? PaperPhysics.HeldSag(_sagShare, _config.heldSag) : 0f;
         bool moving = flex > 0f && (_physics.Bow != 0f || _physics.Twist != 0f || _physics.Flutter != 0f);
         if (!moving)
             return sag <= 0f ? PaperBend.Flat : Size.x >= Size.y ? new PaperBend(1f, 0f, sag, 0f, 0f, 0f, 0f, 0f) : new PaperBend(0f, 1f, sag, 0f, 0f, 0f, 0f, 0f);
