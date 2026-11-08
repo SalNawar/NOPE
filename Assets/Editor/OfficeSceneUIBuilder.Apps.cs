@@ -142,11 +142,13 @@ public static partial class OfficeSceneUIBuilder
     /// the Record Extract (a FormView at the PC page width, Form_RecordExtract)
     /// and the Statement (a FormView across the scroll, Form_Statement's
     /// landscape page, so its eight columns keep their type sizes), both
-    /// centred on the form style's dark backing (DiegeticBacking, as the
-    /// Documents tab lays its scanned pages: BUG-50a, UI-24 "a third of the
-    /// window is an empty blue-edged margin"; the room beside the portrait
-    /// page is the viewer's backing, not blank paper, and the wheel scrolls
-    /// over it too). AccountWindow fills and stacks them. Rebuilt fresh.
+    /// centred on the sheet's backing (BUG-50a, UI-24 "a third of the window
+    /// is an empty blue-edged margin"; the room beside the portrait page is
+    /// the viewer's backing, not blank paper, and the wheel scrolls over it
+    /// too). The backing is PC chrome, not evidence: it takes the Sidebar
+    /// role, so the PC theme paints it in its deep glass (pc-citizen-backdrop,
+    /// item 6: the form style's scanner backing stayed dark on the warm PC).
+    /// AccountWindow fills and stacks them. Rebuilt fresh.
     /// </summary>
     private static DesktopWindow BuildAccountWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -160,7 +162,7 @@ public static partial class OfficeSceneUIBuilder
         FormStyleSO style = EnsureFormStyle();
         Image backing = GetOrAdd<Image>(scroll.gameObject);
         backing.color = style.backing;
-        SceneUiKit.Tag(backing, ThemeRoleId.DiegeticBacking, ThemePart.Fill);
+        SceneUiKit.Tag(backing, ThemeRoleId.Sidebar, ThemePart.Fill);
         var content = (RectTransform)Panel(viewport, "Content", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
         content.pivot = new Vector2(0.5f, 1f);
         scroll.content = content;
