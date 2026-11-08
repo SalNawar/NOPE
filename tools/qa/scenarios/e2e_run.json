@@ -271,10 +271,6 @@
       "f": 1
     },
     {
-      "op": "still",
-      "name": "dbg_after_pc"
-    },
-    {
       "op": "waitTraveller",
       "f": 90
     },
@@ -285,14 +281,6 @@
     {
       "op": "cheat",
       "name": "DecideCorrectly"
-    },
-    {
-      "op": "wait",
-      "f": 1
-    },
-    {
-      "op": "still",
-      "name": "dbg_pre_p07_d1"
     },
     {
       "op": "boardOpen"
@@ -530,8 +518,16 @@
       "target2": "Scanner"
     },
     {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
       "op": "call",
       "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
     },
     {
       "op": "drag",
@@ -542,8 +538,16 @@
       "y2": 0.24
     },
     {
+      "op": "wait",
+      "f": 4.5
+    },
+    {
       "op": "call",
       "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
     },
     {
       "op": "call",
@@ -551,7 +555,7 @@
     },
     {
       "op": "wait",
-      "f": 3
+      "f": 2
     },
     {
       "op": "wait",
@@ -602,14 +606,6 @@
     {
       "op": "cheat",
       "name": "DecideCorrectly"
-    },
-    {
-      "op": "wait",
-      "f": 1
-    },
-    {
-      "op": "still",
-      "name": "dbg_pre_p13_d12"
     },
     {
       "op": "boardOpen"
