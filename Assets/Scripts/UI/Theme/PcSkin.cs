@@ -266,13 +266,13 @@ public sealed class PcSkin : MonoBehaviour
         return new Color(token.r, token.g, token.b, before.a);
     }
 
-    /// <summary>A text's colour for <paramref name="ink"/>: light on the glass, and the deep glass on a bright plate it lies on (a side tag, a badge), so a word never takes its own plate's colour.</summary>
+    /// <summary>A text's colour for <paramref name="ink"/>: the theme's ink on the glass, and the low bezel (the theme's dark token; the warm palette's deep glass is tan) on a bright plate it lies on (a side tag, a badge, a field), so a word never takes its own plate's colour.</summary>
     private static Color TextColour(Graphic text, PcThemeSO theme, PcInk ink, Color accent, Color before)
     {
         Color token = theme.Token(ink, accent);
         Transform parent = text.transform.parent;
         if (parent != null && parent.TryGetComponent(out Image plate) && plate.sprite == null && plate.color.a > 0.5f && Luma(plate.color) > BrightPlate)
-            token = theme.glassDeep;
+            token = theme.bezelLow;
         return new Color(token.r, token.g, token.b, before.a);
     }
 
