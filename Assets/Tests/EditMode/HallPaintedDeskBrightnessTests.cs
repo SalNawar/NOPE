@@ -29,7 +29,7 @@ public class HallPaintedDeskBrightnessTests
         Match curve = Regex.Match(asset, @"\n  paintedDeskBrightness:\n(.*?)\n    m_PreInfinity: (\d+)\n    m_PostInfinity: (\d+)", RegexOptions.Singleline);
         Assert.IsTrue(curve.Success, "HallLighting_Default.asset carries the painted desk's brightness");
         MatchCollection keys = Regex.Matches(curve.Groups[1].Value, @"time: ([0-9.]+)\n\s+value: ([0-9.]+)");
-        float[] times = { 5.5f, 8.5f, 12f, 16f, 19f, 20.5f }, values = { 1.9f, 1.2f, 1.2f, 1.2f, 1.2f, 1.9f };
+        float[] times = { 5.5f, 8.5f, 12f, 16f, 19f, 20.5f }, values = { 1.9f, 1.3f, 1.3f, 1.3f, 1.3f, 1.9f };
         Assert.AreEqual(times.Length, keys.Count, "a line through the night, the day and the dusk");
         for (int i = 0; i < times.Length; i++)
         {
@@ -43,7 +43,7 @@ public class HallPaintedDeskBrightnessTests
     public void TheKnobsDefault_IsTheAssetsLine()
     {
         string source = Read("Assets/Scripts/Office/HallLightingSO.cs");
-        StringAssert.Contains("public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 1.2f), (12f, 1.2f), (16f, 1.2f), (19f, 1.2f), (20.5f, 1.9f));", source);
+        StringAssert.Contains("public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 1.3f), (12f, 1.3f), (16f, 1.3f), (19f, 1.3f), (20.5f, 1.9f));", source);
     }
 
     [Test]

@@ -229,13 +229,13 @@ public sealed class HallLightingSO : ScriptableObject
     /// shows it as lit; HallBackdrop.Brightness). D55 (hall-light-balance):
     /// the hall window at luma 70 or more by day, 55 or more at 19:00 and 50
     /// or more at night, after the office finish; a line through 05:30 1.9,
-    /// 08:30 1.2, 12:00 1.2, 16:00 1.2, 19:00 1.2 and 20:30 1.9 (the day holds
+    /// 08:30 1.3, 12:00 1.3, 16:00 1.3, 19:00 1.3 and 20:30 1.9 (the day holds
     /// to the dusk's start at 19:00; the night's lit hall is darker than the
     /// day's, so the night scale is above 1). The hours outside keep
     /// the nearer end's value. The art's desk (the painted desk off) keeps
     /// the hall as lit.
     /// </summary>
-    public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 1.2f), (12f, 1.2f), (16f, 1.2f), (19f, 1.2f), (20.5f, 1.9f));
+    public AnimationCurve paintedDeskBrightness = Line((5.5f, 1.9f), (8.5f, 1.3f), (12f, 1.3f), (16f, 1.3f), (19f, 1.3f), (20.5f, 1.9f));
 
     /// <summary>
     /// The booth's grade: a per-channel scale of the lit hall's sRGB values
