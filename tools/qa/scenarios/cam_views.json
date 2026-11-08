@@ -574,6 +574,13 @@
       "text": "premade:ines"
     },
     {
+      "op": "flowSettled"
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
       "op": "startShift"
     },
     {
