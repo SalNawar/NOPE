@@ -814,9 +814,14 @@ public sealed class DeskPainted : MonoBehaviour
     /// reader's slide; the code review's R3 of 2026-10-28), and the readout's
     /// click box <paramref name="clickBox"/> (its BoxCollider and Clickable,
     /// which Silence may have switched off) is re-fitted over the line, on
-    /// the Interactable layer, outlining the painted reader. The line swaps
-    /// its text as the old readout did (no fade: ChipReader sets the text).
-    /// False without the painted object, its mesh bounds or the text.
+    /// the Interactable layer, outlining the painted reader. The line is a
+    /// VFD window (Saleh's playtest of 2026-11-07, item 15): a dark green
+    /// glass quad the line's size behind the text and a near-black bezel quad
+    /// round it (PaintedReadout.BezelSize), both children of the text so they
+    /// ride and lean with it, the text inset in the glass
+    /// (PaintedReadout.TextSize); the painted body stays under them. The line
+    /// swaps its text as the old readout did (no fade: ChipReader sets the
+    /// text). False without the painted object, its mesh bounds or the text.
     /// </summary>
     public bool WearReadout(string name, TMP_Text readout, Transform clickBox)
     {
@@ -834,12 +839,15 @@ public sealed class DeskPainted : MonoBehaviour
         Pose(line, V(PaintedReadout.LinePosition(local)), Quaternion.LookRotation(V(forward), V(up)));
         if (line is RectTransform rect)
         {
-            (float width, float height) = PaintedReadout.LineSize(local);
+            (float width, float height) = PaintedReadout.TextSize(local);
             rect.sizeDelta = new Vector2(width, height);
         }
-        // The old reader's auto-size cap (0.12: an em of 1.2 cm) kept READY about 21 x 3 px at 1080p; the type may now fill the line.
+        // The old reader's auto-size cap (0.12: an em of 1.2 cm) kept READY about 21 x 3 px at 1080p; the type may now fill the glass.
         readout.enableAutoSizing = true;
         readout.fontSizeMax = PaintedReadout.FontSizeMax(local);
+        // The window behind the text: the glass first, the bezel a step further back, so each shows through nothing in front of it.
+        WindowQuad(line, "VfdGlass", PaintedReadout.LineSize(local), PaintedReadout.GlassDepth, VfdGlassColour);
+        WindowQuad(line, "VfdBezel", PaintedReadout.BezelSize(local), PaintedReadout.BezelDepth, VfdBezelColour);
         foreach (Renderer r in readout.GetComponentsInChildren<Renderer>(true))
             r.enabled = true;
         // The worn line is the painted look's now: the old-parts audit and a later reskin count it as painted (GATE-26 of
@@ -893,6 +901,39 @@ public sealed class DeskPainted : MonoBehaviour
     }
 
     private static float Inverse(float v) => Mathf.Abs(v) < 1e-6f ? 1f : 1f / v;
+
+    /// <summary>The VFD window's glass (a dark green, the phosphor's bed) and its bezel (near black).</summary>
+    private static readonly Color VfdGlassColour = new Color(0.03f, 0.08f, 0.05f, 1f), VfdBezelColour = new Color(0.07f, 0.07f, 0.06f, 1f);
+
+    /// <summary>
+    /// A flat quad of <paramref name="size"/> (metres) in <paramref name="colour"/> under the readout <paramref name="line"/>, named <paramref name="name"/> (made once; found again by name), centred on the line and <paramref name="depth"/> behind its text (a TextMeshPro and Unity's quad both show on their -Z), unlit, no shadows, on the line's layer.
+    /// </summary>
+    private void WindowQuad(Transform line, string name, (float width, float height) size, float depth, Color colour)
+    {
+        Transform quad = line.Find(name);
+        if (quad == null)
+        {
+            var made = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
+            made.GetComponent<MeshFilter>().sharedMesh = Resources.GetBuiltinResource<Mesh>("Quad.fbx");
+            var renderer = made.GetComponent<MeshRenderer>();
+            // The PC screen's art material (URP Unlit) when the desk has it, else URP's own unlit: the glass is dark on its own, lit or not.
+            Material material = screen != null && screen.sharedMaterial != null ? new Material(screen.sharedMaterial) : new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+            material.name = $"Readout {name} (runtime)";
+            if (material.HasProperty("_BaseColor"))
+                material.SetColor("_BaseColor", colour);
+            else
+                material.color = colour;
+            renderer.sharedMaterial = material;
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            renderer.receiveShadows = false;
+            quad = made.transform;
+            quad.SetParent(line, false);
+        }
+        quad.gameObject.layer = line.gameObject.layer;
+        quad.localPosition = new Vector3(0f, 0f, depth);
+        quad.localRotation = Quaternion.identity;
+        quad.localScale = new Vector3(size.width, size.height, 1f);
+    }
 
     private void Pose(Transform t, Vector3 local, Quaternion turn)
     {

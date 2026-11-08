@@ -8,6 +8,9 @@ using NUnit.Framework;
 /// box covers the line above the body's padded box, so the line is clicked
 /// before the body. Its type may fill the line, so it reads from the chair
 /// (the code review's R3 of 2026-10-28: READY was about 21 x 3 px at 1080p).
+/// The line is a VFD window (item 15 of 2026-11-07): the glass is the line,
+/// the bezel runs round it, the text sits inside the glass, and the window
+/// stands clear of the top face and of the painted card slot line.
 /// </summary>
 public class PaintedReadoutTests
 {
@@ -91,11 +94,35 @@ public class PaintedReadoutTests
     /// shows taller from the chair than flat.
     /// </summary>
     [Test]
+    public void TheWindow_HoldsTheTextInItsGlass_InsideItsBezel_ClearOfTheFaceAndTheSlot()
+    {
+        (float width, float height) = PaintedReadout.LineSize(PaintedReader);
+        (float tw, float th) = PaintedReadout.TextSize(PaintedReader);
+        (float bw, float bh) = PaintedReadout.BezelSize(PaintedReader);
+        Assert.AreEqual(width - 2f * PaintedReadout.WindowPad, tw, 1e-6f, "the text inset from the glass's sides");
+        Assert.AreEqual(height - 2f * PaintedReadout.WindowPad, th, 1e-6f, "and from its near and far edges");
+        Assert.AreEqual(width + 2f * PaintedReadout.Bezel, bw, 1e-6f, "the bezel round the glass");
+        Assert.AreEqual(height + 2f * PaintedReadout.Bezel, bh, 1e-6f);
+        Assert.Greater(PaintedReadout.BezelDepth, PaintedReadout.GlassDepth, "the bezel behind the glass, the glass behind the text");
+        Assert.Greater(PaintedReadout.GlassDepth, 0f);
+        // The bezel's near edge: Bezel down the lean and BezelDepth behind the plane from the line's near edge; still over the top face.
+        double tilt = PaintedReadout.Tilt * Math.PI / 180.0;
+        double bezelNear = PaintedReadout.Lift - PaintedReadout.Bezel * Math.Sin(tilt) - PaintedReadout.BezelDepth * Math.Cos(tilt);
+        Assert.Greater(bezelNear, 0.0005, $"the bezel's near edge {bezelNear * 1000:0.00} mm over the face: nothing sinks into the painted body");
+        // The painted card slot line lies on the near third of the top face (the feedback still 10.png: about 0.2 to 0.28 of the depth from the near edge).
+        (_, _, float nz) = PaintedReadout.NearEdge(PaintedReader);
+        Assert.Greater(nz - PaintedReader.MinZ, 0.29f * PaintedReader.Depth, "the window's near edge beyond the painted slot line: the slot stays in view under it");
+        (_, _, float fz) = PaintedReadout.FarEdge(PaintedReader);
+        Assert.Less(fz, PaintedReader.MaxZ - 0.1f * PaintedReader.Depth, "its far edge short of the far rim: the lamp's corner stays clear");
+    }
+
+    [Test]
     public void TheLargestType_FillsTheLine_AndReadsFromTheChairAt1080p()
     {
         (float width, float height) = PaintedReadout.LineSize(PaintedReader);
         float size = PaintedReadout.FontSizeMax(PaintedReader);
-        Assert.AreEqual(height, size * PaintedReadout.EmPerFontSize, 1e-6f, "the largest em is the line's height");
+        Assert.AreEqual(PaintedReadout.TextSize(PaintedReader).height, size * PaintedReadout.EmPerFontSize, 1e-6f, "the largest em is the text's height inside the glass");
+        Assert.Greater(size * PaintedReadout.EmPerFontSize, 0.8f * height, "most of the line's height: the pad takes little");
         Assert.Greater(size, OldFontSizeMax * 5f, "far over the old reader's cap");
 
         float line = ScreenHeight(PaintedReadout.NearEdge(PaintedReader), PaintedReadout.FarEdge(PaintedReader));
