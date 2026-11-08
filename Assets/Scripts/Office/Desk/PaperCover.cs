@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -22,7 +23,11 @@ using UnityEngine;
 /// grid, Sheet, so DocumentCel bends them, Bow; the emblem rides the bow,
 /// Ride, so the board never comes up through it), with passport_open and
 /// passport_close (the sound bank's cues, FEEDBACK's). Every paper but a
-/// booklet hides it.
+/// booklet hides it. The shut cover is printed, not a plain card (Saleh's
+/// playtest of 2026-11-07, item 2: "Passport feels like cardboard"): the
+/// form's title is printed under the emblem in the emblem's ink (Title, from
+/// the paper's text template, shrunk to fit the cover's width) and rides the
+/// bow as the emblem does.
 /// </summary>
 public sealed class PaperCover : MonoBehaviour
 {
@@ -47,6 +52,9 @@ public sealed class PaperCover : MonoBehaviour
     /// <summary>How far over the sheet the shut cover lies (metres toward the viewer): over every printed part (PaperLayers.PartsDepth) and the stack's gap.</summary>
     public const float Lift = PaperLayers.PartsDepth + PaperLayers.StackGap;
 
+    /// <summary>The cover's title line height as a share of the cover's width (a passport's "PASSPORT" line).</summary>
+    [SerializeField, Range(0.03f, 0.2f)] private float titleShare = 0.075f;
+
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
     private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
     private static readonly int BaseMapStId = Shader.PropertyToID("_BaseMap_ST");
@@ -60,6 +68,11 @@ public sealed class PaperCover : MonoBehaviour
 
     /// <summary>The cover sheets' shared grid (Sheet), made once.</summary>
     private static Mesh _sheet;
+
+    /// <summary>The title line under the emblem (made on the first Arrive from the paper's text template), its place on the flat cover and its half size.</summary>
+    private TextMeshPro _title;
+    private Vector3 _titleRest;
+    private Vector2 _titleHalf;
 
     /// <summary>The bow last shown (metres; Show sets the sheets' bend only when it changes).</summary>
     private float _bowShown;
@@ -86,10 +99,12 @@ public sealed class PaperCover : MonoBehaviour
     /// <paramref name="spine"/>, sheet metres, on a sheet <paramref name="size"/>
     /// metres), in <paramref name="colour"/> with <paramref name="mark"/> (the
     /// nation's emblem; null: none), the visa page's half of
-    /// <paramref name="face"/> on its back. <paramref name="paper"/> and its
-    /// <paramref name="drag"/> say when it opens.
+    /// <paramref name="face"/> on its back, and <paramref name="title"/> (the
+    /// form's title in the reading language; blank: none) printed under the
+    /// emblem from <paramref name="textTemplate"/>. <paramref name="paper"/>
+    /// and its <paramref name="drag"/> say when it opens.
     /// </summary>
-    public void Arrive(DeskDocument paper, DeskDraggable drag, float spine, Vector2 size, Color colour, Texture2D mark, Texture2D face)
+    public void Arrive(DeskDocument paper, DeskDraggable drag, float spine, Vector2 size, Color colour, Texture2D mark, Texture2D face, TextMeshPro textTemplate, string title)
     {
         _paper = paper;
         _drag = drag;
@@ -112,9 +127,10 @@ public sealed class PaperCover : MonoBehaviour
             _block.SetColor(BaseColorId, colour);
             front.SetPropertyBlock(_block);
         }
+        float emblemSide = halfWidth * 2f * emblemShare;
         if (emblem != null)
         {
-            float side = halfWidth * 2f * emblemShare;
+            float side = emblemSide;
             emblem.gameObject.SetActive(mark != null);
             _emblemRest = new Vector3(0f, -below / 2f, -PaperLayers.Seal);
             _emblemHalf = new Vector2(side / 2f, side / 2f);
@@ -127,6 +143,37 @@ public sealed class PaperCover : MonoBehaviour
                 _block.SetTexture(BaseMapId, mark);
                 _block.SetColor(BaseColorId, emblemInk);
                 emblem.SetPropertyBlock(_block);
+            }
+        }
+        if (textTemplate != null && hinge != null)
+        {
+            if (_title == null)
+            {
+                _title = Instantiate(textTemplate, hinge);
+                _title.name = "Title";
+            }
+            bool titled = !string.IsNullOrEmpty(title);
+            _title.gameObject.SetActive(titled);
+            if (titled)
+            {
+                float line = halfWidth * 2f * titleShare, width = halfWidth * 1.8f;
+                TmpFormText.Style(_title, FormTextRole.Title, line);
+                _title.fontStyle |= FontStyles.UpperCase;
+                _title.text = title;
+                _title.color = emblemInk;
+                _title.alignment = TextAlignmentOptions.Center;
+                _title.textWrappingMode = TextWrappingModes.NoWrap;
+                // one line, shrunk to the cover's width: a long title never runs off the cover
+                float wide = _title.GetPreferredValues(title).x;
+                if (wide > width)
+                    _title.fontSize *= width / wide;
+                _title.rectTransform.sizeDelta = new Vector2(width, line * 1.5f);
+                _titleRest = new Vector3(0f, -below / 2f - emblemSide / 2f - line, -PaperLayers.Seal);
+                _titleHalf = new Vector2(halfWidth * 0.9f, line * 0.75f);
+                _title.rectTransform.localPosition = _titleRest;
+                _title.rectTransform.localRotation = Quaternion.identity;
+                if (_title.TryGetComponent(out MeshRenderer titleRenderer))
+                    titleRenderer.enabled = true;
             }
         }
         if (back != null)
@@ -298,6 +345,8 @@ public sealed class PaperCover : MonoBehaviour
             Bow(back, _block, Vector2.up, -bow);
             if (emblem != null && front != null)
                 Ride(emblem.transform, _emblemRest, _emblemHalf, front.transform, Vector2.down, bow);
+            if (_title != null && front != null)
+                Ride(_title.transform, _titleRest, _titleHalf, front.transform, Vector2.down, bow);
         }
         bool shut = _flip.State != CoverState.Open;
         if (shut == _shut && !force)

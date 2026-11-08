@@ -462,6 +462,7 @@ public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
         float spine = 0f;
         string colour = null;
         string emblem = null;
+        string title = null;
         foreach (FormItem item in _form.Items)
         {
             if (item.Kind == FormItemKind.Spine)
@@ -470,9 +471,11 @@ public sealed partial class DeskDocument : IHoverLift, IPointerDownHandler
                 colour = item.Text;
             else if (item.Kind == FormItemKind.Watermark && !Seals.TryParse(item.Text, out _))
                 emblem = item.Text;
+            else if (item.Kind == FormItemKind.Text && item.Role == FormTextRole.Title && title == null)
+                title = item.Text;
         }
         Color ink = EmblemArt.Ink(colour, new Color(0.14f, 0.19f, 0.37f, 1f));
-        cover.Arrive(this, drag, spine, Size, ink, string.IsNullOrEmpty(emblem) ? null : EmblemArt.Texture(emblem), _faceArt);
+        cover.Arrive(this, drag, spine, Size, ink, string.IsNullOrEmpty(emblem) ? null : EmblemArt.Texture(emblem), _faceArt, textTemplate, title);
     }
 
     /// <summary>
