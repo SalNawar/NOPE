@@ -16,9 +16,10 @@ the quad is PortalVortex.Margin, 1.5, opening radii each way). On the frames (ca
 hole is the ellipse inside 0.95 opening radii, its chevrons' band the ring 1.05 to 1.5.
 
   steps     the ring's discrete changes (a chevron lit, the event horizon opening, a kawoosh starting) from the
-            columns, with the frames where the chevrons' band changes on the pictures: pass when the chevrons step
-            at the calibration's rate (20 / 7 s, +-0.1 s), each change in one frame, and no two changes closer than
-            2 s. Each change is timed on the clock that drives it: the board calibrates on unscaled time
+            columns, with the frames where the chevrons' band changes on the pictures (3 or more of its pixels
+            moving over 16 luma: chevron 6 hides behind the office window's bar from the desk, 5 px of it show at
+            960x540): pass when the chevrons step at the calibration's rate (20 / 7 s, +-0.1 s), each change in one
+            frame, and no two changes closer than 2 s. Each change is timed on the clock that drives it: the board calibrates on unscaled time
             (SwitchboardView: a hit-stop never stops a calibration), so a chevron and the open are timed on the
             frames' unscaled column; the ring's own motion (the dwell before a kawoosh, the kawoosh, the close) runs on
             game time, one frame a 30th of a second in a fixed-step capture. In play both clocks run together; in
@@ -133,12 +134,14 @@ def check_steps(seq, rows, lumas, band, ring, lines):
     # a board-driven change (a chevron, the open) on the unscaled clock; the kawoosh on game time (frames / 30)
     gaps = [round((b[0] - a[0]) / FPS if b[1] == 'kawoosh' else unscaled[b[0]] - unscaled[a[0]], 3) for a, b in zip(events, events[1:])]
     # the band's changed pixels per frame: a chevron lights in one frame, then holds
-    moved = [int(((np.abs(lumas[i] - lumas[i - 1]) > 24) & band).sum()) for i in range(1, len(lumas))]
+    # over 16 luma: chevron 6 (the lower left one) hides behind the office window's bar from the desk, so a 4 by 2 px
+    # sliver of it shows at 960x540 (2 px over 24, 5 over 16); between steps a fixed-step capture's band moves 0 px
+    moved = [int(((np.abs(lumas[i] - lumas[i - 1]) > 16) & band).sum()) for i in range(1, len(lumas))]
     jumps = [i + 1 for i, n in enumerate(moved) if n >= 3]
     lines.append('steps: events ' + ', '.join('%s@%d' % (e, i) for i, e in events))
     lines.append('steps: chevron spacing (unscaled s) %s, expected %.3f; in frames %s' % (spacing, STEP_SECONDS, [b - a for a, b in zip(chev, chev[1:])]))
     lines.append('steps: gaps between changes (s, each on its own clock) %s; smallest %s (least %.1f)' % (gaps, min(gaps) if gaps else '-', DWELL_SECONDS))
-    lines.append('steps: frames where the chevrons\' band jumped (>= 3 px over 24 luma): %s' % jumps)
+    lines.append('steps: frames where the chevrons\' band jumped (>= 3 px over 16 luma): %s' % jumps)
     # the unscaled column steps a real frame at a time (about 0.07 s in a capture), so a step lands within one frame of its time
     frame_real = max(unscaled[i] - unscaled[i - 1] for i in range(1, len(unscaled))) if len(unscaled) > 1 else 0.0
     ok_rate = len(chev) >= 6 and all(abs(x - STEP_SECONDS) <= frame_real + 0.01 for x in spacing)
