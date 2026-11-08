@@ -27,6 +27,8 @@
     { "op": "still", "name": "jump_d7_after_sign" },
     { "op": "waitTraveller", "f": 20 },
     { "op": "cheatCheck", "name": "first", "target": "d7", "w": 5 },
-    { "op": "still", "name": "jump_d7_first" }
+    { "op": "still", "name": "jump_d7_first" },
+    { "op": "wait", "f": 4.0 },
+    { "op": "still", "name": "jump_d7_first_full" }
   ]
 }
