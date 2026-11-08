@@ -3060,6 +3060,10 @@ MonoBehaviour:
     text: "Eine Lampe blinkt: Ring auf ihr Wappen drehen, dann auf ihre Epoche. Zellen bis zur Marke einsetzen. MASTER ziehen"
     gloss: 0
     tier: 0
+  - key: switchboard.legend.origin
+    text: URSPRUNG
+    gloss: 0
+    tier: 0
   - key: switchboard.display.pull
     text: ZIEHEN
     gloss: 0
@@ -6343,3 +6347,5 @@ MonoBehaviour:
     english: mark
   - native: einsetzen
     english: insert
+  - native: Ursprung
+    english: origin

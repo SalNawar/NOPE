@@ -14,6 +14,9 @@ public static class SwitchboardWords
     /// <summary>The day-1 hint card of the Stargate dialer (look Stargate).</summary>
     public const string HintDial = "switchboard.hint.dial";
 
+    /// <summary>The legend plate's name for the point of origin (the Bureau's hourglass; the nations and eras print their own names).</summary>
+    public const string LegendOrigin = "switchboard.legend.origin";
+
     /// <summary>A module's display when its cords are in and MASTER waits.</summary>
     public const string Pull = "switchboard.display.pull";
 
@@ -39,5 +42,5 @@ public static class SwitchboardWords
     public const string Bonus = "switchboard.bonus";
 
     /// <summary>Every key above (the tests check each is in ui.strings).</summary>
-    public static readonly string[] All = { Hint, HintDial, Pull, Power, Open, Done, Fuse, Closed, Sent, Bonus };
+    public static readonly string[] All = { Hint, HintDial, LegendOrigin, Pull, Power, Open, Done, Fuse, Closed, Sent, Bonus };
 }
