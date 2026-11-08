@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "CAM: every resize is the rig's own (camres). Both fixed poses frame what they must at A1, A2, 16:10, A3, A4 on days 1 and 12, home by home, each leg judged on the view it names and red when another is on (camframe), with the cap height at the reading pose reported for DOC-LOOK at A1 and A2 on day 12 (red outside the reading view), once the scripted day has laid its papers on the desk (camcap: day 1's handed papers wait on the counter, so a day-1 leg would measure nothing); the controls fade in over the last third of a move, at once when motion is still (camfade: full motion, Reduced Motion, a Motion intensity of 0); no view change while something is held, each refused on its own, from the office, the reading view and the city (camhold); the city's sweep and pointer parallax at most 1 px a 30 fps frame, the look landing within 2 s of an edge-to-edge pointer move, no bars, a click and Q return, F1 opens the PC with its keys card (camparallax, A1 and A4); each shake moment draws its own row and nothing else shakes, none when motion is still (camshake); the scripted day 12 (every counter paper dropped, every other one from the office view; the Auto-Feed tray clicked and its stack scanned; 10 scans and 5 chip reads, each finished; the intercom's wheel opened and a ring question answered; the Rolodex's right-click the one gap) with every landing with the view off tilting in once in its frame, none without a landing, and nothing turning while holding, counted from the views' own turns (camplay, camtilts); every camera move tagged (the run's camera assertion and each cameraCheck). CAM-LEGIBILITY: camcap also at A4 (1280x1024) on day 12, each leg writing its texts table; camtraveller reports the traveller's height on the office frame (D16: 29 to 32 % at 16:9); the Tab tilt in and out recorded at 16:10 and A3 too (a16x10_tab_in, a16x10_tab_out, a3_tab_in, a3_tab_out: no band, no black edge). CAM-PLAY-D12-RETARGET: day 12's first traveller is forced to Ines Varga (the cheat menu's First traveller of the shift, premade:ines, day 12's own story beat, a labourer: TC-520, TC-240 the chip card, TC-230), so camplay's chip reads have a card; the day's own draw put a displaced traveller with one TC-610 first (0 of 5 chip reads at 0274840). BOUNCE 1: camplay picks each paper for a scan or a chip read at a screen point the pointer reaches (the centre, else a 5 by 5 grid over its screen rect), not at its centre: since doc-data-size (TC-230 at 1.6) Ines's TC-230 and TC-520 lie over the chip card's centre and the three chip tries took a covering paper (8 of 10 scans, 0 of 5 chip reads at 1c0f389)."
+      "text": "CAM: every resize is the rig's own (camres). Both fixed poses frame what they must at A1, A2, 16:10, A3, A4 on days 1 and 12, home by home, each leg judged on the view it names and red when another is on (camframe), with the cap height at the reading pose reported for DOC-LOOK at A1 and A2 on day 12 (red outside the reading view), once the scripted day has laid its papers on the desk (camcap: day 1's handed papers wait on the counter, so a day-1 leg would measure nothing); the controls fade in over the last third of a move, at once when motion is still (camfade: full motion, Reduced Motion, a Motion intensity of 0); no view change while something is held, each refused on its own, from the office, the reading view and the city (camhold); the city's sweep and pointer parallax at most 1 px a 30 fps frame, the look landing within 2 s of an edge-to-edge pointer move, no bars, a click and Q return, F1 opens the PC with its keys card (camparallax, A1 and A4); each shake moment draws its own row and nothing else shakes, none when motion is still (camshake); the scripted day 12 (every counter paper dropped, every other one from the office view; the Auto-Feed tray clicked and its stack scanned; 10 scans and 5 chip reads, each finished; the intercom's wheel opened and a ring question answered; the Rolodex's right-click the one gap) with every landing with the view off tilting in once in its frame, none without a landing, and nothing turning while holding, counted from the views' own turns (camplay, camtilts); every camera move tagged (the run's camera assertion and each cameraCheck). CAM-LEGIBILITY: camcap also at A4 (1280x1024) on day 12, each leg writing its texts table; camtraveller reports the traveller's height on the office frame (D16: 29 to 32 % at 16:9); the Tab tilt in and out recorded at 16:10 and A3 too (a16x10_tab_in, a16x10_tab_out, a3_tab_in, a3_tab_out: no band, no black edge). CAM-PLAY-D12-RETARGET: day 12's first traveller is forced to Ines Varga (the cheat menu's First traveller of the shift, premade:ines, day 12's own story beat, a labourer: TC-520, TC-240 the chip card, TC-230), so camplay's chip reads have a card; the day's own draw put a displaced traveller with one TC-610 first (0 of 5 chip reads at 0274840). BOUNCE 1: camplay picks each paper for a scan or a chip read at a screen point the pointer reaches (the centre, else a 5 by 5 grid over its screen rect), not at its centre: since doc-data-size (TC-230 at 1.6) Ines's TC-230 and TC-520 lie over the chip card's centre and the three chip tries took a covering paper (8 of 10 scans, 0 of 5 chip reads at 1c0f389). VIEW-SWITCH-PAPER-RECORD (item 13, D57): the day-12 Tab in and out recorded at A1 with the case papers at rest on the desk (a1_d12_tab_in, a1_d12_tab_out), each paper's world x and z noted before and after by campapers (papers.a1_d12_in, papers.a1_d12_out; the tables papers_a1_d12_in.tsv and papers_a1_d12_out.tsv): every paper differs by 0.000 m, since on the switch only the camera moves."
     },
     {
       "op": "title"
@@ -646,12 +646,29 @@
       "name": "a1_d12"
     },
     {
+      "op": "campapers",
+      "target": "before",
+      "name": "a1_d12"
+    },
+    {
+      "op": "recStart",
+      "name": "a1_d12_tab_in"
+    },
+    {
       "op": "call",
       "target": "DeskView.Toggle"
     },
     {
       "op": "wait",
       "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "campapers",
+      "target": "after",
+      "name": "a1_d12_in"
     },
     {
       "op": "still",
@@ -667,12 +684,29 @@
       "name": "a1_d12"
     },
     {
+      "op": "campapers",
+      "target": "before",
+      "name": "a1_d12"
+    },
+    {
+      "op": "recStart",
+      "name": "a1_d12_tab_out"
+    },
+    {
       "op": "call",
       "target": "DeskView.Return"
     },
     {
       "op": "wait",
       "f": 1.5
+    },
+    {
+      "op": "recStop"
+    },
+    {
+      "op": "campapers",
+      "target": "after",
+      "name": "a1_d12_out"
     },
     {
       "op": "cameraCheck",
