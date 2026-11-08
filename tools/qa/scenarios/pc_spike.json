@@ -1,0 +1,146 @@
+{
+  "name": "pc_spike",
+  "owner": "pc-spike",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "pc-spike (the night of 2026-11-08): the d1 desk still as smoke_day1 takes it, then a pick of the light-brown spike behind the monitor's top-left corner (x 195, y 637 at 1080p) and a pick on the monitor's cream plate (x 212, y 690) as the control. Then one still a round with one candidate of the pick hidden (the shell, the booth walls and frame, the screen dome, the model): the round whose still has no spike names it."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d1_desk"
+    },
+    {
+      "op": "pick",
+      "name": "spike",
+      "x": 195,
+      "y": 637
+    },
+    {
+      "op": "pick",
+      "name": "spike_low",
+      "x": 195,
+      "y": 652
+    },
+    {
+      "op": "pick",
+      "name": "plate",
+      "x": 212,
+      "y": 690
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/DeskShell",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "hide_shell"
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/DeskShell",
+      "n": 0
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/Booth_WallLeft",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "hide_wallleft"
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/Booth_WallLeft",
+      "n": 0
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/Booth_BackWall",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "hide_backwall"
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/Booth_BackWall",
+      "n": 0
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/Booth_Frame",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "hide_frame"
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Shell/Booth_Frame",
+      "n": 0
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Fixed/PC_Crt/Screen",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "hide_screen"
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Fixed/PC_Crt/Screen",
+      "n": 0
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Fixed/PC_Crt/PcRetro/PcRetro_Monitor",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "hide_monitor"
+    },
+    {
+      "op": "hide",
+      "target": "Office/DeskPainted/Fixed/PC_Crt/PcRetro/PcRetro_Monitor",
+      "n": 0
+    }
+  ]
+}
