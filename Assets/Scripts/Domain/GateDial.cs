@@ -119,6 +119,15 @@ public static class GateDial
     /// <summary>The slot under chevron <paramref name="chevron"/> with the ring at <paramref name="rotation"/>.</summary>
     public static int SlotUnderChevron(float rotation, int chevron, int slots) => SlotUnder(rotation, ChevronAngle(chevron), slots);
 
+    /// <summary>The slot of <paramref name="ring"/> that carries <paramref name="kind"/> number <paramref name="index"/>, or -1 (the view marks a locked glyph there).</summary>
+    public static int SlotOf(GateGlyph[] ring, GateGlyphKind kind, int index)
+    {
+        for (int s = 0; ring != null && s < ring.Length; s++)
+            if (ring[s].Kind == kind && ring[s].Index == index)
+                return s;
+        return -1;
+    }
+
     /// <summary>The detent nearest <paramref name="rotation"/>: a glyph exactly under every chevron (not wrapped, so the ring eases the short way).</summary>
     public static float Detent(float rotation, int slots)
     {
@@ -335,5 +344,42 @@ public sealed class GateBoardLayout
     {
         float step = _cells <= 4 ? 100f : (Rack.W - 40f) / _cells;
         return new BoardPoint(Rack.X + Rack.W / 2f + (cell - (_cells - 1) / 2f) * step, Rack.Y + Rack.H / 2f);
+    }
+
+    // ------------------------------------------------------------------ the legend
+
+    /// <summary>The legend plates (D54: the glyphs' guide, on the board): two brass plates, one in each gap between the big dials' cradles, below the rings and above the rack, the ring's glyphs with their names in ring order.</summary>
+    public const int LegendColumns = 2;
+
+    /// <summary>A legend glyph's size and a name row's height.</summary>
+    public const float LegendGlyphSize = 20f, LegendRowH = 26f;
+
+    /// <summary>Legend plate <paramref name="column"/> (0 between dials 01 and 02, 1 between 02 and 03).</summary>
+    public BoardRect LegendPlate(int column)
+    {
+        column = Math.Max(0, Math.Min(LegendColumns - 1, column));
+        float x = (DialCentre(column).X + DialCentre(column + 1).X) / 2f;
+        return new BoardRect(x - 92f, 650f, 184f, 150f);
+    }
+
+    /// <summary>How many rows a legend column holds for a ring of <paramref name="slots"/>.</summary>
+    public static int LegendRows(int slots) => Math.Max(1, (slots + LegendColumns - 1) / LegendColumns);
+
+    /// <summary>The centre of ring slot <paramref name="slot"/>'s glyph on the legend (its column and row follow the ring order: the first rows on the left plate).</summary>
+    public BoardPoint LegendGlyph(int slot, int slots)
+    {
+        int rows = LegendRows(slots);
+        BoardRect plate = LegendPlate(slot / rows);
+        float pitch = (plate.H - 14f) / rows;
+        return new BoardPoint(plate.X + 8f + LegendGlyphSize / 2f, plate.Y + 7f + (slot % rows + 0.5f) * pitch);
+    }
+
+    /// <summary>Where ring slot <paramref name="slot"/>'s name prints on the legend (left-aligned, right of its glyph, to the plate's edge).</summary>
+    public BoardRect LegendName(int slot, int slots)
+    {
+        BoardRect plate = LegendPlate(slot / LegendRows(slots));
+        BoardPoint g = LegendGlyph(slot, slots);
+        float left = g.X + LegendGlyphSize / 2f + 6f;
+        return new BoardRect(left, g.Y - LegendRowH / 2f, plate.X + plate.W - 6f - left, LegendRowH);
     }
 }

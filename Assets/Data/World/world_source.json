@@ -31382,6 +31382,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "switchboard.legend.origin",
+        "text": "ORIGIN",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "switchboard.display.pull",
         "text": "PULL",
         "gloss": "None",
@@ -35930,6 +35936,10 @@
           {
             "key": "switchboard.hint.dial",
             "text": "مصباح يومض: أدر الحلقة إلى شعاره, ثم إلى عصره. ضع الخلايا حتى العلامة. اسحب الذراع الرئيسية"
+          },
+          {
+            "key": "switchboard.legend.origin",
+            "text": "المنشأ"
           },
           {
             "key": "switchboard.display.pull",
@@ -41732,6 +41742,10 @@
           {
             "native": "العلامة",
             "english": "the mark"
+          },
+          {
+            "native": "المنشأ",
+            "english": "origin"
           }
         ]
       },
@@ -44746,6 +44760,10 @@
           {
             "key": "switchboard.hint.dial",
             "text": "Μια λάμπα αναβοσβήνει: γύρισε τον δακτύλιο στο έμβλημά της, μετά στην εποχή της. Βάλε στοιχεία ως το σημάδι. Τράβηξε το MASTER"
+          },
+          {
+            "key": "switchboard.legend.origin",
+            "text": "ΑΦΕΤΗΡΙΑ"
           },
           {
             "key": "switchboard.display.pull",
@@ -49952,6 +49970,10 @@
           {
             "native": "σημάδι",
             "english": "mark"
+          },
+          {
+            "native": "Αφετηρία",
+            "english": "origin (the starting point)"
           }
         ]
       },
@@ -52966,6 +52988,10 @@
           {
             "key": "switchboard.hint.dial",
             "text": "Una spia lampeggia: gira l'anello sul suo emblema, poi sulla sua epoca. Inserisci le celle fino al segno. Tira il MASTER"
+          },
+          {
+            "key": "switchboard.legend.origin",
+            "text": "ORIGINE"
           },
           {
             "key": "switchboard.display.pull",
@@ -61292,6 +61318,10 @@
             "text": "Eine Lampe blinkt: Ring auf ihr Wappen drehen, dann auf ihre Epoche. Zellen bis zur Marke einsetzen. MASTER ziehen"
           },
           {
+            "key": "switchboard.legend.origin",
+            "text": "URSPRUNG"
+          },
+          {
             "key": "switchboard.display.pull",
             "text": "ZIEHEN"
           },
@@ -66804,6 +66834,10 @@
           {
             "native": "einsetzen",
             "english": "insert"
+          },
+          {
+            "native": "Ursprung",
+            "english": "origin"
           }
         ]
       },
@@ -69818,6 +69852,10 @@
           {
             "key": "switchboard.hint.dial",
             "text": "指示灯闪烁：把环转到它的徽章，再转到它的时代。装入电池直到刻度。拉下 MASTER"
+          },
+          {
+            "key": "switchboard.legend.origin",
+            "text": "原点"
           },
           {
             "key": "switchboard.display.pull",
@@ -74684,6 +74722,10 @@
           {
             "native": "刻度",
             "english": "mark"
+          },
+          {
+            "native": "原点",
+            "english": "origin"
           }
         ]
       },
@@ -77698,6 +77740,10 @@
           {
             "key": "switchboard.hint.dial",
             "text": "ランプが点滅したら：リングをその紋章へ、次にその時代へ回す。印までセルを入れ、MASTERを引く"
+          },
+          {
+            "key": "switchboard.legend.origin",
+            "text": "原点"
           },
           {
             "key": "switchboard.display.pull",
@@ -82608,6 +82654,10 @@
           {
             "native": "セル",
             "english": "cell"
+          },
+          {
+            "native": "原点",
+            "english": "origin"
           }
         ]
       }

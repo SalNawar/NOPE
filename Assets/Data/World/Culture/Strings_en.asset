@@ -3309,6 +3309,10 @@ MonoBehaviour:
     text: "A lamp blinks: turn the ring to its emblem, then its era. Seat cells to the mark. Pull MASTER"
     gloss: 0
     tier: 1
+  - key: switchboard.legend.origin
+    text: ORIGIN
+    gloss: 0
+    tier: 1
   - key: switchboard.display.pull
     text: PULL
     gloss: 0

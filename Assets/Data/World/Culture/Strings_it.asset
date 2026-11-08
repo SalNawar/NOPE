@@ -3067,6 +3067,10 @@ MonoBehaviour:
     text: "Una spia lampeggia: gira l'anello sul suo emblema, poi sulla sua epoca. Inserisci le celle fino al segno. Tira il MASTER"
     gloss: 0
     tier: 0
+  - key: switchboard.legend.origin
+    text: ORIGINE
+    gloss: 0
+    tier: 0
   - key: switchboard.display.pull
     text: TIRA
     gloss: 0

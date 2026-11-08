@@ -125,10 +125,10 @@ public readonly struct GateColour
 /// The dialer's art, painted in code in the board kit's palette (brass,
 /// oxblood, slate, ink: the v3 board's): the slate face over the Classic
 /// board's jacks (its wells, rings, rack and placards), a dial's inner ring
-/// with its glyph discs, a chevron, a power cell, the gate's horizon, and the
-/// eras' glyphs and the point of origin as inked shapes (the nations wear
-/// their passport emblems, EmblemArt). Pure: the office turns each canvas
-/// into a sprite (GateArt).
+/// with its glyph discs, the locked glyph's lit disc, a chevron, a power cell,
+/// the gate's horizon, the legend plates, and the eras' glyphs and the point
+/// of origin as inked shapes (the nations wear their passport emblems,
+/// EmblemArt). Pure: the office turns each canvas into a sprite (GateArt).
 /// </summary>
 public static class GatePaint
 {
@@ -136,7 +136,8 @@ public static class GatePaint
     public static readonly GateColour Ink = new GateColour(18, 14, 12), Slate = new GateColour(48, 52, 57), SlateDeep = new GateColour(31, 34, 38),
         SlateWell = new GateColour(22, 24, 27), Brass = new GateColour(205, 160, 84), BrassDeep = new GateColour(118, 84, 38),
         BrassLight = new GateColour(236, 198, 122), Oxblood = new GateColour(112, 32, 26), Cream = new GateColour(240, 230, 204),
-        Hazard = new GateColour(232, 186, 44), Danger = new GateColour(176, 42, 32), CellCore = new GateColour(255, 222, 156);
+        Hazard = new GateColour(232, 186, 44), Danger = new GateColour(176, 42, 32), CellCore = new GateColour(255, 222, 156),
+        DiscBrass = new GateColour(210, 182, 126), DiscBrassDeep = new GateColour(166, 126, 66), Lit = new GateColour(255, 250, 234), LitDeep = new GateColour(250, 236, 200);
 
     // ------------------------------------------------------------------ shapes
 
@@ -171,9 +172,11 @@ public static class GatePaint
     /// <summary>
     /// True when (<paramref name="x"/>, <paramref name="y"/>) in [-1, 1] (y
     /// down) is inked in era <paramref name="era"/>'s glyph (0 Ancient: a
-    /// stepped pyramid; 1 Medieval: a tower; 2 Early modern: a ship under
-    /// sail; 3 Industrial: a gear; 4 Modern: a bolt) or, for -1, the point of
-    /// origin (the Bureau's hourglass). Nothing for another era.
+    /// pyramid of 3 steps; 1 Medieval: a tower with 2 windows; 2 Early
+    /// modern: a ship under 2 sails; 3 Industrial: a gear round 1 hub; 4
+    /// Modern: 1 bolt: each glyph has as many parts as the bars its era
+    /// needs, D54) or, for -1, the point of origin (the Bureau's hourglass).
+    /// Nothing for another era.
     /// </summary>
     public static bool EraInked(int era, float x, float y)
     {
@@ -195,7 +198,7 @@ public static class GatePaint
                 return false;
             case 1:
                 if (Math.Abs(x) <= 0.5f && y >= -0.42f && y <= 0.86f)
-                    return !(Math.Abs(x) < 0.17f && y > 0.38f) && !(Math.Abs(x) < 0.09f && Math.Abs(y + 0.08f) < 0.14f);
+                    return !(Math.Abs(x) < 0.17f && y > 0.46f) && !(Math.Abs(x) < 0.11f && (Math.Abs(y + 0.22f) < 0.12f || Math.Abs(y - 0.14f) < 0.12f));
                 return y >= -0.82f && y < -0.42f && Math.Abs(x) <= 0.66f && ((int)MathF.Floor((x + 0.66f) / 0.264f) % 2 == 0);
             case 2:
                 return InPolygon(Sail, x, y) || InPolygon(Jib, x, y) || InPolygon(Hull, x, y) || (Math.Abs(x) < 0.04f && y > -0.9f && y < 0.4f);
@@ -296,6 +299,14 @@ public static class GatePaint
             canvas.RoundRect(new BoardRect(disp.X - ox - 56f, disp.Y - oy - 17f, 112f, 34f), 6f, BrassDeep, Ink);
         }
 
+        // The legend plates (D54): brass with an ink line inside the edge; the view prints the glyphs and their names on them.
+        for (int col = 0; col < GateBoardLayout.LegendColumns; col++)
+        {
+            BoardRect plate = Shift(layout.LegendPlate(col));
+            canvas.RoundRect(plate, 6f, BrassLight.Lerp(Brass, 0.35f), Brass.Lerp(BrassDeep, 0.35f));
+            canvas.RoundRectLine(plate, 6f, 2f, Ink.WithAlpha(0.7f));
+        }
+
         // The cell rack.
         BoardRect rack = Shift(layout.Rack);
         canvas.RoundRect(rack, 10f, SlateDeep, SlateWell);
@@ -332,7 +343,7 @@ public static class GatePaint
             }, t => Ink.WithAlpha(0.55f));
             float g = s * step * MathF.PI / 180f;
             float gx = c + GateBoardLayout.GlyphRadius * MathF.Sin(g), gy = c - GateBoardLayout.GlyphRadius * MathF.Cos(g);
-            canvas.Annulus(gx, gy, 0f, 20f, new GateColour(244, 214, 150), new GateColour(196, 150, 80));
+            canvas.Annulus(gx, gy, 0f, 20f, DiscBrass, DiscBrassDeep);
             canvas.Annulus(gx, gy, 18f, 20f, BrassDeep, BrassDeep);
         }
         return canvas;
@@ -357,6 +368,15 @@ public static class GatePaint
             float dx = (x - 9f) / 8f, dy = (y - 5f) / 5f;
             return (MathF.Sqrt(dx * dx + dy * dy) - 1f) * 5f;
         }, t => new GateColour(255, 255, 255));
+        return canvas;
+    }
+
+    /// <summary>The locked glyph's disc (44 x 44; D54 amended): a lit cream disc of a ring disc's size with a deep brass rim; the view draws it over the ring and the chevrons at the locked glyph, so the locked choice never hides. Its face is 1.5 times a ring disc's luma.</summary>
+    public static GateCanvas LockDisc()
+    {
+        var canvas = new GateCanvas(44, 44);
+        canvas.Annulus(22f, 22f, 0f, 20f, Lit, LitDeep);
+        canvas.Annulus(22f, 22f, 18.5f, 20f, BrassDeep, BrassDeep);
         return canvas;
     }
 
