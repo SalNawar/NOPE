@@ -217,10 +217,33 @@ public sealed class CityR17 : MonoBehaviour
             Pan = pan,
             Reduced = reduced,
         };
+        ReadCulture(ref state);
         _stage.Render(state);
         Shader.SetGlobalTexture(CityTexId, _stage.Output);
         Shader.SetGlobalVector(CityViewId, _stage.View);
         Measure(true);
+    }
+
+    private string _cultureId;
+    private Texture2D _emblem;
+
+    /// <summary>Sets the frame's culture: the leading culture's plate art and its theme's two colours, none before a leader (D61; the hall's rule).</summary>
+    private void ReadCulture(ref CityR17Stage.FrameState state)
+    {
+        CultureThemeService svc = CultureThemeService.Instance;
+        string id = svc != null && !string.IsNullOrWhiteSpace(svc.ActiveCultureId) ? svc.ActiveCultureId : null;
+        if (id != _cultureId)
+        {
+            _cultureId = id;
+            _emblem = id != null ? SlotArt.Texture(new[] { ArtSlots.HallSlot("15-departure-board-frame", id) }) : null;
+        }
+        PaletteEntry ground = _emblem != null ? svc.ActiveTheme.Get(ThemeRoleId.PrimaryAction) : null;
+        PaletteEntry band = _emblem != null ? svc.ActiveTheme.Get(ThemeRoleId.Desktop) : null;
+        if (ground == null || !ground.hasFill || band == null || !band.hasFill)
+            return;
+        state.Emblem = _emblem;
+        state.Ground = ground.fill;
+        state.Band = band.fill;
     }
 
     /// <summary>Smooths the frame's CPU cost and, with only the hall windows up, halves their rate while over budget.</summary>

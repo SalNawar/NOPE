@@ -204,6 +204,12 @@ public sealed class CityR17Stage : IDisposable
 
         /// <summary>Reduced Motion: the smoke and the fire hold one drawing.</summary>
         public bool Reduced;
+
+        /// <summary>The leading culture's departure-board plate art, or null (neutral: every screen shows its ad).</summary>
+        public Texture2D Emblem;
+
+        /// <summary>The leading culture's two palette colours: the screens' ground and the band at their foot.</summary>
+        public Color Ground, Band;
     }
 
     private FrameState _f;
@@ -470,8 +476,23 @@ public sealed class CityR17Stage : IDisposable
             if (!CityR17Loops.ClipTile(src, e.UsedW, e.UsedH, out CityR17Rect clip, out double dx, out double dy))
                 continue;
             CityR17Rect r = ads.Screens[i].Rect;
+            if (_f.Emblem != null && CityR17Culture.Takes(r, _config.cultureMinW, _config.cultureMinH))
+            {
+                DrawCultureScreen(cmd, r, par);
+                continue;
+            }
             Sprite(cmd, PassAlpha, _adTex[sheet], e.SizeW, e.SizeH, clip, Placed(r.X + dx, r.Y + dy, clip.W, clip.H, par), White, NoHaze);
         }
+    }
+
+    /// <summary>One ad screen under the leading culture: its ground colour, the band at its foot and the emblem cropped from the plate art to the box above (D61).</summary>
+    private void DrawCultureScreen(CommandBuffer cmd, CityR17Rect r, double par)
+    {
+        CityR17Culture.Layout(r, out CityR17Rect band, out CityR17Rect box);
+        var whole = new CityR17Rect(0, 0, 1, 1);
+        Sprite(cmd, PassAlpha, Texture2D.whiteTexture, 1, 1, whole, Placed(r.X, r.Y, r.W, r.H, par), _f.Ground, NoHaze);
+        Sprite(cmd, PassAlpha, Texture2D.whiteTexture, 1, 1, whole, Placed(band.X, band.Y, band.W, band.H, par), _f.Band, NoHaze);
+        Sprite(cmd, PassAlpha, _f.Emblem, _f.Emblem.width, _f.Emblem.height, CityR17Culture.Crop(box), Placed(box.X, box.Y, box.W, box.H, par), White, NoHaze);
     }
 
     private void Flip(CommandBuffer cmd, int[] seq5, string[] sheets, Texture2D tex, CityR17Rect at, long f, double par, string folder)
