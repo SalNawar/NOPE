@@ -26,6 +26,7 @@ MonoBehaviour:
   scanHintKey: desk.scanHint
   scanHintUntilDay: 5
   paperSize: {x: 0.26, y: 0.34}
+  readingHeight: 0.6
   paperSpawnSlots:
   - {x: 0.5, y: 0.62}
   - {x: 0.74, y: 0.5}
@@ -34,7 +35,7 @@ MonoBehaviour:
   paperSlideSeconds: 0.25
   paperStackStep: 0.0015
   heldPaperLift: 0.02
-  travellerHeight: 1.9
+  travellerHeight: 2.45
   travellerTint: {r: 0.9, g: 0.88, b: 0.84, a: 1}
   wheelRadii: {x: 365, y: 225}
   wheelItemSize: {x: 240, y: 44}
@@ -42,6 +43,8 @@ MonoBehaviour:
   wheelItemGap: 8
   wheelHintKey: desk.wheelHint
   wheelHintUntilDay: 1
+  wheelHintHeight: 2.64
+  wheelHintNearShare: 0.77
   bubbleSeconds: 4
   bubbleCharsPerSecond: 40
   bubbleMinSeconds: 1.5

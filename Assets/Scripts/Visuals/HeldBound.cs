@@ -24,6 +24,11 @@ using System;
 /// on.</item>
 /// <item>A zone change is not a pick-up: the paper starts free in its new
 /// zone and is held from the frame it lies wholly in the new area.</item>
+/// <item>Over a machine that takes a drop there the bound gives way, so a
+/// paper's centre reaches the machine's bed (the bounce of 2026-11-07: the
+/// chip card at its 0.6 m reading size was held wholly in the reading view,
+/// its centre short of the scanner's bed at the view's edge, and nothing
+/// scanned). Its state goes on, so off the machine it is held again.</item>
 /// </list>
 /// The area is taken at each pick-up, and again only when the zone or the
 /// footprint's size changes, so a drag frame allocates nothing. Pure, so every
@@ -52,8 +57,11 @@ public sealed class HeldBound
     /// zone's size (read only at a pick-up), or null for the folder (kept
     /// inside from its first frame). <paramref name="area"/> gives the area a
     /// footprint rests wholly inside in a zone (DeskController.RestArea).
+    /// <paramref name="overMachine"/> is true when the footprint's centre
+    /// lies over a machine that takes a drop there (DeskController.DockAt):
+    /// the step then gives no move but still keeps the bound's state.
     /// </summary>
-    public (float x, float y) Step(DeskRect footprint, float growX, float growY, bool onDesk, DeskRect? lies, Func<DeskRect, bool, DeskRect> area)
+    public (float x, float y) Step(DeskRect footprint, float growX, float growY, bool onDesk, DeskRect? lies, Func<DeskRect, bool, DeskRect> area, bool overMachine = false)
     {
         var settled = new DeskRect(footprint.CentreX + growX, footprint.CentreY + growY, footprint.Width, footprint.Height);
         bool pickUp = !_set, crossed = _set && onDesk != _onDesk;
@@ -78,6 +86,6 @@ public sealed class HeldBound
         }
         else
             (x, y) = DropResolver.Inside(settled, _area);
-        return (x - settled.CentreX, y - settled.CentreY);
+        return overMachine ? (0f, 0f) : (x - settled.CentreX, y - settled.CentreY);
     }
 }

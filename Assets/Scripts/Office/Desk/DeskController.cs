@@ -383,6 +383,10 @@ public sealed class DeskController : MonoBehaviour
     /// DeskDocument.SettledGrabScale; FOLD-01 round 4, G2: judged at the
     /// counter's edge where a smaller offset had put it, the bound held a
     /// growing paper at the lip for 1 to 3 frames, up to 59.9 mm).
+    /// With its settled footprint's centre over a machine (DockAt, the dock a
+    /// release there goes to) it is not held back, so a wide paper's centre
+    /// reaches the scanner's bed at the reading view's edge (the bounce of
+    /// 2026-11-07: the chip card at the 0.6 m reading size never scanned).
     /// Allocates nothing.
     /// </summary>
     private Vector3 PaperBound(DeskDocument paper, Vector3 at)
@@ -395,7 +399,10 @@ public sealed class DeskController : MonoBehaviour
         DeskRect where = RestRect(_boundCorners, 4);
         paper.RestCorners(new Vector3(at.x, y, at.z), _boundCorners);
         Vector3 grow = paper.Drag.Regrown(at, paper.SettledGrabScale) - at;
-        return Inward(RestRect(_boundCorners, 4), at, grow, paper.Zone == DeskZone.Desk, where);
+        DeskRect footprint = RestRect(_boundCorners, 4);
+        Vector3 settled = at + grow;
+        bool overMachine = DockAt(PaperFootprint(paper, settled), settled.y) != null;
+        return Inward(footprint, at, grow, paper.Zone == DeskZone.Desk, where, overMachine);
     }
 
     /// <summary>PaperBound's buffer (a paper's four corners).</summary>
@@ -412,13 +419,14 @@ public sealed class DeskController : MonoBehaviour
     /// this drag and zone, counting where it lay at the pick-up. The area is
     /// taken at each pick-up and again only when the held thing's size or
     /// zone changes (at the counter's edge), so a drag frame allocates
-    /// nothing.
+    /// nothing. <paramref name="overMachine"/> (a paper over a machine that
+    /// takes a drop there) gives no move (HeldBound.Step).
     /// </summary>
-    private Vector3 Inward(DeskRect footprint, Vector3 at, Vector3 grow, bool onDesk, DeskRect? lies = null)
+    private Vector3 Inward(DeskRect footprint, Vector3 at, Vector3 grow, bool onDesk, DeskRect? lies = null, bool overMachine = false)
     {
         if (_restArea == null)
             _restArea = RestArea;
-        (float x, float y) = _held.Step(footprint, Vector3.Dot(grow, RestRight), Vector3.Dot(grow, RestForward), onDesk, lies, _restArea);
+        (float x, float y) = _held.Step(footprint, Vector3.Dot(grow, RestRight), Vector3.Dot(grow, RestForward), onDesk, lies, _restArea, overMachine);
         if (Mathf.Approximately(x, 0f) && Mathf.Approximately(y, 0f))
             return at;
         return at + RestRight * x + RestForward * y;

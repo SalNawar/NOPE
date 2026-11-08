@@ -95,7 +95,15 @@ using UnityEngine.UI;
 /// #9); red "not measured" outside the reading view (CAM's pose), and with
 /// no paper on the desk, so cam_views runs it
 /// only after camplay has laid the day's papers there (a handed paper waits
-/// on the counter).</item>
+/// on the counter); it writes texts_&lt;name&gt;_&lt;w&gt;x&lt;h&gt;.tsv, one row a
+/// label: its paper, path, string, rect on the still (pixels from the top
+/// left) and cap height (the still's pixels and at 1080p).</item>
+/// <item><c>camtraveller</c> (name): in the office view, the traveller's height
+/// on the frame (D16, HALL-05: from the top of the head down to the desk's top
+/// at the figure, the line the counter hides the legs below) as a share of the
+/// screen's rows, and the face's height in pixels;
+/// <c>traveller.&lt;name&gt;</c> passes at 29 to 32 % on a 16:9 screen (a report
+/// at any other aspect).</item>
 /// <item><c>camcycle</c> (n = 1 starts, 0 reports; f = cycles, 2 when 0;
 /// name): n = 1 starts, in the background, the reading view turned in and
 /// back and the city looked at and back, for the <c>gc</c> step that
@@ -171,6 +179,7 @@ public static class CamOps
         QaRunner.RegisterOp("camtilts", Tilts);
         QaRunner.RegisterOp("camplay", Play);
         QaRunner.RegisterOp("camcap", Cap);
+        QaRunner.RegisterOp("camtraveller", TravellerShare);
         QaRunner.RegisterOp("camcycle", Cycle);
         QaRunner.Finished -= RunFinished;
         QaRunner.Finished += RunFinished;
@@ -1774,14 +1783,23 @@ public static class CamOps
             yield break;
         }
         var caps = new List<(float px, string what)>();
+        var rows = new List<string> { "paper\tkind\ttext\tstring\tx\ty\tw\th\tcapPx\tcap1080" };
         foreach (DeskDocument paper in UnityEngine.Object.FindObjectsByType<DeskDocument>())
         {
             if (!paper.isActiveAndEnabled || paper.Zone != DeskZone.Desk)
                 continue;
             foreach (TMP_Text text in paper.GetComponentsInChildren<TMP_Text>(false))
                 if (CapPixels(cam, text) is float px)
+                {
                     caps.Add((px, $"{paper.Index}/{text.name}"));
+                    Rect r = ScreenRect(cam, text);
+                    string shown = text.GetParsedText().Replace('\t', ' ').Replace('\n', ' ');
+                    rows.Add(string.Join("\t", paper.Index, paper.Kind, LabelPath(paper.transform, text.transform), shown.Length > 48 ? shown.Substring(0, 48) : shown,
+                                         r.x.ToString("0"), r.y.ToString("0"), r.width.ToString("0"), r.height.ToString("0"),
+                                         (px * Screen.height / 1080f).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture), px.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)));
+                }
         }
+        System.IO.File.WriteAllLines(System.IO.Path.Combine(runner.OutDir, $"texts_{name}_{Screen.width}x{Screen.height}.tsv"), rows);
         if (caps.Count == 0)
         {
             runner.Assert("capreport." + name, Owner, false, "not measured", "no printed text on a desk paper");
@@ -1793,6 +1811,60 @@ public static class CamOps
         runner.Assert("capreport." + name, Owner, true,
                       $"cap height at 1080p: least {caps[0].px:0.0} px, median {median:0.0} px over {caps.Count} texts; margin to DOC-LOOK's floor ({floor:0} px at {Screen.height} rows): {caps[0].px - floor:+0.0;-0.0} px",
                       $"a report at CAM's pose (the desk plan's §6 smoke; the pass is DOC-LOOK's at #9); smallest: {smallest}");
+    }
+
+    // ------------------------------------------------------------------ camtraveller
+
+    /// <summary>D16's band for the traveller's height on a 16:9 frame (shares of the screen's rows).</summary>
+    private const float TravellerLeast = 0.29f, TravellerMost = 0.32f;
+
+    private static IEnumerator TravellerShare(QaRunner runner, QaStep step)
+    {
+        yield return null;
+        string name = Name(step, "office");
+        Camera cam = Camera.main;
+        TravellerView traveller = QaGame.Find<TravellerView>();
+        BoxCollider zone = traveller != null ? traveller.GetComponentInChildren<BoxCollider>(true) : null;
+        if (cam == null || traveller == null || zone == null)
+        {
+            runner.Assert("traveller." + name, Owner, false, "not measured", "no camera, traveller or hit zone");
+            yield break;
+        }
+        Vector3 head = traveller.HeadTop;
+        Vector3 desk = new Vector3(head.x, zone.bounds.min.y, head.z);
+        Bounds face = traveller.Face;
+        float top = cam.WorldToScreenPoint(head).y, bottom = cam.WorldToScreenPoint(desk).y;
+        float faceTop = cam.WorldToScreenPoint(face.max).y, faceBottom = cam.WorldToScreenPoint(face.min).y;
+        float share = (top - bottom) / Screen.height;
+        bool wide = Mathf.Abs((float)Screen.width / Screen.height - 16f / 9f) < 0.01f;
+        runner.Assert("traveller." + name, Owner, !wide || (share >= TravellerLeast - 1e-4f && share <= TravellerMost + 1e-4f),
+                      $"{share * 100f:0.0} % of {Screen.height} rows (head top at row {Screen.height - top:0}, the desk's top at the figure at row {Screen.height - bottom:0}); the head {faceTop - faceBottom:0} px",
+                      wide ? $"D16: {TravellerLeast * 100f:0} to {TravellerMost * 100f:0} % at 16:9" : "a report (D16's band is for 16:9)");
+    }
+
+    /// <summary><paramref name="text"/>'s mesh bounds on the screen through <paramref name="cam"/>, in pixels from the top left (the texts table's rect: the still's own rows).</summary>
+    private static Rect ScreenRect(Camera cam, TMP_Text text)
+    {
+        Bounds b = text.textBounds;
+        float xMin = float.MaxValue, yMin = float.MaxValue, xMax = float.MinValue, yMax = float.MinValue;
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 local = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, 0f);
+            Vector3 p = cam.WorldToScreenPoint(text.transform.TransformPoint(local));
+            xMin = Mathf.Min(xMin, p.x); xMax = Mathf.Max(xMax, p.x);
+            yMin = Mathf.Min(yMin, Screen.height - p.y); yMax = Mathf.Max(yMax, Screen.height - p.y);
+        }
+        return Rect.MinMaxRect(xMin, yMin, xMax, yMax);
+    }
+
+    /// <summary><paramref name="leaf"/>'s path under <paramref name="root"/> (the texts table's name of a label).</summary>
+    private static string LabelPath(Transform root, Transform leaf)
+    {
+        var parts = new List<string>();
+        for (Transform t = leaf; t != null && t != root; t = t.parent)
+            parts.Add(t.name);
+        parts.Reverse();
+        return string.Join("/", parts);
     }
 
     /// <summary>The cap height of <paramref name="text"/>'s largest visible letter, in pixels at 1080p through <paramref name="cam"/> (its font's cap line over its ascent line, at the letter's baseline), or null with none shown.</summary>
