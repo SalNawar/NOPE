@@ -48,8 +48,8 @@ public sealed partial class SwitchboardView
     private static readonly Color OriginInk = new Color(0.46f, 0.33f, 0.15f, 1f);
     private static readonly Color EmblemCream = new Color(0.94f, 0.9f, 0.8f, 1f);
 
-    /// <summary>The legend names' smallest font: Outfit's cap height is 0.7 em, so 17.2 px keeps the caps at 12 px or more at 1920x1080 (the director's floor, D54 amended).</summary>
-    private const float LegendFontMin = 17.2f;
+    /// <summary>The legend names' smallest font: Outfit's cap height is 0.7 em, so 17.6 px keeps the caps at 12.3 px or more at 1920x1080 (the director's floor is 12 px, D54 amended; at 17.2 px a row's antialiased top read 11 px in the still).</summary>
+    private const float LegendFontMin = 17.6f;
     private static readonly Color PipDark = new Color(0.55f, 0.45f, 0.3f, 0.28f);
 
     /// <summary>A dial not in service today: a darker veil than a Classic module's (a dial's brass reads bright under the Classic one).</summary>
