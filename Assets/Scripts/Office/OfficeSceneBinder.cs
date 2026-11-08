@@ -1107,6 +1107,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         foreach (PaintedObject o in DeskPaintedMap.Objects)
             if (o.role == PaintedRole.Slider)
                 MachineSlideIn.Attach(DeskPaintedMap.LiftOf(o.name), paintedDesk.SliderOf(o.name));
+        // The pocket's painted flap rests on the painted book: it rides the book's lift, so the book never rises through it (Saleh's item 3 of 2026-11-07, the director's follow-up pocket-hover-clip).
+        MachineSlideIn pocketBook = paintedDesk.SliderOf(DeskPaintedMap.RulebookFolded) is Transform bookRoot ? bookRoot.GetComponent<MachineSlideIn>() : null;
+        Transform flap = paintedDesk.SliderOf(PaintedPocket) is Transform pocketRoot ? pocketRoot.Find(DeskPaintedMap.Flap) : null;
+        if (pocketBook != null && flap != null)
+            pocketBook.Carries(flap);
         // The painted daters lift on their rack (UNITY_PLAN 5.1: 1.2 cm and the tip), the painted dater rising off the dater STAMP carries: it gives way while one is carried or strokes.
         if (stampTray != null)
             foreach ((DeskStamp _, string painted, string slider) in PaintedDaters)
