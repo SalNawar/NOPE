@@ -178,31 +178,51 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A layer tab's size (desktop units).</summary>
     private static readonly Vector2 LayerTab = new Vector2(104f, 40f);
 
-    /// <summary>The strip over a Documents view's copies that holds the layer tabs.</summary>
+    /// <summary>The paper toolbar row over a Documents view's copies that holds the layer tabs.</summary>
     private const float LayerStripHeight = 56f;
 
     /// <summary>
     /// A scanned copy's layer switch (the scanner app spec §2.4;
-    /// ScanLayerSwitch): over the Documents view, PRINT, UV and CHIP at its top
-    /// right (each a quiet button with a bar under its word while chosen),
-    /// and the layer's panel over the copy below them, on the scanner's dark
-    /// backing (the form style's): its heading, its lines (a scroll; a line
-    /// that glows sits on a difference plate) and the wipe's bar. Hidden until
-    /// a copy shows.
+    /// ScanLayerSwitch): over the Documents view, the paper toolbar row
+    /// (PaperToolbar: a tab-strip plate across the view's top with a hairline
+    /// under it) with PRINT, UV and CHIP in a row at its right end (each a
+    /// quiet button with a bar under its word while chosen; a hidden tab
+    /// leaves no gap, so no control lies over the copy: Saleh's playtest item
+    /// 5), and the layer's panel over the copy under the row, on the
+    /// scanner's dark backing (the form style's): its heading, its lines (a
+    /// scroll; a line that glows sits on a difference plate) and the wipe's
+    /// bar. Hidden until a copy shows.
     /// </summary>
     private static ScanLayerSwitch BuildScanLayers(Transform view, FormStyleSO style)
     {
         DestroyChildIfPresent(view, "Layers");
         Transform root = Panel(view, "Layers", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+
+        // The paper toolbar row: the tabs lie in a row at its right end, a hidden tab leaves no gap (a layout group), and the copies start under it.
+        Transform bar = Panel(root, "PaperToolbar", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.TabStrip);
+        PlaceRect(bar, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -LayerStripHeight), Vector2.zero);
+        bar.GetComponent<Image>().raycastTarget = false;
+        HorizontalLayoutGroup tabRow = GetOrAdd<HorizontalLayoutGroup>(bar.gameObject);
+        tabRow.padding = new RectOffset((int)PcSize.M, (int)PcSize.M, (int)PcSize.S, (int)PcSize.S);
+        tabRow.spacing = PcSize.S;
+        tabRow.childAlignment = TextAnchor.MiddleRight;
+        tabRow.childControlWidth = tabRow.childControlHeight = true;
+        tabRow.childForceExpandWidth = tabRow.childForceExpandHeight = false;
+        Transform edge = Panel(bar, "Edge", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 0.5f), new Vector2(0f, 1f), WbLine, ThemeRoleId.Hairline);
+        edge.GetComponent<Image>().raycastTarget = false;
+        GetOrAdd<LayoutElement>(edge.gameObject).ignoreLayout = true;
+
         var tabs = new Button[3];
         string[] keys = { "layers.tab.print", "layers.tab.uv", "layers.tab.chip" };
         for (int i = 0; i < 3; i++)
         {
-            Button tab = MakeButton(root, "Tab_" + keys[i].Substring(11), null, Vector2.one, Vector2.one, WbSurface, ThemeRoleId.Button, keys[i]);
+            Button tab = MakeButton(bar, "Tab_" + keys[i].Substring(11), null, Vector2.one, Vector2.one, WbSurface, ThemeRoleId.Button, keys[i]);
             ButtonLabel(tab, PcType.Caption).fontStyle = FontStyles.Bold;
             HairlineFrame(tab.transform);
-            float right = PcSize.M + (2 - i) * (LayerTab.x + PcSize.S);
-            PlaceRect(tab.transform, Vector2.one, Vector2.one, new Vector2(-(right + LayerTab.x), -(PcSize.S + LayerTab.y)), new Vector2(-right, -PcSize.S));
+            LayoutElement size = GetOrAdd<LayoutElement>(tab.gameObject);
+            size.preferredWidth = LayerTab.x;
+            size.preferredHeight = LayerTab.y;
+            size.flexibleWidth = 0f;
             Transform selected = Panel(tab.transform, "Selected", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 2f), new Vector2(-12f, 4f), WbAction, ThemeRoleId.PrimaryAction);
             selected.GetComponent<Image>().raycastTarget = false;
             selected.gameObject.SetActive(i == 0);
@@ -210,7 +230,7 @@ public static partial class OfficeSceneUIBuilder
         }
 
         Transform overlay = Panel(root, "Overlay", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, style.backing, ThemeRoleId.DiegeticBacking);
-        PlaceRect(overlay, Vector2.zero, Vector2.one, new Vector2(PcSize.M, PcSize.M), new Vector2(-PcSize.M, -(PcSize.S * 2f + LayerTab.y)));
+        PlaceRect(overlay, Vector2.zero, Vector2.one, new Vector2(PcSize.M, PcSize.M), new Vector2(-PcSize.M, -(LayerStripHeight + PcSize.M)));
         TMP_Text title = Text(overlay, "Title", "UV LIGHT", PcType.Title, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, style.backingInk, ThemeRoleId.DiegeticBacking,
                               null, FontStyles.Bold, ThemeTextKind.Heading);
         title.raycastTarget = false;
