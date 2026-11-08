@@ -190,10 +190,10 @@ public sealed partial class AppPane : MonoBehaviour
 
     /// <summary>
     /// Shows this side's header as the target of the shelf, or not. The
-    /// "Links open here" hint takes the width its words need (pc-ui-heuristics,
-    /// Saleh's item 5: "Links op..." was cut in a fixed box) and the title row
-    /// ends where it starts; the row's right inset while this side is not the
-    /// target is the built one.
+    /// "Links open here" hint shrinks to its built box (UiText.FitLabel;
+    /// pc-ui-heuristics, Saleh's item 5: "Links op..." was cut), so the title
+    /// keeps its built room (round 1: a wider hint cut "Transponder Card" to
+    /// "Transpo..."); the title row's right inset is the built one for each state.
     /// </summary>
     public void SetTarget(bool on)
     {
@@ -203,19 +203,11 @@ public sealed partial class AppPane : MonoBehaviour
         foreach (GameObject part in otherParts)
             if (part != null && part.activeSelf == on)
                 part.SetActive(!on);
-        float right = on ? titleRightInsets.x : titleRightInsets.y;
-        TMP_Text hint = on ? HintText() : null;
-        if (hint != null)
-        {
-            RectTransform box = hint.rectTransform;
-            float pad = -box.offsetMax.x; // the built gap between the hint and the header's right edge
-            float width = hint.GetPreferredValues(hint.text).x + pad;
-            box.offsetMin = new Vector2(-(width + pad), box.offsetMin.y);
-            right = -(width + 2f * pad);
-        }
+        if (on)
+            UiText.FitLabel(HintText());
         RectTransform inset = titleRow != null ? titleRow : titleText != null ? titleText.rectTransform : null;
         if (inset != null)
-            inset.offsetMax = new Vector2(right, inset.offsetMax.y);
+            inset.offsetMax = new Vector2(on ? titleRightInsets.x : titleRightInsets.y, inset.offsetMax.y);
     }
 
     /// <summary>The hint among the target parts (the one part that is a text), or null.</summary>
