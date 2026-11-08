@@ -35,6 +35,12 @@
       "name": "d1_restart"
     },
     {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d1_restart",
+      "w": 5
+    },
+    {
       "op": "jumpDay",
       "n": 5
     },
@@ -51,6 +57,12 @@
       "name": "d5_jump"
     },
     {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d5_jump",
+      "w": 5
+    },
+    {
       "op": "jumpDay",
       "n": 7
     },
@@ -65,6 +77,12 @@
     {
       "op": "probe",
       "name": "d7_jump"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d7_jump",
+      "w": 5
     },
     {
       "op": "cheat",
@@ -77,6 +95,12 @@
     {
       "op": "probe",
       "name": "d7_restart"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d7_restart",
+      "w": 5
     },
     {
       "op": "cheat",
@@ -94,6 +118,12 @@
     {
       "op": "probe",
       "name": "d8_skip"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d8_skip",
+      "w": 5
     },
     {
       "op": "jumpDay",
@@ -115,6 +145,12 @@
       "name": "d12_jump"
     },
     {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d12_jump",
+      "w": 5
+    },
+    {
       "op": "cheat",
       "name": "RestartShift"
     },
@@ -127,6 +163,12 @@
       "name": "d12_restart"
     },
     {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d12_restart",
+      "w": 5
+    },
+    {
       "op": "jumpDay",
       "n": 15
     },
@@ -141,6 +183,12 @@
     {
       "op": "probe",
       "name": "d15_jump"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d15_jump",
+      "w": 5
     },
     {
       "op": "jumpDay",
@@ -159,6 +207,12 @@
       "name": "d18_jump"
     },
     {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d18_jump",
+      "w": 5
+    },
+    {
       "op": "jumpDay",
       "n": 21
     },
@@ -173,6 +227,12 @@
     {
       "op": "probe",
       "name": "d21_jump"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d21_jump",
+      "w": 5
     }
   ]
 }
