@@ -1170,10 +1170,51 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             scanner.Configure(scanner.DropSize, s.InverseTransformPoint(new Vector3(b.center.x, b.max.y + ScannerBedLift, b.center.z)));
             Transform sweep = Descendant(s, "SweepBar");
             if (sweep != null)
+            {
                 sweep.position = new Vector3(sweep.position.x, scanner.BedPoint.y + SweepOverBed, sweep.position.z); // DeskScanner runs it along its own z only
+                FitSweep(s, sweep, b);
+            }
             PaintAddOns(s, b);
         }
         return look;
+    }
+
+    /// <summary>How far inside the painted scanner's body its glass lies, as shares of the body's size: along the sweep's travel (local z, each end) and across it (local x, each side). Measured on the painting's bed (Saleh's playtest of 2026-11-07, items 10 and 11: the light ran past the frame).</summary>
+    private const float PaintedGlassInsetZ = 0.18f, PaintedGlassInsetX = 0.14f;
+
+    /// <summary>
+    /// Fits the sweep light <paramref name="sweep"/> to the painted scanner's
+    /// glass: the art's bar is sized for its own machine, so under the painting
+    /// it ran wider than the bed and past the frame at its travel's ends. The
+    /// bar's width (local x) becomes the glass's, its centre the glass's, and
+    /// its travel (DeskScanner.FitSweep, local z) keeps its whole depth inside
+    /// the glass. The glass is the body's bounds <paramref name="body"/> shrunk
+    /// by PaintedGlassInsetZ and PaintedGlassInsetX.
+    /// </summary>
+    private void FitSweep(Transform s, Transform sweep, Bounds body)
+    {
+        if (!sweep.TryGetComponent(out MeshFilter filter) || filter.sharedMesh == null)
+            return;
+        Vector3 min = Vector3.positiveInfinity, max = Vector3.negativeInfinity;
+        for (int i = 0; i < 8; i++)
+        {
+            Vector3 corner = new Vector3((i & 1) == 0 ? body.min.x : body.max.x, (i & 2) == 0 ? body.min.y : body.max.y, (i & 4) == 0 ? body.min.z : body.max.z);
+            Vector3 local = s.InverseTransformPoint(corner);
+            min = Vector3.Min(min, local);
+            max = Vector3.Max(max, local);
+        }
+        float width = (max.x - min.x) * (1f - 2f * PaintedGlassInsetX), length = max.z - min.z;
+        Bounds mesh = filter.sharedMesh.bounds;
+        Vector3 size = Vector3.Scale(mesh.size, sweep.lossyScale);
+        Vector3 scale = sweep.localScale;
+        scale.x *= width / Mathf.Max(size.x, 1e-5f);
+        sweep.localScale = scale;
+        Vector3 at = s.InverseTransformPoint(sweep.position);
+        at.x = (min.x + max.x) / 2f - mesh.center.x * sweep.lossyScale.x;
+        sweep.position = s.TransformPoint(at);
+        float half = size.z / 2f;
+        float front = min.z + length * PaintedGlassInsetZ + half, back = max.z - length * PaintedGlassInsetZ - half;
+        scanner.FitSweep(new Vector2(front, Mathf.Max(front, back)));
     }
 
     /// <summary>
