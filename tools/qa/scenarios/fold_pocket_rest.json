@@ -1,0 +1,127 @@
+{
+  "name": "fold_pocket_rest",
+  "owner": "DOC-HANDLE",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "folder-holder-clip (Saleh's playtest of 2026-11-07, item 3: 'Folder clipping in the folder holder'). The folder at rest in its pocket at the day's start (the shift started and signed, so the briefing is away), the office view and the reading view, 1920x1080 and 1280x1024. deskinspect writes the world bounds of the folder (Rulebook), the painted book (Desk_RulebookFolded) and the pocket (Desk_Pocket, its Flap listed under it) to inspect_<name>.txt: the folder's box and renderers must lie inside the pocket's footprint and under the book's top. No assertion: a diagnosis scenario, judged on the stills and the inspect files."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "office_1080"
+    },
+    {
+      "op": "deskinspect",
+      "name": "folder_office",
+      "target": "Rulebook"
+    },
+    {
+      "op": "deskinspect",
+      "name": "book_office",
+      "target": "Desk_RulebookFolded"
+    },
+    {
+      "op": "deskinspect",
+      "name": "pocket_office",
+      "target": "Desk_Pocket"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "reading_1080"
+    },
+    {
+      "op": "deskinspect",
+      "name": "folder_reading",
+      "target": "Rulebook"
+    },
+    {
+      "op": "deskinspect",
+      "name": "book_reading",
+      "target": "Desk_RulebookFolded"
+    },
+    {
+      "op": "deskinspect",
+      "name": "pocket_reading",
+      "target": "Desk_Pocket"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "camres",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 0.5
+    },
+    {
+      "op": "still",
+      "name": "office_1280"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "reading_1280"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    }
+  ]
+}
