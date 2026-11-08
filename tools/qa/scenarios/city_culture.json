@@ -3,7 +3,7 @@
   "owner": "CITY",
   "seed": 12345,
   "steps": [
-    {"op": "note", "text": "city-culture (D61): the city view at 12:00 with no leader, then with Egypt leading, then Japan. Pass: the stills differ on 12 or more ad screens between the two leaders (tools/qa/city_culture_count.py), the neutral still shows the ads."},
+    {"op": "note", "text": "city-culture (D61): the city view at 12:00 with no leader, then with Egypt leading, then Japan. Pass: the stills of two leaders with different colours (Egypt, China) differ on 12 or more ad screens, the neutral still shows the ads."},
     {"op": "title"},
     {"op": "res", "w": 1920, "h": 1080},
     {"op": "newRun", "text": "Biscuit"},
@@ -21,6 +21,9 @@
     {"op": "cheat", "name": "ForceLeader", "text": "japan"},
     {"op": "wait", "f": 1.5},
     {"op": "still", "name": "city_japan"},
+    {"op": "cheat", "name": "ForceLeader", "text": "china"},
+    {"op": "wait", "f": 1.5},
+    {"op": "still", "name": "city_china"},
     {"op": "key", "key": "D"},
     {"op": "wait", "f": 2.5},
     {"op": "hour", "f": -1},
