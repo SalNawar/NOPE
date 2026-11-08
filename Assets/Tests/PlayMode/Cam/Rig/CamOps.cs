@@ -1433,7 +1433,10 @@ public static class CamOps
         yield return rect.center;
         for (int iy = 0; iy < 5; iy++)
             for (int ix = 0; ix < 5; ix++)
+            {
+                if (ix == 2 && iy == 2) continue; // the grid's middle point is the centre already tried
                 yield return new Vector2(Mathf.Lerp(rect.xMin, rect.xMax, 0.15f + 0.175f * ix), Mathf.Lerp(rect.yMin, rect.yMax, 0.15f + 0.175f * iy));
+            }
     }
 
     private static readonly List<RaycastResult> PickHits = new List<RaycastResult>();
