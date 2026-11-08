@@ -52,12 +52,19 @@ public sealed class PaperCover : MonoBehaviour
     /// <summary>How far over the sheet the shut cover lies (metres toward the viewer): over every printed part (PaperLayers.PartsDepth) and the stack's gap.</summary>
     public const float Lift = PaperLayers.PartsDepth + PaperLayers.StackGap;
 
+    /// <summary>The shut booklet's corner radius (metres): the cover's corners and the page block's are round (D63).</summary>
+    [SerializeField, Range(0f, 0.01f)] private float cornerRadius = 0.003f;
+
+    /// <summary>The cover boards' thickness on the shut booklet's sides (metres): the front board over the page block, the back board under it (D63).</summary>
+    [SerializeField, Range(0.0001f, 0.002f)] private float boardThickness = 0.0006f;
+
     /// <summary>The cover's title line height as a share of the cover's width (a passport's "PASSPORT" line).</summary>
     [SerializeField, Range(0.03f, 0.2f)] private float titleShare = 0.075f;
 
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
     private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
     private static readonly int BaseMapStId = Shader.PropertyToID("_BaseMap_ST");
+    private static readonly int CutoffId = Shader.PropertyToID("_Cutoff");
     private static readonly int FlexId = Shader.PropertyToID("_Flex"), Flex2Id = Shader.PropertyToID("_Flex2"), FlexSizeId = Shader.PropertyToID("_FlexSize");
 
     /// <summary>The cover's bow at its swing's height (metres; its free edge bows twice it: 3 mm, GAME_FEEL_BIBLE A1's 2 to 4 mm).</summary>
@@ -84,6 +91,16 @@ public sealed class PaperCover : MonoBehaviour
     /// <summary>The sound bank's cues for the cover's swing (SoundBank_Default; GAME_FEEL_BIBLE A1).</summary>
     private const string OpenCue = "passport_open", CloseCue = "passport_close";
 
+    /// <summary>The shut booklet's sides (Block: the spine and the page block between the two cover boards; D63), made on the first Arrive, and its mesh.</summary>
+    private MeshRenderer _blockRenderer;
+    private Mesh _blockMesh;
+
+    /// <summary>The front's corner mask and spine crease (FrontMask), made on each Arrive for the cover's size.</summary>
+    private Texture2D _frontMask;
+
+    /// <summary>True while the booklet lies fully shut (the block shows and the open model is cut whole; last shown).</summary>
+    private bool _closed;
+
     private readonly BookletFlip _flip = new BookletFlip();
     private DeskDocument _paper;
     private DeskDraggable _drag;
@@ -102,9 +119,12 @@ public sealed class PaperCover : MonoBehaviour
     /// <paramref name="face"/> on its back, and <paramref name="title"/> (the
     /// form's title in the reading language; blank: none) printed under the
     /// emblem from <paramref name="textTemplate"/>. <paramref name="paper"/>
-    /// and its <paramref name="drag"/> say when it opens.
+    /// and its <paramref name="drag"/> say when it opens. Fully shut it is a
+    /// booklet <paramref name="thickness"/> deep under the cover (Block: a
+    /// spine and a page block with light page edges on its three open sides,
+    /// round corners; D63).
     /// </summary>
-    public void Arrive(DeskDocument paper, DeskDraggable drag, float spine, Vector2 size, Color colour, Texture2D mark, Texture2D face, TextMeshPro textTemplate, string title)
+    public void Arrive(DeskDocument paper, DeskDraggable drag, float spine, Vector2 size, Color colour, Texture2D mark, Texture2D face, TextMeshPro textTemplate, string title, float thickness)
     {
         _paper = paper;
         _drag = drag;
@@ -125,8 +145,11 @@ public sealed class PaperCover : MonoBehaviour
             front.transform.localScale = new Vector3(halfWidth * 2f, below, 1f);
             front.GetPropertyBlock(_block);
             _block.SetColor(BaseColorId, colour);
+            _block.SetTexture(BaseMapId, FrontMask(halfWidth * 2f, below));
+            _block.SetFloat(CutoffId, 0.5f);
             front.SetPropertyBlock(_block);
         }
+        Block(halfWidth * 2f, below, spine, thickness, colour);
         float emblemSide = halfWidth * 2f * emblemShare;
         if (emblem != null)
         {
@@ -192,6 +215,7 @@ public sealed class PaperCover : MonoBehaviour
         }
         _flip.Shut();
         _shut = false;
+        _closed = false;
         _out = false;
         _bowShown = float.NaN;
         Show(true);
@@ -348,10 +372,148 @@ public sealed class PaperCover : MonoBehaviour
             if (_title != null && front != null)
                 Ride(_title.transform, _titleRest, _titleHalf, front.transform, Vector2.down, bow);
         }
-        bool shut = _flip.State != CoverState.Open;
-        if (shut == _shut && !force)
+        bool shut = _flip.State != CoverState.Open, closed = _flip.State == CoverState.Closed;
+        if (shut == _shut && closed == _closed && !force)
             return;
         _shut = shut;
-        _paper.ShowShut(shut, _spine);
+        _closed = closed;
+        if (_blockRenderer != null)
+            _blockRenderer.enabled = closed;
+        _paper.ShowShut(shut, _spine, closed);
+    }
+
+    /// <summary>
+    /// The front's mask (D63): white, its four corners cut round at
+    /// cornerRadius (alpha 0: DocumentCel's cut-out) and a darker crease
+    /// along the spine (the cover's fold), for a front
+    /// <paramref name="width"/> by <paramref name="height"/> metres (its
+    /// top edge on the spine).
+    /// </summary>
+    private Texture2D FrontMask(float width, float height)
+    {
+        const int Side = 128;
+        if (_frontMask == null)
+            _frontMask = new Texture2D(Side, Side, TextureFormat.RGBA32, false) { name = "CoverMask", wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.DontSave };
+        var pixels = new Color32[Side * Side];
+        float r = Mathf.Min(cornerRadius, width / 2f, height / 2f);
+        for (int j = 0; j < Side; j++)
+            for (int i = 0; i < Side; i++)
+            {
+                float x = (i + 0.5f) / Side * width, y = (j + 0.5f) / Side * height;
+                float cx = Mathf.Clamp(x, r, width - r), cy = Mathf.Clamp(y, r, height - r);
+                bool inside = (x - cx) * (x - cx) + (y - cy) * (y - cy) <= r * r;
+                // the fold: a band 3 to 4.5 mm under the spine, a little darker
+                float fromSpine = height - y;
+                byte k = fromSpine > 0.003f && fromSpine < 0.0045f ? (byte)190 : (byte)255;
+                pixels[j * Side + i] = new Color32(k, k, k, inside ? (byte)255 : (byte)0);
+            }
+        _frontMask.SetPixels32(pixels);
+        _frontMask.Apply(false);
+        return _frontMask;
+    }
+
+    /// <summary>
+    /// The shut booklet's sides (D63: "just make 3d objects"): a wall round
+    /// the data page's outline (<paramref name="width"/> across,
+    /// <paramref name="height"/> from the bottom edge up to the
+    /// <paramref name="spine"/>, corners round at cornerRadius), from the
+    /// cover (Lift over the sheet) down to the booklet's foot
+    /// (<paramref name="thickness"/> under the sheet): on the three open sides
+    /// the front board, the page block in light page lines and the back
+    /// board; on the spine side the cover's <paramref name="colour"/> all the
+    /// way down (the fold). Vertex colours carry it all (alpha 0: it never
+    /// bends); it shows only while the cover lies fully shut (Show), when
+    /// the open model under it is cut whole (DeskDocument.ShowShut).
+    /// </summary>
+    private void Block(float width, float height, float spine, float thickness, Color colour)
+    {
+        if (_blockRenderer == null)
+        {
+            if (front == null)
+                return;
+            var go = new GameObject("Block");
+            go.transform.SetParent(transform, false);
+            go.layer = front.gameObject.layer;
+            _blockRenderer = go.AddComponent<MeshRenderer>();
+            _blockRenderer.sharedMaterial = front.sharedMaterial;
+            _blockRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            _blockMesh = new Mesh { name = "BookletBlock", hideFlags = HideFlags.DontSave };
+            go.AddComponent<MeshFilter>().sharedMesh = _blockMesh;
+            var white = new MaterialPropertyBlock();
+            white.SetColor(BaseColorId, Color.white);
+            white.SetTexture(BaseMapId, Texture2D.whiteTexture);
+            _blockRenderer.SetPropertyBlock(white);
+        }
+        float top = -Lift, foot = Mathf.Max(thickness, boardThickness * 3f);
+        var board = new Color(colour.r, colour.g, colour.b, 0f);
+        var fold = new Color(colour.r * 0.8f, colour.g * 0.8f, colour.b * 0.8f, 0f);
+        Color page = new Color(0.98f, 0.95f, 0.86f, 0f), line = new Color(0.8f, 0.76f, 0.68f, 0f);
+        // the bands down an open side: the front board, the page lines, the back board
+        var bands = new List<(float z0, float z1, Color c)> { (top, top + boardThickness, board) };
+        float pagesFrom = top + boardThickness, pagesTo = foot - boardThickness;
+        const int PageBands = 10;
+        for (int k = 0; k < PageBands; k++)
+            bands.Add((Mathf.Lerp(pagesFrom, pagesTo, (float)k / PageBands), Mathf.Lerp(pagesFrom, pagesTo, (float)(k + 1) / PageBands), k % 2 == 0 ? page : line));
+        bands.Add((pagesTo, foot, board));
+        var spineBands = new List<(float z0, float z1, Color c)> { (top, foot, fold) };
+        float radius = Mathf.Min(cornerRadius, width / 2f, height / 2f);
+        List<Vector2> outline = RoundRect(-width / 2f, spine - height, width / 2f, spine, radius);
+        var vertices = new List<Vector3>();
+        var normals = new List<Vector3>();
+        var colours = new List<Color>();
+        var triangles = new List<int>();
+        for (int i = 0; i < outline.Count; i++)
+        {
+            Vector2 a = outline[i], b = outline[(i + 1) % outline.Count];
+            if ((b - a).sqrMagnitude < 1e-12f)
+                continue;
+            Vector2 along = (b - a).normalized;
+            var normal = new Vector3(along.y, -along.x, 0f); // the outline runs anticlockwise: its outside is on the right
+            bool spineSide = (a.y + b.y) / 2f > spine - radius * 0.5f;
+            foreach ((float z0, float z1, Color c) in spineSide ? spineBands : bands)
+            {
+                int n = vertices.Count;
+                vertices.Add(new Vector3(a.x, a.y, z0));
+                vertices.Add(new Vector3(b.x, b.y, z0));
+                vertices.Add(new Vector3(b.x, b.y, z1));
+                vertices.Add(new Vector3(a.x, a.y, z1));
+                for (int v = 0; v < 4; v++)
+                {
+                    normals.Add(normal);
+                    colours.Add(c);
+                }
+                triangles.AddRange(new[] { n, n + 1, n + 2, n, n + 2, n + 3 });
+            }
+        }
+        _blockMesh.Clear();
+        _blockMesh.SetVertices(vertices);
+        _blockMesh.SetNormals(normals);
+        _blockMesh.SetColors(colours);
+        _blockMesh.SetUVs(0, vertices.ConvertAll(_ => new Vector2(0.5f, 0.5f)));
+        _blockMesh.SetTriangles(triangles, 0);
+        _blockMesh.RecalculateBounds();
+    }
+
+    /// <summary>A rectangle's outline from (<paramref name="x0"/>, <paramref name="y0"/>) to (<paramref name="x1"/>, <paramref name="y1"/>), anticlockwise, its corners round at <paramref name="radius"/> (four steps each).</summary>
+    private static List<Vector2> RoundRect(float x0, float y0, float x1, float y1, float radius)
+    {
+        const int Steps = 4;
+        var points = new List<Vector2>();
+        var centres = new[] { new Vector2(x1 - radius, y0 + radius), new Vector2(x1 - radius, y1 - radius), new Vector2(x0 + radius, y1 - radius), new Vector2(x0 + radius, y0 + radius) };
+        for (int c = 0; c < 4; c++)
+            for (int step = 0; step <= Steps; step++)
+            {
+                float angle = (c - 1 + (float)step / Steps) * Mathf.PI / 2f;
+                points.Add(centres[c] + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius);
+            }
+        return points;
+    }
+
+    private void OnDestroy()
+    {
+        if (_blockMesh != null)
+            Destroy(_blockMesh);
+        if (_frontMask != null)
+            Destroy(_frontMask);
     }
 }
