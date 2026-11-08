@@ -1,0 +1,107 @@
+{
+  "name": "reading_edges",
+  "owner": "CAM",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "READING-VIEW-EDGES: in the reading view at 1920x1080 and 1280x1024 on day 1 with a cheated run, the cheat badge lies wholly on the screen and each hand-over paper's top edge rests 24 px or more (1080p) inside the mat's far rim (camedges); the stills show the back row."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "cheat",
+      "name": "AddMoney",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "edges_reading"
+    },
+    {
+      "op": "camedges",
+      "name": "a1_d1"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "camres",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Toggle"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "edges_reading"
+    },
+    {
+      "op": "camedges",
+      "name": "a4_d1"
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    }
+  ]
+}
