@@ -180,6 +180,24 @@
       "name": "d1_home"
     },
     {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "d1_home_54"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
       "op": "call",
       "target": "RunManager.LoadTitleScene"
     },

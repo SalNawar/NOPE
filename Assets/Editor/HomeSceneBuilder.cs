@@ -189,16 +189,33 @@ public static class HomeSceneBuilder
         Debug.Log("[TimeDesk] Home UI built and wired. Save the scene.");
     }
 
+    /// <summary>The flat's evening plate: the bed, the window and the pet's bed (D62).</summary>
+    private const string BackdropPlate = "Assets/Art/Home/room_bed_br.png";
+
     /// <summary>
-    /// The flat's painted backdrop, the art's "ArtBackground" image on the
-    /// canvas (placed with the art, never created here), which Home tints
-    /// toward deep night after a late shift (HomeUIController.SetLateness;
-    /// night shifts); null when the scene has none.
+    /// The flat's painted backdrop, the "ArtBackground" image on the canvas
+    /// (found, or created behind the panels), which Home tints toward deep
+    /// night after a late shift (HomeUIController.SetLateness; night shifts).
+    /// It shows the evening plate and scales to cover the frame at any aspect
+    /// (an AspectRatioFitter, so the plate never stretches).
     /// </summary>
     private static Image Backdrop(Transform canvas)
     {
         Transform art = canvas.Find("ArtBackground");
-        return art != null ? art.GetComponent<Image>() : null;
+        if (art == null)
+            return null;
+        Image image = art.GetComponent<Image>();
+        Sprite plate = AssetDatabase.LoadAssetAtPath<Sprite>(BackdropPlate);
+        if (image == null || plate == null)
+            return image;
+        image.sprite = plate;
+        image.preserveAspect = false;
+        AspectRatioFitter fit = art.GetComponent<AspectRatioFitter>();
+        if (fit == null)
+            fit = art.gameObject.AddComponent<AspectRatioFitter>();
+        fit.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+        fit.aspectRatio = plate.rect.width / plate.rect.height;
+        return image;
     }
 
     /// <summary>The bills panel's size (reference px): the title, the evening's lines (the break-in, the fixed costs, the pet's needs, the bills' total), the five bills' rows and Pay.</summary>
