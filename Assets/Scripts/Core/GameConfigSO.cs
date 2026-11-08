@@ -8,6 +8,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameConfig_", menuName = "TimeDesk/Game Config", order = 2)]
 public sealed class GameConfigSO : ScriptableObject
 {
+    [Header("City weather")]
+    /// <summary>The share of days that rain on the city (CityWeather.Rains: the day's seed draws Clear or Rain; 0: always clear).</summary>
+    [Range(0f, 1f)]
+    public float rainChance = 0.3f;
+
     [Header("Pay")]
     /// <summary>Base pay for a correct send (multiplied by WorldState.payRateMultiplier).</summary>
     [Min(0)]
