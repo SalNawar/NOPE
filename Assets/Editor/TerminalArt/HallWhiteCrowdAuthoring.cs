@@ -157,45 +157,35 @@ public static class HallWhiteCrowdAuthoring
         var positions=crowds.Groups.Select(g=>g.silhouette.transform.localPosition).ToArray();var rotations=crowds.Groups.Select(g=>g.silhouette.transform.localRotation).ToArray();var scales=crowds.Groups.Select(g=>g.silhouette.transform.localScale).ToArray();var report=new StringBuilder();
         try
         {
-            int min=crowds.Groups.Length,max=0;float low=1,high=0;
-            for(int t=0;t<=600;t++)
+            float low=1,high=0;
+            crowds.Apply();int count=crowds.Groups.Count(g=>g.silhouette.enabled);
+            for(int n=0;n<crowds.Groups.Length;n++)
             {
-                crowds.Apply(t);int count=crowds.Groups.Count(g=>g.silhouette.enabled);min=Math.Min(min,count);max=Math.Max(max,count);
-                for(int n=0;n<crowds.Groups.Length;n++)
-                {
-                    var g=crowds.Groups[n];if(g.silhouette.transform.localPosition!=positions[n]||g.silhouette.transform.localRotation!=rotations[n]||g.silhouette.transform.localScale!=scales[n])throw new InvalidOperationException("Crowd transform animated.");
-                    var block=new MaterialPropertyBlock();g.silhouette.GetPropertyBlock(block);float a=block.GetColor("_Tint").a;low=Math.Min(low,a);high=Math.Max(high,a);
-                }
+                var g=crowds.Groups[n];if(g.silhouette.transform.localPosition!=positions[n]||g.silhouette.transform.localRotation!=rotations[n]||g.silhouette.transform.localScale!=scales[n])throw new InvalidOperationException("Crowd transform animated.");
+                var block=new MaterialPropertyBlock();g.silhouette.GetPropertyBlock(block);float a=block.GetColor("_Tint").a;low=Math.Min(low,a);high=Math.Max(high,a);
             }
-            if(!MotionPreference.Reduced&&(min==max||min<2||low>.001f||high>.47f))throw new InvalidOperationException("Crowd fade / opacity validation failed.");
-            report.AppendLine($"Approved original meshes/atlas unchanged. {crowds.Groups.Length} fixed placements, {crowds.Groups.Count(g=>!g.balcony)} main floor / {crowds.Groups.Count(g=>g.balcony)} balcony. 601 timeline samples: active groups {min}-{max}, alpha {low:0.00}-{high:0.00}. Position, rotation, scale unchanged.");
+            if(count!=crowds.Groups.Length||low<=.001f)throw new InvalidOperationException("Crowd hold / opacity validation failed: a group is hidden.");
+            report.AppendLine($"Approved original meshes/atlas unchanged. {crowds.Groups.Length} fixed placements, {crowds.Groups.Count(g=>!g.balcony)} main floor / {crowds.Groups.Count(g=>g.balcony)} balcony. All {count} groups shown and held, alpha {low:0.00}-{high:0.00}. Position, rotation, scale unchanged.");
             foreach(float hour in new[]{8f,10f,12f,14f,16.5f,18f,22f})
             {
-                settings.previewHourOn=true;settings.previewHour=hour;art.SetPan(0);crowds.Apply(29);Capture("hour-"+hour.ToString("00.0",System.Globalization.CultureInfo.InvariantCulture));report.AppendLine($"Hour {hour}: tint {crowds.Palette}.");
+                settings.previewHourOn=true;settings.previewHour=hour;art.SetPan(0);Capture("hour-"+hour.ToString("00.0",System.Globalization.CultureInfo.InvariantCulture));report.AppendLine($"Hour {hour}: tint {crowds.Palette}.");
             }
             settings.previewHour=12;
-            // Show every placement together so a fade cannot hide a bad anchor during review.
-            var phases=crowds.Groups.Select(g=>g.phase).ToArray();
-            try
-            {
-                for(int i=0;i<phases.Length;i++)crowds.Groups[i].phase=10;
-                crowds.Apply(0);art.SetPan(0);Capture("all-groups");
-                art.SetPan(1);Capture("all-groups-left");art.SetPan(0);
-            }
-            finally{for(int i=0;i<phases.Length;i++)crowds.Groups[i].phase=phases[i];}
-            foreach(float time in new[]{0f,12f,29f,47f,71f,104f}){crowds.Apply(time);Capture("population-"+time);report.AppendLine($"Population time {time}: {crowds.Groups.Count(g=>g.silhouette.enabled)} groups.");}
-            art.SetPan(1);crowds.Apply(29);Capture("left-pan");art.SetPan(.5f);crowds.Apply(47);Capture("mid-pan");
+            // Every placement shows together, so a bad anchor cannot hide during review.
+            art.SetPan(0);Capture("all-groups");
+            art.SetPan(1);Capture("all-groups-left");art.SetPan(0);
+            art.SetPan(1);Capture("left-pan");art.SetPan(.5f);Capture("mid-pan");
             File.WriteAllText(Report+"/validation.txt",report.ToString());
         }
-        finally{settings.previewHour=oldHour;settings.previewHourOn=oldOverride;art.SetPan(oldPan);crowds.Apply(Application.isPlaying?Time.timeSinceLevelLoad:0);}
-        Debug.Log("Crowd lighting, fade and fixed transform verification captured for visual review.");
+        finally{settings.previewHour=oldHour;settings.previewHourOn=oldOverride;art.SetPan(oldPan);crowds.Apply();}
+        Debug.Log("Crowd lighting, hold and fixed transform verification captured for visual review.");
     }
     [MenuItem("Tools/Terminal Art/Crowds/Capture Live White Crowds")]
     public static void Live()
     {
         Directory.CreateDirectory(Report);var crowds=UnityEngine.Object.FindFirstObjectByType<HallWhiteCrowds>();
         if(crowds==null||!Application.isPlaying)throw new InvalidOperationException("Live review requires Play mode.");
-        float seconds=Time.timeSinceLevelLoad;crowds.Apply(seconds);Capture("live-"+Mathf.FloorToInt(seconds));
+        float seconds=Time.timeSinceLevelLoad;crowds.Apply();Capture("live-"+Mathf.FloorToInt(seconds));
         File.AppendAllText(Report+"/validation.txt",$"Live Play frame {seconds:0.00}s: {crowds.Groups.Count(g=>g.silhouette.enabled)} visible groups.\n");
     }    [MenuItem("Tools/Terminal Art/Crowds/Save White Crowd Scene")]
     public static void Save()
@@ -205,7 +195,7 @@ public static class HallWhiteCrowdAuthoring
         var rig=UnityEngine.Object.FindFirstObjectByType<HallLightingRig>();
         typeof(HallLightingRig).GetMethod("LateUpdate",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(rig,null);
         UnityEngine.Object.FindFirstObjectByType<HallBakedLighting>().Apply();
-        var crowds=UnityEngine.Object.FindFirstObjectByType<HallWhiteCrowds>();crowds.Apply(0);
+        var crowds=UnityEngine.Object.FindFirstObjectByType<HallWhiteCrowds>();crowds.Apply();
         EditorSceneManager.MarkSceneDirty(art.gameObject.scene);EditorSceneManager.SaveScene(art.gameObject.scene);
     }}
 
