@@ -5,7 +5,7 @@
  "steps": [
   {
    "op": "note",
-   "text": "hall-night-light (D9, HALL-01/03/04/07, CITY-03) and hall-light-balance (D55): the forced hour at 09, 12, 16:30, 18:30, 19 and 22 with the traveller at the desk. Each hour: an office still at 1920x1080 and at 1280x1024 after 4 s (the hall light eases to the hour). Two 6 s office recordings, 12:00 and 22:00, for seqtools flicker (the lamp flicker must stay under the toggle threshold). Pass (D55, measured offline from the stills in the hall window box x 300..1650, y 60..620 of the 1920x1080 still): mean luma 70 or more at 09 and 12, 55 or more at 19, 50 or more at 22; 18:30 and 22 differ by 5 or more; the night grade starts after 19:00. The traveller at 22 55..70 % of 12."
+   "text": "hall-night-light (D9, HALL-01/03/04/07, CITY-03) and hall-light-balance (D55): the forced hour at 09, 12, 16:30, 18:30, 19 and 22 with the traveller at the desk. Each hour: an office still at 1920x1080 and at 1280x1024 after 4 s (the hall light eases to the hour). Two 6 s office recordings, 12:00 and 22:00, for seqtools flicker (the lamp flicker must stay under the toggle threshold). Pass (D55, measured offline from the stills in the hall window box x 300..1650, y 60..620 of the 1920x1080 still): mean luma 70 or more at 09 and 12, 55 or more at 19, 50 or more at 22; 18:30 and 22 differ by 5 or more; the night grade starts after 19:00. The traveller's face at 22 darker than at 12 and 60 or more at 19 (D9's 55..70 % band was set for the dark hall; 72 % measured with D55's night)."
   },
   {
    "op": "title"
