@@ -102,12 +102,12 @@ public class CamRigTests
     {
         var rect = new Rect(100f, 200f, 400f, 300f);
         List<Vector2> points = CamOps.PickCandidates(rect).ToList();
-        Assert.AreEqual(26, points.Count, "the centre and a 5 by 5 grid");
+        Assert.AreEqual(25, points.Count, "the centre and the 24 other points of a 5 by 5 grid (the grid middle is the centre)");
         Assert.AreEqual(rect.center, points[0], "the centre first: the old pick when nothing covers it");
         Assert.AreEqual(new Vector2(160f, 245f), points[1], "the grid starts 15 % in from the bottom left");
-        Assert.AreEqual(new Vector2(440f, 455f), points[25], "and ends 15 % in from the top right");
+        Assert.AreEqual(new Vector2(440f, 455f), points[24], "and ends 15 % in from the top right");
         Assert.IsTrue(points.All(p => rect.Contains(p)), "every candidate lies on the paper's screen rect");
-        Assert.AreEqual(26, points.Distinct().Count(), "no point twice");
+        Assert.AreEqual(25, points.Distinct().Count(), "no point twice");
     }
 
     [Test]
