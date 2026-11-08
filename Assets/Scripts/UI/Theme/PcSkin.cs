@@ -353,8 +353,9 @@ public sealed class PcSkin : MonoBehaviour
     /// <summary>
     /// The monitor in the theme's look: the bezel redrawn round the glass, the
     /// power switch the neon glyph, the brand plate's ink quiet, the power
-    /// move's dark glass the deep glass and its line and afterglow phosphor,
-    /// and the tube behind the picture the deep glass.
+    /// move's dark glass the low bezel and its line and afterglow phosphor,
+    /// and the tube behind the picture the low bezel (a switched-off CRT
+    /// stays dark while the deck is warm; pc-ui-heuristics round 1).
     /// </summary>
     private void Monitor(PcFrame frame, PcThemeSO theme)
     {
@@ -363,7 +364,7 @@ public sealed class PcSkin : MonoBehaviour
         {
             if (!_tube.HasValue)
                 _tube = desktop.worldCamera.backgroundColor;
-            desktop.worldCamera.backgroundColor = theme.glassDeep;
+            desktop.worldCamera.backgroundColor = theme.bezelLow;
         }
         if (frame == null)
             return;
@@ -384,7 +385,7 @@ public sealed class PcSkin : MonoBehaviour
         if (brand != null && brand.TryGetComponent(out TMP_Text plate))
             Paint(plate, theme.inkMuted);
         Transform glass = casing != null ? casing.Find("Glass") : null;
-        Tint(glass, "PowerVeil", theme.glassDeep);
+        Tint(glass, "PowerVeil", theme.bezelLow);
         Tint(glass, "PowerGlow", theme.phosphor);
         Tint(glass, "Afterglow", theme.phosphor);
     }

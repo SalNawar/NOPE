@@ -33,7 +33,7 @@ public sealed class PcThemeSO : ScriptableObject
     /// <summary>Raised glass: title bars, buttons, plates, tooltips.</summary>
     public Color glassRaised = new Color(0.071f, 0.110f, 0.200f, 1f);
 
-    /// <summary>The deepest glass: the deck, fields, the sidebar, the tube behind the picture.</summary>
+    /// <summary>The deepest glass: the deck, fields, the sidebar.</summary>
     public Color glassDeep = new Color(0.016f, 0.027f, 0.055f, 1f);
 
     /// <summary>Phosphor cyan: the primary (edges that matter, glyphs, focus, the tray, the boot line).</summary>
@@ -77,7 +77,7 @@ public sealed class PcThemeSO : ScriptableObject
     /// <summary>The bezel's casing at its top.</summary>
     public Color bezel = new Color(0.075f, 0.090f, 0.125f, 1f);
 
-    /// <summary>The bezel's casing at its bottom (the chin's shade).</summary>
+    /// <summary>The bezel's casing at its bottom (the chin's shade), the tube behind the picture and the power move's veil.</summary>
     public Color bezelLow = new Color(0.035f, 0.043f, 0.067f, 1f);
 
     /// <summary>The thin lit line along the bezel's outer edge and the rim at the glass.</summary>
