@@ -48,15 +48,13 @@ using UnityEngine.UI;
 /// never moved. Unbound (no art Cinemachine camera), the mat never shows.
 /// </para>
 /// <para>
-/// The painted desk's two texture sets (DESK-01 round 3, the director's
-/// decision of 2026-10-29): once a frame, after the brain moves the camera,
-/// the view sets the global _DeskReadingBlend (ReadingBlend) to the reading
-/// camera's share of the brain's live state: 0 in the office pose, 1 in the
+/// The reading camera's share of the live camera state (ReadingBlend): once
+/// a frame, after the brain moves the camera, 0 in the office pose, 1 in the
 /// reading pose, the blend's own eased weight between (a blend from the
-/// middle of another counted through its nested blend). NOPE/Desk Painted
-/// lerps the office set (v3's paint) to the reading set (the overhead
-/// plates) by it. It follows the tilt and adds no motion of its own: under
-/// Reduced Motion the camera cuts, and so does the share.
+/// middle of another counted through its nested blend). The QA rig's steady
+/// check reads it (QaGame). Nothing draws by it: the painted desk shows one
+/// paint in both views (D57; Saleh's playtest of 2026-11-07, item 13), so
+/// only the camera moves on the switch.
 /// </para>
 /// </summary>
 public sealed class DeskView : MonoBehaviour
@@ -88,14 +86,8 @@ public sealed class DeskView : MonoBehaviour
     /// <summary>Our blend hook, made once (BUG-65e/73e): Unity compiles C# 9, which caches no delegate made from a static method group, so converting <see cref="OwnersBlend"/> in <see cref="Hook"/> made a new delegate on every view change.</summary>
     private static readonly CinemachineCore.GetBlendOverrideDelegate Ours = OwnersBlend;
 
-    /// <summary>The global NOPE/Desk Painted lerps its office paint to its reading paint by (DESK-01 round 3).</summary>
-    public static readonly int ReadingBlendId = Shader.PropertyToID("_DeskReadingBlend");
-
-    /// <summary>The reading camera's share of the live camera state, as last set on the shaders (0 the office pose, 1 the reading pose).</summary>
+    /// <summary>The reading camera's share of the live camera state (0 the office pose, 1 the reading pose, the blend's eased weight between): the QA rig's steady check reads it (QaGame); nothing draws by it (D57).</summary>
     public static float ReadingBlend { get; private set; }
-
-    /// <summary>The share changed (after the brain moved the camera, before the frame renders): the counter's strip fades with it (DeskCounter.FadeInReading).</summary>
-    public static event Action<float> ReadingBlendChanged;
 
     /// <summary>How deep a blend from the middle of another blend is followed (Cinemachine nests one per interrupted blend).</summary>
     private const int MaxNestedBlends = 8;
@@ -149,20 +141,18 @@ public sealed class DeskView : MonoBehaviour
         _hookOwner = null;
         _before = null;
         ReadingBlend = 0f;
-        ReadingBlendChanged = null;
-        Shader.SetGlobalFloat(ReadingBlendId, 0f);
     }
 
     private void OnEnable() => CinemachineCore.CameraUpdatedEvent.AddListener(HandleCameraUpdated);
 
-    /// <summary>A disabled view hands the desk back to its office paint (the next live view sets the share again).</summary>
+    /// <summary>A disabled view's share is 0 (the next live view sets it again).</summary>
     private void OnDisable()
     {
         CinemachineCore.CameraUpdatedEvent.RemoveListener(HandleCameraUpdated);
         SetReadingBlend(0f);
     }
 
-    /// <summary>A brain moved its camera: the reading camera's share of its state goes to the painted desk's shader (only for a brain that drives the reading camera's channel).</summary>
+    /// <summary>A brain moved its camera: the reading camera's share of its state is kept (only for a brain that drives the reading camera's channel).</summary>
     private void HandleCameraUpdated(CinemachineBrain brain)
     {
         if (brain == null || deskCamera == null || _office == null || !brain.IsValidChannel(deskCamera))
@@ -185,15 +175,8 @@ public sealed class DeskView : MonoBehaviour
         return 0f;
     }
 
-    /// <summary>Sets the global the painted desk's shader reads, when it changed.</summary>
-    private static void SetReadingBlend(float share)
-    {
-        if (share == ReadingBlend)
-            return;
-        ReadingBlend = share;
-        Shader.SetGlobalFloat(ReadingBlendId, share);
-        ReadingBlendChanged?.Invoke(share);
-    }
+    /// <summary>Keeps the share.</summary>
+    private static void SetReadingBlend(float share) => ReadingBlend = share;
 
     private void Awake()
     {

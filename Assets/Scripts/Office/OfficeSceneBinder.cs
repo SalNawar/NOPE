@@ -554,12 +554,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         }
 
         // The counter lies along the desk's far edge in the office view's frame, ending where the desk view shows the desk (Papers, Please's zones).
-        // On the painted desk its see-through strip fades out with the reading view (DESK-01 round 3, DESK-04): in the office view it
-        // stays as at 32c54e8; in the reading view its sliver in front of the painted counter strip's bevel was a slate-blue hairline.
+        // On the painted desk its see-through strip is hidden in both poses (DESK-04, D57: the painted counter strip covers it in the
+        // office view; in the reading view its sliver in front of the painted strip's bevel was a slate-blue hairline).
         if (counter != null && _office != null)
         {
             counter.Bind(_office.transform.forward);
-            counter.FadeInReading(_painted);
+            counter.HideStrip(_painted);
         }
         // Everything else stands on its home (the desk home map, DeskLayoutSettings): the stamp rack at the back of the rail by the counter, its daters front to back; DETAIN left of the AVAILABLE sign; the machines and the upgrades' objects, each first-day note over its machine; the deal tray right above the mat; the intercom is the art's phone on its home (a stand-in is built when the art has none).
         Transform standIn = null;

@@ -15,10 +15,11 @@ using NUnit.Framework;
 /// v3's paint, byte for byte (the files at 32c54e8), on v3's meshes, so the
 /// office view cannot change. The reading set (name_Read.png, the same UVs,
 /// E:\unity\NOPE-tools\design\desk\pipeline\export\v6) is painted wholly
-/// from the overhead plates. NOPE/Desk Painted lerps the two by one global,
-/// _DeskReadingBlend, which DeskView sets from the Tab tilt (0 in the office
-/// pose, 1 in the reading pose). Two gap strips beside the mat (DESK-02)
-/// draw only in the reading blend. These checks read the installed files
+/// from the overhead plates. NOPE/Desk Painted draws the reading set in
+/// both poses (D57; item 13 of Saleh's playtest of 2026-11-07: one desk
+/// paint, nothing fades with the Tab tilt; before, it lerped the two by the
+/// tilt's global _DeskReadingBlend). Two gap strips beside the mat (DESK-02)
+/// draw in both poses too. These checks read the installed files
 /// as bytes and text (the house runner runs them outside Unity). Each fails
 /// when its part is reverted.
 /// </summary>
@@ -177,19 +178,19 @@ public class PaintedReadingBakeTests
     }
 
     [Test]
-    public void TheShader_LerpsTheTwoSets_ByTheTiltsGlobal_AndKeepsTheSrpBatcher()
+    public void TheShader_DrawsTheReadingSet_InBothPoses_AndKeepsTheSrpBatcher()
     {
         string shader = Read(ShaderPath);
         string cbuffer = shader.Substring(shader.IndexOf("CBUFFER_START(UnityPerMaterial)", StringComparison.Ordinal));
         cbuffer = cbuffer.Substring(0, cbuffer.IndexOf("CBUFFER_END", StringComparison.Ordinal));
-        StringAssert.Contains("half _Reading, _ReadingOnly;", cbuffer, "the per-material switches sit in the one UnityPerMaterial buffer (SRP Batcher)");
-        StringAssert.DoesNotContain("_DeskReadingBlend", cbuffer, "the tilt's share is a global, not a material property");
-        StringAssert.Contains("float _DeskReadingBlend;", shader);
-        StringAssert.Contains("half reading = (half)saturate(_DeskReadingBlend) * _Reading;", shader);
+        StringAssert.Contains("half _Reading;", cbuffer, "the per-material switch sits in the one UnityPerMaterial buffer (SRP Batcher)");
+        StringAssert.DoesNotContain("_DeskReadingBlend", shader, "D57: no global follows the Tab tilt; the paint is the same in both poses");
+        StringAssert.Contains("half reading = _Reading;", shader, "a material with a reading paint draws it in both poses");
         StringAssert.Contains("if (reading > 0.0h)\n                    paint = lerp(paint, SAMPLE_TEXTURE2D_GRAD(_ReadingMap, sampler_ReadingMap, i.uv, uvDx, uvDy).rgb, reading);", shader,
-            "at a share of 0 the office paint is v3's exactly (the reading paint is not sampled)");
-        StringAssert.Contains("clip(_DeskReadingBlend - 0.001);", shader, "a reading-only material draws nothing in the office pose");
-        Assert.AreEqual(3, Regex.Matches(shader, @"                ClipReadingOnly\(\);").Count, "in the forward, shadow and depth passes");
+            "a material without a reading paint shows its office paint (the reading paint is not sampled)");
+        StringAssert.DoesNotContain("ClipReadingOnly", shader, "nothing is clipped by the pose");
+        StringAssert.DoesNotContain("_ReadingOnly", shader, "nothing fades by the pose");
+        StringAssert.Contains("return half4(MixFog(color, i.fog), 1.0h);", shader, "one alpha in both poses");
     }
 
     [Test]
@@ -205,19 +206,20 @@ public class PaintedReadingBakeTests
         StringAssert.Contains("CinemachineCore.CameraUpdatedEvent.AddListener(HandleCameraUpdated);", view, "set once a frame, after the brain moves the camera");
         StringAssert.Contains("SetReadingBlend(blend != null ? ShareOf(blend, 0) : ReferenceEquals(brain.ActiveVirtualCamera, deskCamera) ? 1f : 0f);", view,
             "from the brain's own blend: a cut (Reduced Motion) cuts it too, with no motion of its own");
-        StringAssert.Contains("Shader.SetGlobalFloat(ReadingBlendId, share);", view);
-        StringAssert.Contains("Shader.PropertyToID(\"_DeskReadingBlend\")", view);
+        StringAssert.DoesNotContain("SetGlobalFloat", view, "D57: nothing draws by the share");
+        StringAssert.DoesNotContain("_DeskReadingBlend", view);
     }
 
     [Test]
-    public void TheGapStrips_CloseTheMatsSideGaps_OnlyInTheReadingBlend()
+    public void TheGapStrips_CloseTheMatsSideGaps_InBothPoses()
     {
         string desk = Read("Assets/Scripts/Office/Desk/DeskPainted.cs");
         StringAssert.Contains("CloseDealTraySlot();\n        CloseGapStrips();", desk, "laid at install (Align)");
         StringAssert.Contains("Resources.Load<Material>(GapStripsMaterial)", desk);
         string mat = Read(Art + "Resources/DeskGapStrips.mat");
         StringAssert.Contains("m_Shader: {fileID: 4800000, guid: " + GuidOf(ShaderPath + ".meta"), mat, "on NOPE/Desk Painted");
-        StringAssert.Contains("\n    - _ReadingOnly: 1\n", mat, "drawn only in the reading blend");
+        StringAssert.DoesNotContain("_ReadingOnly", mat, "D57: drawn in both poses");
+        StringAssert.Contains("\n    - _Reading: 1\n", mat, "its reading paint");
         StringAssert.Contains("\n    - _ZWrite: 1\n", mat, "it writes depth once drawn");
         StringAssert.Contains("m_CustomRenderQueue: 2450", mat, "after the opaque desk, before the transparent counter strip");
         StringAssert.Contains("- _BaseMap:\n        m_Texture: {fileID: 2800000, guid: " + GuidOf(Art + "Textures/DeskGapStrips_Read.png.meta"), mat);
@@ -225,19 +227,20 @@ public class PaintedReadingBakeTests
 
     /// <summary>
     /// DESK-04 (the slate-blue hairline along the paper slot, and the blue block at its right end): the counter's see-through
-    /// strip stays where it lay at 32c54e8 (the office view keeps its look) and fades out with the reading view on the painted
-    /// desk. Rounds 1 and 2 sank it under the mat, which also took its line out of the office view.
+    /// strip stays where it lay at 32c54e8 and is hidden on the painted desk in both poses (D57, item 13: the painted
+    /// counter strip covers it in the office pose; before, it faded out with the Tab tilt). Rounds 1 and 2 sank it under
+    /// the mat, which also took its line out of the office view.
     /// </summary>
     [Test]
-    public void TheCountersStrip_KeepsItsHeight_AndFadesOutWithTheReadingView_OnThePaintedDesk()
+    public void TheCountersStrip_KeepsItsHeight_AndIsHiddenOnThePaintedDesk_InBothPoses()
     {
         string counter = Read("Assets/Scripts/Office/Desk/DeskCounter.cs");
         StringAssert.Contains("private const float ZoneLift = 0.0004f;", counter, "the strip's height at 32c54e8");
-        StringAssert.Contains("tint.a *= 1f - DeskView.ReadingBlend;", counter, "faded by the reading view's share");
-        StringAssert.Contains("DeskView.ReadingBlendChanged += HandleReadingBlend;", counter, "and it follows the share as it changes");
+        StringAssert.Contains("strip.enabled = !hidden;", counter, "hidden, not faded");
+        StringAssert.DoesNotContain("ReadingBlend", counter, "D57: nothing of it follows the Tab tilt");
         string binder = Read("Assets/Scripts/Office/OfficeSceneBinder.cs");
-        StringAssert.Contains("counter.Bind(_office.transform.forward);\n            counter.FadeInReading(_painted);", binder, "only on the painted desk");
+        StringAssert.Contains("counter.Bind(_office.transform.forward);\n            counter.HideStrip(_painted);", binder, "only on the painted desk");
         StringAssert.DoesNotContain("CounterStripLift", binder, "no sinking under the mat (it changed the office view)");
-        StringAssert.Contains("ReadingBlendChanged?.Invoke(share);", Read("Assets/Scripts/Office/DeskView.cs"));
+        StringAssert.DoesNotContain("ReadingBlendChanged", Read("Assets/Scripts/Office/DeskView.cs"), "no fade follows the share");
     }
 }
