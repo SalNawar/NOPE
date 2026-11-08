@@ -47,7 +47,7 @@ public class PaintedReadoutTests
         Assert.GreaterOrEqual(nz, Reader.MinZ, "its near edge over the face");
         Assert.LessOrEqual(fz, Reader.MaxZ, "its far edge over the face");
         Assert.LessOrEqual(width, Reader.Width, "no wider than the face");
-        Assert.Greater(width, 0.6f * Reader.Width, "over half the face's width: a readable line, kept inside the body in the reading view (item 15: the leant window's parallax)");
+        Assert.GreaterOrEqual(width, 0.6f * Reader.Width, "over half the face's width: a readable line, kept inside the body in the reading view (item 15: the leant window's parallax)");
         Assert.AreEqual(height, Distance((nx, ny, nz), (fx, fy, fz)), 1e-5f, "the line keeps its height up the lean");
     }
 

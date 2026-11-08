@@ -32,10 +32,11 @@ public static class PaintedReadout
     /// rides up to 3.5 cm over the face, and the reading view's camera, left
     /// of the reader, shifts it right on screen by about 30 px at 1080p
     /// (the verifier of 2026-11-08: at 0.9 the window's top right corner stood
-    /// up to 29 px past the body over the brass); at 0.66 the right edge comes
-    /// in 28 px and stays inside the painted body in every row.
+    /// up to 29 px past the body over the brass); at 0.6 the right edge comes
+    /// in 36 px and stays inside the painted body in every row, about 8 px
+    /// clear at the top right corner where the reader rests at its home.
     /// </summary>
-    public const float WidthShare = 0.66f;
+    public const float WidthShare = 0.6f;
 
     /// <summary>The line's height as a share of the top face's depth.</summary>
     public const float DepthShare = 0.32f;
