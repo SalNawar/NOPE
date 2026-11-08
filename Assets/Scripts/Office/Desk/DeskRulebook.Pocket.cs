@@ -7,8 +7,11 @@ using UnityEngine;
 /// playtest of 2026-10-28, point 5: "isnt the big red binder for the folder?
 /// why is the folder by default on the desk? still no place for it"). On the
 /// painted desk (SetPocket, the office binder) the folder starts each day in
-/// its pocket: shrunk under the painting's red book (RulebookPocket.Fit), the
-/// book shown, the mat empty. A click on the book brings the folder out onto
+/// its pocket: shrunk under the painting's red book (RulebookPocket.Fit), its
+/// shut board centred under the book (MeasureFit: the root is on the spine,
+/// so a root laid at the book's centre stood the board out through the
+/// pocket's rim; Saleh's playtest of 2026-11-07, item 3), the book shown,
+/// the mat empty. A click on the book brings the folder out onto
 /// the mat at its reading spot (TakeOut, eased over the pocket's lip); a drag
 /// from the book takes it out under the pointer (TakeOutUnder, PocketBook);
 /// the guide's page brings it out too (ShowPage). A folder let go on the
@@ -47,6 +50,9 @@ public sealed partial class DeskRulebook
     private Vector2 _bookSize;
     private bool _fitMeasured;
 
+    /// <summary>The shut board's footprint centre from the folder's root (its own space, on its plane, at its own size; MeasureFit): the root is on the spine, not under the board's middle.</summary>
+    private Vector3 _boardCentre;
+
     /// <summary>The folder's reading spot on the desk (Place): where TakeOut lays it.</summary>
     private Vector3 _readAt;
     private Quaternion _readTurn = Quaternion.identity;
@@ -68,6 +74,9 @@ public sealed partial class DeskRulebook
 
     /// <summary>True while the folder goes into or out of its pocket (its carry or its size still moving): the QA rig waits for it.</summary>
     public bool PocketMoving => _carry.Running || (_inSeconds > 0f && _inElapsed < _inSeconds);
+
+    /// <summary>Where the folder's root lies in its pocket: the book's centre less the board's centre offset at its fit, so the board, not the spine, lies under the book's middle.</summary>
+    private Vector3 PocketRoot => _pocketAt - _readTurn * (_boardCentre * _pocketFit);
 
     /// <summary>
     /// The folder's pocket (the office binder, on the painted desk, after
@@ -91,11 +100,12 @@ public sealed partial class DeskRulebook
     }
 
     /// <summary>
-    /// The folder's fit under the book (RulebookPocket.Fit), measured once on
-    /// its own box at its own size (the shut board's side), as soon as the box
-    /// is there: a folder not on the desk yet (before its day, inactive, its
-    /// box not taken) is measured when it first comes (Show, at the day's
-    /// start). Until then it keeps its size.
+    /// The folder's fit under the book (RulebookPocket.Fit) and its board's
+    /// centre from its root (_boardCentre), measured once on its own box at
+    /// its own size (the shut board's side), as soon as the box is there: a
+    /// folder not on the desk yet (before its day, inactive, its box not
+    /// taken) is measured when it first comes (Show, at the day's start).
+    /// Until then it keeps its size.
     /// </summary>
     private void MeasureFit()
     {
@@ -105,15 +115,17 @@ public sealed partial class DeskRulebook
         if (!TryBoxCorners(corners))
             return;
         float x0 = float.MaxValue, x1 = float.MinValue, z0 = float.MaxValue, z1 = float.MinValue;
-        Vector3 right = _readTurn * Vector3.right, forward = _readTurn * Vector3.forward;
+        Vector3 right = _readTurn * Vector3.right, forward = _readTurn * Vector3.forward, centre = Vector3.zero;
         foreach (Vector3 c in corners)
         {
             x0 = Mathf.Min(x0, Vector3.Dot(c, right));
             x1 = Mathf.Max(x1, Vector3.Dot(c, right));
             z0 = Mathf.Min(z0, Vector3.Dot(c, forward));
             z1 = Mathf.Max(z1, Vector3.Dot(c, forward));
+            centre += c / 8f;
         }
         _pocketFit = RulebookPocket.Fit(_bookSize.x, _bookSize.y, x1 - x0, z1 - z0);
+        _boardCentre = Vector3.ProjectOnPlane(transform.InverseTransformPoint(centre), Vector3.up);
         _fitMeasured = true;
     }
 
@@ -133,7 +145,7 @@ public sealed partial class DeskRulebook
             return;
         _carry.Stop();
         MeasureFit(); // at its own size: until measured its fit is 1
-        transform.SetPositionAndRotation(_pocketAt, _readTurn);
+        transform.SetPositionAndRotation(PocketRoot, _readTurn);
         SizeTo(1f, 0f);
         InPocket();
     }
@@ -198,7 +210,7 @@ public sealed partial class DeskRulebook
         if (!_pocketed || !isActiveAndEnabled)
             return false;
         OutOfPocket();
-        var way = new List<Vector3> { _pocketAt + Vector3.up * PocketLift, _readAt + Vector3.up * PocketLift, _readAt };
+        var way = new List<Vector3> { PocketRoot + Vector3.up * PocketLift, _readAt + Vector3.up * PocketLift, _readAt };
         float seconds = UiMotion.Amount.Still ? 0f : CarrySeconds(way);
         _carry.Start(transform, way, _readTurn, seconds, null);
         SizeTo(0f, seconds);
@@ -228,7 +240,7 @@ public sealed partial class DeskRulebook
             return;
         if (folderCover != null && !folderCover.Shut)
             folderCover.Close();
-        var way = new List<Vector3> { transform.position + Vector3.up * PocketLift, _pocketAt + Vector3.up * PocketLift, _pocketAt };
+        var way = new List<Vector3> { transform.position + Vector3.up * PocketLift, PocketRoot + Vector3.up * PocketLift, PocketRoot };
         float seconds = UiMotion.Amount.Still ? 0f : CarrySeconds(way);
         if (seconds <= 0f)
         {
