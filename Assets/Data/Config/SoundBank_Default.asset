@@ -17,14 +17,16 @@ MonoBehaviour:
     bus: 1
     loop: 0
     priority: 1
-    clips: []
+    clips:
+    - {fileID: 8300000, guid: d858f70f9e291e6429afa78089a8d6b7, type: 3}
     placeholder: 0
     volume: 1
   - id: stamp_deny
     bus: 1
     loop: 0
     priority: 1
-    clips: []
+    clips:
+    - {fileID: 8300000, guid: c64f40009dab9434c8932f416a27002d, type: 3}
     placeholder: 0
     volume: 1
   - id: stamp_miss
@@ -34,27 +36,27 @@ MonoBehaviour:
     clips: []
     placeholder: 0
     volume: 1
-  - id: stamp_bar_out
+  - id: drawer_open
     bus: 1
     loop: 0
     priority: 1
     clips: []
     placeholder: 0
     volume: 1
-  - id: stamp_bar_in
+  - id: drawer_close
     bus: 1
     loop: 0
     priority: 1
-    clips:
-    - {fileID: 8300000, guid: 47541b5e239906b439d3f573c2d5f16b, type: 3}
-    placeholder: 1
+    clips: []
+    placeholder: 0
     volume: 1
   - id: stamp_lift
     bus: 1
     loop: 0
     priority: 3
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: e42b31c087489854493042a10a7898c5, type: 3}
+    placeholder: 1
     volume: 1
   - id: paper_pickup
     bus: 1
@@ -178,6 +180,27 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 967f53dc81613704cb130e3b57106fd6, type: 3}
     placeholder: 1
     volume: 1
+  - id: scanner_lid_open
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: scanner_lid_close
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: scanner_scan
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
   - id: inspect_on
     bus: 1
     loop: 0
@@ -189,8 +212,9 @@ MonoBehaviour:
     bus: 1
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 79d257ca1be88b4448a3e59daa650020, type: 3}
+    placeholder: 1
     volume: 1
   - id: inspect_match
     bus: 1
@@ -225,6 +249,21 @@ MonoBehaviour:
     bus: 1
     loop: 0
     priority: 3
+    clips:
+    - {fileID: 8300000, guid: e4479f1e3e637ba4dacec1568ebabaf2, type: 3}
+    placeholder: 1
+    volume: 1
+  - id: dater_wheel_click
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: dater_reink
+    bus: 1
+    loop: 0
+    priority: 2
     clips: []
     placeholder: 0
     volume: 1
@@ -278,7 +317,21 @@ MonoBehaviour:
     clips: []
     placeholder: 0
     volume: 1
+  - id: portal_kawoosh
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
   - id: detain
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: detain_cover
     bus: 1
     loop: 0
     priority: 2
@@ -296,15 +349,17 @@ MonoBehaviour:
     bus: 0
     loop: 0
     priority: 1
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 4eec26601d13aaf41a7eee94e3295601, type: 3}
+    placeholder: 1
     volume: 1
   - id: pc_off
     bus: 0
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 22c033e81f7c7a44a9c1d83dd8efb201, type: 3}
+    placeholder: 1
     volume: 1
   - id: key_tap
     bus: 0
@@ -360,6 +415,14 @@ MonoBehaviour:
     clips: []
     placeholder: 0
     volume: 1
+  - id: evidence_pin
+    bus: 0
+    loop: 0
+    priority: 2
+    clips:
+    - {fileID: 8300000, guid: 325c5a2af9724d743a67f183368547b5, type: 3}
+    placeholder: 1
+    volume: 1
   - id: ui_hover
     bus: 0
     loop: 0
@@ -395,8 +458,9 @@ MonoBehaviour:
     bus: 0
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: fdfebfd0e4b959946bd68dcc7591ed93, type: 3}
+    placeholder: 1
     volume: 1
   - id: ui_error
     bus: 0
@@ -410,15 +474,17 @@ MonoBehaviour:
     bus: 0
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 9ed2bbc134c816a40a405a1882c67db5, type: 3}
+    placeholder: 1
     volume: 1
   - id: wheel_open
     bus: 0
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: fe8e54a81a6b28242858cb46edc014c4, type: 3}
+    placeholder: 1
     volume: 1
   - id: slot_lever
     bus: 0
@@ -455,8 +521,9 @@ MonoBehaviour:
     bus: 0
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 14755042e16a86d428dfd22efd6c1279, type: 3}
+    placeholder: 1
     volume: 1
   - id: clock_tick
     bus: 1
@@ -500,15 +567,17 @@ MonoBehaviour:
     bus: 1
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: cc089de3d60c3064baa4fe32a5e95cc9, type: 3}
+    placeholder: 1
     volume: 1
   - id: citation_hit
     bus: 1
     loop: 0
     priority: 1
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 5eb8ed1f2c49cd34ba4f9f2a9c80f956, type: 3}
+    placeholder: 1
     volume: 1
   - id: helix_pulse
     bus: 1
@@ -521,15 +590,17 @@ MonoBehaviour:
     bus: 1
     loop: 0
     priority: 1
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 94a58b4449961aa43b1d0f2868090707, type: 3}
+    placeholder: 1
     volume: 1
   - id: famous_pass
     bus: 1
     loop: 0
     priority: 2
-    clips: []
-    placeholder: 0
+    clips:
+    - {fileID: 8300000, guid: 7747a9c160e035648add5487311466e1, type: 3}
+    placeholder: 1
     volume: 1
   - id: amb_hall_day
     bus: 2
@@ -604,6 +675,132 @@ MonoBehaviour:
   - id: mus_desk_tense
     bus: 3
     loop: 1
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: chip_insert
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: chip_read
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: chip_ok
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: chip_fault
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: chip_eject
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: uv_on
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: uv_off
+    bus: 1
+    loop: 0
+    priority: 1
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: uv_hum
+    bus: 1
+    loop: 1
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: crate_tear
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: crate_pop
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: adf_feed
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: beacon_pop
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: cartridge_in
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: translator_chirp
+    bus: 1
+    loop: 0
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: loupe_tick
+    bus: 1
+    loop: 0
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: arm_fold
+    bus: 1
+    loop: 0
+    priority: 3
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: relay_clack
+    bus: 1
+    loop: 0
+    priority: 2
+    clips: []
+    placeholder: 0
+    volume: 1
+  - id: rolodex_flick
+    bus: 1
+    loop: 0
     priority: 3
     clips: []
     placeholder: 0
