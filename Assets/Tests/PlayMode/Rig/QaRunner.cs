@@ -87,7 +87,7 @@ public sealed class QaRunner : MonoBehaviour
     /// <summary>Every op a step may name (lower case; docs/pending/QA-RIG.md describes each).</summary>
     public static readonly string[] Ops =
     {
-        "title", "newrun", "waitoffice", "startshift", "sign", "waittraveller", "hour", "jumpday", "cheat", "call", "button", "click",
+        "title", "newrun", "waitoffice", "startshift", "sign", "waittraveller", "hour", "weather", "jumpday", "cheat", "call", "button", "click",
         "drag", "key", "move", "wait", "waitscene", "res", "recstart", "recstop", "record", "still", "track", "probe", "gc", "selftest",
         "cameracheck", "mark", "note", "quit", "waitactive", "realtime", "drop",
     };
@@ -307,6 +307,11 @@ public sealed class QaRunner : MonoBehaviour
                 break;
             case "hour":
                 DevToolsState.ForcedHour = s.f < 0f ? (float?)null : s.f;
+                _hourForced = true;
+                yield return QaGame.Frames(5);
+                break;
+            case "weather":
+                DevToolsState.ForcedRain = s.f < 0f ? (bool?)null : s.f > 0f;
                 _hourForced = true;
                 yield return QaGame.Frames(5);
                 break;
@@ -952,7 +957,10 @@ public sealed class QaRunner : MonoBehaviour
         if (_oldSeed.HasValue && RunManager.HasInstance && RunManager.Instance.Config != null)
             RunManager.Instance.Config.fixedRunSeed = _oldSeed.Value;
         if (_hourForced)
+        {
             DevToolsState.ForcedHour = null;
+            DevToolsState.ForcedRain = null;
+        }
         Input?.Dispose();
     }
 
