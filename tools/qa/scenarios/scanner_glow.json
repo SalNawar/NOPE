@@ -26,7 +26,7 @@
     { "op": "drag", "name": "top_to_mat", "path": "Plain", "target": "PaperTemplate(Clone)", "x2": 0.5, "y2": 0.5 },
     { "op": "wait", "f": 1.5 },
     { "op": "recStart", "name": "scan_top" },
-    { "op": "drag", "name": "top_to_scanner", "path": "Plain", "target": "PaperTemplate(Clone)", "target2": "Scanner" },
+    { "op": "drag", "name": "top_to_scanner", "path": "Plain", "target": "PaperTemplate(Clone)", "x2": 0.89, "y2": 0.43 },
     { "op": "wait", "f": 2.5 },
     { "op": "recStop" },
     { "op": "still", "name": "top_scanned" },
