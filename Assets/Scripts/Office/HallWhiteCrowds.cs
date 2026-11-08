@@ -32,18 +32,10 @@ public sealed class HallWhiteCrowds : MonoBehaviour
         }
     }
     public void Configure(HallLightingRig rig,SpriteRenderer hall,Group[] entries)
-    {lighting=rig;architecture=hall;groups=entries;Apply(0);}
-    public static float Fade(Group group,float seconds)
-    {
-        float t=Mathf.Repeat(seconds+group.phase,group.cycle);
-        const float duration=4;
-        if(t<duration)return Mathf.SmoothStep(0,1,t/duration);
-        if(t<duration+group.hold)return 1;
-        if(t<duration*2+group.hold)return 1-Mathf.SmoothStep(0,1,(t-duration-group.hold)/duration);
-        return 0;
-    }
-    void LateUpdate()=>Apply(Application.isPlaying?Time.timeSinceLevelLoad:0);
-    public void Apply(float seconds)
+    {lighting=rig;architecture=hall;groups=entries;Apply();}
+    void LateUpdate()=>Apply();
+    /// <summary>Writes every group's mesh, tint and contact; runs each frame and after the editor tools change the opacity.</summary>
+    public void Apply()
     {
         properties??=new MaterialPropertyBlock();
         var color=Palette;
