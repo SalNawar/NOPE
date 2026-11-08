@@ -59,8 +59,8 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// <summary>How far (overlay units) the Bureau memo may drop below its home to clear a long small story; at 16:9 its foot then stays on screen.</summary>
     [SerializeField] private float memoMaxDrop = 80f;
 
-    /// <summary>The smallest size of the small story's type, as a fraction of its built size, when the memo at its lowest still covers it.</summary>
-    [SerializeField, Range(0.5f, 1f)] private float storyMinScale = 0.85f;
+    /// <summary>The smallest size of the small story's type, as a fraction of its built size, when the memo at its lowest still covers it (0.75: on a day whose paper seats famous premades the story runs 18 lines, and 0.85 left the memo over its last line).</summary>
+    [SerializeField, Range(0.5f, 1f)] private float storyMinScale = 0.75f;
 
     [Header("Results Panel")]
     /// <summary>Root of the results panel.</summary>
