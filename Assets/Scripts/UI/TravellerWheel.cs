@@ -182,6 +182,8 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         {
             bubble.PlacedByOwner = true; // the bubble belongs to the traveller and keeps clear of the wheel: PlaceBubble
             bubble.Appear = AppearStyle.Fade; // laid out whole, then revealed in place: nothing in the bubble moves (D26)
+            if (bubble.Label != null)
+                bubble.Label.overflowMode = TextOverflowModes.Ellipsis; // a line that fills the plate even at the smallest size ends in an ellipsis, never cut mid-glyph
             _tail = bubble.Panel != null ? bubble.Panel.Find("Tail") as RectTransform : null;
             if (_tail != null)
             {
