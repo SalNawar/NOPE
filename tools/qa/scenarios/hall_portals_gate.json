@@ -1,0 +1,319 @@
+{
+  "name": "hall_portals_gate",
+  "owner": "HALL-GATE",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "HALL-GATE (the night of 2026-11-07, DECISIONS D6): the hall portals as gates. Day 1, the tutorial skipped (its hint plate covered ring 1), the AVAILABLE sign not pressed (no traveller in front of ring 1), LIGHT's dust hidden ('Hall FX: dust', toggled back at the end) and the hall's flyers tracked, as in hall_fx_portals. The cheat 'Switchboard: 3 test calls' rings three calls; HallGateRig's hallGateDial answers them through the board's rules (module 01 on the first route, module 02 on the other; the drags are swb01-play's). gate_dial_h12 records ring 01 from the lock-in through its seven chevrons, the open and the kawoosh; gate_pool_h12 and gate_pool_h22 10 s of its open event horizon by day and night; gate_close_h22 its close (hallGateClear pulls module 01's PLACE cord). A second call set at night dials ring 01 again for the night stills. Stills at 1920x1080 and 2560x1080 by day (12) and night (22): offline, locked in, kawoosh, open, closed. Pass: tools/hall/gate_check.py <run> (the chevrons' rate and one change per 2 s, the pool under 8 % of its pixels a frame, the kawoosh in 36 frames peaking at frame 10 to 14 with no step over 0.15, the close with no step over 0.1, no flicker inside the ring's quad), the rig's gate.dial and gate.clear lines, and the stills by eye."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "track",
+      "name": "guide_arrow",
+      "target": "OfficeOverlayCanvas/GuidePrompt/Arrow"
+    },
+    {
+      "op": "track",
+      "name": "car0",
+      "target": "Exterior flying vehicle 0"
+    },
+    {
+      "op": "track",
+      "name": "car1",
+      "target": "Exterior flying vehicle 1"
+    },
+    {
+      "op": "track",
+      "name": "car2",
+      "target": "Exterior flying vehicle 2"
+    },
+    {
+      "op": "track",
+      "name": "car3",
+      "target": "Exterior flying vehicle 3"
+    },
+    {
+      "op": "track",
+      "name": "car4",
+      "target": "Exterior flying vehicle 4"
+    },
+    {
+      "op": "track",
+      "name": "car5",
+      "target": "Exterior flying vehicle 5"
+    },
+    {
+      "op": "track",
+      "name": "car6",
+      "target": "Exterior flying vehicle 6"
+    },
+    {
+      "op": "track",
+      "name": "car7",
+      "target": "Exterior flying vehicle 7"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
+    },
+    {
+      "op": "hour",
+      "f": 12
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Switchboard: 3 test calls"
+    },
+    {
+      "op": "hallGateTrack",
+      "n": 1
+    },
+    {
+      "op": "hallGateTrack",
+      "n": 2
+    },
+    {
+      "op": "still",
+      "name": "gate_offline_h12"
+    },
+    {
+      "op": "recstart",
+      "name": "gate_dial_h12"
+    },
+    {
+      "op": "hallGateDial",
+      "n": 1
+    },
+    {
+      "op": "hallGateDial",
+      "n": 2,
+      "text": "optional"
+    },
+    {
+      "op": "wait",
+      "n": 285
+    },
+    {
+      "op": "still",
+      "name": "gate_lockedin_h12"
+    },
+    {
+      "op": "hallGateWait",
+      "n": 1,
+      "name": "Sending",
+      "f": 240
+    },
+    {
+      "op": "wait",
+      "n": 12
+    },
+    {
+      "op": "still",
+      "name": "gate_kawoosh_h12"
+    },
+    {
+      "op": "hallGateWait",
+      "n": 1,
+      "name": "Open",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "still",
+      "name": "gate_open_h12"
+    },
+    {
+      "op": "record",
+      "name": "gate_pool_h12",
+      "f": 10
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "hallGateTrack",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "gate_open_h12"
+    },
+    {
+      "op": "hour",
+      "f": 22
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "still",
+      "name": "gate_open_h22"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "hallGateTrack",
+      "n": 1
+    },
+    {
+      "op": "still",
+      "name": "gate_open_h22"
+    },
+    {
+      "op": "record",
+      "name": "gate_pool_h22",
+      "f": 10
+    },
+    {
+      "op": "recstart",
+      "name": "gate_close_h22"
+    },
+    {
+      "op": "hallGateClear",
+      "n": 1
+    },
+    {
+      "op": "hallGateWait",
+      "n": 1,
+      "name": "Offline",
+      "f": 60
+    },
+    {
+      "op": "wait",
+      "n": 15
+    },
+    {
+      "op": "recstop"
+    },
+    {
+      "op": "still",
+      "name": "gate_closed_h22"
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Switchboard: 3 test calls"
+    },
+    {
+      "op": "hallGateDial",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 9.5
+    },
+    {
+      "op": "still",
+      "name": "gate_lockedin_h22"
+    },
+    {
+      "op": "res",
+      "w": 2560,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "n": 5
+    },
+    {
+      "op": "still",
+      "name": "gate_lockedin_h22"
+    },
+    {
+      "op": "hallGateWait",
+      "n": 1,
+      "name": "Sending",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 0.4
+    },
+    {
+      "op": "still",
+      "name": "gate_kawoosh_h22"
+    },
+    {
+      "op": "hallGateWait",
+      "n": 1,
+      "name": "Open",
+      "f": 60
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "gate_open_after_h22"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "hour",
+      "f": -1
+    },
+    {
+      "op": "cheat",
+      "name": "Extra",
+      "text": "Hall FX: dust"
+    },
+    {
+      "op": "probe",
+      "name": "end"
+    }
+  ]
+}
