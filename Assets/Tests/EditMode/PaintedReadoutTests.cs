@@ -47,7 +47,7 @@ public class PaintedReadoutTests
         Assert.GreaterOrEqual(nz, Reader.MinZ, "its near edge over the face");
         Assert.LessOrEqual(fz, Reader.MaxZ, "its far edge over the face");
         Assert.LessOrEqual(width, Reader.Width, "no wider than the face");
-        Assert.Greater(width, 0.8f * Reader.Width, "most of the face's width: a readable line");
+        Assert.Greater(width, 0.6f * Reader.Width, "over half the face's width: a readable line, kept inside the body in the reading view (item 15: the leant window's parallax)");
         Assert.AreEqual(height, Distance((nx, ny, nz), (fx, fy, fz)), 1e-5f, "the line keeps its height up the lean");
     }
 
@@ -94,6 +94,34 @@ public class PaintedReadoutTests
     /// shows taller from the chair than flat.
     /// </summary>
     [Test]
+    public void TheLargestType_FillsTheLine_AndReadsFromTheChairAt1080p()
+    {
+        (float width, float height) = PaintedReadout.LineSize(PaintedReader);
+        float size = PaintedReadout.FontSizeMax(PaintedReader);
+        Assert.AreEqual(PaintedReadout.TextSize(PaintedReader).height, size * PaintedReadout.EmPerFontSize, 1e-6f, "the largest em is the text's height inside the glass");
+        Assert.Greater(size * PaintedReadout.EmPerFontSize, 0.8f * height, "most of the line's height: the pad takes little");
+        Assert.Greater(size, OldFontSizeMax * 5f, "far over the old reader's cap");
+
+        float line = ScreenHeight(PaintedReadout.NearEdge(PaintedReader), PaintedReadout.FarEdge(PaintedReader));
+        Assert.GreaterOrEqual(line, 32f, $"the line {line:0.0} px high from the chair at 1080p (the largest em; at least 32 px)");
+        float old = line * OldFontSizeMax * PaintedReadout.EmPerFontSize / height;
+        Assert.Less(old, 8f, $"the old cap's em {old:0.0} px: the review's smear");
+
+        (float nx, float ny, float nz) = PaintedReadout.NearEdge(PaintedReader);
+        float flat = ScreenHeight((nx, ny, nz), (nx, ny, nz + height));
+        Assert.Greater(line, 1.4f * flat, $"leant {line:0.0} px against flat {flat:0.0} px: the lean shows the line taller from the chair");
+
+        float wide = ScreenWidth((nx - width / 2f, ny, nz), (nx + width / 2f, ny, nz));
+        Assert.GreaterOrEqual(wide, 80f, $"the line {wide:0} px wide from the chair at 1080p");
+    }
+
+    /// <summary>
+    /// Saleh's playtest of 2026-11-07, item 15: the line is a VFD window.
+    /// The glass is the line's size, the text sits inside it by the pad, the
+    /// bezel runs round it a step behind, and the window stays over the
+    /// face, past the painted card slot line and short of the lamp's rim.
+    /// </summary>
+    [Test]
     public void TheWindow_HoldsTheTextInItsGlass_InsideItsBezel_ClearOfTheFaceAndTheSlot()
     {
         (float width, float height) = PaintedReadout.LineSize(PaintedReader);
@@ -114,28 +142,6 @@ public class PaintedReadoutTests
         Assert.Greater(nz - PaintedReader.MinZ, 0.29f * PaintedReader.Depth, "the window's near edge beyond the painted slot line: the slot stays in view under it");
         (_, _, float fz) = PaintedReadout.FarEdge(PaintedReader);
         Assert.Less(fz, PaintedReader.MaxZ - 0.1f * PaintedReader.Depth, "its far edge short of the far rim: the lamp's corner stays clear");
-    }
-
-    [Test]
-    public void TheLargestType_FillsTheLine_AndReadsFromTheChairAt1080p()
-    {
-        (float width, float height) = PaintedReadout.LineSize(PaintedReader);
-        float size = PaintedReadout.FontSizeMax(PaintedReader);
-        Assert.AreEqual(PaintedReadout.TextSize(PaintedReader).height, size * PaintedReadout.EmPerFontSize, 1e-6f, "the largest em is the text's height inside the glass");
-        Assert.Greater(size * PaintedReadout.EmPerFontSize, 0.8f * height, "most of the line's height: the pad takes little");
-        Assert.Greater(size, OldFontSizeMax * 5f, "far over the old reader's cap");
-
-        float line = ScreenHeight(PaintedReadout.NearEdge(PaintedReader), PaintedReadout.FarEdge(PaintedReader));
-        Assert.GreaterOrEqual(line, 32f, $"the line {line:0.0} px high from the chair at 1080p (the largest em; at least 32 px)");
-        float old = line * OldFontSizeMax * PaintedReadout.EmPerFontSize / height;
-        Assert.Less(old, 8f, $"the old cap's em {old:0.0} px: the review's smear");
-
-        (float nx, float ny, float nz) = PaintedReadout.NearEdge(PaintedReader);
-        float flat = ScreenHeight((nx, ny, nz), (nx, ny, nz + height));
-        Assert.Greater(line, 1.4f * flat, $"leant {line:0.0} px against flat {flat:0.0} px: the lean shows the line taller from the chair");
-
-        float wide = ScreenWidth((nx - width / 2f, ny, nz), (nx + width / 2f, ny, nz));
-        Assert.GreaterOrEqual(wide, 80f, $"the line {wide:0} px wide from the chair at 1080p");
     }
 
     /// <summary>The screen height (px, 1920 x 1080) between two points of the painted desk's frame seen from the office eye (DeskHomeMap.OfficeEye).</summary>

@@ -902,8 +902,8 @@ public sealed class DeskPainted : MonoBehaviour
 
     private static float Inverse(float v) => Mathf.Abs(v) < 1e-6f ? 1f : 1f / v;
 
-    /// <summary>The VFD window's glass (a dark green, the phosphor's bed) and its bezel (near black).</summary>
-    private static readonly Color VfdGlassColour = new Color(0.03f, 0.08f, 0.05f, 1f), VfdBezelColour = new Color(0.07f, 0.07f, 0.06f, 1f);
+    /// <summary>The VFD window's glass (a dark green, the phosphor's bed) and its bezel (a mid grey: it reads against the glass and against the cream body, where a near-black bezel vanished into the glass).</summary>
+    private static readonly Color VfdGlassColour = new Color(0.01f, 0.03f, 0.015f, 1f), VfdBezelColour = new Color(0.20f, 0.20f, 0.19f, 1f);
 
     /// <summary>
     /// A flat quad of <paramref name="size"/> (metres) in <paramref name="colour"/> under the readout <paramref name="line"/>, named <paramref name="name"/> (made once; found again by name), centred on the line and <paramref name="depth"/> behind its text (a TextMeshPro and Unity's quad both show on their -Z), unlit, no shadows, on the line's layer.
@@ -916,13 +916,11 @@ public sealed class DeskPainted : MonoBehaviour
             var made = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             made.GetComponent<MeshFilter>().sharedMesh = Resources.GetBuiltinResource<Mesh>("Quad.fbx");
             var renderer = made.GetComponent<MeshRenderer>();
-            // The PC screen's art material (URP Unlit) when the desk has it, else URP's own unlit: the glass is dark on its own, lit or not.
-            Material material = screen != null && screen.sharedMaterial != null ? new Material(screen.sharedMaterial) : new Material(Shader.Find("Universal Render Pipeline/Unlit"));
-            material.name = $"Readout {name} (runtime)";
-            if (material.HasProperty("_BaseColor"))
-                material.SetColor("_BaseColor", colour);
-            else
-                material.color = colour;
+            // URP's own unlit in the flat colour: the glass is dark on its own, lit or not. Never the PC screen's material: by the time the desk
+            // wears the readout (BindDesk, after BindPc), PcScreenClone has swapped it for its PlanarScreen instance, which has no _BaseColor
+            // and draws the live desktop (the verifier of 2026-11-08: a 78 x 19 px copy of the PC's picture in the window's centre).
+            var material = new Material(Shader.Find("Universal Render Pipeline/Unlit")) { name = $"Readout {name} (runtime)" };
+            material.SetColor("_BaseColor", colour);
             renderer.sharedMaterial = material;
             renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             renderer.receiveShadows = false;

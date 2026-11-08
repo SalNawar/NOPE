@@ -27,8 +27,15 @@ public static class PaintedReadout
     /// <summary>The line's near edge floats this far over the top face (metres): room for the bezel behind the glass (BezelDepth) at the near edge.</summary>
     public const float Lift = 0.002f;
 
-    /// <summary>The line's width as a share of the top face's width.</summary>
-    public const float WidthShare = 0.9f;
+    /// <summary>
+    /// The line's width as a share of the top face's width. The leant line
+    /// rides up to 3.5 cm over the face, and the reading view's camera, left
+    /// of the reader, shifts it right on screen by about 30 px at 1080p
+    /// (the verifier of 2026-11-08: at 0.9 the window's top right corner stood
+    /// up to 29 px past the body over the brass); at 0.66 the right edge comes
+    /// in 28 px and stays inside the painted body in every row.
+    /// </summary>
+    public const float WidthShare = 0.66f;
 
     /// <summary>The line's height as a share of the top face's depth.</summary>
     public const float DepthShare = 0.32f;
