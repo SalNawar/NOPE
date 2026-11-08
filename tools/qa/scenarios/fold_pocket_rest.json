@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "folder-holder-clip (Saleh's playtest of 2026-11-07, item 3: 'Folder clipping in the folder holder'). The folder at rest in its pocket at the day's start (the shift started and signed, so the briefing is away), the office view and the reading view, 1920x1080 and 1280x1024. deskinspect writes the world bounds of the folder (Rulebook), the painted book (Desk_RulebookFolded) and the pocket (Desk_Pocket, its Flap listed under it) to inspect_<name>.txt: the folder's box and renderers must lie inside the pocket's footprint and under the book's top. No assertion: a diagnosis scenario, judged on the stills and the inspect files."
+      "text": "folder-holder-clip (Saleh's playtest of 2026-11-07, item 3: 'Folder clipping in the folder holder'). The folder at rest in its pocket at the day's start (the shift started and signed, so the briefing is away), the office view and the reading view, 1920x1080 and 1280x1024. deskinspect writes the world bounds of the folder (Rulebook), the painted book (Desk_RulebookFolded) and the pocket (Desk_Pocket, its Flap listed under it) to inspect_<name>.txt: the folder's box and renderers must lie inside the pocket's footprint and under the book's top. No assertion: a diagnosis scenario, judged on the stills and the inspect files. pocket-hover-clip: then the pointer moves onto the book (its screen point at 1920x1080, as a fraction) and rests 1 s, a still and the book's and the pocket's inspect with the book lifted (book_hover, pocket_hover): the book's top must stay under the flap's bottom; then the pointer leaves."
     },
     {
       "op": "title"
@@ -54,6 +54,40 @@
       "op": "deskinspect",
       "name": "pocket_office",
       "target": "Desk_Pocket"
+    },
+    {
+      "op": "move",
+      "x": 0.2654,
+      "y": 0.1749,
+      "n": 20
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "still",
+      "name": "office_hover_1080"
+    },
+    {
+      "op": "deskinspect",
+      "name": "book_hover",
+      "target": "Desk_RulebookFolded"
+    },
+    {
+      "op": "deskinspect",
+      "name": "pocket_hover",
+      "target": "Desk_Pocket"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.5,
+      "n": 20
+    },
+    {
+      "op": "wait",
+      "f": 1.0
     },
     {
       "op": "call",
