@@ -21,7 +21,7 @@ public static class HallDayCycle
     /// field defaults read these, and <see cref="Active"/> starts from them
     /// (sunrise 07:00, sunset 16:30, 1.5 h twilights, fixtures on below 0.6
     /// daylight over a 0.1 band, 4 minutes apart). The shipped asset
-    /// (HallLighting_Default) tunes its own values (fixtures on below 0.8);
+    /// (HallLighting_Default) tunes its own values (sunset 19:45, fixtures on below 0.8);
     /// they reach every reader once the rig publishes them, each frame.
     /// </summary>
     public static readonly Settings Defaults = new Settings(7f, 16.5f, 1.5f, 0.6f, 0.1f, 4f);
@@ -42,10 +42,11 @@ public static class HallDayCycle
     /// The hour the cheat menu's Dusk sets (P0-A seam; owner LIGHT, read by
     /// RUN-SAFE's DevCheats): 18:30, the plan's H4 and the value the seam was
     /// stubbed with, so the LIGHT pass compares cheat Dusk with a natural
-    /// 18:30 (FIX_PLAN LIGHT). On the one cycle with the shipped knobs 18:30
-    /// is already full night; moving it to the cycle's sunset
-    /// (<see cref="HourAtEvening"/> of 0.5, 16:30) is a proposal waiting
-    /// for the orchestrator (docs/pending/LIGHT.md), not done here.
+    /// 18:30 (FIX_PLAN LIGHT). With the shipped knobs (D55: the dusk runs
+    /// 19:00 to 20:30) 18:30 is still the full day, so Dusk shows the day
+    /// hall; moving it into the dusk (<see cref="HourAtEvening"/> of 0.5,
+    /// the sunset, 19:45) is an open call (hall-light-balance's suggested
+    /// scope), not done here.
     /// </summary>
     public static float DuskHour => 18.5f;
 
