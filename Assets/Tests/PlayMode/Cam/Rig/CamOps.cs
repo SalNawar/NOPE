@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || TIMEDESK_QA
+﻿#if UNITY_EDITOR || TIMEDESK_QA
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.TextCore;
 using UnityEngine.UI;
@@ -1410,6 +1411,60 @@ public static class CamOps
         UnityEngine.Object.FindObjectsByType<DeskDocument>()
                       .Where(p => p.isActiveAndEnabled && p.Zone == zone && !p.IsSliding).OrderBy(p => p.Index).ToList();
 
+    /// <summary>
+    /// The screen points to try for a pick on a paper whose screen rect is
+    /// <paramref name="rect"/> (pure): its centre first, then a 5 by 5 grid
+    /// inset 15 % from its edges, row by row from the bottom left. Bounce 1
+    /// of cam-play-d12-retarget: since doc-data-size (TC-230 at 1.6) Ines
+    /// Varga's TC-230 and TC-520 lie over the chip card's centre on the mat,
+    /// and a drag from the centre took the covering paper (3 chip_fault, 0
+    /// chip_read), as a player's would.
+    /// </summary>
+    public static IEnumerable<Vector2> PickCandidates(Rect rect)
+    {
+        yield return rect.center;
+        for (int iy = 0; iy < 5; iy++)
+            for (int ix = 0; ix < 5; ix++)
+                yield return new Vector2(Mathf.Lerp(rect.xMin, rect.xMax, 0.15f + 0.175f * ix), Mathf.Lerp(rect.yMin, rect.yMax, 0.15f + 0.175f * iy));
+    }
+
+    private static readonly List<RaycastResult> PickHits = new List<RaycastResult>();
+
+    /// <summary>True when the pointer at <paramref name="screen"/> reaches <paramref name="paper"/>: the event system's first hit (the same raycast DeskDraggable's drag begins from) is under it.</summary>
+    private static bool Reaches(DeskDocument paper, Vector2 screen)
+    {
+        EventSystem events = EventSystem.current;
+        if (events == null || screen.x < 0f || screen.y < 0f || screen.x > Screen.width || screen.y > Screen.height)
+            return false;
+        PickHits.Clear();
+        events.RaycastAll(new PointerEventData(events) { position = screen }, PickHits);
+        return PickHits.Count > 0 && PickHits[0].gameObject != null && PickHits[0].gameObject.transform.IsChildOf(paper.transform);
+    }
+
+    /// <summary>
+    /// Where camplay picks <paramref name="paper"/> up: the first of
+    /// <see cref="PickCandidates"/> over its screen rect the pointer reaches
+    /// (<see cref="Reaches"/>), so a drag takes this paper and not one lying
+    /// over it; its centre when none does (the old pick; the caller notes
+    /// it), null when it is off the screen.
+    /// </summary>
+    private static Vector2? PickPoint(DeskDocument paper, out bool reached)
+    {
+        reached = false;
+        Rect? rect = QaGame.ScreenRect(paper.gameObject);
+        if (rect == null)
+            return QaGame.ScreenPoint(paper.gameObject);
+        foreach (Vector2 p in PickCandidates(rect.Value))
+        {
+            if (Reaches(paper, p))
+            {
+                reached = true;
+                return p;
+            }
+        }
+        return QaGame.ScreenPoint(paper.gameObject);
+    }
+
     /// <summary>Waits (real time) until <paramref name="condition"/> holds or <paramref name="timeout"/> s pass, then tells <paramref name="held"/> which (no throw: camplay notes a miss and goes on).</summary>
     private static IEnumerator Wait(Func<bool> condition, float timeout, Action<bool> held)
     {
@@ -1633,7 +1688,9 @@ public static class CamOps
                 }
                 DeskDocument paper = onDesk[i % onDesk.Count];
                 yield return Reach(scanner.BedPoint);
-                Vector2? from = QaGame.ScreenPoint(paper.gameObject), to = ScreenOf(scanner.BedPoint);
+                Vector2? from = PickPoint(paper, out bool reached), to = ScreenOf(scanner.BedPoint);
+                if (!reached && from != null && notes.Count < 12)
+                    notes.Add($"scan {i + 1}: paper {paper.Index} is covered whole (picked at its centre)");
                 if (from == null || to == null)
                 {
                     notes.Add("the scanner's bed is off the screen");
@@ -1670,7 +1727,9 @@ public static class CamOps
                 }
                 tried.Add(paper.Index);
                 yield return Reach(reader.DockPoint(MachineDock.Pad));
-                Vector2? from = QaGame.ScreenPoint(paper.gameObject), to = ScreenOf(reader.DockPoint(MachineDock.Pad));
+                Vector2? from = PickPoint(paper, out bool reached), to = ScreenOf(reader.DockPoint(MachineDock.Pad));
+                if (!reached && from != null && notes.Count < 12)
+                    notes.Add($"chip try {attempt + 1}: paper {paper.Index} is covered whole (picked at its centre)");
                 if (from == null || to == null)
                 {
                     notes.Add("the chip reader is off the screen");
