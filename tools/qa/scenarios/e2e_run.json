@@ -167,7 +167,7 @@
     },
     {
       "op": "stampHandBack",
-      "n": 0
+      "n": 1
     },
     {
       "op": "waitTraveller",
@@ -214,7 +214,7 @@
     },
     {
       "op": "stampHandBack",
-      "n": 0
+      "n": 1
     },
     {
       "op": "key",
