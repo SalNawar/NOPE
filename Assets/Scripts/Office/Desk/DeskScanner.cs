@@ -215,6 +215,9 @@ public sealed class DeskScanner : MonoBehaviour, IPaperDock
         bedCentre = bed;
     }
 
+    /// <summary>Sets where the bar runs, in local Z (<paramref name="z"/>: from the glass's front edge to its back edge): the office binder fits it to the painted scanner's glass.</summary>
+    public void FitSweep(Vector2 z) => sweepZ = z;
+
     /// <summary>True when a world point lies over the drop area.</summary>
     public bool Contains(Vector3 world)
     {
