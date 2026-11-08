@@ -120,7 +120,7 @@ MonoBehaviour:
         labelInk: '#60261B'
         valueShare: 0.56
         labelShare: 0.56
-        reading: 1.35
+        reading: 1.6
         photo:
           x0: 0
           y0: 0

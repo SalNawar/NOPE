@@ -16,6 +16,15 @@
 // write; it depth-tests, so the preserved 3D desk in front hides it. Two passes of the same code:
 // UniversalForward for the office camera, and Universal2D for the anime hall's 2D backdrop camera
 // (HallBackdrop), which draws it among the painted layers (unlit: it ignores the hall's Light2Ds).
+// The rings as gates (the night of 2026-11-07, DECISIONS D6; PortalGate, PortalEffect): with _Gate.x on, an open
+// ring shows the event horizon instead of the swirl: a slow rippling pool in two cel tones of the ring's light
+// (_Mid dark water, _Light thin crests), irregular ripple bands running out to the rim under 1 Hz (_Gate.y, _Pool), a
+// light centre, a soft rim glow inside the painted edge and the ink line on it; a send's kawoosh (_Gate.w, _Kawoosh) swells
+// a plume of the light tone from the core out to its front and back, its heart white-hot and the whole ring lifted
+// for the bloom. The chevrons (_Chevron, _ChevronRing) are drawn outside the hole, on the ring's metal band: the
+// Stargate's V lamps in a dark housing with an ink outline, lit in the dial's order (three down the right, three
+// down the left, the top one last), never over what stands in front. _Gate.z fades the horizon, _Chevron.w the
+// chevrons (the close). Every time-varying input comes from PortalEffect, so reduced motion holds the pool still.
 Shader "TimeDesk/PortalGlow"
 {
     Properties
@@ -32,6 +41,14 @@ Shader "TimeDesk/PortalGlow"
         _Swirl ("x: arms, y: twist (negative: the other way), z: angle (radians), w: the sparkles' drift", Vector) = (3, 2.2, 0, 0)
         _Life ("x: iris (share of the opening), y: flare 0-1, z: night 0-1, w: the flare's shock ring radius (negative: none)", Vector) = (1, 0, 0, -1)
         _Glow ("x: the core's bloom lift, y: sparkle density 0-1, z: brightness over the tones, w: the night's extra brightness", Vector) = (0.6, 0.5, 1.15, 0.35)
+        _Gate ("x: the event horizon (1) or the swirl (0), y: the ripples' phase (bands), z: the horizon's opacity, w: the kawoosh's envelope", Vector) = (1, 0, 1, 0)
+        _Pool ("x: ripple bands from centre to rim, y: their wander (bands), z: the wander's phase (turns), w: the light tone's share of a band", Vector) = (2.6, 0.45, 0, 0.28)
+        _Kawoosh ("x: the plume's front (opening radii), y: the flare's brightness at the peak, z: the rim glow, w: the light centre (opening radii)", Vector) = (0.2, 0.7, 0.55, 0.18)
+        _ChevronRing ("The chevrons' ellipse: xy its centre's offset, zw its radii (opening radii)", Vector) = (0, 0, 1.22, 1.22)
+        _Chevron ("x: the angle between sites (radians), y: a chevron's half-width (mean opening radii), z: lit, w: the chevrons' opacity", Vector) = (0.698, 0.14, 0, 0)
+        _ChevronShape ("x: chevrons, y: the opening's aspect (radius across / up)", Vector) = (7, 1, 0, 0)
+        _ChevronLit ("A lit chevron", Color) = (1, 0.6, 0.2, 1)
+        _ChevronDark ("An unlit chevron's housing", Color) = (0.3, 0.27, 0.3, 1)
     }
 
     SubShader
@@ -56,6 +73,14 @@ Shader "TimeDesk/PortalGlow"
             float4 _Swirl;
             float4 _Life;
             float4 _Glow;
+            float4 _Gate;
+            float4 _Pool;
+            float4 _Kawoosh;
+            float4 _ChevronRing;
+            float4 _Chevron;
+            float4 _ChevronShape;
+            half4 _ChevronLit;
+            half4 _ChevronDark;
         CBUFFER_END
 
         struct Attributes
@@ -130,6 +155,83 @@ Shader "TimeDesk/PortalGlow"
             return SAMPLE_TEXTURE2D(_Mask, sampler_Mask, m) * inCrop;
         }
 
+        // The site of chevron i of n (PortalGate.ChevronAngle): three down the right side, three down the left, the top last.
+        float ChevronAngle(float i, float n, float gap)
+        {
+            const float quarter = 1.5707963;
+            if (i >= n - 1.0)
+                return quarter;
+            float right = floor(n * 0.5);
+            return i < right ? quarter - gap * (i + 1.0) : quarter + gap * (i - right + 1.0);
+        }
+
+        // The opening's radii to its mean radius (a chevron is measured in it, so it keeps its shape on an oval ring).
+        float2 ChevronIso()
+        {
+            float aspect = max(_ChevronShape.y, 1e-3);
+            return float2(sqrt(aspect), 1.0 / sqrt(aspect));
+        }
+
+        // The chevrons at q (opening radii): rgb premultiplied by a, their coverage. Each is a V lamp pointing at the
+        // centre in a dark housing, both inked; lit ones in the dial's order. Measured in the opening's mean radius
+        // (ChevronIso), so a chevron keeps its shape on an oval ring. isoPixel: a screen pixel in mean radii (taken
+        // outside any branch: no gradient in flow control).
+        float4 Chevrons(float2 q, float night, float isoPixel)
+        {
+            float n = clamp(_ChevronShape.x, 1.0, 9.0);
+            float2 iso = ChevronIso();
+            float size = max(_Chevron.y, 1e-3);
+            float pw = isoPixel / size;                              // a screen pixel in the chevron's own units
+            float4 sum = 0;
+            [unroll] for (int k = 0; k < 9; k++)
+            {
+                float i = (float)k;
+                float shown = step(i + 0.5, n);
+                float t = ChevronAngle(i, n, _Chevron.x);
+                float2 dir = float2(cos(t), sin(t));
+                float2 site = _ChevronRing.xy + _ChevronRing.zw * dir;
+                float2 normal = normalize(dir / max(_ChevronRing.zw * iso, 1e-3));
+                float2 tangent = float2(-normal.y, normal.x);
+                float2 d = (q - site) * iso;
+                float u = dot(d, tangent) / size, v = dot(d, normal) / size;
+                float widen = 0.3 * (v + 0.8) / 1.6;                       // the housing widens outward
+                float outer = Cel(abs(v), 1.0, pw) * Cel(abs(u) - widen, 1.17, pw) * shown;
+                float house = Cel(abs(v), 0.78, pw) * Cel(abs(u) - widen, 0.95, pw);
+                float base = -0.55 + 0.85 * abs(u);                         // the V: its tip toward the centre
+                float lamp = Cel(abs(u), 1.0, pw) * Cel(base - v, 0.0, pw) * Cel(v - base - 0.5, 0.0, pw);
+                float heart = Cel(abs(u), 0.7, pw) * Cel(base + 0.12 - v, 0.0, pw) * Cel(v - base - 0.36, 0.0, pw);
+                float lit = step(i + 0.5, _Chevron.z);
+                half3 c = _Ink.rgb;
+                c = lerp(c, _ChevronDark.rgb * lerp(1.0, 0.55, night), house);
+                c = lerp(c, lerp(_Ink.rgb * 1.6, _ChevronLit.rgb * 1.35, lit), lamp);
+                c = lerp(c, lerp(_ChevronLit.rgb, half3(1.0, 0.95, 0.8), 0.6) * 1.5, lit * heart);
+                sum += float4(c * outer, outer);
+            }
+            return min(sum, float4(8.0, 8.0, 8.0, 1.0));
+        }
+
+        // The event horizon at radius r (opening radii) and angle: two cel tones in irregular ripple bands running
+        // out, a light centre, the soft rim glow inside the painted edge (edge depth d, 0 at the edge), the kawoosh's
+        // plume and heart, and a light rim while the iris opens. pixel: opening radii per screen pixel.
+        half3 Horizon(float r, float angle, float d, float pixel, float iris)
+        {
+            float rings = max(_Pool.x, 0.5);
+            // Whole turns of the wander's phase in both terms, so its wrap at 1 (PortalEffect) is seamless.
+            float wander = _Pool.y * (0.6 * sin(3.0 * angle + _Pool.z * TwoPi) + 0.4 * sin(5.0 * angle - _Pool.z * TwoPi + 2.0 * r));
+            float s = r * rings + wander - _Gate.y;
+            float share = saturate(_Pool.w);
+            half3 col = lerp(_Mid.rgb, _Light.rgb, Band(s, 0.5 * share, 0.5 * share, 1.5 * rings * pixel));
+            col = lerp(col, _Light.rgb, Cel(r, _Kawoosh.w, pixel));
+            col = lerp(col, _Rim.rgb, saturate(1.0 - d / 0.9) * _Kawoosh.z);
+            float e = saturate(_Gate.w);
+            float front = max(_Kawoosh.x, 0.05);
+            col = lerp(col, _Light.rgb, e * (1.0 - smoothstep(0.5 * front, 1.25 * front, r)));
+            col = lerp(col, _Rim.rgb, e * (1.0 - smoothstep(0.15 * front, 0.6 * front, r)));
+            float springing = 1.0 - smoothstep(0.85, 1.0, iris);
+            col = lerp(col, _Rim.rgb, springing * 0.6);
+            return col;
+        }
+
         half4 Frag(Varyings input) : SV_Target
         {
             float2 q = (input.uv - 0.5) * 2.0 * Margin;     // in opening radii
@@ -138,6 +240,7 @@ Shader "TimeDesk/PortalGlow"
             float night = saturate(_Life.z);
             float flare = saturate(_Life.y);
             float pixel = max(length(fwidth(q)), 1e-4);      // opening radii per screen pixel
+            float isoPixel = max(length(fwidth(q * ChevronIso())), 1e-4);
 
             // The iris: its edge springs out from the core (PortalVortex.Iris) to the hole's reach, so open it uncovers all of it.
             float iris = max(_Life.x, 0.0);
@@ -215,12 +318,28 @@ Shader "TimeDesk/PortalGlow"
             col = lerp(col, _Rim.rgb, springing * (1.0 - Cel(rr, 0.9, pixel / edge)));
 
             float bright = _Glow.z * (1.0 + _Glow.w * night + 0.5 * flare) * (1.0 + _Glow.x * heart);
+
+            // The event horizon in place of the swirl (the gate's look): its own tones, the ink line on the painted
+            // edge kept, the kawoosh lifting the whole ring for the bloom.
+            if (_Gate.x > 0.5)
+            {
+                col = Horizon(r, angle, depth, pixel, iris);
+                col = lerp(col, _Ink.rgb, Band(depth, 0.33, 0.1, dw));
+                bright = _Glow.z * (1.0 + _Glow.w * night) * (1.0 + _Kawoosh.y * saturate(_Gate.w));
+            }
+
             // The hole and what stands in front of it end at their painted edges, the masks' half level (the edge
             // the openings are fitted to), the antialiasing kept on the hole's side (integration, 2026-10-21: the
             // bilinear fringe outside the half level drew the bright rim at 10-50 % on the metal's edge pixels,
-            // half a pixel of halo all round, 3-9 % on a small ring's axes).
-            float fill = inside * InsideEdge(m.r) * ClearOf(m.g) * lerp(1.0, _Shape.y, m.b) * _Shape.z;
-            return half4(col * bright * fill, fill);
+            // half a pixel of halo all round, 3-9 % on a small ring's axes). _Gate.z fades it (the close).
+            float fill = inside * InsideEdge(m.r) * ClearOf(m.g) * lerp(1.0, _Shape.y, m.b) * _Shape.z * saturate(_Gate.z);
+
+            // The chevrons on the metal: never in the hole, never over what stands in front of it.
+            float4 chevrons = 0;
+            if (_Chevron.w > 0.0)
+                chevrons = Chevrons(q, night, isoPixel) * saturate(_Chevron.w) * (1.0 - InsideEdge(m.r)) * ClearOf(m.g);
+            float alpha = fill + chevrons.a * (1.0 - fill);
+            return half4(col * bright * fill + chevrons.rgb * (1.0 - fill), alpha);
         }
         ENDHLSL
 

@@ -68,9 +68,9 @@ public static class DeskPlanOps
         var sb = new System.Text.StringBuilder();
         sb.AppendLine($"{QaGame.Where(go)} active {go.activeInHierarchy} layer {LayerMask.LayerToName(go.layer)} localScale {go.transform.localScale} lossyScale {go.transform.lossyScale} position {go.transform.position}");
         foreach (Collider c in go.GetComponentsInChildren<Collider>(true))
-            sb.AppendLine($"  collider {QaGame.Where(c.gameObject)} {c.GetType().Name} enabled {c.enabled} active {c.gameObject.activeInHierarchy} layer {LayerMask.LayerToName(c.gameObject.layer)} lossyScale {c.transform.lossyScale} bounds {c.bounds.center} size {c.bounds.size}");
+            sb.AppendLine($"  collider {QaGame.Where(c.gameObject)} {c.GetType().Name} enabled {c.enabled} active {c.gameObject.activeInHierarchy} layer {LayerMask.LayerToName(c.gameObject.layer)} lossyScale {c.transform.lossyScale} bounds {c.bounds.center:F3} size {c.bounds.size:F3}");
         foreach (Renderer r in go.GetComponentsInChildren<Renderer>(true))
-            sb.AppendLine($"  renderer {QaGame.Where(r.gameObject)} {r.GetType().Name} enabled {r.enabled} active {r.gameObject.activeInHierarchy} bounds {r.bounds.center} size {r.bounds.size}");
+            sb.AppendLine($"  renderer {QaGame.Where(r.gameObject)} {r.GetType().Name} enabled {r.enabled} active {r.gameObject.activeInHierarchy} bounds {r.bounds.center:F3} size {r.bounds.size:F3}");
         foreach (Clickable click in go.GetComponentsInChildren<Clickable>(true))
             sb.AppendLine($"  clickable {QaGame.Where(click.gameObject)} enabled {click.enabled} interactable {click.Interactable} outline {click.Outline.Count}");
         Vector2? p = QaGame.ScreenPoint(go);

@@ -3,8 +3,9 @@ using NUnit.Framework;
 /// <summary>
 /// The portal rings' vortex (Saleh's demo 1018a, PortalVortex): the effect's
 /// quad sits on its opening in the drawing's local space, maps onto its ring's
-/// crop of the mask atlas, and the iris, flare and swirl behave (one step, or
-/// still, with reduced motion).
+/// crop of the mask atlas, the chevrons' ellipse maps to its own space, and the
+/// iris and swirl behave (at once, or still, with reduced motion; the kawoosh:
+/// PortalGateTests).
 /// </summary>
 public class PortalVortexTests
 {
@@ -56,6 +57,28 @@ public class PortalVortexTests
     }
 
     [Test]
+    public void ChevronRing_PutsTheRingsChevronEllipseInOpeningRadii()
+    {
+        // The front ring: its opening at canvas (1094.18, 486.57), radii 53.31 x 47.86; its chevrons 1.22 times it.
+        PortalVortex.Box same = PortalVortex.ChevronRing(1094.18f, 486.57f, 53.31f, 47.86f, 1094.18f, 486.57f, 65.04f, 58.39f, 1.22f);
+        Assert.AreEqual(0f, same.X, 1e-4f);
+        Assert.AreEqual(0f, same.Y, 1e-4f);
+        Assert.AreEqual(1.22f, same.W, 1e-3f);
+        Assert.AreEqual(1.22f, same.H, 1e-3f);
+        // An arch: its chevrons' ellipse higher than its opening (canvas rows run down, the effect's y up) and wider.
+        PortalVortex.Box arch = PortalVortex.ChevronRing(1766.3f, 217.74f, 22.12f, 38.28f, 1765.5f, 206f, 28.5f, 37f, 1.22f);
+        Assert.AreEqual((1765.5f - 1766.3f) / 22.12f, arch.X, 1e-4f);
+        Assert.AreEqual((217.74f - 206f) / 38.28f, arch.Y, 1e-4f, "up is positive");
+        Assert.AreEqual(28.5f / 22.12f, arch.W, 1e-4f);
+        Assert.AreEqual(37f / 38.28f, arch.H, 1e-4f);
+        // No ellipse: the opening grown by the knob.
+        PortalVortex.Box grown = PortalVortex.ChevronRing(100f, 100f, 20f, 10f, 0f, 0f, 0f, 0f, 1.3f);
+        Assert.AreEqual(1.3f, grown.W);
+        Assert.AreEqual(1.3f, grown.H);
+        Assert.AreEqual(0f, grown.X);
+    }
+
+    [Test]
     public void Reveal_OpensAndShutsOverItsTime()
     {
         Assert.AreEqual(0.5f, PortalVortex.Reveal(0f, true, 0.3f, 0.6f, false), 1e-5f);
@@ -74,18 +97,6 @@ public class PortalVortexTests
         Assert.Greater(PortalVortex.Iris(0.8f), 1f, "it overshoots the rim");
         Assert.Greater(PortalVortex.Iris(0.3f), 0.3f, "it opens fast");
         Assert.AreEqual(0f, PortalVortex.Iris(-1f));
-    }
-
-    [Test]
-    public void Pulse_FlaresUpAndDown_OneStepWithReducedMotion()
-    {
-        Assert.AreEqual(0f, PortalVortex.Pulse(0f, false));
-        Assert.AreEqual(1f, PortalVortex.Pulse(0.5f, false), 1e-5f);
-        Assert.AreEqual(0f, PortalVortex.Pulse(1f, false));
-        Assert.Greater(PortalVortex.Pulse(0.25f, false), 0.5f);
-        Assert.AreEqual(1f, PortalVortex.Pulse(0.1f, true), "reduced motion: one step up");
-        Assert.AreEqual(1f, PortalVortex.Pulse(0.9f, true));
-        Assert.AreEqual(0f, PortalVortex.Pulse(1f, true), "and down at its end");
     }
 
     [Test]

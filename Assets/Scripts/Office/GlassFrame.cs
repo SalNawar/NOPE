@@ -46,6 +46,9 @@ public readonly struct GlassFrame
     /// <summary>Where the power knob is by default (the art study's CRT).</summary>
     public Vector3 PowerKnob => Centre + Right * KnobFromGlass.x + Up * KnobFromGlass.y;
 
+    /// <summary>A point <paramref name="metres"/> right and up of the glass's centre, in the glass's plane (a drawn control on a model's face).</summary>
+    public Vector3 FromCentre(Vector2 metres) => Centre + Right.normalized * metres.x + Up.normalized * metres.y;
+
     /// <summary>
     /// Measures a glass from its local bounds: the thinnest local axis is its
     /// normal (turned toward <paramref name="viewer"/>); of the other two, the

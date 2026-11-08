@@ -19,8 +19,11 @@ using UnityEngine;
 /// workbench (MatchBoard) draws the pair: the held value, the line between
 /// the two and the finding (the PC workbench spec §4); at the office the
 /// strip shows the pair as one short, quiet line (optional; the verdict and
-/// the two values), and steps aside while the desk's line labels the pair
-/// itself (SetStripCovered; the desk-first polish, 2026-10-05).
+/// the two values), keeps it after the workbench lets the pair go (Release;
+/// until the next pick or Clear: Saleh's playtest 2026-11-07, item 14, "UI
+/// for comparing still missing"), and steps aside while the desk's line
+/// labels the pair itself (SetStripCovered; the desk-first polish,
+/// 2026-10-05).
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
@@ -54,6 +57,9 @@ public sealed class CompareController : MonoBehaviour
 
     /// <summary>True while the strip shows a note that replaced the pair's line (a deviation logged, already documented): the desk's line does not hide it.</summary>
     private bool _stripNote;
+
+    /// <summary>True while the strip keeps the last pair's line or note after the workbench let the pair go (Release): until the next pick or Clear.</summary>
+    private bool _stripKept;
 
     /// <summary>
     /// Raised when the second side is picked, with both sides' typed evidence.
@@ -169,17 +175,21 @@ public sealed class CompareController : MonoBehaviour
 
     /// <summary>
     /// Lets a finished pair go (the workbench, once every listener read it):
-    /// the picks and their highlights clear, but a note the pair wrote on the
-    /// office strip ("DEVIATION LOGGED", "ALREADY DOCUMENTED") stays up until
-    /// the next pick (CODE-110, BUG-58a: it vanished after one frame).
+    /// the picks and their highlights clear, but the office strip keeps the
+    /// pair's line (the verdict and the two values; item 14: it vanished with
+    /// the pair after one frame) or the note the pair wrote ("DEVIATION
+    /// LOGGED", "ALREADY DOCUMENTED"; CODE-110, BUG-58a) until the next pick
+    /// or Clear (the workbench clears at the case's start and end).
     /// </summary>
     public void Release()
     {
-        bool note = _stripNote && officeBar != null && officeBar.activeSelf;
+        _stripKept = _pair.IsPaired || _stripNote;
         _pair.Clear();
         ClearHighlights();
-        if (!note)
+        if (!_stripKept)
             Draw();
+        else
+            ShowStrip();
         PicksChanged?.Invoke();
     }
 
@@ -197,6 +207,7 @@ public sealed class CompareController : MonoBehaviour
     {
         bool active = _pair.HasA;
         _stripNote = false;
+        _stripKept = false;
         ShowStrip();
 
         if (_pair.IsPaired && !_pair.Understood)
@@ -227,12 +238,13 @@ public sealed class CompareController : MonoBehaviour
         ShowStrip();
     }
 
-    /// <summary>The office strip shows while a value is picked, except a plain pair the desk's line already labels.</summary>
+    /// <summary>The office strip shows while a value is picked, and keeps a finished pair's line, except a plain pair the desk's line labels now.</summary>
     private void ShowStrip()
     {
         if (officeBar == null)
             return;
-        bool on = _pair.HasA && (_stripNote || !(_stripCovered && _pair.IsPaired));
+        bool pairShown = _pair.IsPaired || _stripKept;
+        bool on = (_pair.HasA || _stripKept) && (_stripNote || !(_stripCovered && pairShown));
         if (officeBar.activeSelf != on)
             officeBar.SetActive(on);
     }

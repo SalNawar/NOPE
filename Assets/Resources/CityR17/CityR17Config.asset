@@ -76,7 +76,7 @@ MonoBehaviour:
   windowHourTint: 1
   viewHourTint: 0.8
   leftWindowsBox: {x: 0, y: 0, z: 0.3131, w: 0.6809}
-  leftWindowsPlate: {x: 300, y: 20, z: 1500, w: 1086}
+  leftWindowsPlate: {x: 1360, y: 0, z: 440, w: 319}
   frontWindowsBox: {x: 0.4503, y: 0.2942, z: 0.1156, w: 0.1671}
   frontWindowsPlate: {x: 1280, y: 60, z: 1000, w: 480}
   budgetMs: 2

@@ -22,7 +22,8 @@ using UnityEngine.Rendering;
 /// hit-stop alone (MotionKnobs.hitStopScale for hitStopSeconds of real time, as FeelDirector.HitStop does, then the
 /// time scale back), without the citation punch's camera shake, which is FEEDBACK's and CAM's and would fail
 /// hall_fx_crossfade's flicker check on their motion, not on the crossfade's. BUG-26a: <c>hallPortalsOpen</c> opens every
-/// ring's vortex (PortalEffect.Show, the departure look, on the asset's tuning) and waits for the irises, so the portal
+/// ring's event horizon (AnimeHallPortalLink.AllOpen, the cheat "Hall: portals open": the day's look of each ring, no
+/// chevrons, as no module dials it) and waits for the irises, so the portal
 /// shots measure all five rings: on a day's plan most rings are shut (day 1 opens one), and an effect's placement and
 /// mask do not depend on which day opens it. Each portal shot also writes the hall drawing's own projection (its canvas
 /// corners on screen), where tools/hall/portal_check.py lays the rings' masks; <c>hallDrawing</c> writes it alone (the
@@ -145,9 +146,7 @@ public static class HallFxRig
 
     private static IEnumerator OpenAll()
     {
-        foreach (PortalEffect e in Object.FindObjectsByType<PortalEffect>(FindObjectsInactive.Include))
-            if (e.Portals != null)
-                e.Show(true, false, e.Portals.vortex, e.Portals.pulseSeconds);
+        AnimeHallPortalLink.AllOpen = true;
         yield return new WaitForSecondsRealtime(2f);
     }
 

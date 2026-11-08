@@ -68,16 +68,16 @@ public static class LightChecks
             pass ? string.Empty : $"Needs the corners ≥ {DeskLighting.ReadableMatLuma + DeskLighting.MarginLuma:0}, the centre ≥ {DeskLighting.TargetMatLuma:0} and a pool step ≥ {DeskLighting.PoolContrastLuma:0}: retune deskNightFloor, deskLampLevel or deskLampRadius.");
     }
 
-    /// <summary>The plan's afternoon dip (FIX_PLAN's H3, 16:45): the lamp is on by then.</summary>
-    public const float AfternoonDipHour = 16.75f;
-
     /// <summary>
-    /// BUG-14a: the work lamp switches on in the dusk, no later than the plan's
-    /// afternoon dip (H3, 16:45; the shipped knob switches it on at the sunset,
-    /// 16:30, a deviation flagged in docs/pending/LIGHT.md), and visibly: the pool's centre gains at least
+    /// BUG-14a: the work lamp switches on inside the cycle's dusk, from its
+    /// start to the full night (HallDayCycle.HourAtEvening 0 and 1: 19:00 to
+    /// 20:30 with the shipped knobs, the lamp at the sunset, 19:45, with
+    /// deskLampOnAt 0.5), and visibly: the pool's centre gains at least
     /// DeskLighting.SwitchOnLuma after the finish as it comes on (the lamp
     /// fills only what the room has lost, so a switch-on in full daylight
-    /// would not show).
+    /// would not show). The plan's fixed bound (H3, 16:45) was for the 16:30
+    /// sunset; D55 moved the dusk after 19:00, so the bound follows the cycle
+    /// (hall-light-balance's ruling in the night's DECISIONS.md).
     /// </summary>
     [GateCheck("light.desk.lampAtTheDip", Owner)]
     public static GateResult LampSwitchesOnAtTheDip()
@@ -89,14 +89,15 @@ public static class LightChecks
         DeskLighting.Knobs desk = knobs.DeskKnobs;
         float dip = DeskLighting.LampOnHour(cycle, desk);
         float from = HallDayCycle.HourAtEvening(0f, cycle);
+        float to = HallDayCycle.HourAtEvening(1f, cycle);
         DeskLighting.Finish finish = knobs.FinishModel();
         float off = DeskLighting.GradedLuma(DeskLighting.LuminanceAt(DeskLighting.Evaluate(dip, cycle, desk, 0f), 1f), finish);
         float on = DeskLighting.GradedLuma(DeskLighting.LuminanceAt(DeskLighting.Evaluate(dip, cycle, desk, 1f), 1f), finish);
-        bool inTime = dip >= from - 1e-3f && dip <= AfternoonDipHour + 1e-3f;
+        bool inTime = dip >= from - 1e-3f && dip <= to + 1e-3f;
         bool visible = on - off >= DeskLighting.SwitchOnLuma;
         return GateResult.Of("light.desk.lampAtTheDip", Owner, inTime && visible,
-            $"lamp on at {Clock(dip)} (dusk from {Clock(from)}, dip {Clock(AfternoonDipHour)}); pool centre {off:0.0} -> {on:0.0}",
-            !inTime ? "The lamp switches on outside the dusk or after the afternoon dip (H3)."
+            $"lamp on at {Clock(dip)} (dusk {Clock(from)} to {Clock(to)}); pool centre {off:0.0} -> {on:0.0}",
+            !inTime ? "The lamp switches on outside the dusk (before its start or after the full night)."
             : !visible ? $"The switch-on lifts the pool's centre by under {DeskLighting.SwitchOnLuma:0} luma: switch it on later (deskLampOnAt), when the room has lost more." : string.Empty);
     }
 
