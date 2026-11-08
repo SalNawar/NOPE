@@ -44,6 +44,10 @@ public sealed class MachineSlideIn : MonoBehaviour
     private DeskHome _home;
     private float _way;
     private Transform _slide, _secondary, _shadowParent;
+
+    /// <summary>A loose part resting on its top that rides its lift (Carries: the pocket's painted flap on the painted book; null for none) and where it lies at rest (local).</summary>
+    private Transform _lid;
+    private Vector3 _lidRest;
     private bool _layered, _laid, _measured, _riderSought;
     private Func<bool> _busy, _taken;
     private IPaperDock _dock;
@@ -153,6 +157,24 @@ public sealed class MachineSlideIn : MonoBehaviour
 
     /// <summary>True when <paramref name="part"/> belongs to this object (one of its click boxes).</summary>
     public bool Owns(Component part) => part != null && part.transform.IsChildOf(transform);
+
+    /// <summary>
+    /// A loose part <paramref name="lid"/> resting on this lift's top rides
+    /// its rise and its squash (the pocket's painted flap on the painted
+    /// book, whose 2 cm lift on the cursor rose through the flap's slab:
+    /// Saleh's playtest of 2026-11-07, item 3, the director's follow-up).
+    /// Its rest is where it lies now; it lies there again whenever this
+    /// slider is off (the book hidden while the folder is out). Null takes
+    /// the lid off.
+    /// </summary>
+    public void Carries(Transform lid)
+    {
+        if (_lid != null)
+            _lid.localPosition = _lidRest;
+        _lid = lid;
+        if (lid != null)
+            _lidRest = lid.localPosition;
+    }
 
     /// <summary>True when the desk point <paramref name="deskPoint"/> (DeskLayout.Frame's x, y) lies in its home's footprint.</summary>
     public bool RestsOn(Vector2 deskPoint) => _home != null && _home.Footprint.Contains(deskPoint.x, deskPoint.y);
@@ -335,6 +357,8 @@ public sealed class MachineSlideIn : MonoBehaviour
             _slide.localPosition = _restLocal;
         if (_secondary != null)
             _secondary.localPosition = _secondaryRest;
+        if (_lid != null)
+            _lid.localPosition = _lidRest;
         _rider = null;
         _stillFrames = 0;
         if (_shadow != null)
@@ -433,6 +457,8 @@ public sealed class MachineSlideIn : MonoBehaviour
         }
         if (_secondary != null)
             _secondary.localPosition = _secondaryRest + ToParent(frame.Right * (_way * pose.Sway * metresPerPx), _secondary);
+        if (_lid != null)
+            _lid.localPosition = _lidRest + ToParent(Vector3.up * (_shownUp - _shownSquash), _lid); // on the top, as the top stands now
         if (_shadow != null)
         {
             (float x, float y) centre = SlideCurve.ShadowCentre(_slider, _way, position, (_restCentre.x, _restCentre.y));
