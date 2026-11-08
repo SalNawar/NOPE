@@ -88,7 +88,7 @@ public sealed class HallLightingPreviewWindow : EditorWindow
         if(crowds==null)return;
         if(!Application.isPlaying)Undo.RecordObject(crowds,"Crowd opacity");
         crowds.crowdOpacity=Mathf.Clamp01(value);
-        crowds.Apply(Application.isPlaying?Time.timeSinceLevelLoad:0);
+        crowds.Apply();
         if(!Application.isPlaying)UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(crowds.gameObject.scene);
         EditorApplication.QueuePlayerLoopUpdate();SceneView.RepaintAll();Repaint();
     }
@@ -177,11 +177,11 @@ public sealed class HallLightingPreviewWindow : EditorWindow
         Open();var window=GetWindow<HallLightingPreviewWindow>();
         var crowds=UnityEngine.Object.FindFirstObjectByType<HallWhiteCrowds>();
         if(crowds==null)throw new InvalidOperationException("No crowd controller.");
-        var group=crowds.Groups[0];var position=group.silhouette.transform.position;float time=10-group.phase;
+        var group=crowds.Groups[0];var position=group.silhouette.transform.position;
         var block=new MaterialPropertyBlock();string report="";
         foreach(float value in new[]{0f,1f,.65f})
         {
-            window.SetCrowdOpacity(value);crowds.Apply(time);group.silhouette.GetPropertyBlock(block);var tint=block.GetColor("_Tint");
+            window.SetCrowdOpacity(value);crowds.Apply();group.silhouette.GetPropertyBlock(block);var tint=block.GetColor("_Tint");
             if(value==0 && group.silhouette.enabled)throw new InvalidOperationException("Zero slider left crowd visible.");
             if(value==1 && Mathf.Abs(tint.a-1)>.001f)throw new InvalidOperationException("100 percent did not reach full opacity.");
             if(value==.65f && (tint.a<=group.opacity || tint.a>=1))throw new InvalidOperationException("65 percent did not increase visibility.");
@@ -189,7 +189,7 @@ public sealed class HallLightingPreviewWindow : EditorWindow
             if(group.silhouette.transform.position!=position)throw new InvalidOperationException("Slider moved a crowd.");
             report+=$"Slider {value:P0}, alpha {tint.a:F3}, neutral RGB {tint.r:F3}, visible {group.silhouette.enabled}\n";
         }
-        crowds.Apply(Application.isPlaying?Time.timeSinceLevelLoad:0);
+        crowds.Apply();
         Directory.CreateDirectory("ArtDeliverables/TimeDesk/WarmStone");File.WriteAllText("ArtDeliverables/TimeDesk/WarmStone/crowd-slider.txt",report);
     }
 }

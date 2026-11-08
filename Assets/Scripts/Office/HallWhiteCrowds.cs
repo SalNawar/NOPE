@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-/// <summary>Stationary background silhouettes. Visibility and palette vary; transforms never animate.</summary>
+/// <summary>Stationary background silhouettes: every group stands shown in its first composition at the crowd opacity; transforms never animate (hall-crowds-count).</summary>
 [ExecuteAlways, DefaultExecutionOrder(250)]
 public sealed class HallWhiteCrowds : MonoBehaviour
 {
@@ -32,40 +32,26 @@ public sealed class HallWhiteCrowds : MonoBehaviour
         }
     }
     public void Configure(HallLightingRig rig,SpriteRenderer hall,Group[] entries)
-    {lighting=rig;architecture=hall;groups=entries;Apply(0);}
-    public static float Fade(Group group,float seconds)
-    {
-        float t=Mathf.Repeat(seconds+group.phase,group.cycle);
-        const float duration=4;
-        if(t<duration)return Mathf.SmoothStep(0,1,t/duration);
-        if(t<duration+group.hold)return 1;
-        if(t<duration*2+group.hold)return 1-Mathf.SmoothStep(0,1,(t-duration-group.hold)/duration);
-        return 0;
-    }
-    public static int AlternativeAt(Group group,float seconds)
-    {
-        if(group.alternatives==null || group.alternatives.Length==0 || MotionPreference.Reduced)return 0;
-        int cycle=Mathf.FloorToInt((seconds+group.phase)/Mathf.Max(1,group.cycle));
-        return (cycle%group.alternatives.Length+group.alternatives.Length)%group.alternatives.Length;
-    }
-    void LateUpdate()=>Apply(Application.isPlaying?Time.timeSinceLevelLoad:0);
-    public void Apply(float seconds)
+    {lighting=rig;architecture=hall;groups=entries;Apply();}
+    void LateUpdate()=>Apply();
+    /// <summary>Writes every group's mesh, tint and contact; runs each frame and after the editor tools change the opacity.</summary>
+    public void Apply()
     {
         properties??=new MaterialPropertyBlock();
         var color=Palette;
         foreach(var group in groups)
         {
             if(group.silhouette==null)continue;
-            int alternative=AlternativeAt(group,seconds);
+            const int alternative=0; // the first composition, never rotated: the count holds between stills
             if(group.meshFilter!=null && group.alternatives.Length>0 && group.activeAlternative!=alternative)
             {
                 group.meshFilter.sharedMesh=group.alternatives[alternative];
                 group.silhouette.sharedMaterial=group.alternativeMaterials[alternative];
                 group.activeAlternative=alternative;
             }
-            float fade=MotionPreference.Reduced?1:Fade(group,seconds);
+            const float fade=1; // every group stands shown; no arrival or departure fades
             // Preserve authored group variation at 40%; slider endpoints are fully
-            // hidden and fully opaque (independent arrival/departure fades remain).
+            // hidden and fully opaque.
             float strength=Mathf.Clamp01(crowdOpacity);
             float opacity=strength<=.4f?group.opacity*strength/.4f:Mathf.Lerp(group.opacity,1,(strength-.4f)/.6f);
             float alpha=fade*opacity;
