@@ -16,7 +16,7 @@ The contract (measured on Desk_PC.fbx in Blender 5.2):
   makes it the CRT dome); this model leaves the bezel's hole for it: the dome's rim (0.38 x 0.306 m, 9 mm behind
   the screen face) sits behind the bezel's face (7 mm behind the screen face).
 
-Objects: PcRetro_Monitor (the deck, the stand, the two-tone case with its thin bezel plate, the tube behind),
+Objects: PcRetro_Monitor (the deck, the stand, the dark chamfered case with its cream bezel plate, the tube behind),
 PcRetro_Keyboard (slab, keys, coiled cable). Material slots by name: Pc_Body, Pc_Cream, Pc_Ink, Pc_Neon, Pc_Glass, Pc_Keys. The ink
 outline is an inverted hull (the mesh pushed out along its normals, faces reversed) in Pc_Ink.
 """
@@ -186,8 +186,9 @@ def build_monitor(bm):
     # The stand: a dark tilt base between the deck and the monitor.
     box(bm, (-0.11, -0.13, 0.082), (0.11, 0.0, z0 + 0.01), BODY, bevel=0.01, segments=1, hull=True)
 
-    # The two-tone case: the cream front half with chamfered edges, the dark grey back half, the tapered tube.
-    box(bm, (-hw, -0.198, z0), (hw, -0.095, z1), CREAM, bevel=0.006, segments=1, hull=True)
+    # The case: dark grey with chamfered edges (its sides stay dark, so only the cream plate reads as the bezel
+    # from the chair), the back half, the tapered tube.
+    box(bm, (-hw, -0.198, z0), (hw, -0.095, z1), BODY, bevel=0.006, segments=1, hull=True)
     box(bm, (-0.205, -0.095, z0 + 0.008), (0.205, 0.07, z1 - 0.008), BODY, bevel=0.008, segments=1, hull=True)
     tapered(bm, (-0.15, 0.21), (0.15, 0.49), (-0.09, 0.27), (0.09, 0.43), 0.065, 0.235, BODY, hull=True)
 
@@ -215,12 +216,12 @@ def build_monitor(bm):
     disc_y(bm, 0.165, 0.182, BEZEL_FACE_Y - 0.014, BEZEL_FACE_Y - 0.003, 0.010, CREAM)                      # the knob
     box(bm, (0.1635, BEZEL_FACE_Y - 0.0155, 0.184), (0.1665, BEZEL_FACE_Y - 0.013, 0.191), NEON)            # its mark
 
-    # The sides: a vent grille on the cream half (both sides), the neon accent line on the dark half.
+    # The sides: a vent grille of grey slats on the front half (both sides), the neon accent line on the back half.
     for side in (-1, 1):
         x = side * hw
         for i in range(6):
             z = 0.30 + 0.026 * i
-            box(bm, (x - 0.003, -0.185, z), (x + 0.003, -0.105, z + 0.011), INK)
+            box(bm, (x - 0.003, -0.185, z), (x + 0.003, -0.105, z + 0.011), KEYS)
         x = side * 0.205
         box(bm, (x - 0.004, -0.09, 0.30), (x + 0.004, 0.06, 0.308), NEON)
 
