@@ -19,6 +19,9 @@ public sealed class CheatBadge : MonoBehaviour
     /// <summary>The canvas sorting order: above the game's screens, under the IMGUI panel (IMGUI always draws last).</summary>
     private const int SortingOrder = 31000;
 
+    /// <summary>The badge's gap from the screen's left and bottom edges (reference pixels): the HUD's 16 px inner edge, so the badge reads whole at every aspect.</summary>
+    private const float InnerEdge = 16f;
+
     /// <summary>The blocker: a clear full-screen graphic that takes every click while the panel is open.</summary>
     private GameObject _blocker;
 
@@ -56,7 +59,7 @@ public sealed class CheatBadge : MonoBehaviour
         label.transform.SetParent(root.transform, false);
         var rect = (RectTransform)label.transform;
         rect.anchorMin = rect.anchorMax = rect.pivot = Vector2.zero;
-        rect.anchoredPosition = new Vector2(12f, 8f);
+        rect.anchoredPosition = new Vector2(InnerEdge, InnerEdge);
         rect.sizeDelta = new Vector2(1400f, 30f);
         var text = label.GetComponent<TextMeshProUGUI>();
         text.fontSize = 18f;
