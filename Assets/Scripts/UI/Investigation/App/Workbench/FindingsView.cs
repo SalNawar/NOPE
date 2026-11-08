@@ -103,8 +103,26 @@ public sealed class FindingsView : MonoBehaviour
     {
         if (rail != null && rail.activeSelf != on)
             rail.SetActive(on);
+        if (on)
+            CentreRailText();
         if (full != null && full.activeSelf == on)
             full.SetActive(!on);
+    }
+
+    /// <summary>
+    /// The rail's words sit at the rail's middle, centred along it
+    /// (pc-ui-heuristics, Saleh's item 5: hung from the rail's top, their end
+    /// ran under the menu bar and was cut); the same as the builder lays them.
+    /// </summary>
+    private void CentreRailText()
+    {
+        TMP_Text text = rail != null ? rail.GetComponentInChildren<TMP_Text>(true) : null;
+        if (text == null)
+            return;
+        RectTransform box = text.rectTransform;
+        box.anchorMin = box.anchorMax = box.pivot = new Vector2(0.5f, 0.5f);
+        box.anchoredPosition = Vector2.zero;
+        text.alignment = TextAlignmentOptions.Center;
     }
 
     /// <summary>Draws <paramref name="log"/>'s findings, newest first (the plates of the last draw reused).</summary>
