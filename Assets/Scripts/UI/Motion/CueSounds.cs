@@ -39,6 +39,7 @@ public static class CueSounds
             case SoundCues.DaterReink: return Noise("Reink", 0.18f, 0.35f, 500f);
             case SoundCues.DetainCover: return Noise("CoverSnap", 0.05f, 0.55f, 1500f);
             case SoundCues.PortalThrough: return Sweep("PortalThrough", 180f, 900f, 1.2f, 0.4f);
+            case SoundCues.PortalKawoosh: return Kawoosh("PortalKawoosh", 1.2f, 0.45f);
             case SoundCues.Detain: return Sweep("Detain", 1400f, 900f, 0.5f, 0.35f);
             case SoundCues.UiError: return Tone("Error", 70f, 0.16f, 0.7f);
             case SoundCues.ChipInsert: return Noise("ChipInsert", 0.12f, 0.6f, 900f);
@@ -128,6 +129,24 @@ public static class CueSounds
         if (!Placeholders.TryGetValue(cue, out AudioClip clip) || clip == null)
             Placeholders[cue] = clip = Make(cue);
         return clip;
+    }
+
+    /// <summary>A gate's burst (<paramref name="seconds"/> long, at <paramref name="volume"/>): a low thump under a rush of noise that opens and swells to a third of its time, then settles.</summary>
+    private static AudioClip Kawoosh(string name, float seconds, float volume)
+    {
+        int n = Mathf.Max(1, (int)(Rate * seconds));
+        var samples = new float[n];
+        float y = 0f;
+        for (int i = 0; i < n; i++)
+        {
+            float k = (float)i / n, t = (float)i / Rate;
+            float env = k < 1f / 3f ? Mathf.SmoothStep(0f, 1f, k * 3f) : Mathf.SmoothStep(0f, 1f, (1f - k) * 1.5f);
+            float a = Mathf.Clamp01(2f * Mathf.PI * (250f + 2200f * env) / Rate);
+            y += a * (DaterInk.Hash01(i, 29, 7) * 2f - 1f - y);
+            float thump = Mathf.Sin(2f * Mathf.PI * 55f * t) * Mathf.Exp(-t * 6f);
+            samples[i] = volume * (2.5f * env * y + 0.6f * thump);
+        }
+        return Clip(name, samples);
     }
 
     private static AudioClip Clip(string name, float[] samples)

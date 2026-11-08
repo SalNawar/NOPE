@@ -9,10 +9,12 @@ using System;
 /// mask); the effect is a quad <see cref="Margin"/> times the opening's radii
 /// each way around its centre, so an arch's hole, which reaches past its
 /// ellipse, still fits on it. This class maps the opening to the drawing's
-/// local space and the quad to its ring's crop of the mask atlas, and holds the
-/// effect's curves: the iris that opens and closes it, the departure flare,
-/// the night surge and the turning of its swirl. No UnityEngine, so it is
-/// tested headless (PortalVortexTests).
+/// local space and the quad to its ring's crop of the mask atlas (and the
+/// ring's chevron ellipse to the quad's own space, ChevronRing), and holds the
+/// effect's curves: the iris that opens and closes the old swirl and the
+/// turning of its swirl (the gate's states and their curves, the kawoosh that
+/// replaced the departure flare among them: PortalGate). No UnityEngine, so it is tested headless
+/// (PortalVortexTests).
 /// </summary>
 public static class PortalVortex
 {
@@ -87,6 +89,24 @@ public static class PortalVortex
         return new Box(offsetU, offsetV, scaleU, scaleV);
     }
 
+    /// <summary>
+    /// The ellipse the ring's chevrons sit on (the middle of its metal band:
+    /// HallPortalRing.chevrons, canvas px, top-left origin: centre
+    /// (<paramref name="ex"/>, <paramref name="ey"/>), radii <paramref name="erx"/>
+    /// and <paramref name="ery"/>) in the effect's own space: its centre's offset
+    /// from the opening (X, Y, y up) and its radii (W, H), in opening radii, the
+    /// opening centred at canvas (<paramref name="cx"/>, <paramref name="cy"/>)
+    /// with radii <paramref name="rx"/> and <paramref name="ry"/>. With no radii
+    /// it is the opening grown by <paramref name="grow"/>.
+    /// </summary>
+    public static Box ChevronRing(float cx, float cy, float rx, float ry, float ex, float ey, float erx, float ery, float grow)
+    {
+        float sx = rx > 0f ? rx : 1f, sy = ry > 0f ? ry : 1f;
+        if (erx <= 0f || ery <= 0f)
+            return new Box(0f, 0f, grow, grow);
+        return new Box((ex - cx) / sx, (cy - ey) / sy, erx / sx, ery / sy);
+    }
+
     /// <summary>The iris after <paramref name="dt"/> seconds from <paramref name="current"/> toward open (1) or shut (0), over <paramref name="seconds"/>; at once with <paramref name="reduced"/> motion or no time.</summary>
     public static float Reveal(float current, bool open, float dt, float seconds, bool reduced)
     {
@@ -106,18 +126,6 @@ public static class PortalVortex
         const float back = 1.6f;
         float u = t - 1f;
         return 1f + u * u * ((back + 1f) * u + back);
-    }
-
-    /// <summary>
-    /// The departure flare at <paramref name="progress"/> (0 to 1 of its time):
-    /// 0 at both ends, 1 at its middle, eased; with <paramref name="reduced"/>
-    /// motion one step: 1 until its time is up, then 0.
-    /// </summary>
-    public static float Pulse(float progress, bool reduced)
-    {
-        if (progress <= 0f || progress >= 1f)
-            return 0f;
-        return reduced ? 1f : (float)Math.Sin(Math.PI * progress);
     }
 
     /// <summary>The swirl's angle (radians, kept in 0 to 2 pi) after <paramref name="dt"/> seconds turning <paramref name="degreesPerSecond"/>; still with <paramref name="reduced"/> motion.</summary>
