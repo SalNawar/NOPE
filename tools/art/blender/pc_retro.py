@@ -16,8 +16,8 @@ The contract (measured on Desk_PC.fbx in Blender 5.2):
   makes it the CRT dome); this model leaves the bezel's hole for it: the dome's rim (0.38 x 0.306 m, 9 mm behind
   the screen face) sits behind the bezel's face (7 mm behind the screen face).
 
-Objects: PcRetro_Monitor (shell, bezel, rear tube, the deck under the monitor as its chin), PcRetro_Keyboard (slab,
-keys, coiled cable). Material slots by name: Pc_Body, Pc_Cream, Pc_Ink, Pc_Neon, Pc_Glass, Pc_Keys. The ink
+Objects: PcRetro_Monitor (the deck, the stand, the two-tone case with its thin bezel plate, the tube behind),
+PcRetro_Keyboard (slab, keys, coiled cable). Material slots by name: Pc_Body, Pc_Cream, Pc_Ink, Pc_Neon, Pc_Glass, Pc_Keys. The ink
 outline is an inverted hull (the mesh pushed out along its normals, faces reversed) in Pc_Ink.
 """
 import math
@@ -38,6 +38,10 @@ SCREEN_W, SCREEN_H, SCREEN_CORNER = 0.36, 0.29, 0.028
 SCREEN_FACE_Y = -0.215
 SCREEN_Z = 0.355
 BEZEL_FACE_Y = SCREEN_FACE_Y + 0.007
+# The face: the glass is 84 percent of its width, the bezel 8 percent each side; a short chin under the glass.
+FACE_W = SCREEN_W / 0.84
+BEZEL = (FACE_W - SCREEN_W) / 2
+CHIN = 0.018
 
 # The ink hull's thickness (metres): about 1.5 px at the desk camera.
 HULL = 0.0045
@@ -157,8 +161,8 @@ def tapered(bm, front_lo, front_hi, back_lo, back_hi, y0, y1, mat, hull=False):
 
 
 def build_monitor(bm):
-    """The monitor on its deck, unturned: x right, -y toward the chair, z up, origin on the pivot at the pad."""
-    # The deck under the monitor (its chin): the cartridge slot, the counter window, the status lamps, the vents.
+    """The monitor on its stand on the deck, unturned: x right, -y toward the chair, z up, origin on the pivot."""
+    # The deck under the monitor: the cartridge slot, the counter window, the status lamps, the vents.
     box(bm, (-0.33, -0.25, 0.004), (0.33, 0.25, 0.082), BODY, bevel=0.012, hull=True)
     box(bm, (-0.31, -0.2545, 0.066), (0.31, -0.20, 0.072), NEON)                     # the neon seam on the deck's lip
     box(bm, (-0.27, -0.256, 0.026), (-0.05, -0.245, 0.052), INK)                    # the cartridge slot
@@ -172,44 +176,53 @@ def build_monitor(bm):
         x = 0.16 + 0.028 * i
         box(bm, (x, -0.254, 0.020), (x + 0.013, -0.248, 0.058), INK)
 
-    # The shell: dark gunmetal, chunky and rounded; the tube behind it, tapered.
-    box(bm, (-0.33, -0.198, 0.084), (0.33, 0.075, 0.585), BODY, bevel=0.04, segments=4, hull=True)
-    tapered(bm, (-0.25, 0.13), (0.25, 0.53), (-0.16, 0.21), (0.16, 0.46), 0.07, 0.248, BODY, hull=True)
+    # The monitor's face: the glass plus an 8 percent bezel each side (Saleh 2026-11-07 23:53: "the bezzel is
+    # too wide"), a short chin for the controls under the glass. The glass centre and size are the contract's.
+    hw = FACE_W / 2
+    z0 = SCREEN_Z - SCREEN_H / 2 - BEZEL - CHIN
+    z1 = SCREEN_Z + SCREEN_H / 2 + BEZEL
+    zc, fh = (z0 + z1) / 2, z1 - z0
 
-    # The cream bezel: a thick chin, the hole for the CRT dome (the screen's 36 x 29 cm with 2.8 cm corners).
-    outer = rounded_loop(0.0, 0.335, 0.58, 0.45, 0.042)
+    # The stand: a dark tilt base between the deck and the monitor.
+    box(bm, (-0.11, -0.13, 0.082), (0.11, 0.0, z0 + 0.01), BODY, bevel=0.01, segments=1, hull=True)
+
+    # The two-tone case: the cream front half with chamfered edges, the dark grey back half, the tapered tube.
+    box(bm, (-hw, -0.198, z0), (hw, -0.095, z1), CREAM, bevel=0.006, segments=1, hull=True)
+    box(bm, (-0.205, -0.095, z0 + 0.008), (0.205, 0.07, z1 - 0.008), BODY, bevel=0.008, segments=1, hull=True)
+    tapered(bm, (-0.15, 0.21), (0.15, 0.49), (-0.09, 0.27), (0.09, 0.43), 0.065, 0.235, BODY, hull=True)
+
+    # The bezel plate: a cream ring with the hole for the CRT dome (the screen's 36 x 29 cm with 2.8 cm corners),
+    # proud of the case front by 10 mm, with its ink edge; the ink line round the glass.
+    outer = rounded_loop(0.0, zc, FACE_W - 0.014, fh - 0.014, 0.02)
     inner = rounded_loop(0.0, SCREEN_Z, SCREEN_W, SCREEN_H, SCREEN_CORNER)
     ring(bm, outer, inner, BEZEL_FACE_Y, -0.192, CREAM)
-    # The ink line round the glass, proud of the bezel; the bezel's outer ink edge.
     ring(bm, rounded_loop(0.0, SCREEN_Z, SCREEN_W + 0.016, SCREEN_H + 0.016, SCREEN_CORNER + 0.008), inner,
          BEZEL_FACE_Y - 0.0025, BEZEL_FACE_Y + 0.002, INK)
-    ring(bm, rounded_loop(0.0, 0.335, 0.594, 0.464, 0.049), outer, BEZEL_FACE_Y + 0.0005, -0.190, INK)
+    ring(bm, rounded_loop(0.0, zc, FACE_W - 0.002, fh - 0.002, 0.026), outer, BEZEL_FACE_Y + 0.0005, -0.190, INK)
 
-    # The chin: one neon line, the worn decal, the speaker grille, the power knob (right and low, where
-    # GlassFrame.PowerKnob puts its click).
-    box(bm, (-0.24, BEZEL_FACE_Y - 0.004, 0.166), (0.16, BEZEL_FACE_Y + 0.001, 0.173), NEON)
-    box(bm, (-0.275, BEZEL_FACE_Y - 0.003, 0.116), (-0.16, BEZEL_FACE_Y + 0.001, 0.150), INK, bevel=0.002)  # the decal
-    box(bm, (-0.266, BEZEL_FACE_Y - 0.0045, 0.124), (-0.236, BEZEL_FACE_Y, 0.142), NEON)                   # its glyph
-    box(bm, (-0.229, BEZEL_FACE_Y - 0.0045, 0.124), (-0.168, BEZEL_FACE_Y, 0.130), CREAM)                  # its worn stripes
-    box(bm, (-0.229, BEZEL_FACE_Y - 0.0045, 0.136), (-0.196, BEZEL_FACE_Y, 0.142), CREAM)
-    for i in range(4):
-        z = 0.116 + 0.011 * i
-        box(bm, (0.06, BEZEL_FACE_Y - 0.002, z), (0.19, BEZEL_FACE_Y + 0.001, z + 0.005), INK)
-    disc_y(bm, 0.255, 0.226, BEZEL_FACE_Y - 0.014, BEZEL_FACE_Y + 0.002, 0.025, INK)                     # the knob's rim
-    disc_y(bm, 0.255, 0.226, BEZEL_FACE_Y - 0.020, BEZEL_FACE_Y - 0.004, 0.019, CREAM)                   # the knob
-    box(bm, (0.252, BEZEL_FACE_Y - 0.0215, 0.214), (0.258, BEZEL_FACE_Y - 0.019, 0.240), NEON)           # its mark
+    # The chin, left to right: the badge, two ports, the power key with its lamp, the brightness knob.
+    box(bm, (-0.19, BEZEL_FACE_Y - 0.003, 0.170), (-0.12, BEZEL_FACE_Y + 0.001, 0.194), INK, bevel=0.002)   # the badge
+    box(bm, (-0.185, BEZEL_FACE_Y - 0.0045, 0.176), (-0.170, BEZEL_FACE_Y, 0.188), NEON)                    # its glyph
+    box(bm, (-0.163, BEZEL_FACE_Y - 0.0045, 0.176), (-0.126, BEZEL_FACE_Y, 0.180), CREAM)                   # its stripes
+    box(bm, (-0.163, BEZEL_FACE_Y - 0.0045, 0.184), (-0.140, BEZEL_FACE_Y, 0.188), CREAM)
+    for x in (-0.062, -0.027):                                                                               # two ports
+        box(bm, (x, BEZEL_FACE_Y - 0.003, 0.175), (x + 0.025, BEZEL_FACE_Y + 0.001, 0.189), INK)
+        box(bm, (x + 0.004, BEZEL_FACE_Y - 0.001, 0.179), (x + 0.021, BEZEL_FACE_Y + 0.001, 0.185), BODY)
+    box(bm, (0.092, BEZEL_FACE_Y - 0.002, 0.169), (0.128, BEZEL_FACE_Y + 0.001, 0.195), INK)                # the key's rim
+    box(bm, (0.095, BEZEL_FACE_Y - 0.006, 0.172), (0.125, BEZEL_FACE_Y, 0.192), BODY, bevel=0.002)          # the power key
+    box(bm, (0.100, BEZEL_FACE_Y - 0.0075, 0.184), (0.107, BEZEL_FACE_Y - 0.006, 0.189), NEON)              # its lamp
+    disc_y(bm, 0.165, 0.182, BEZEL_FACE_Y - 0.009, BEZEL_FACE_Y + 0.002, 0.014, INK)                        # the knob's rim
+    disc_y(bm, 0.165, 0.182, BEZEL_FACE_Y - 0.014, BEZEL_FACE_Y - 0.003, 0.010, CREAM)                      # the knob
+    box(bm, (0.1635, BEZEL_FACE_Y - 0.0155, 0.184), (0.1665, BEZEL_FACE_Y - 0.013, 0.191), NEON)            # its mark
 
-    # The cyberpunk twist: neon accent lines down both sides, side vents, the holo-strip on top.
+    # The sides: a vent grille on the cream half (both sides), the neon accent line on the dark half.
     for side in (-1, 1):
-        x = side * 0.3305
-        box(bm, (x - 0.004, -0.17, 0.296), (x + 0.004, 0.05, 0.304), NEON)
-        box(bm, (x - 0.0035, -0.16, 0.12), (x + 0.0035, 0.04, 0.27), CREAM, bevel=0.002)   # the cream side panel
-        box(bm, (x - 0.0045, -0.14, 0.19), (x + 0.0045, -0.07, 0.205), INK)              # its hand grip slot
-        for i in range(5):
-            z = 0.40 + 0.03 * i
-            box(bm, (x - 0.003, -0.12, z), (x + 0.003, 0.02, z + 0.012), INK)
-    box(bm, (-0.225, -0.177, 0.581), (0.225, -0.159, 0.588), INK)                    # the holo-strip's socket
-    box(bm, (-0.21, -0.172, 0.584), (0.21, -0.164, 0.598), NEON)                     # the holo-strip
+        x = side * hw
+        for i in range(6):
+            z = 0.30 + 0.026 * i
+            box(bm, (x - 0.003, -0.185, z), (x + 0.003, -0.105, z + 0.011), INK)
+        x = side * 0.205
+        box(bm, (x - 0.004, -0.09, 0.30), (x + 0.004, 0.06, 0.308), NEON)
 
 
 def build_keyboard(bm):
@@ -345,6 +358,7 @@ def main():
               "min", [round(x, 4) for x in lo], "max", [round(x, 4) for x in hi])
     c = Matrix.Rotation(math.radians(CRT_TURN), 3, 'Z') @ Vector((0.0, SCREEN_FACE_Y, SCREEN_Z))
     print("PCRETRO screen centre (frame, from the pivot)", [round(x, 4) for x in c], "size", SCREEN_W, SCREEN_H)
+    print("PCRETRO face", round(FACE_W, 4), "m wide; bezel", round(BEZEL, 4), "m a side =", round(100 * BEZEL / FACE_W, 1), "%")
 
     bpy.ops.export_scene.fbx(filepath=out, use_selection=False, object_types={'MESH'}, apply_unit_scale=True,
                              apply_scale_options='FBX_SCALE_ALL', axis_forward='-Z', axis_up='Y',
