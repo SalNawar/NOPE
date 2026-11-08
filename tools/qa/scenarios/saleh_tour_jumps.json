@@ -1,0 +1,172 @@
+{
+  "name": "saleh_tour_jumps",
+  "owner": "CHEATS",
+  "steps": [
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "cheat",
+      "name": "UnlockEverything",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 11
+    },
+    {
+      "op": "waitOffice",
+      "n": 11
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "21_d11_office"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d11_jump",
+      "w": 5
+    },
+    {
+      "op": "jumpDay",
+      "n": 20
+    },
+    {
+      "op": "waitOffice",
+      "n": 20
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "22_d20_office"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d20_jump",
+      "w": 5
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "23_d12_rest"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d12_jump",
+      "w": 5
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "24_d12_traveller"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d12_traveller",
+      "w": 5
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "record",
+      "name": "25_d12_to_reading",
+      "f": 2.5
+    },
+    {
+      "op": "still",
+      "name": "25_d12_reading"
+    },
+    {
+      "op": "key",
+      "key": "Tab"
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "hour",
+      "f": 16
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "26_d12_1600"
+    },
+    {
+      "op": "hour",
+      "f": 21
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "27_d12_night"
+    }
+  ]
+}

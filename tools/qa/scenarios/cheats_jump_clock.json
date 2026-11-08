@@ -1,0 +1,130 @@
+{
+  "name": "cheats_jump_clock",
+  "owner": "CHEATS",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "cheats-day-clock (Saleh 2026-11-07, item 9: 'Cheats still start other days on wrong time', day 8 showed 19:12 after the jump). His path: the day's shift runs with a traveller at the desk, then the cheat menu's Day 8 (DevCheats.Run), then Day 15. Each jumped day opens at its own hour (13:00, 16:00) at the briefing and right after AVAILABLE; a still of each."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 20.0
+    },
+    {
+      "op": "cheat",
+      "name": "JumpToDay",
+      "n": 8
+    },
+    {
+      "op": "waitOffice",
+      "n": 8,
+      "f": 180
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "d8_jump_briefing"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d8_briefing",
+      "w": 5
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d8_shift",
+      "w": 5
+    },
+    {
+      "op": "still",
+      "name": "d8_jump_shift"
+    },
+    {
+      "op": "wait",
+      "f": 20.0
+    },
+    {
+      "op": "cheat",
+      "name": "JumpToDay",
+      "n": 15
+    },
+    {
+      "op": "waitOffice",
+      "n": 15,
+      "f": 180
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "still",
+      "name": "d15_jump_briefing"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d15_briefing",
+      "w": 5
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "cheatCheck",
+      "name": "clockOpens",
+      "target": "d15_shift",
+      "w": 5
+    },
+    {
+      "op": "still",
+      "name": "d15_jump_shift"
+    }
+  ]
+}
