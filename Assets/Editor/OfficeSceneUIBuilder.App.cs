@@ -187,7 +187,7 @@ public static partial class OfficeSceneUIBuilder
                              style.backingInk, ThemeRoleId.DiegeticBacking);
         hint.textWrappingMode = TextWrappingModes.Normal;
 
-        // The copies sit under the layer tabs (the scanner app spec §2.4), so the tabs never cover a copy's scan strip.
+        // The copies sit under the paper toolbar row (BuildScanLayers; the scanner app spec §2.4), so no tab lies over a copy.
         Transform copies = Panel(root, "Copies", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(copies, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -LayerStripHeight));
         DocumentWindowController copy = BuildDocumentPage(copies);
