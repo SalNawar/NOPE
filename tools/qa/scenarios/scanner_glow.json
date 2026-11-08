@@ -24,7 +24,7 @@
     { "op": "still", "name": "top_rest" },
     { "op": "recStart", "name": "scan_top" },
     { "op": "drag", "name": "top_to_scanner", "path": "Plain", "target": "PaperTemplate(Clone)", "x2": 0.89, "y2": 0.43 },
-    { "op": "wait", "f": 2.5 },
+    { "op": "wait", "f": 4.5 },
     { "op": "recStop" },
     { "op": "still", "name": "top_scanned" },
     { "op": "call", "target": "DeskView.Return" },
