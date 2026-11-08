@@ -902,8 +902,8 @@ public sealed class DeskPainted : MonoBehaviour
 
     private static float Inverse(float v) => Mathf.Abs(v) < 1e-6f ? 1f : 1f / v;
 
-    /// <summary>The VFD window's glass (a dark green, the phosphor's bed) and its bezel (a mid grey: it reads against the glass and against the cream body, where a near-black bezel vanished into the glass).</summary>
-    private static readonly Color VfdGlassColour = new Color(0.01f, 0.03f, 0.015f, 1f), VfdBezelColour = new Color(0.20f, 0.20f, 0.19f, 1f);
+    /// <summary>The VFD window's glass (a dark green, the phosphor's bed) and its bezel (a light grey: the office's post stack shows an unlit value v at about 200 v luma, so 0.45 lands near 90, between the glass at about 7 and the cream body at about 155; a near-black bezel vanished into the glass).</summary>
+    private static readonly Color VfdGlassColour = new Color(0.01f, 0.03f, 0.015f, 1f), VfdBezelColour = new Color(0.45f, 0.45f, 0.43f, 1f);
 
     /// <summary>
     /// A flat quad of <paramref name="size"/> (metres) in <paramref name="colour"/> under the readout <paramref name="line"/>, named <paramref name="name"/> (made once; found again by name), centred on the line and <paramref name="depth"/> behind its text (a TextMeshPro and Unity's quad both show on their -Z), unlit, no shadows, on the line's layer.
