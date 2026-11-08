@@ -1430,39 +1430,55 @@ public static class CamOps
 
     private static readonly List<RaycastResult> PickHits = new List<RaycastResult>();
 
-    /// <summary>True when the pointer at <paramref name="screen"/> reaches <paramref name="paper"/>: the event system's first hit (the same raycast DeskDraggable's drag begins from) is under it.</summary>
-    private static bool Reaches(DeskDocument paper, Vector2 screen)
+    /// <summary>The paper the pointer takes at <paramref name="screen"/>: the one under the event system's first hit (the same raycast DeskDraggable's drag begins from), null when none.</summary>
+    private static DeskDocument Under(Vector2 screen)
     {
         EventSystem events = EventSystem.current;
         if (events == null || screen.x < 0f || screen.y < 0f || screen.x > Screen.width || screen.y > Screen.height)
-            return false;
+            return null;
         PickHits.Clear();
         events.RaycastAll(new PointerEventData(events) { position = screen }, PickHits);
-        return PickHits.Count > 0 && PickHits[0].gameObject != null && PickHits[0].gameObject.transform.IsChildOf(paper.transform);
+        return PickHits.Count > 0 && PickHits[0].gameObject != null ? PickHits[0].gameObject.GetComponentInParent<DeskDocument>() : null;
     }
 
     /// <summary>
     /// Where camplay picks <paramref name="paper"/> up: the first of
-    /// <see cref="PickCandidates"/> over its screen rect the pointer reaches
-    /// (<see cref="Reaches"/>), so a drag takes this paper and not one lying
-    /// over it; its centre when none does (the old pick; the caller notes
-    /// it), null when it is off the screen.
+    /// <see cref="PickCandidates"/> over its screen rect where the pointer
+    /// takes it (<see cref="Under"/>), so a drag takes this paper and not one
+    /// lying over it; its centre when none does (the old pick; the caller
+    /// notes it), null when it is off the screen. <paramref name="offset"/>
+    /// is how far the pick lies from the centre of the paper the pointer
+    /// takes there (screen pixels): the drop's target moves by it, because
+    /// DeskController docks a paper by its footprint's centre, not by the
+    /// pointer (DockAt), and a paper picked at its edge and dropped with the
+    /// pointer on the bed lands its centre off the bed (bounce 1: 7 of 10
+    /// scans, "never finished (the drop missed the bed?)").
     /// </summary>
-    private static Vector2? PickPoint(DeskDocument paper, out bool reached)
+    private static Vector2? PickPoint(DeskDocument paper, out bool reached, out Vector2 offset)
     {
         reached = false;
+        offset = Vector2.zero;
+        Vector2? centre = QaGame.ScreenPoint(paper.gameObject);
         Rect? rect = QaGame.ScreenRect(paper.gameObject);
-        if (rect == null)
-            return QaGame.ScreenPoint(paper.gameObject);
-        foreach (Vector2 p in PickCandidates(rect.Value))
+        if (rect != null)
         {
-            if (Reaches(paper, p))
+            foreach (Vector2 p in PickCandidates(rect.Value))
             {
-                reached = true;
-                return p;
+                if (Under(p) == paper)
+                {
+                    reached = true;
+                    offset = centre != null ? p - centre.Value : Vector2.zero;
+                    return p;
+                }
             }
         }
-        return QaGame.ScreenPoint(paper.gameObject);
+        if (centre != null)
+        {
+            DeskDocument taken = Under(centre.Value);
+            Vector2? takenCentre = taken != null ? QaGame.ScreenPoint(taken.gameObject) : null;
+            offset = takenCentre != null ? centre.Value - takenCentre.Value : Vector2.zero;
+        }
+        return centre;
     }
 
     /// <summary>Waits (real time) until <paramref name="condition"/> holds or <paramref name="timeout"/> s pass, then tells <paramref name="held"/> which (no throw: camplay notes a miss and goes on).</summary>
@@ -1688,7 +1704,7 @@ public static class CamOps
                 }
                 DeskDocument paper = onDesk[i % onDesk.Count];
                 yield return Reach(scanner.BedPoint);
-                Vector2? from = PickPoint(paper, out bool reached), to = ScreenOf(scanner.BedPoint);
+                Vector2? from = PickPoint(paper, out bool reached, out Vector2 offset), to = ScreenOf(scanner.BedPoint) + offset;
                 if (!reached && from != null && notes.Count < 12)
                     notes.Add($"scan {i + 1}: paper {paper.Index} is covered whole (picked at its centre)");
                 if (from == null || to == null)
@@ -1727,7 +1743,7 @@ public static class CamOps
                 }
                 tried.Add(paper.Index);
                 yield return Reach(reader.DockPoint(MachineDock.Pad));
-                Vector2? from = PickPoint(paper, out bool reached), to = ScreenOf(reader.DockPoint(MachineDock.Pad));
+                Vector2? from = PickPoint(paper, out bool reached, out Vector2 offset), to = ScreenOf(reader.DockPoint(MachineDock.Pad)) + offset;
                 if (!reached && from != null && notes.Count < 12)
                     notes.Add($"chip try {attempt + 1}: paper {paper.Index} is covered whole (picked at its centre)");
                 if (from == null || to == null)
