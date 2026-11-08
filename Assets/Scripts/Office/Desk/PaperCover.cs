@@ -23,13 +23,11 @@ using UnityEngine;
 /// grid, Sheet, so DocumentCel bends them, Bow; the emblem rides the bow,
 /// Ride, so the board never comes up through it), with passport_open and
 /// passport_close (the sound bank's cues, FEEDBACK's). Every paper but a
-/// booklet hides it. The shut cover reads as a printed booklet, not a card
-/// (Saleh's playtest of 2026-11-07, item 2: "Passport feels like cardboard"):
-/// its corners are rounded (Corners, an alpha mask on the front), the emblem
-/// stands embossed (Emboss: its own shape under it, a shade darker than the
-/// cover, a hair down and right) and the form's title is printed under the
-/// emblem in the emblem's ink (Title, from the paper's text template); both
-/// ride the bow as the emblem does.
+/// booklet hides it. The shut cover is printed, not a plain card (Saleh's
+/// playtest of 2026-11-07, item 2: "Passport feels like cardboard"): the
+/// form's title is printed under the emblem in the emblem's ink (Title, from
+/// the paper's text template, shrunk to fit the cover's width) and rides the
+/// bow as the emblem does.
 /// </summary>
 public sealed class PaperCover : MonoBehaviour
 {
@@ -57,18 +55,8 @@ public sealed class PaperCover : MonoBehaviour
     /// <summary>The cover's title line height as a share of the cover's width (a passport's "PASSPORT" line).</summary>
     [SerializeField, Range(0.03f, 0.2f)] private float titleShare = 0.075f;
 
-    /// <summary>The rounded corners' radius as a share of the cover's side (Corners).</summary>
-    public const float CornerShare = 0.06f;
-
-    /// <summary>How far the emboss shade lies down and right of the emblem (metres).</summary>
-    public const float EmbossOffset = 0.0004f;
-
-    /// <summary>How much of the cover's colour the emboss shade keeps (darker than the cover).</summary>
-    public const float EmbossShade = 0.55f;
-
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
     private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
-    private static readonly int CutoffId = Shader.PropertyToID("_Cutoff");
     private static readonly int BaseMapStId = Shader.PropertyToID("_BaseMap_ST");
     private static readonly int FlexId = Shader.PropertyToID("_Flex"), Flex2Id = Shader.PropertyToID("_Flex2"), FlexSizeId = Shader.PropertyToID("_FlexSize");
 
@@ -81,13 +69,9 @@ public sealed class PaperCover : MonoBehaviour
     /// <summary>The cover sheets' shared grid (Sheet), made once.</summary>
     private static Mesh _sheet;
 
-    /// <summary>The rounded corners' alpha mask (Corners), made once.</summary>
-    private static Texture2D _corners;
-
-    /// <summary>The emboss shade under the emblem and the title line under both (made on the first Arrive, from the emblem and the paper's text template), their places on the flat cover and the title's half size.</summary>
-    private Renderer _emboss;
+    /// <summary>The title line under the emblem (made on the first Arrive from the paper's text template), its place on the flat cover and its half size.</summary>
     private TextMeshPro _title;
-    private Vector3 _embossRest, _titleRest;
+    private Vector3 _titleRest;
     private Vector2 _titleHalf;
 
     /// <summary>The bow last shown (metres; Show sets the sheets' bend only when it changes).</summary>
@@ -141,8 +125,6 @@ public sealed class PaperCover : MonoBehaviour
             front.transform.localScale = new Vector3(halfWidth * 2f, below, 1f);
             front.GetPropertyBlock(_block);
             _block.SetColor(BaseColorId, colour);
-            _block.SetTexture(BaseMapId, Corners());
-            _block.SetFloat(CutoffId, 0.5f);
             front.SetPropertyBlock(_block);
         }
         float emblemSide = halfWidth * 2f * emblemShare;
@@ -150,8 +132,7 @@ public sealed class PaperCover : MonoBehaviour
         {
             float side = emblemSide;
             emblem.gameObject.SetActive(mark != null);
-            // the emboss shade lies between the front and the emblem
-            _emblemRest = new Vector3(0f, -below / 2f, -2f * PaperLayers.Seal);
+            _emblemRest = new Vector3(0f, -below / 2f, -PaperLayers.Seal);
             _emblemHalf = new Vector2(side / 2f, side / 2f);
             emblem.transform.localPosition = _emblemRest;
             emblem.transform.localRotation = Quaternion.identity;
@@ -162,23 +143,6 @@ public sealed class PaperCover : MonoBehaviour
                 _block.SetTexture(BaseMapId, mark);
                 _block.SetColor(BaseColorId, emblemInk);
                 emblem.SetPropertyBlock(_block);
-            }
-            if (_emboss == null)
-            {
-                _emboss = Instantiate(emblem, emblem.transform.parent);
-                _emboss.name = "Emboss";
-            }
-            _emboss.gameObject.SetActive(mark != null);
-            _embossRest = _emblemRest + new Vector3(EmbossOffset, -EmbossOffset, PaperLayers.Seal);
-            _emboss.transform.localPosition = _embossRest;
-            _emboss.transform.localRotation = Quaternion.identity;
-            _emboss.transform.localScale = emblem.transform.localScale;
-            if (mark != null)
-            {
-                _emboss.GetPropertyBlock(_block);
-                _block.SetTexture(BaseMapId, mark);
-                _block.SetColor(BaseColorId, new Color(colour.r * EmbossShade, colour.g * EmbossShade, colour.b * EmbossShade, 1f));
-                _emboss.SetPropertyBlock(_block);
             }
         }
         if (textTemplate != null && hinge != null)
@@ -192,15 +156,19 @@ public sealed class PaperCover : MonoBehaviour
             _title.gameObject.SetActive(titled);
             if (titled)
             {
-                float line = halfWidth * 2f * titleShare;
+                float line = halfWidth * 2f * titleShare, width = halfWidth * 1.8f;
                 TmpFormText.Style(_title, FormTextRole.Title, line);
                 _title.fontStyle |= FontStyles.UpperCase;
                 _title.text = title;
                 _title.color = emblemInk;
                 _title.alignment = TextAlignmentOptions.Center;
                 _title.textWrappingMode = TextWrappingModes.NoWrap;
-                _title.rectTransform.sizeDelta = new Vector2(halfWidth * 1.8f, line * 1.5f);
-                _titleRest = new Vector3(0f, -below / 2f - emblemSide / 2f - line, -2f * PaperLayers.Seal);
+                // one line, shrunk to the cover's width: a long title never runs off the cover
+                float wide = _title.GetPreferredValues(title).x;
+                if (wide > width)
+                    _title.fontSize *= width / wide;
+                _title.rectTransform.sizeDelta = new Vector2(width, line * 1.5f);
+                _titleRest = new Vector3(0f, -below / 2f - emblemSide / 2f - line, -PaperLayers.Seal);
                 _titleHalf = new Vector2(halfWidth * 0.9f, line * 0.75f);
                 _title.rectTransform.localPosition = _titleRest;
                 _title.rectTransform.localRotation = Quaternion.identity;
@@ -267,33 +235,6 @@ public sealed class PaperCover : MonoBehaviour
         _sheet.SetTriangles(triangles, 0);
         _sheet.RecalculateBounds();
         return _sheet;
-    }
-
-    /// <summary>
-    /// The cover's rounded corners: a white alpha mask over the unit cover,
-    /// clear outside a quarter circle of CornerShare at each corner (the
-    /// front's _BaseMap with its cut-out on, DocumentCel); made once and
-    /// shared.
-    /// </summary>
-    public static Texture2D Corners()
-    {
-        if (_corners != null)
-            return _corners;
-        const int n = 128;
-        float r = CornerShare * n;
-        var pixels = new Color32[n * n];
-        for (int y = 0; y < n; y++)
-            for (int x = 0; x < n; x++)
-            {
-                float dx = Mathf.Max(0f, r - (x + 0.5f), x + 0.5f - (n - r));
-                float dy = Mathf.Max(0f, r - (y + 0.5f), y + 0.5f - (n - r));
-                bool inside = dx * dx + dy * dy <= r * r;
-                pixels[y * n + x] = new Color32(255, 255, 255, inside ? (byte)255 : (byte)0);
-            }
-        _corners = new Texture2D(n, n, TextureFormat.RGBA32, false) { name = "CoverCorners", hideFlags = HideFlags.DontSave, wrapMode = TextureWrapMode.Clamp };
-        _corners.SetPixels32(pixels);
-        _corners.Apply(false, true);
-        return _corners;
     }
 
     /// <summary>Puts the shared grid (Sheet) on a cover sheet's mesh filter.</summary>
@@ -404,8 +345,6 @@ public sealed class PaperCover : MonoBehaviour
             Bow(back, _block, Vector2.up, -bow);
             if (emblem != null && front != null)
                 Ride(emblem.transform, _emblemRest, _emblemHalf, front.transform, Vector2.down, bow);
-            if (_emboss != null && front != null)
-                Ride(_emboss.transform, _embossRest, _emblemHalf, front.transform, Vector2.down, bow);
             if (_title != null && front != null)
                 Ride(_title.transform, _titleRest, _titleHalf, front.transform, Vector2.down, bow);
         }
