@@ -104,6 +104,13 @@ using UnityEngine.UI;
 /// screen's rows, and the face's height in pixels;
 /// <c>traveller.&lt;name&gt;</c> passes at 29 to 32 % on a 16:9 screen (a report
 /// at any other aspect).</item>
+/// <item><c>campapers</c> (target "before" or "after"; name): "before"
+/// notes the world x and z of every case paper at rest on the desk; "after"
+/// writes papers_&lt;name&gt;.tsv (one row a paper: its index, kind, x and z
+/// before and after, dx and dz in metres) and asserts
+/// <c>papers.&lt;name&gt;</c>: each paper's x and z differ by 0.000 m (D57: on
+/// the switch only the camera moves; a paper is moved only by its own drop,
+/// FOLD-01); red "not measured" with no "before" or no paper on the desk.</item>
 /// <item><c>camcycle</c> (n = 1 starts, 0 reports; f = cycles, 2 when 0;
 /// name): n = 1 starts, in the background, the reading view turned in and
 /// back and the city looked at and back, for the <c>gc</c> step that
@@ -180,6 +187,7 @@ public static class CamOps
         QaRunner.RegisterOp("camplay", Play);
         QaRunner.RegisterOp("camcap", Cap);
         QaRunner.RegisterOp("camtraveller", TravellerShare);
+        QaRunner.RegisterOp("campapers", PapersAtRest);
         QaRunner.RegisterOp("camcycle", Cycle);
         QaRunner.Finished -= RunFinished;
         QaRunner.Finished += RunFinished;
@@ -1840,6 +1848,54 @@ public static class CamOps
         runner.Assert("traveller." + name, Owner, !wide || (share >= TravellerLeast - 1e-4f && share <= TravellerMost + 1e-4f),
                       $"{share * 100f:0.0} % of {Screen.height} rows (head top at row {Screen.height - top:0}, the desk's top at the figure at row {Screen.height - bottom:0}); the head {faceTop - faceBottom:0} px",
                       wide ? $"D16: {TravellerLeast * 100f:0} to {TravellerMost * 100f:0} % at 16:9" : "a report (D16's band is for 16:9)");
+    }
+
+    // ------------------------------------------------------------------ campapers
+
+    /// <summary>The desk papers campapers "before" noted (by paper index: the kind and the world position), waiting for the "after" call.</summary>
+    private static Dictionary<int, (string kind, Vector3 at)> _papersBefore;
+
+    /// <summary>A metre value for the papers table (three decimals, the acceptance's 0.000 m).</summary>
+    private static string Metres(float v) => v.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+
+    private static IEnumerator PapersAtRest(QaRunner runner, QaStep step)
+    {
+        yield return null;
+        string name = Name(step, "papers");
+        List<DeskDocument> papers = Papers(DeskZone.Desk);
+        if (step.target != "after")
+        {
+            _papersBefore = papers.ToDictionary(p => p.Index, p => (p.Kind.ToString(), p.transform.position));
+            yield break;
+        }
+        Dictionary<int, (string kind, Vector3 at)> before = _papersBefore;
+        _papersBefore = null;
+        if (before == null || before.Count == 0)
+        {
+            runner.Assert("papers." + name, Owner, false, "not measured", before == null ? "no campapers \"before\" was taken" : "no case paper at rest on the desk at the \"before\"");
+            yield break;
+        }
+        var rows = new List<string> { "paper\tkind\tx_before\tz_before\tx_after\tz_after\tdx\tdz" };
+        float worst = 0f;
+        int gone = 0;
+        foreach (KeyValuePair<int, (string kind, Vector3 at)> pair in before.OrderBy(p => p.Key))
+        {
+            DeskDocument now = papers.FirstOrDefault(p => p.Index == pair.Key);
+            Vector3 a = pair.Value.at;
+            if (now == null)
+            {
+                gone++;
+                rows.Add(string.Join("\t", pair.Key, pair.Value.kind, Metres(a.x), Metres(a.z), "not at rest on the desk", "", "", ""));
+                continue;
+            }
+            Vector3 b = now.transform.position;
+            worst = Mathf.Max(worst, Mathf.Abs(b.x - a.x), Mathf.Abs(b.z - a.z));
+            rows.Add(string.Join("\t", pair.Key, pair.Value.kind, Metres(a.x), Metres(a.z), Metres(b.x), Metres(b.z), Metres(b.x - a.x), Metres(b.z - a.z)));
+        }
+        System.IO.File.WriteAllLines(System.IO.Path.Combine(runner.OutDir, $"papers_{name}.tsv"), rows);
+        runner.Assert("papers." + name, Owner, gone == 0 && worst < 0.0005f,
+                      $"{before.Count} papers at rest on the desk before; the largest move in x or z {worst:0.000000} m; {gone} not at rest on the desk after; papers_{name}.tsv",
+                      "D57: each paper's world x and z differ by 0.000 m across the switch, every paper still at rest on the desk");
     }
 
     /// <summary><paramref name="text"/>'s mesh bounds on the screen through <paramref name="cam"/>, in pixels from the top left (the texts table's rect: the still's own rows).</summary>
