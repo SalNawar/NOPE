@@ -47,9 +47,9 @@ public sealed class CityR17ConfigSO : ScriptableObject
     public float idleSeconds = 4f;
 
     [Header("Ad screens under the leading culture (D61)")]
-    [Tooltip("A screen at least this wide and this tall (plate px) shows the leading culture's emblem and colours; the smaller ones keep their ads.")]
-    public float cultureMinW = 64f;
-    public float cultureMinH = 48f;
+    [Tooltip("A screen whose emblem can be at least this wide and this tall (plate px; 42 is 40 px at 1080p) shows the leading culture's emblem and colours; the smaller ones keep their ads.")]
+    public float cultureMinW = 42f;
+    public float cultureMinH = 18f;
 
     [Header("Traffic")]
     [Tooltip("How far (m) the ink hull sits behind its body in depth, so it only shows round the silhouette (the look-dev culls front faces; the port draws both and pushes the ink back).")]

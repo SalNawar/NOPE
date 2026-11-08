@@ -9,19 +9,25 @@ public static class CityR17Culture
     /// <summary>The emblem's crop in the culture's departure-board plate art (canvas px): the plate's centre and the height of its inner field, which holds the emblem and none of the frame.</summary>
     public const double PlateCenterX = 1061, PlateCenterY = 59, PlateFieldH = 22;
 
-    /// <summary>The share of a screen's height the colour band takes at its foot, and the share of its width the emblem is inset on each side.</summary>
-    public const double BandShare = 0.14, InsetShare = 0.08;
+    /// <summary>The share of the box's height the colour band takes at its foot, and the widest emblem shape (width over height).</summary>
+    public const double BandShare = 0.10, MaxAspect = 2.4;
 
-    /// <summary>True when a screen of <paramref name="r"/> is big enough to carry an emblem (the rest keep their ads).</summary>
-    public static bool Takes(CityR17Rect r, double minW, double minH) => r.W >= minW && r.H >= minH;
-
-    /// <summary>The part of the screen the base colour covers (the whole rect), the band at its foot and the emblem's box above the band (plate px).</summary>
-    public static void Layout(CityR17Rect screen, out CityR17Rect band, out CityR17Rect emblem)
+    /// <summary>True when the emblem of a screen whose painted ad fills <paramref name="box"/> is at least <paramref name="minW"/> by <paramref name="minH"/> (the rest keep their ads).</summary>
+    public static bool Takes(CityR17Rect box, double minW, double minH)
     {
-        double bandH = Math.Round(screen.H * BandShare);
-        band = new CityR17Rect(screen.X, screen.Y + screen.H - bandH, screen.W, bandH);
-        double inset = Math.Round(screen.W * InsetShare);
-        emblem = new CityR17Rect(screen.X + inset, screen.Y + inset, screen.W - 2 * inset, screen.H - bandH - 2 * inset);
+        Layout(box, out _, out CityR17Rect emblem);
+        return emblem.W >= minW && emblem.H >= minH;
+    }
+
+    /// <summary>The band at the foot of <paramref name="box"/> (the painted ad's opaque box) and the emblem's box above it, centred, from square to 2.4 wide, filling the box above the band (plate px).</summary>
+    public static void Layout(CityR17Rect box, out CityR17Rect band, out CityR17Rect emblem)
+    {
+        double bandH = Math.Round(box.H * BandShare);
+        band = new CityR17Rect(box.X, box.Y + box.H - bandH, box.W, bandH);
+        double aw = box.W, ah = box.H - bandH;
+        double aspect = ah > 0 ? Math.Min(MaxAspect, Math.Max(1.0, aw / ah)) : 1.0;
+        double w = Math.Max(0, Math.Min(aw, ah * aspect)), h = w / aspect;
+        emblem = new CityR17Rect(box.X + (box.W - w) / 2, box.Y + (ah - h) / 2, w, h);
     }
 
     /// <summary>The crop of the plate art (canvas px) that fills <paramref name="box"/>: the plate's centre, the field's height, the width of the box's aspect.</summary>

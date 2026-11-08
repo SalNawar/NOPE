@@ -476,16 +476,17 @@ public sealed class CityR17Stage : IDisposable
             if (!CityR17Loops.ClipTile(src, e.UsedW, e.UsedH, out CityR17Rect clip, out double dx, out double dy))
                 continue;
             CityR17Rect r = ads.Screens[i].Rect;
-            if (_f.Emblem != null && CityR17Culture.Takes(r, _config.cultureMinW, _config.cultureMinH))
+            CityR17Rect box = ads.Screens[i].Box;
+            if (_f.Emblem != null && CityR17Culture.Takes(box, _config.cultureMinW, _config.cultureMinH))
             {
-                DrawCultureScreen(cmd, r, par);
+                DrawCultureScreen(cmd, box, par);
                 continue;
             }
             Sprite(cmd, PassAlpha, _adTex[sheet], e.SizeW, e.SizeH, clip, Placed(r.X + dx, r.Y + dy, clip.W, clip.H, par), White, NoHaze);
         }
     }
 
-    /// <summary>One ad screen under the leading culture: its ground colour, the band at its foot and the emblem cropped from the plate art to the box above (D61).</summary>
+    /// <summary>One ad screen under the leading culture, inside the box of its ad's opaque pixels: its ground colour, the band at its foot and the emblem cropped from the plate art (D61).</summary>
     private void DrawCultureScreen(CommandBuffer cmd, CityR17Rect r, double par)
     {
         CityR17Culture.Layout(r, out CityR17Rect band, out CityR17Rect box);
