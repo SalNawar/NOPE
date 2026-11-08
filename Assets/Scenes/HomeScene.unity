@@ -21478,6 +21478,7 @@ GameObject:
   - component: {fileID: 1696245244}
   - component: {fileID: 1696245246}
   - component: {fileID: 1696245245}
+  - component: {fileID: 1696245250}
   m_Layer: 0
   m_Name: ArtBackground
   m_TagString: Untagged
@@ -21524,7 +21525,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f53bf5654f132844b918fd8e09f7eecc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ccd5972ed4754c1bb26955ae5abe9ff0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -21542,6 +21543,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1696245243}
   m_CullTransparentMesh: 1
+--- !u!114 &1696245250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696245243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
+  m_AspectMode: 4
+  m_AspectRatio: 1.7777778
 --- !u!1 &1703125626
 GameObject:
   m_ObjectHideFlags: 0
