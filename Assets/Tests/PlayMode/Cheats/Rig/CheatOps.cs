@@ -46,7 +46,8 @@ using UnityEngine;
 /// desk's papers, at least 50 red pixels, half of the boxes' middles on the
 /// screen and twice the median red of the papers' other boxes), first (the forced appearance stands first: cheatForce's),
 /// lawbreaker (today's cases hold someone else's photo and the switch is used
-/// up).</item>
+/// up), clockopens (the clock shows today's opening hour within 1 minute:
+/// a jumped day opens at its own hour; cheats-day-clock).</item>
 /// <item><c>cheatForce</c> (text: "famous" or "D&lt;day&gt;"): picks the menu's
 /// first famous premade, or that day's first story beat, notes what must
 /// stand first and where, and runs "First traveller of the shift" on it.</item>
@@ -413,6 +414,21 @@ public static class CheatOps
                     return liars >= 1 && !DevToolsState.ForcedLie.HasValue;
                 };
                 detail = "CHEATS.md Law-breaker next: the next generated traveller carries someone else's photo, and today's shift starts over";
+                break;
+            case "clockopens":
+                // cheats-day-clock (Saleh 2026-11-07, item 9: "Cheats still start other days on wrong time").
+                test = () =>
+                {
+                    var driver = ShiftClockDriver.Live as ShiftClockDriver;
+                    RunManager run = RunManager.HasInstance ? RunManager.Instance : null;
+                    DayPlanSO plan = run != null ? run.GetCurrentDayPlan() : null;
+                    int opens = plan != null ? plan.Shift(run.Config != null ? run.Config.gameConfig : null).StartMinute : -1;
+                    float shown = driver != null && driver.Clock != null ? driver.ShownMinute : -1f;
+                    HallLightingRig rig = UnityEngine.Object.FindObjectsByType<HallLightingRig>().FirstOrDefault(r => r.isActiveAndEnabled);
+                    measured = $"day {(World != null ? World.day : 0)}: the clock shows {(shown >= 0f ? ShiftClock.Format(shown) : "no clock")}, the day opens {(opens >= 0 ? ShiftClock.Format(opens) : "no plan")}, hall rig hour {(rig != null ? rig.Hour : -1f).ToString("0.00", CultureInfo.InvariantCulture)}";
+                    return opens >= 0 && shown >= 0f && Mathf.Abs(shown - opens) <= 1f;
+                };
+                detail = "cheats-day-clock: a jumped day opens at its own hour (09:00 days 1-7, 13:00 days 8-14, 16:00 days 15-21; FEATURES, the cheat menu): the clock shows it within 1 minute";
                 break;
             case "hour":
                 yield return Hour(runner, step, id);
