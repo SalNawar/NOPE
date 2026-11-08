@@ -188,7 +188,13 @@ public sealed partial class AppPane : MonoBehaviour
         HistoryChanged?.Invoke(this);
     }
 
-    /// <summary>Shows this side's header as the target of the shelf, or not.</summary>
+    /// <summary>
+    /// Shows this side's header as the target of the shelf, or not. The
+    /// "Links open here" hint shrinks to its built box (UiText.FitLabel;
+    /// pc-ui-heuristics, Saleh's item 5: "Links op..." was cut), so the title
+    /// keeps its built room (round 1: a wider hint cut "Transponder Card" to
+    /// "Transpo..."); the title row's right inset is the built one for each state.
+    /// </summary>
     public void SetTarget(bool on)
     {
         foreach (GameObject part in targetParts)
@@ -197,9 +203,20 @@ public sealed partial class AppPane : MonoBehaviour
         foreach (GameObject part in otherParts)
             if (part != null && part.activeSelf == on)
                 part.SetActive(!on);
+        if (on)
+            UiText.FitLabel(HintText());
         RectTransform inset = titleRow != null ? titleRow : titleText != null ? titleText.rectTransform : null;
         if (inset != null)
             inset.offsetMax = new Vector2(on ? titleRightInsets.x : titleRightInsets.y, inset.offsetMax.y);
+    }
+
+    /// <summary>The hint among the target parts (the one part that is a text), or null.</summary>
+    private TMP_Text HintText()
+    {
+        foreach (GameObject part in targetParts)
+            if (part != null && part.TryGetComponent(out TMP_Text text))
+                return text;
+        return null;
     }
 
     /// <summary>The pane shows (the app split, the window opened): it is set up and shows its source.</summary>

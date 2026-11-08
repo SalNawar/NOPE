@@ -462,12 +462,12 @@ public static partial class OfficeSceneUIBuilder
         HairlineEdge(column, "Rule", 2);
 
         Transform rail = Panel(column, "Rail", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        TMP_Text railText = WbText(rail, "Text", "findings.empty", null, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineRight);
+        // Centred along the rail (pc-ui-heuristics: hung from the top, the words ran under the menu bar; FindingsView.CentreRailText lays the built scene the same).
+        TMP_Text railText = WbText(rail, "Text", "findings.empty", null, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.Center);
         var railRect = (RectTransform)railText.transform;
-        railRect.anchorMin = railRect.anchorMax = new Vector2(0.5f, 1f);
-        railRect.pivot = new Vector2(1f, 0.5f);
+        railRect.anchorMin = railRect.anchorMax = railRect.pivot = new Vector2(0.5f, 0.5f);
         railRect.sizeDelta = new Vector2(520f, 40f);
-        railRect.anchoredPosition = new Vector2(0f, -16f);
+        railRect.anchoredPosition = Vector2.zero;
         railRect.localRotation = Quaternion.Euler(0f, 0f, 90f);
         rail.gameObject.SetActive(false);
 
