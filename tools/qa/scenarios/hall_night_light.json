@@ -5,7 +5,7 @@
  "steps": [
   {
    "op": "note",
-   "text": "hall-night-light (D9, HALL-01/03/04/07, CITY-03): the forced hour at 09, 12, 16:30, 18:30 and 22 with the traveller at the desk. Each hour: an office still at 1920x1080 and at 1280x1024 after 4 s (the hall light eases to the hour). Two 6 s office recordings, 12:00 and 22:00, for seqtools flicker (the lamp flicker must stay under the toggle threshold). Pass: the window region luma at 12 in 33..41, at 22 in 28..34; the mat at 22 35..50 % under 12; the traveller at 22 55..70 % of 12 (measured offline from the stills)."
+   "text": "hall-night-light (D9, HALL-01/03/04/07, CITY-03) and hall-light-balance (D55): the forced hour at 09, 12, 16:30, 18:30, 19 and 22 with the traveller at the desk. Each hour: an office still at 1920x1080 and at 1280x1024 after 4 s (the hall light eases to the hour). Two 6 s office recordings, 12:00 and 22:00, for seqtools flicker (the lamp flicker must stay under the toggle threshold). Pass (D55, measured offline from the stills in the hall window box x 300..1650, y 60..620 of the 1920x1080 still): mean luma 70 or more at 09 and 12, 55 or more at 19, 50 or more at 22; 18:30 and 22 differ by 5 or more; the night grade starts after 19:00. The traveller at 22 55..70 % of 12."
   },
   {
    "op": "title"
@@ -183,6 +183,44 @@
   {
    "op": "still",
    "name": "hnl_1830"
+  },
+  {
+   "op": "res",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "op": "wait",
+   "f": 1.5
+  },
+  {
+   "op": "hour",
+   "f": 19
+  },
+  {
+   "op": "wait",
+   "f": 4
+  },
+  {
+   "op": "still",
+   "name": "hnl_1900"
+  },
+  {
+   "op": "probe",
+   "name": "h1900"
+  },
+  {
+   "op": "res",
+   "w": 1280,
+   "h": 1024
+  },
+  {
+   "op": "wait",
+   "f": 1.5
+  },
+  {
+   "op": "still",
+   "name": "hnl_1900"
   },
   {
    "op": "res",
