@@ -1978,16 +1978,13 @@ public static class CamOps
     }
 
     /// <summary>
-    /// camedges (name), in the reading view: asserts <c>edges.&lt;name&gt;.badge</c> (the cheat badge's text lies wholly on the screen: 0 px cut)
-    /// and <c>edges.&lt;name&gt;.rest</c> (each paper on the counter has its top edge 24 px or more, at 1080p, nearer the chair than the mat's far
-    /// rim). READING-VIEW-EDGES: the badge sat clipped by the left edge, and the hand-over row touched the mat's rim.
+    /// camedges (name): asserts <c>edges.&lt;name&gt;.badge</c>: the cheat badge's text lies wholly on the screen (0 px cut). READING-VIEW-EDGES:
+    /// Saleh's still showed the badge clipped by the left edge. The hand-over row's gap to the mat's rim is read off the still (the rim is art).
     /// </summary>
     private static IEnumerator Edges(QaRunner runner, QaStep step)
     {
         yield return null;
         string name = Name(step, "edges");
-        float k = 1080f / Screen.height;
-        Camera cam = Camera.main;
         var badge = QaGame.Find<CheatBadge>();
         if (badge != null && QaGame.Field(badge, "_badge") is TMP_Text text && !string.IsNullOrEmpty(text.text))
         {
@@ -2005,37 +2002,6 @@ public static class CamOps
         }
         else
             runner.Assert($"edges.{name}.badge", Owner, false, "not measured", "no cheat badge with a line (the run is not cheated)");
-
-        if (cam == null || !DeskLayout.Bound)
-        {
-            runner.Assert($"edges.{name}.rest", Owner, false, "not measured", "no camera or bound desk");
-            yield break;
-        }
-        DeskRect mat = DeskLayout.Mat.Rect;
-        float far = mat.CentreY + mat.Height / 2f;
-        var gaps = new List<string>();
-        float least = float.MaxValue;
-        foreach (DeskDocument p in Papers(DeskZone.Counter))
-        {
-            Renderer[] rs = p.GetComponentsInChildren<Renderer>();
-            if (rs.Length == 0)
-                continue;
-            Bounds b = rs[0].bounds;
-            foreach (Renderer r in rs)
-                b.Encapsulate(r.bounds);
-            float top = float.MaxValue;
-            for (int i = 0; i < 8; i++)
-            {
-                Vector3 c = new Vector3((i & 1) == 0 ? b.min.x : b.max.x, (i & 2) == 0 ? b.min.y : b.max.y, (i & 4) == 0 ? b.min.z : b.max.z);
-                top = Mathf.Min(top, Screen.height - cam.WorldToScreenPoint(c).y);
-            }
-            float rim = Screen.height - cam.WorldToScreenPoint(DeskLayout.Frame.Point(new Vector2(DeskLayout.Frame.Local(p.transform.position).x, far), 0f)).y;
-            float gap = (top - rim) * k;
-            least = Mathf.Min(least, gap);
-            gaps.Add($"paper {p.Index} {gap:0} px");
-        }
-        runner.Assert($"edges.{name}.rest", Owner, gaps.Count > 0 && least >= 24f, $"{Screen.width}x{Screen.height}: {string.Join(", ", gaps)} (at 1080p, top edge to the mat's far rim)",
-                      "each hand-over paper's top edge rests 24 px or more (1080p) inside the mat's rim");
     }
 
     /// <summary><paramref name="text"/>'s mesh bounds on the screen through <paramref name="cam"/>, in pixels from the top left (the texts table's rect: the still's own rows).</summary>
