@@ -47,6 +47,9 @@ public sealed partial class SwitchboardView
     private static readonly Color EraInk = new Color(0.47f, 0.13f, 0.1f, 1f);
     private static readonly Color OriginInk = new Color(0.46f, 0.33f, 0.15f, 1f);
     private static readonly Color EmblemCream = new Color(0.94f, 0.9f, 0.8f, 1f);
+
+    /// <summary>The legend names' smallest font: Outfit's cap height is 0.7 em, so 17.2 px keeps the caps at 12 px or more at 1920x1080 (the director's floor, D54 amended).</summary>
+    private const float LegendFontMin = 17.2f;
     private static readonly Color PipDark = new Color(0.55f, 0.45f, 0.3f, 0.28f);
 
     /// <summary>A dial not in service today: a darker veil than a Classic module's (a dial's brass reads bright under the Classic one).</summary>
@@ -62,6 +65,11 @@ public sealed partial class SwitchboardView
         public Image Horizon;
         public Image Mark;
         public Image[] Bars;
+        public Vector2 Centre;
+        public Image[] Glyphs;
+        public readonly Image[] LockGlows = new Image[2], LockDiscs = new Image[2], LockGlyphs = new Image[2];
+        public readonly Color[] LockColour = new Color[2];
+        public readonly float[] LockLevel = new float[2];
         public Spring Turn = Spring.At(0f);
         public float HandLast;
         public float GrabDetent;
@@ -188,6 +196,7 @@ public sealed partial class SwitchboardView
             _eraSprites[e + 1] = SpriteOf(Art(GatePaint.Glyph(e, 64), "Switchboard glyph " + e));
         Sprite chevron = SpriteOf(Art(GatePaint.Chevron(), "Switchboard chevron"));
         Sprite lens = SpriteOf(Art(GatePaint.Lens(), "Switchboard lens"));
+        Sprite lockDisc = SpriteOf(Art(GatePaint.LockDisc(), "Switchboard lock disc"));
         Sprite horizon = SpriteOf(Art(GatePaint.Horizon((int)GateBoardLayout.HubRadius), "Switchboard horizon"));
         Sprite cell = SpriteOf(Art(GatePaint.Cell(), "Switchboard cell"));
         Sprite mark = SpriteOf(Art(GatePaint.MarkArrow(), "Switchboard mark"));
@@ -209,6 +218,21 @@ public sealed partial class SwitchboardView
             _callSlots[d] = slot;
         }
 
+        // The legend plates (D54; Saleh: "symbols need a guide"): every ring glyph with its name, in ring order, a column a plate.
+        for (int s = 0; s < _ring.Length; s++)
+        {
+            GateGlyph g = _ring[s];
+            if (g.Kind == GateGlyphKind.Blank)
+                continue;
+            Sprite sprite = GlyphSprite(g, emblems);
+            Picture("Legend glyph " + g, _callLayer, sprite, sprite != null ? GlyphInkOf(g) : Color.clear, Local(_gate.LegendGlyph(s, _ring.Length)), Vector2.one * GateBoardLayout.LegendGlyphSize);
+            BoardRect row = _gate.LegendName(s, _ring.Length);
+            TextMeshProUGUI name = Label("Legend name " + g, _callLayer, Local(row.Centre), Size(row), NameInk, LegendFontMin, 18f, _font);
+            name.alignment = TextAlignmentOptions.MidlineLeft;
+            name.textWrappingMode = TextWrappingModes.NoWrap;
+            name.text = g.Kind == GateGlyphKind.Nation ? Nation(g.Index) : g.Kind == GateGlyphKind.Era ? Era(g.Index) : Words(SwitchboardWords.LegendOrigin);
+        }
+
         // The dials: the horizon in the hub, the ring and its glyphs, the chevrons and their lenses, the number; the cradle's bars and its mark.
         _dials = new Dial[modules];
         for (int m = 0; m < modules; m++)
@@ -222,18 +246,20 @@ public sealed partial class SwitchboardView
             dial.Horizon = Picture("Horizon", root, horizon, Clear(_config.horizonColour), Local(c), Vector2.one * (2f * GateBoardLayout.HubRadius + 2f));
             Image ring = Picture("Ring", root, _ringSprite, Color.white, Local(c), _ringSprite != null ? _ringSprite.rect.size : Vector2.one * 284f);
             dial.Ring = ring.rectTransform;
+            dial.Centre = Local(c);
+            dial.Glyphs = new Image[_ring.Length];
             float step = GateDial.SlotDegrees(_ring.Length);
             for (int s = 0; s < _ring.Length; s++)
             {
                 GateGlyph g = _ring[s];
                 if (g.Kind == GateGlyphKind.Blank)
                     continue;
-                Sprite sprite = g.Kind == GateGlyphKind.Nation ? EmblemArt.Sprite(emblems[g.Index]) : _eraSprites[g.Kind == GateGlyphKind.Era ? g.Index + 1 : 0];
-                Color ink = g.Kind == GateGlyphKind.Nation ? GlyphInk : g.Kind == GateGlyphKind.Era ? EraInk : OriginInk;
+                Sprite sprite = GlyphSprite(g, emblems);
                 float a = s * step * Mathf.Deg2Rad;
-                Image glyph = Picture("Glyph " + g, dial.Ring, sprite, sprite != null ? ink : Color.clear,
+                Image glyph = Picture("Glyph " + g, dial.Ring, sprite, sprite != null ? GlyphInkOf(g) : Color.clear,
                                       new Vector2(GateBoardLayout.GlyphRadius * Mathf.Sin(a), GateBoardLayout.GlyphRadius * Mathf.Cos(a)), Vector2.one * GateBoardLayout.GlyphSize);
                 glyph.rectTransform.localRotation = Quaternion.Euler(0f, 0f, -s * step);
+                dial.Glyphs[s] = glyph;
             }
             dial.Lenses = new Image[GateDial.Chevrons];
             dial.LensGlows = new Image[GateDial.Chevrons];
@@ -255,6 +281,13 @@ public sealed partial class SwitchboardView
                 dial.Bars[s] = Picture("Bar " + (s + 1), root, Sprite("lamp_glow"), Clear(LampAmber), Local(_gate.CradleSlot(m, s).Centre), new Vector2(96f, 120f));
             dial.Mark = Picture("Era mark", root, mark, Color.white, Local(_gate.Mark(m, 1)), new Vector2(18f, 12f));
             dial.Mark.gameObject.SetActive(false);
+            // The locked glyphs' discs, over the ring and the chevrons (D54 amended); DrawLocks places them each frame.
+            for (int l = 0; l < dial.LockDiscs.Length; l++)
+            {
+                dial.LockGlows[l] = Picture("Lock glow " + (l + 1), root, Sprite("lamp_glow"), Color.clear, dial.Centre, Vector2.one * 84f);
+                dial.LockDiscs[l] = Picture("Lock disc " + (l + 1), root, lockDisc, Color.clear, dial.Centre, Vector2.one * 44f);
+                dial.LockGlyphs[l] = Picture("Lock glyph " + (l + 1), root, null, Color.clear, dial.Centre, Vector2.one * GateBoardLayout.GlyphSize);
+            }
         }
         BuildModules(_moduleLayer);
         BuildLamps(_lampLayer);
@@ -553,6 +586,14 @@ public sealed partial class SwitchboardView
 
     private string Nation(int d) => d >= 0 && d < _nationNames.Length ? _nationNames[d] : "nation " + d;
 
+    private string Era(int e) => e >= 0 && e < _eraNames.Length && !string.IsNullOrEmpty(_eraNames[e]) ? _eraNames[e] : "era " + e;
+
+    /// <summary>Glyph <paramref name="g"/>'s picture: a nation's passport emblem (<paramref name="emblems"/>, EmblemArt), an era's inked glyph or the origin's hourglass.</summary>
+    private Sprite GlyphSprite(GateGlyph g, List<string> emblems) => g.Kind == GateGlyphKind.Nation ? EmblemArt.Sprite(emblems[g.Index]) : _eraSprites[g.Kind == GateGlyphKind.Era ? g.Index + 1 : 0];
+
+    /// <summary>The ink glyph <paramref name="g"/> is drawn in.</summary>
+    private static Color GlyphInkOf(GateGlyph g) => g.Kind == GateGlyphKind.Nation ? GlyphInk : g.Kind == GateGlyphKind.Era ? EraInk : OriginInk;
+
     /// <summary>A lock landed on chevron <paramref name="chevron"/>: the click, and the chevron's flash starts (it lights this frame).</summary>
     private void Locked(Dial d, int chevron)
     {
@@ -823,7 +864,13 @@ public sealed partial class SwitchboardView
             d.Lenses[k].color = lit;
             d.LensGlows[k].color = new Color(colour.r, colour.g, colour.b, level * (0.55f + 0.45f * flash));
             d.LensGlows[k].rectTransform.localScale = Vector3.one * (1f + 0.35f * flash);
+            if (k <= GateDial.PeriodChevron)
+            {
+                d.LockColour[k] = colour;
+                d.LockLevel[k] = level;
+            }
         }
+        DrawLocks(d, m, closed);
 
         // The horizon: the hub fills as the route goes live (eased; at once under Reduced Motion), and breathes slowly.
         bool live = m.State == SwitchModuleState.Open;
@@ -917,6 +964,39 @@ public sealed partial class SwitchboardView
 
     /// <summary>The dialer's layout (null on the Classic board or before the day).</summary>
     internal GateBoardLayout GateLayout => _gate;
+
+    /// <summary>
+    /// The locked glyphs' discs (D54 amended; Saleh: "locking a choice should
+    /// be on top always"): PLACE's nation and PERIOD's era each wear a lit
+    /// disc with the glyph on it, drawn over the ring and the chevrons at the
+    /// glyph's place on the turned ring, the lock's lamp colour glowing
+    /// behind, so the locked choice never hides while the ring turns on; the
+    /// disc goes when the lock opens (or the dial is veiled).
+    /// </summary>
+    private void DrawLocks(Dial d, SwitchModule m, bool closed)
+    {
+        for (int l = 0; l < d.LockDiscs.Length; l++)
+        {
+            int slot = l == GateDial.PlaceChevron
+                ? (m.PlaceJack >= 0 ? GateDial.SlotOf(_ring, GateGlyphKind.Nation, m.PlaceJack) : -1)
+                : (m.HasPeriod ? GateDial.SlotOf(_ring, GateGlyphKind.Era, m.PeriodJack.Period) : -1);
+            bool on = slot >= 0 && !closed;
+            Image glyph = on ? d.Glyphs[slot] : null;
+            float deg = on ? GateDial.SlotAngle(slot, d.Turn.Value, _ring.Length) : 0f, rad = deg * Mathf.Deg2Rad;
+            Vector2 at = d.Centre + GateBoardLayout.GlyphRadius * new Vector2(Mathf.Sin(rad), Mathf.Cos(rad));
+            Quaternion turn = Quaternion.Euler(0f, 0f, -deg);
+            Color lamp = d.LockColour[l];
+            d.LockGlows[l].rectTransform.anchoredPosition = at;
+            d.LockGlows[l].color = new Color(lamp.r, lamp.g, lamp.b, on ? 0.7f * Mathf.Max(0.4f, d.LockLevel[l]) : 0f);
+            d.LockDiscs[l].rectTransform.anchoredPosition = at;
+            d.LockDiscs[l].rectTransform.localRotation = turn;
+            d.LockDiscs[l].color = on ? Color.white : Color.clear;
+            d.LockGlyphs[l].rectTransform.anchoredPosition = at;
+            d.LockGlyphs[l].rectTransform.localRotation = turn;
+            d.LockGlyphs[l].sprite = glyph != null ? glyph.sprite : null;
+            d.LockGlyphs[l].color = glyph != null && glyph.sprite != null ? glyph.color : Color.clear;
+        }
+    }
 
     /// <summary>The dial's ring glyphs (null before the day).</summary>
     internal GateGlyph[] GateRing => _ring;

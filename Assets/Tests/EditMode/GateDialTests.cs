@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -188,5 +190,128 @@ public class GateDialTests
         Assert.AreEqual(0, GatePaint.Horizon(40).At(0, 0).a);
         Assert.Greater(GatePaint.Horizon(40).At(41, 41).a, 100);
         Assert.Greater(GatePaint.Glyph(-1, 48).Pixels.Count(p => p > 0), 100);
+    }
+
+    private static float Luma((byte r, byte g, byte b, byte a) c) => 0.299f * c.r + 0.587f * c.g + 0.114f * c.b;
+
+    /// <summary>The mean luma of <paramref name="canvas"/> within <paramref name="radius"/> of (<paramref name="cx"/>, <paramref name="cy"/>).</summary>
+    private static float DiscLuma(GateCanvas canvas, float cx, float cy, float radius)
+    {
+        float sum = 0f;
+        int n = 0;
+        for (int y = 0; y < canvas.Height; y++)
+            for (int x = 0; x < canvas.Width; x++)
+                if ((x + 0.5f - cx) * (x + 0.5f - cx) + (y + 0.5f - cy) * (y + 0.5f - cy) <= radius * radius)
+                {
+                    sum += Luma(canvas.At(x, y));
+                    n++;
+                }
+        return sum / Math.Max(1, n);
+    }
+
+    [Test]
+    public void TheLockedGlyphsDisc_IsOneAndAHalfTimesAsBright_AsARingDisc()
+    {
+        GateCanvas ring = GatePaint.Ring(14);
+        float c = ring.Width / 2f;
+        float unlocked = DiscLuma(ring, c, c - GateBoardLayout.GlyphRadius, 16f);
+        GateCanvas locked = GatePaint.LockDisc();
+        float lit = DiscLuma(locked, 22f, 22f, 16f);
+        Assert.GreaterOrEqual(lit / unlocked, 1.5f, $"lit {lit:0} against unlocked {unlocked:0} (D54 amended)");
+        Assert.AreEqual(255, locked.At(22, 22).a);
+        Assert.AreEqual(0, locked.At(0, 0).a, "a disc: clear at the corner");
+    }
+
+    /// <summary>The un-inked runs of era <paramref name="era"/>'s glyph down the line x = <paramref name="x"/> from <paramref name="y0"/> to <paramref name="y1"/>.</summary>
+    private static int Holes(int era, float x, float y0, float y1)
+    {
+        int holes = 0;
+        bool inked = true;
+        for (int i = 0; i <= 400; i++)
+        {
+            bool now = GatePaint.EraInked(era, x, y0 + (y1 - y0) * i / 400f);
+            if (inked && !now)
+                holes++;
+            inked = now;
+        }
+        return holes;
+    }
+
+    /// <summary>The inked runs of era <paramref name="era"/>'s glyph along the line y = <paramref name="y"/> that are wider than <paramref name="minWidth"/>.</summary>
+    private static int Runs(int era, float y, float minWidth)
+    {
+        int runs = 0, length = 0;
+        for (int i = 0; i <= 400; i++)
+        {
+            bool now = GatePaint.EraInked(era, -1f + 2f * i / 400f, y);
+            if (now)
+                length++;
+            if ((!now || i == 400) && length > 0)
+            {
+                if (length * 2f / 400f > minWidth)
+                    runs++;
+                length = 0;
+            }
+        }
+        return runs;
+    }
+
+    [Test]
+    public void TheEraGlyphs_CarryTheirBarCounts_ThreeStepsTwoWindowsTwoSailsOneHubOneBolt()
+    {
+        var widths = new HashSet<int>();
+        for (int i = 0; i <= 400; i++)
+        {
+            int w = 0;
+            while (w < 200 && GatePaint.EraInked(0, w / 200f, -0.7f + 1.4f * i / 400f))
+                w++;
+            if (w > 0)
+                widths.Add(w / 10);
+        }
+        Assert.AreEqual(3, widths.Count, "the pyramid has 3 steps (Ancient: 3 bars)");
+        Assert.AreEqual(3, Holes(1, 0f, -0.42f, 0.86f), "the tower has 2 windows and its door (Medieval: 2 bars)");
+        Assert.AreEqual(2, Runs(2, 0.1f, 0.1f), "the ship has 2 sails (Early modern: 2 bars)");
+        Assert.AreEqual(1, Holes(3, 0f, -0.9f, 0.9f), "the gear has 1 hub (Industrial: 1 bar)");
+        Assert.AreEqual(1, Runs(4, 0f, 0.05f), "the bolt is 1 part (Modern: 1 bar)");
+    }
+
+    [Test]
+    public void TheLegendPlates_LieBetweenTheCradles_BelowTheRings_AboveTheRack_AndHoldEveryGlyphWithItsName()
+    {
+        var layout = new GateBoardLayout(8, 4, 3);
+        int slots = GateDial.Ring(8, 5).Length;
+        for (int col = 0; col < GateBoardLayout.LegendColumns; col++)
+        {
+            BoardRect plate = layout.LegendPlate(col);
+            Assert.Greater(plate.Y, layout.DialCentre(col).Y + GateBoardLayout.ChevronRadius + 18f, "below the chevrons");
+            Assert.LessOrEqual(plate.Y + plate.H, layout.Rack.Y, "above the rack");
+            BoardRect leftSlot = layout.CradleSlot(col, layout.CradleSlots - 1), rightSlot = layout.CradleSlot(col + 1, 0);
+            Assert.Greater(plate.X, leftSlot.X + leftSlot.W + 8f, "clear of the left cradle's rail");
+            Assert.Less(plate.X + plate.W, rightSlot.X - 8f, "clear of the right cradle's rail");
+        }
+        Assert.AreEqual(7, GateBoardLayout.LegendRows(slots));
+        for (int s = 0; s < slots; s++)
+        {
+            BoardRect plate = layout.LegendPlate(s / GateBoardLayout.LegendRows(slots));
+            BoardRect name = layout.LegendName(s, slots);
+            Assert.IsTrue(plate.Contains(layout.LegendGlyph(s, slots)), "glyph " + s + " on its plate");
+            Assert.GreaterOrEqual(name.W, 140f, "room for EARLY MODERN at 12 px caps");
+            Assert.LessOrEqual(name.X + name.W, plate.X + plate.W, "the name stays on the plate");
+        }
+        GateCanvas face = GatePaint.Face(layout, 5, 5);
+        BoardPoint mid = layout.LegendPlate(1).Centre;
+        (byte r, byte g, byte b, byte a) brass = face.At((int)(mid.X - layout.Cover.X), (int)(mid.Y - layout.Cover.Y));
+        Assert.Greater(brass.r, brass.b + 60, "the plate is brass");
+    }
+
+    [Test]
+    public void SlotOf_FindsAGlyphOnTheRing_OrMinusOne()
+    {
+        GateGlyph[] ring = GateDial.Ring(8, 5);
+        Assert.AreEqual(0, GateDial.SlotOf(ring, GateGlyphKind.Origin, 0));
+        Assert.AreEqual(2, GateDial.SlotOf(ring, GateGlyphKind.Era, 0));
+        Assert.AreEqual(1, GateDial.SlotOf(ring, GateGlyphKind.Nation, 0));
+        Assert.AreEqual(-1, GateDial.SlotOf(ring, GateGlyphKind.Era, 9));
+        Assert.AreEqual(-1, GateDial.SlotOf(null, GateGlyphKind.Nation, 0));
     }
 }
