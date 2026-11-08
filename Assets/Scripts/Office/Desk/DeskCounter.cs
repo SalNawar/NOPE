@@ -64,7 +64,6 @@ public sealed class DeskCounter : MonoBehaviour
     private MaterialPropertyBlock _block;
     private bool _handBack;
     private bool _hover;
-    private bool _fadeInReading;
 
     /// <summary>The strip papers are handed back on, where Bind lays it (the guide's "counter" arrow points here; this object itself stays where the builder put it).</summary>
     public Transform Strip => zone != null ? zone.transform : transform;
@@ -121,39 +120,24 @@ public sealed class DeskCounter : MonoBehaviour
     /// <summary>Prints the strip's words in the reading language as the scene starts (the builder's are English).</summary>
     private void Start() => Reprint();
 
-    /// <summary>Follows a change of the labels' language, and of the reading view's share (FadeInReading).</summary>
-    private void OnEnable()
-    {
-        CultureThemeService.LabelsChanged += Reprint;
-        DeskView.ReadingBlendChanged += HandleReadingBlend;
-    }
+    /// <summary>Follows a change of the labels' language.</summary>
+    private void OnEnable() => CultureThemeService.LabelsChanged += Reprint;
 
-    /// <summary>Stops following them.</summary>
-    private void OnDisable()
-    {
-        CultureThemeService.LabelsChanged -= Reprint;
-        DeskView.ReadingBlendChanged -= HandleReadingBlend;
-    }
+    /// <summary>Stops following it.</summary>
+    private void OnDisable() => CultureThemeService.LabelsChanged -= Reprint;
 
     /// <summary>
-    /// Fades the strip out with the reading view, or not (the office binder: on the painted desk; DESK-01 round 3, DESK-04).
-    /// The strip lies under the painted counter strip but in front of its bevel's foot, where it drew a slate-blue hairline
-    /// along the paper slot in the reading view (and a blue block over the gap strip at its right end). Its tint's alpha
-    /// takes (1 - DeskView.ReadingBlend): as at 32c54e8 in the office pose, gone in the reading pose, faded with the tilt (no
-    /// motion of its own). Its hand-back cue never showed on the painted desk (the painted strip covers it); the zone, its
-    /// spots and the drops do not read the tint.
+    /// Hides the strip's quad, or shows it (the office binder: hidden on the painted desk; DESK-04, D57). The quad lies under
+    /// the painted counter strip but in front of its bevel's foot: the painted strip covers it and its hand-back cue in the
+    /// office pose, and in the reading pose it drew a slate-blue hairline along the paper slot (and a blue block over the gap
+    /// strip at its right end). So it is hidden in both poses, and nothing fades with the Tab tilt (Saleh's playtest of
+    /// 2026-11-07, item 13: "things are consistent as you move from one screen to the next"). The zone, its spots and the
+    /// drops do not read the quad.
     /// </summary>
-    public void FadeInReading(bool fade)
+    public void HideStrip(bool hidden)
     {
-        _fadeInReading = fade;
-        Tint();
-    }
-
-    /// <summary>The reading view's share changed: the faded strip follows it.</summary>
-    private void HandleReadingBlend(float share)
-    {
-        if (_fadeInReading)
-            Tint();
+        if (strip != null)
+            strip.enabled = !hidden;
     }
 
     /// <summary>Shows the strip (<paramref name="shown"/>: a traveller is at the desk) with the counter's name, or "▲ HAND BACK ▲" brighter (<paramref name="handBack"/>: the passport carries its verdict); lit while a dragged paper's pointer is over it (<paramref name="hover"/>), reading "STAMP THE PASSPORT FIRST" before the verdict.</summary>
@@ -170,14 +154,12 @@ public sealed class DeskCounter : MonoBehaviour
         Tint();
     }
 
-    /// <summary>The strip's tint for its state (Show), its alpha faded by the reading view's share when FadeInReading is on.</summary>
+    /// <summary>The strip's tint for its state (Show).</summary>
     private void Tint()
     {
         if (strip == null)
             return;
         Color tint = _hover ? (_handBack ? hoverHandBackTint : hoverRefusedTint) : _handBack ? handBackTint : plainTint;
-        if (_fadeInReading)
-            tint.a *= 1f - DeskView.ReadingBlend;
         _block ??= new MaterialPropertyBlock();
         strip.GetPropertyBlock(_block);
         _block.SetColor(BaseColorId, tint);

@@ -75,10 +75,10 @@ public sealed class DeskViewTuning
 public static class DeskViewPose
 {
     /// <summary>
-    /// The reading view's share of a camera blend (DESK-01 round 3, the painted desk's two texture sets): its share of the
-    /// blend's first camera, <paramref name="shareOfA"/>, and of its second, <paramref name="shareOfB"/>, mixed by the
-    /// blend's eased <paramref name="weight"/> (0 the first, 1 the second), kept in 0..1. DeskView sets it on the shaders
-    /// once a frame (_DeskReadingBlend): 0 in the office pose, 1 in the reading pose.
+    /// The reading view's share of a camera blend: its share of the blend's first camera, <paramref name="shareOfA"/>, and
+    /// of its second, <paramref name="shareOfB"/>, mixed by the blend's eased <paramref name="weight"/> (0 the first, 1 the
+    /// second), kept in 0..1. DeskView keeps it once a frame (ReadingBlend) for the QA rig's steady check: 0 in the office
+    /// pose, 1 in the reading pose. Nothing draws by it (D57: one desk paint in both views).
     /// </summary>
     public static float BlendShare(float weight, float shareOfA, float shareOfB)
     {

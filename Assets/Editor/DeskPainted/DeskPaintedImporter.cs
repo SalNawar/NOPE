@@ -79,8 +79,8 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
 
     /// <summary>
     /// The reading set's suffix (DESK-01 round 3): <c>name_Read.png</c> beside <c>name_Paint.png</c>, the same UVs painted
-    /// from the overhead plates (E:\unity\NOPE-tools\design\desk\pipeline\export\v6). NOPE/Desk Painted lerps it in by
-    /// the Tab tilt (_DeskReadingBlend); the office set (_Paint) is v3's, unchanged.
+    /// from the overhead plates (E:\unity\NOPE-tools\design\desk\pipeline\export\v6). NOPE/Desk Painted draws it in
+    /// both poses (D57: one desk paint); the office set (_Paint) is v3's, unchanged, drawn where a material has no reading paint.
     /// </summary>
     public const string ReadingSuffix = "_Read";
 
@@ -455,20 +455,18 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
     }
 
     /// <summary>
-    /// The reading set on a painted material (DESK-01 round 3): its reading paint and _Reading 1, or none and 0 (the
-    /// material then shows its office paint in every pose).
+    /// The reading set on a painted material (DESK-01 round 3): its reading paint and _Reading 1 (drawn in both poses, D57),
+    /// or none and 0 (the material then shows its office paint in every pose).
     /// </summary>
     private static void Reading(Material m, Texture2D reading)
     {
         m.SetTexture("_ReadingMap", reading);
         m.SetFloat("_Reading", reading != null ? 1f : 0f);
-        m.SetFloat("_ReadingOnly", 0f);
     }
 
     /// <summary>
     /// The DESK-02 gap strips' material (Resources/DeskGapStrips.mat): NOPE/Desk Painted on the strips' reading paint, drawn
-    /// only in the reading blend (_ReadingOnly: its alpha is the tilt's share, clipped in the office pose), blended over
-    /// what is behind it, writing depth, after the opaque desk (queue 2450) and before the transparent counter strip.
+    /// in both poses (D57), writing depth, after the opaque desk (queue 2450) and before the transparent counter strip.
     /// </summary>
     private static void BuildGapStrips()
     {
@@ -492,7 +490,6 @@ public sealed class DeskPaintedImporter : AssetPostprocessor
         material.SetFloat("_Glow", 0f);
         material.SetTexture("_ReadingMap", paint);
         material.SetFloat("_Reading", 1f);
-        material.SetFloat("_ReadingOnly", 1f);
         material.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
         material.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
         material.SetFloat("_ZWrite", 1f);

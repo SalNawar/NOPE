@@ -145,8 +145,8 @@ public sealed class DeskPainted : MonoBehaviour
     /// mat's right edge"): the 1.2 to 1.5 cm gaps between the mat and the rail and trays meet no desk mesh, so the hall
     /// showed through them from above. Two level quads close them, painted from the overhead plates (the bake v6 reading
     /// set's DeskGapStrips_Read.png: the left strip's UVs u 0.02 to 0.48, the right one's 0.52 to 0.98, v from near to
-    /// far). Their material draws only in the reading blend (NOPE/Desk Painted's _ReadingOnly): clipped in the office
-    /// pose, so the office view stays v3's exactly, and faded in with the Tab tilt. Idempotent; none without the material.
+    /// far). Their material (NOPE/Desk Painted on the strips' reading paint) draws in both poses (D57: one desk paint;
+    /// before, it drew only in the reading blend). Idempotent; none without the material.
     /// </summary>
     private void CloseGapStrips()
     {
