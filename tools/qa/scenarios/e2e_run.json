@@ -1,0 +1,909 @@
+{
+  "name": "e2e_run",
+  "owner": "E2E",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "e2e_run: one run from the title to an ending in one scenario. Day 1 by hand on the desk, the evening, day 2, a jump to day 12 (items, scanner, switchboard), a jump to day 21 and its ending. Stills at every phase, 1280x1024 at the key ones."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p01_title"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p01_title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "qaSnap",
+      "name": "title"
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p02_briefing_d1"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p03_traveller1_arrives"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_t1"
+    },
+    {
+      "op": "counterDrag",
+      "name": "p04_t1_passport",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p04_t1_desk_read"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p04_t1_desk_read"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "p04_t1_stamp"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p04_t1_desk_stamped"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "counterDrag",
+      "name": "p05_t2_passport",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p05_t2_desk_read"
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "p05_t2_stamp"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p05_t2_desk_stamped"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p06_pc_d1"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p06_pc_d1"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "call",
+      "target": "OfficeViewController.FocusOffice"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "boardOpen"
+    },
+    {
+      "op": "boardCall",
+      "text": "ifNone",
+      "name": "p07_d1"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "call",
+      "f": 0.9,
+      "name": "p07_d1_place"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "callEra",
+      "f": 0.9,
+      "name": "p07_d1_era"
+    },
+    {
+      "op": "boardCells",
+      "n": 0,
+      "name": "p07_d1"
+    },
+    {
+      "op": "boardAssert",
+      "name": "p07_d1_ready",
+      "text": "powered:0"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p07_d1_board_ready"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p07_d1_board_ready"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "boardMaster",
+      "f": 1
+    },
+    {
+      "op": "boardAssert",
+      "name": "p07_d1_committed",
+      "text": "committed:0"
+    },
+    {
+      "op": "boardWait",
+      "text": "sent>=1",
+      "f": 40
+    },
+    {
+      "op": "wait",
+      "n": 8
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p07_d1_board_sent"
+    },
+    {
+      "op": "key",
+      "key": "Escape"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p08_after_board_d1"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_board"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p09_results_d1"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d1_results"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "qaHome",
+      "name": "d1",
+      "f": 120
+    },
+    {
+      "op": "waitOffice",
+      "n": 2,
+      "f": 240
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p10_briefing_d2"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d2_briefing"
+    },
+    {
+      "op": "cheat",
+      "name": "GiveAllItems"
+    },
+    {
+      "op": "cheat",
+      "name": "UnlockEverything",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 12
+    },
+    {
+      "op": "waitOffice",
+      "n": 12,
+      "f": 240
+    },
+    {
+      "op": "briefingMemoClear"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p11_briefing_d12"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d12_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "hour",
+      "f": 22
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "track",
+      "name": "passport",
+      "target": "PaperTemplate(Clone)"
+    },
+    {
+      "op": "drag",
+      "name": "d12_counter_to_desk",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "target2": "Scanner"
+    },
+    {
+      "op": "wait",
+      "f": 2.5
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "drag",
+      "name": "d12_office_to_scanner",
+      "path": "Plain",
+      "target": "PaperTemplate(Clone)",
+      "x2": 0.74,
+      "y2": 0.24
+    },
+    {
+      "op": "wait",
+      "f": 4.5
+    },
+    {
+      "op": "call",
+      "target": "DeskView.Return"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "call",
+      "target": "DeskController.FeedStack"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p12_d12_scan"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p12_d12_scan"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "qaSnap",
+      "name": "d12_scan"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "cheat",
+      "name": "DecideCorrectly"
+    },
+    {
+      "op": "boardOpen"
+    },
+    {
+      "op": "boardCall",
+      "text": "ifNone",
+      "name": "p13_d12"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "call",
+      "f": 0.9,
+      "name": "p13_d12_place"
+    },
+    {
+      "op": "boardDial",
+      "n": 0,
+      "text": "callEra",
+      "f": 0.9,
+      "name": "p13_d12_era"
+    },
+    {
+      "op": "boardCells",
+      "n": 0,
+      "name": "p13_d12"
+    },
+    {
+      "op": "boardAssert",
+      "name": "p13_d12_ready",
+      "text": "powered:0"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p13_d12_board_ready"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p13_d12_board_ready"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "boardMaster",
+      "f": 1
+    },
+    {
+      "op": "boardAssert",
+      "name": "p13_d12_committed",
+      "text": "committed:0"
+    },
+    {
+      "op": "boardWait",
+      "text": "sent>=1",
+      "f": 40
+    },
+    {
+      "op": "wait",
+      "n": 8
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p13_d12_board_sent"
+    },
+    {
+      "op": "key",
+      "key": "Escape"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p14_after_board_d12"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d12_board"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 1
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p15_results_d12"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d12_results"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "qaHome",
+      "name": "d12",
+      "f": 120
+    },
+    {
+      "op": "waitOffice",
+      "n": 13,
+      "f": 240
+    },
+    {
+      "op": "jumpDay",
+      "n": 21
+    },
+    {
+      "op": "flowSettled"
+    },
+    {
+      "op": "waitOffice",
+      "n": 21,
+      "f": 400
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p16_briefing_d21"
+    },
+    {
+      "op": "qaSnap",
+      "name": "d21_briefing"
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "EndShift"
+    },
+    {
+      "op": "waitActive",
+      "target": "DayFlowUIController.resultsPanel",
+      "f": 120
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p17_results_d21"
+    },
+    {
+      "op": "button",
+      "target": "DayFlowUIController.goHomeButton"
+    },
+    {
+      "op": "waitScene",
+      "name": "HomeScene",
+      "f": 120
+    },
+    {
+      "op": "call",
+      "target": "RunManager.Sleep"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "flowEdition",
+      "f": 30
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p18_ending_edition"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p18_ending_edition"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "qaSnap",
+      "name": "ending"
+    },
+    {
+      "op": "click",
+      "target": "EveningEdition/Page/Buttons/TitleButton"
+    },
+    {
+      "op": "wait",
+      "f": 3
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p19_title_end"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "p19_title_end"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "wait",
+      "f": 1
+    }
+  ]
+}
