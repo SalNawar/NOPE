@@ -242,7 +242,7 @@ public sealed class CityR17Scene
                 rle[2 * k] = (int)CityR17Json.Num(seq[k].Items[0]);
                 rle[2 * k + 1] = (int)CityR17Json.Num(seq[k].Items[1]);
             }
-            a.Screens[i] = new CityR17Screen { Id = CityR17Json.ReqStr(sc, "id"), Rect = CityR17Json.Rect(sc, "rect"), Rle = rle };
+            a.Screens[i] = new CityR17Screen { Id = CityR17Json.ReqStr(sc, "id"), Rect = CityR17Json.Rect(sc, "rect"), Box = CityR17Json.Rect(sc, "box"), Rle = rle };
         }
         ContentNode tf = CityR17Json.Req(n, "transitionFrames");
         a.TransitionFrames = new Dictionary<string, int>(StringComparer.Ordinal);
@@ -405,11 +405,11 @@ public sealed class CityR17TrainData
     public double ParapetX, ParapetY, BookSx, BookSy;
 }
 
-/// <summary>One ad screen: its id, its rect on the plate (its tiles' top-left) and its tile per frame (run-length: tile, count, ...).</summary>
+/// <summary>One ad screen: its id, its rect on the plate (its tiles' top-left), the box of its tiles' opaque pixels on the plate (no two boxes overlap; D61) and its tile per frame (run-length: tile, count, ...).</summary>
 public sealed class CityR17Screen
 {
     public string Id;
-    public CityR17Rect Rect;
+    public CityR17Rect Rect, Box;
     public int[] Rle;
 }
 

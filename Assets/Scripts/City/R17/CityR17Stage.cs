@@ -207,6 +207,12 @@ public sealed class CityR17Stage : IDisposable
 
         /// <summary>The day's weather: true draws the rain over the city (the cooler tint and the streaks).</summary>
         public bool Rain;
+
+        /// <summary>The leading culture's departure-board plate art, or null (neutral: every screen shows its ad).</summary>
+        public Texture2D Emblem;
+
+        /// <summary>The leading culture's two palette colours: the screens' ground and the band at their foot.</summary>
+        public Color Ground, Band;
     }
 
     private FrameState _f;
@@ -523,8 +529,24 @@ public sealed class CityR17Stage : IDisposable
             if (!CityR17Loops.ClipTile(src, e.UsedW, e.UsedH, out CityR17Rect clip, out double dx, out double dy))
                 continue;
             CityR17Rect r = ads.Screens[i].Rect;
+            CityR17Rect box = ads.Screens[i].Box;
+            if (_f.Emblem != null && CityR17Culture.Takes(box, _config.cultureMinW, _config.cultureMinH))
+            {
+                DrawCultureScreen(cmd, box, par);
+                continue;
+            }
             Sprite(cmd, PassAlpha, _adTex[sheet], e.SizeW, e.SizeH, clip, Placed(r.X + dx, r.Y + dy, clip.W, clip.H, par), White, NoHaze);
         }
+    }
+
+    /// <summary>One ad screen under the leading culture, inside the box of its ad's opaque pixels: its ground colour, the band at its foot and the emblem cropped from the plate art (D61).</summary>
+    private void DrawCultureScreen(CommandBuffer cmd, CityR17Rect r, double par)
+    {
+        CityR17Culture.Layout(r, out CityR17Rect band, out CityR17Rect box);
+        var whole = new CityR17Rect(0, 0, 1, 1);
+        Sprite(cmd, PassAlpha, Texture2D.whiteTexture, 1, 1, whole, Placed(r.X, r.Y, r.W, r.H, par), _f.Ground, NoHaze);
+        Sprite(cmd, PassAlpha, Texture2D.whiteTexture, 1, 1, whole, Placed(band.X, band.Y, band.W, band.H, par), _f.Band, NoHaze);
+        Sprite(cmd, PassAlpha, _f.Emblem, _f.Emblem.width, _f.Emblem.height, CityR17Culture.Crop(box), Placed(box.X, box.Y, box.W, box.H, par), White, NoHaze);
     }
 
     private void Flip(CommandBuffer cmd, int[] seq5, string[] sheets, Texture2D tex, CityR17Rect at, long f, double par, string folder)
