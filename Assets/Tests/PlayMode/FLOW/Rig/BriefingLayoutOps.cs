@@ -1,3 +1,4 @@
+#if UNITY_EDITOR || TIMEDESK_QA
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -68,3 +69,4 @@ public static class BriefingLayoutOps
         return Rect.MinMaxRect(x0, y0, x1, y1);
     }
 }
+#endif
