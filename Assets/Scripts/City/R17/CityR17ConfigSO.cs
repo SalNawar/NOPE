@@ -97,6 +97,13 @@ public sealed class CityR17ConfigSO : ScriptableObject
     [Tooltip("The plate rect the front clerestory windows look out on (plate px, y down).")]
     public Vector4 frontWindowsPlate = new Vector4(1280f, 60f, 1000f, 480f);
 
+    [Header("Rain")]
+    [Tooltip("A rainy day's cooler tint over the whole city (rgb the colour, alpha how much it covers; the view and the hall windows both show it). Alpha 0: no tint.")]
+    public Color rainTint = new Color(0.12f, 0.18f, 0.28f, 0.6f);
+
+    [Tooltip("A rainy day's streaks: how fast they fall (plate px a second).")]
+    public float rainSpeed = 900f;
+
     [Header("Budget")]
     [Tooltip("The city's CPU budget a frame (ms): over it, the hall windows' redraw rate halves until it fits.")]
     public float budgetMs = 2f;
