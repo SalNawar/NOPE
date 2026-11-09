@@ -156,7 +156,7 @@ public sealed class DeskConfigSO : ScriptableObject
     [FormerlySerializedAs("handBackDepth"), Min(0.02f)] public float counterDepth = 0.05f;
 
     /// <summary>How far nearer than the counter's far edge the papers handed over land (metres: their centres' row, DeskZones.CounterSpot); small papers there reach over the slim strip onto the desk.</summary>
-    [Min(0f)] public float counterSpotInset = 0.145f;
+    [Min(0f)] public float counterSpotInset = 0.07f;
 
     /// <summary>A document's scale on the counter (small: a share of its own size; PaperSizes.SheetScale: one world size per zone, whatever the view).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
