@@ -272,16 +272,4 @@ public class PaperPhysicsTests
         Assert.AreEqual(0f, body.ShakeX, "no shake either");
         Assert.IsFalse(body.Moving);
     }
-
-    [Test]
-    public void HeldSag_IsTheKnobWhenHeld_NoneAtRest_AndEasesBetween()
-    {
-        // D63: a held document bends under the hand and lies flat at rest
-        Assert.AreEqual(0f, PaperPhysics.HeldSag(0f, 0.005f), 1e-7f);
-        Assert.AreEqual(0.005f, PaperPhysics.HeldSag(1f, 0.005f), 1e-7f);
-        Assert.AreEqual(0.0025f, PaperPhysics.HeldSag(0.5f, 0.005f), 1e-7f);
-        Assert.Less(PaperPhysics.HeldSag(0.25f, 0.005f), 0.0025f * 0.5f + 1e-7f, "it eases in (a smoothstep), never snaps");
-        Assert.AreEqual(0.005f, PaperPhysics.HeldSag(3f, 0.005f), 1e-7f, "a share past 1 holds at the knob");
-        Assert.AreEqual(0f, PaperPhysics.HeldSag(1f, -0.002f), 1e-7f, "a negative knob never curls it up");
-    }
 }

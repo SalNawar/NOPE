@@ -842,8 +842,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         }
         if (hop > 0f)
             _lift.Kick(knobs.Get(knobs.paperFeel).KickFor(hop));
-        float sagSeconds = _config != null ? _config.heldSagSeconds : 0f;
-        _sagShare = amount.Still || sagSeconds <= 0f ? (dragged ? 1f : 0f) : Mathf.MoveTowards(_sagShare, dragged ? 1f : 0f, dt / sagSeconds);
         bool bent = ShowBend(BendNow(knobs));
         if (dragged && dt > 0f && !amount.Still)
         {

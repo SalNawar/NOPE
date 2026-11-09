@@ -170,9 +170,6 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How thick each thing lying on the desk is (metres; Saleh's 1007d playtest: "too flat when you see them from the side"; 2026-10-17: "use canva and blender to make actual 3d documents"): a sheet of paper, a plastic card, a passport booklet (its covers and pages), the rulebook's folder (its boards and loose sheets), each as deep as its model under its face (DeskPaperDepth). The stack makes room for it (PaperLayers.Lifts) and the contact shadow lies at its foot.</summary>
     [Min(0.0001f)] public float paperThickness = 0.0007f, cardThickness = 0.0012f, bookletThickness = 0.004f, folderThickness = 0.0055f;
 
-    /// <summary>How far a held document's ends droop under the hand (metres; D63: a card, a ticket, a form bends when held and lies flat at rest; PaperPhysics.HeldSag) and how long the sag takes to come in or go out (seconds).</summary>
-    [Min(0f)] public float heldSag = 0.005f, heldSagSeconds = 0.12f;
-
     /// <summary>The contact shadow of a thing lying on the desk (DeskPaperDepth): how far it reaches outside the outline and how far it falls toward the bottom right (metres), and its darkness (0 to 1).</summary>
     [Min(0f)] public float shadowSpread = 0.005f, shadowOffset = 0.007f;
 

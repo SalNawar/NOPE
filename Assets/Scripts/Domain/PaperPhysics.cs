@@ -269,17 +269,5 @@ public sealed class PaperPhysics
     /// <summary>The ripple's height on a move of <paramref name="speed"/> metres per second: none below <paramref name="from"/>, then <paramref name="perSpeed"/> metres per metre per second above it, at most <paramref name="most"/>.</summary>
     public static float FlutterHeight(float speed, float from, float perSpeed, float most) => speed <= from ? 0f : Math.Min((speed - from) * perSpeed, most);
 
-    /// <summary>
-    /// The sag of a held document under the hand (Saleh's D63: "they are
-    /// stiff"): its ends droop <paramref name="sag"/> metres (PaperBend's bow)
-    /// at a full hold, eased in over <paramref name="holdShare"/> (0 lying, 1
-    /// held; a smoothstep, so it never snaps); none at rest, a card too.
-    /// </summary>
-    public static float HeldSag(float holdShare, float sag)
-    {
-        float s = holdShare <= 0f ? 0f : holdShare >= 1f ? 1f : holdShare;
-        return sag <= 0f ? 0f : sag * s * s * (3f - 2f * s);
-    }
-
     private static float Clamp(float v, float most) => v > most ? most : v < -most ? -most : v;
 }
