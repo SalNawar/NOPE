@@ -165,14 +165,18 @@ public sealed class CaseFactory
     /// <summary>The current slot's case seed (Seeds.ForCase), kept on the traveller for their return.</summary>
     private int _caseSeed;
 
+    /// <summary>True: slot 1 of day 1 is a clean, honest traveller (GameConfigSO.firstCaseClean; FirstCase).</summary>
+    public bool FirstCaseClean { get; }
+
     /// <summary>
     /// Construct a factory over a content library and today's world: its
     /// places and their facts, history applied (ContentLibrarySO.BuildToday
     /// for the same day plan).
     /// </summary>
-    public CaseFactory(ContentLibrarySO lib, TodaysWorld today)
+    public CaseFactory(ContentLibrarySO lib, TodaysWorld today, bool firstCaseClean = true)
     {
         _lib = lib;
+        FirstCaseClean = firstCaseClean;
         _facts = today?.Facts ?? new FactTable();
         _todays = today != null ? new List<NationEraProfileSO>(today.Places) : new List<NationEraProfileSO>();
         _present = today?.Present;
@@ -364,6 +368,8 @@ public sealed class CaseFactory
             return violators;
 
         var standingSlots = new HashSet<int>(_appearances.Where(a => a.Value.legendary != null || HasAuthoredFault(a.Value)).Select(a => a.Key));
+        if (FirstCase.IsClean(plan.DayNumber, 1, FirstCaseClean) && !_appearances.ContainsKey(1))
+            standingSlots.Add(1); // the first traveller of the game stays clean: no guaranteed breaker stands there (FirstCase)
         var rng = new SeededRandom(Seeds.ForViolators(daySeed));
         int[] slots = ViolatorSlots.Pick(total, breakersPerRule.Count, rng, standingSlots);
         for (int i = 0; i < slots.Length; i++)
@@ -448,7 +454,9 @@ public sealed class CaseFactory
                 ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, onlyKind) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
                 : 0f, _rng);
         CaseBlueprintSO blueprint = forcedBlueprint != null ? forcedBlueprint : entry?.blueprint;
-        bool honest = (entry != null && entry.honest) || corrected;
+        // The first traveller of day 1 is clean (FirstCase); a forced appearance, a premade or a return keeps its own authoring.
+        bool firstClean = FirstCase.IsClean(plan.DayNumber, caseIndex1Based, FirstCaseClean) && appearance == null && legendary == null && back == null;
+        bool honest = (entry != null && entry.honest) || corrected || firstClean;
 
         // A 2150 citizen (traveller types K2, K4) comes from the present: a drawn one, or a story character (a citizen premade, days 7-15 B2).
         bool citizen = blueprint != null && TravellerKinds.IsCitizen(blueprint.Kind);

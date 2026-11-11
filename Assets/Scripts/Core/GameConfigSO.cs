@@ -8,6 +8,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameConfig_", menuName = "TimeDesk/Game Config", order = 2)]
 public sealed class GameConfigSO : ScriptableObject
 {
+    [Header("First traveller")]
+    /// <summary>True: slot 1 of day 1 is an honest traveller with valid papers, so the tutorial teaches the approve first (FirstCase; Saleh 2026-11-11).</summary>
+    public bool firstCaseClean = true;
+
     [Header("City weather")]
     /// <summary>The share of days that rain on the city (CityWeather.Rains: the day's seed draws Clear or Rain; 0: always clear).</summary>
     [Range(0f, 1f)]
