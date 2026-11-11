@@ -178,8 +178,9 @@ public sealed class MatchLines : MaskableGraphic
     {
         SetVerticesDirty();
         bool link = !_holding && Visible(_a) && Visible(_b);
-        if (labelPlate != null && labelPlate.gameObject.activeSelf != link)
-            labelPlate.gameObject.SetActive(link);
+        bool plateOn = link && labelText != null && !string.IsNullOrEmpty(labelText.text); // the desk's line has no label
+        if (labelPlate != null && labelPlate.gameObject.activeSelf != plateOn)
+            labelPlate.gameObject.SetActive(plateOn);
         if (!link || labelPlate == null)
             return;
         labelPlate.color = Colour(_look);
