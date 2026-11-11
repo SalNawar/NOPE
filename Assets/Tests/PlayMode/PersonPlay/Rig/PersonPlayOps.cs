@@ -32,10 +32,10 @@ using Object = UnityEngine.Object;
 /// <c>personPick</c> with the text Photo then pairs it with the passport's photo, the one pair that draws a readout).</item>
 /// <item><c>personLook</c> (name): the pointer goes onto the passport in inspect mode and a still is taken lifted (the stamp's ink at a readable size).</item>
 /// <item><c>personSettle</c>: waits until the camera is still (a stamp aimed on a moving camera lands off the pointer's spot).</item>
-/// <item><c>personReadout</c> (text = a label, name): reads the compare readout at the bottom centre and the line's
-/// look, keeps them for the decision and takes the still.</item>
-/// <item><c>personDecide</c>: the decision of the case from the readouts kept (a MISMATCH, or a red line when no
-/// readout is drawn: deny; else approve); <c>stampAim</c> with the text "readout" stamps it.</item>
+/// <item><c>personReadout</c> (text = a label, name): reads the compare readout at the bottom centre (its text decides; an empty strip
+/// fails the step) and the line's look, keeps them for the decision and takes the still.</item>
+/// <item><c>personDecide</c>: the decision of the case from the readouts' text kept (a MISMATCH: deny;
+/// else approve); <c>stampAim</c> with the text "readout" stamps it.</item>
 /// <item><c>personVerdict</c> (name): asserts the case was scored correct and no citation slip came.</item>
 /// </list>
 /// </summary>
@@ -522,13 +522,12 @@ public static class PersonPlayOps
         foreach (TMP_Text t in Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Exclude))
             if (t.gameObject.activeInHierarchy && t != text && t.text != null && t.text.IndexOf("MATCH", StringComparison.OrdinalIgnoreCase) >= 0)
                 Rep(r, $"   other text with MATCH: {QaGame.Where(t.gameObject)} '{t.text}'");
-        bool mismatch;
-        if (strip.Length > 0)
-            mismatch = strip.IndexOf("MISMATCH", StringComparison.OrdinalIgnoreCase) >= 0;
-        else
+        // the decision comes from the readout's text for every compare; an empty strip fails the step
+        bool mismatch = strip.IndexOf("MISMATCH", StringComparison.OrdinalIgnoreCase) >= 0;
+        if (strip.Length == 0)
         {
-            mismatch = look == FindingLook.Differ;
-            Find(r, "S2", $"the {s.text} compare gives no readout at the bottom centre", $"the strip is empty; only the line's colour ({look}) says the result; still {name}");
+            Find(r, "S2", $"the {s.text} compare gives no readout at the bottom centre", $"the strip is empty (line look {look}); still {name}");
+            r.Assert("person.readout." + name, Owner, false, "the readout strip is empty", string.Empty);
         }
         Readouts.Add($"{s.text}: {(strip.Length > 0 ? strip : "(no readout, line " + look + ")")}");
         _mismatch |= mismatch;

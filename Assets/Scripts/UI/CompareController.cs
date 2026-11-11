@@ -150,6 +150,18 @@ public sealed class CompareController : MonoBehaviour
     /// </summary>
     public void ShowAlreadyDocumented(string categoryLabel) => WriteNote(UiText.Pc.Format("compare.alreadyDocumented", categoryLabel), neutralColor);
 
+    /// <summary>
+    /// Shows the result of a value held against a rule or today's date
+    /// (MatchBoard.Judge): <paramref name="line"/> in the look's colour, kept as
+    /// a pair's line is, until the next pick or Clear.
+    /// </summary>
+    public void ShowResult(string line, FindingLook look)
+    {
+        WriteNote(line, look == FindingLook.Match ? matchColor : look == FindingLook.Differ ? mismatchColor : neutralColor);
+        _stripKept = true;
+        ShowStrip();
+    }
+
     /// <summary>Clears the picks, their highlights and the bars.</summary>
     public void Clear()
     {

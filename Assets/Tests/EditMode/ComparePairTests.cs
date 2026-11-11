@@ -191,4 +191,21 @@ public class ComparePairTests
         };
         Assert.AreEqual(6, keys.Count);
     }
+
+    [Test]
+    public void ReadoutLine_MatchAndMismatchNameTheTwoThings()
+    {
+        const string fmt = "{0}  ·  {2}  vs  {4}";
+        Assert.AreEqual("MATCH  ·  Periclean Athens  vs  today's rule",
+                        CompareReadout.Line(FindingLook.Match, fmt, "MATCH", "MISMATCH", null, "Periclean Athens", "today's rule"));
+        Assert.AreEqual("MISMATCH  ·  2 MAR 2150  vs  today  14 MAR 2150",
+                        CompareReadout.Line(FindingLook.Differ, fmt, "MATCH", "MISMATCH", null, "2 MAR 2150", "today  14 MAR 2150"));
+    }
+
+    [Test]
+    public void ReadoutLine_InfoPrintsTheNote()
+    {
+        Assert.AreEqual("That rule is not about the Name. Nothing logged.",
+                        CompareReadout.Line(FindingLook.Info, "{0}", "MATCH", "MISMATCH", "That rule is not about the Name. Nothing logged.", "x", "y"));
+    }
 }

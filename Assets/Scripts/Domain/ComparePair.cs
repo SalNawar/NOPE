@@ -227,3 +227,18 @@ public static class PickKeys
         return false;
     }
 }
+
+/// <summary>
+/// The office readout's line for a value held against a rule or today's date
+/// (the pair's line, "MATCH  ·  value  vs  against", for a match or a
+/// difference; the note's words for a result that logs nothing). Pure;
+/// MatchBoard.Judge writes it, CompareController draws it.
+/// </summary>
+public static class CompareReadout
+{
+    /// <summary>The line: <paramref name="pairFormat"/> is the "compare.pair" text ({0} word, {2} value, {4} against).</summary>
+    public static string Line(FindingLook look, string pairFormat, string matchWord, string mismatchWord, string note, string value, string against) =>
+        look == FindingLook.Info
+            ? note
+            : string.Format(pairFormat, look == FindingLook.Match ? matchWord : mismatchWord, string.Empty, value, string.Empty, against);
+}

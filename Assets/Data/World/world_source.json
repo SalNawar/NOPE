@@ -29570,6 +29570,18 @@
         "tier": "Flavour"
       },
       {
+        "key": "compare.today",
+        "text": "today  {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.rule",
+        "text": "today's rule",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "compare.pickAnother",
         "text": "{0}:  {1}    vs    (pick another value to compare)",
         "gloss": "None",
@@ -83958,7 +83970,7 @@
         ],
         "form": "",
         "target": "calendar",
-        "text": "Click the Passport's Valid Until, then the calendar: is it still valid?"
+        "text": "Click the Passport's Valid Until. Press {stamps} for the office view, then click the date on the monitor: is it still valid?"
       },
       {
         "id": "stamp",
