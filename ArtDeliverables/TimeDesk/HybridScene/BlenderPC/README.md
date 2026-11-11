@@ -14,7 +14,7 @@ The PC is an original unbranded interpretation of its proportions and material s
   objects and exports evaluated copies. It never edits a Unity scene or runs in-game.
 - `asset_manifest.json`: material palette and exported object/material mappings.
 - `PC_authoring_view.png`: earlier orange-palette Blender presentation, now superseded by the neutral casing revision; not a Unity screenshot.
-- `BeforeIntegration/OfficeScene.unity`: scene backup from before this pass.
+- `BeforeIntegration/OfficeScene.unity`: scene backup from before this pass (removed from the tree on 2026-11-11; git history keeps it).
 - `Assets/Art/Office/Hybrid/BlenderPC/Models`: three FBX assets.
 - `Assets/Art/Office/Hybrid/BlenderPC/Materials`: URP materials, matte on casings.
 - `Assets/Art/Office/Hybrid/BlenderPC/Prefabs`: reusable material-bound art prefabs.
