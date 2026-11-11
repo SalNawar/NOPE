@@ -630,6 +630,15 @@ public class DeskPapersTests
     }
 
     [Test]
+    public void TheWheelHint_HidesWhilePapersComeUnasked_AGuideStepShows_OrTheDeskIsRead()
+    {
+        Assert.IsFalse(DeskHints.WheelHintVisible(WheelHint, 1, 1, false, true, papersComeUnasked: true), "papers lie on the counter or desk");
+        Assert.IsFalse(DeskHints.WheelHintVisible(WheelHint, 1, 1, false, true, guideStepShown: true), "a guide step gives another order");
+        Assert.IsFalse(DeskHints.WheelHintVisible(WheelHint, 1, 1, false, true, reading: true), "the reading view");
+        Assert.IsFalse(DeskHints.WheelHintVisible(WheelHint, 1, 1, false, true, inspecting: true), "inspect mode");
+    }
+
+    [Test]
     public void TheCaseUnderTest_HandsOverTwoPapersOnArrival()
     {
         var arrived = new List<int>();

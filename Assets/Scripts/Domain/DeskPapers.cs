@@ -608,7 +608,9 @@ public static class DeskHints
     public static bool ScanHintVisible(string hint, int day, int untilDay, int usesToday, bool paperOnDesk) =>
         !string.IsNullOrWhiteSpace(hint) && day <= untilDay && usesToday == 0 && paperOnDesk;
 
-    /// <summary>The wheel note: a non-blank hint, on or before its last day, while a traveller is at the desk and the wheel was not opened yet today.</summary>
-    public static bool WheelHintVisible(string hint, int day, int untilDay, bool wheelOpenedToday, bool travellerAtDesk) =>
-        !string.IsNullOrWhiteSpace(hint) && day <= untilDay && !wheelOpenedToday && travellerAtDesk;
+    /// <summary>The wheel note: a non-blank hint, on or before its last day, while a traveller is at the desk and the wheel was not opened yet today. It never shows while the case's papers come without a click (<paramref name="papersComeUnasked"/>: the case has arrival papers, on the counter or on their way), while a guide step gives another order (<paramref name="guideStepShown"/>), in the reading view or in inspect mode (<paramref name="reading"/>, <paramref name="inspecting"/>).</summary>
+    public static bool WheelHintVisible(string hint, int day, int untilDay, bool wheelOpenedToday, bool travellerAtDesk,
+                                        bool papersComeUnasked = false, bool guideStepShown = false, bool reading = false, bool inspecting = false) =>
+        !string.IsNullOrWhiteSpace(hint) && day <= untilDay && !wheelOpenedToday && travellerAtDesk
+        && !papersComeUnasked && !guideStepShown && !reading && !inspecting;
 }

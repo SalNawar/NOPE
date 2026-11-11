@@ -86,6 +86,9 @@ public sealed class BoothCoordinator : MonoBehaviour
 
     private DeskAvailability _availability;
 
+    /// <summary>The guide (found at Start, optional): the wheel note yields to a step.</summary>
+    private GuideDirector _guide;
+
     private BoothPhase _phase = BoothPhase.NoTraveller;
     private int _day;
     private bool _citationPending;
@@ -121,7 +124,10 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (inspect != null)
             inspect.Changed += Apply;
         if (desk != null)
+        {
             desk.ScanFinished += HandleScanFinished;
+            desk.CaseBegun += Apply;
+        }
         if (deskView != null)
             deskView.Changed += Apply;
         if (cityView != null)
@@ -141,7 +147,10 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (inspect != null)
             inspect.Changed -= Apply;
         if (desk != null)
+        {
             desk.ScanFinished -= HandleScanFinished;
+            desk.CaseBegun -= Apply;
+        }
         if (deskView != null)
             deskView.Changed -= Apply;
         if (cityView != null)
@@ -154,6 +163,9 @@ public sealed class BoothCoordinator : MonoBehaviour
         _availability = game != null ? game.Desk : null;
         if (_availability != null)
             _availability.Changed += Apply;
+        _guide = FindFirstObjectByType<GuideDirector>();
+        if (_guide != null)
+            _guide.Changed += Apply;
         Apply();
     }
 
@@ -163,6 +175,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         CultureThemeService.LabelsChanged -= PrintWheelHint;
         if (_availability != null)
             _availability.Changed -= Apply;
+        if (_guide != null)
+            _guide.Changed -= Apply;
     }
 
     /// <summary>Where the shift is (GameManager); presenting a traveller (the AVAILABLE sign calls them) also wakes the screen and returns the reading view and the city view, so the arrival is seen.</summary>
@@ -279,7 +293,11 @@ public sealed class BoothCoordinator : MonoBehaviour
             travellerHitZone.Interactable = input.TravellerLive;
         if (wheelHint != null)
             wheelHint.gameObject.SetActive(config != null &&
-                DeskHints.WheelHintVisible(config.wheelHintKey, _day, config.wheelHintUntilDay, _wheelOpenedToday, _phase == BoothPhase.TravellerAtDesk));
+                DeskHints.WheelHintVisible(config.wheelHintKey, _day, config.wheelHintUntilDay, _wheelOpenedToday, _phase == BoothPhase.TravellerAtDesk,
+                    papersComeUnasked: desk != null && desk.HasArrivalPapers,
+                    guideStepShown: _guide != null && !string.IsNullOrEmpty(_guide.StepShown),
+                    reading: deskView != null && deskView.IsOn,
+                    inspecting: inspecting));
         DeskLayout.Lamps.Show(_phase == BoothPhase.Newsletter ? null : NextToolLamp.For(new CaseLampState(
             travellerAtDesk: _phase == BoothPhase.TravellerAtDesk,
             shiftOpen: _availability != null && _availability.IsAvailable,
