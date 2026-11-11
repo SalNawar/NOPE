@@ -36,7 +36,12 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: app.orders.closed
-    text: 'Orders are closed today: nothing would arrive'
+    text: Orders closed today
+    gloss: 0
+    tier: 0
+  - key: app.orders.walletClosed
+    text: "Wallet {0} · Orders are closed today: it is the last day, so nothing
+      would arrive."
     gloss: 0
     tier: 0
   - key: notes.daysNone

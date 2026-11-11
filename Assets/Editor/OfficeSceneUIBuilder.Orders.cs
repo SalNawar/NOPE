@@ -30,9 +30,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The wallet line's height (three Caption lines: UI-13, the lead never runs under the title bar or into the first band head) and the action button's height (desktop units).</summary>
     private const float OrdersHeader = 108f, OrdersActionHeight = 52f;
 
-    /// <summary>The header row's room for the wallet line before the closed note (desktop units).</summary>
-    private const float OrdersWalletRoom = 360f;
-
     /// <summary>The zoom bar's height, its buttons' width and its level's width (desktop units).</summary>
     private const float OrdersZoomHeight = 48f, OrdersZoomButton = 44f, OrdersZoomLevel = 96f;
 
@@ -54,13 +51,6 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(wallet.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(PcSize.L, -(top + OrdersHeader)), new Vector2(-(treeRight + OrdersZoomWidth + PcSize.L), -top));
         Chrome(wallet, PcType.Caption, true);
         wallet.overflowMode = TextOverflowModes.Ellipsis; // a longer lead ends in an ellipsis inside its row, never under the title bar (UI-13)
-        // On a day orders are closed (BUG-28d), the reason in the same row, right-aligned: its own keyed label, shown by OrdersWindow.
-        TMP_Text closed = Text(win, "ClosedText", null, PcType.Caption, TextAlignmentOptions.MidlineRight, Vector2.zero, Vector2.one, Ink, ThemeRoleId.WindowBody,
-                               "app.orders.closed", FontStyles.Italic);
-        PlaceRect(closed.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(PcSize.L + OrdersWalletRoom, -(top + OrdersHeader)),
-                  new Vector2(-(treeRight + OrdersZoomWidth + PcSize.L), -top));
-        Chrome(closed, PcType.Caption, true);
-        closed.raycastTarget = false;
 
         // The tree: a scroll both ways over a plate.
         float below = top + OrdersHeader + DocGap;
@@ -134,7 +124,6 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "detailForm", AssetDatabase.LoadAssetAtPath<FormSpecSO>(RequisitionFormPath));
         Wire(so, "selectText", select);
         Wire(so, "actionButton", action);
-        Wire(so, "closedNote", closed.gameObject);
         Wire(so, "kit", _kit);
         so.ApplyModifiedProperties();
 
@@ -144,7 +133,6 @@ public static partial class OfficeSceneUIBuilder
         lit.gameObject.SetActive(false);
         detail.gameObject.SetActive(false);
         action.gameObject.SetActive(false);
-        closed.gameObject.SetActive(false);
         win.gameObject.SetActive(false);
         return chrome;
     }
