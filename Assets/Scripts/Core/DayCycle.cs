@@ -229,7 +229,7 @@ public static class DayCycle
         {
             InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, ledger);
             today = lib.BuildToday(plan, world);
-            cases = new CaseFactory(lib, today).GenerateDayCases(plan, world, Seeds.Day(world.runSeed, world.day), interview, true);
+            cases = new CaseFactory(lib, today, config == null || config.firstCaseClean).GenerateDayCases(plan, world, Seeds.Day(world.runSeed, world.day), interview, true);
         }
 
         for (int i = 0; i < cases.Count; i++)
