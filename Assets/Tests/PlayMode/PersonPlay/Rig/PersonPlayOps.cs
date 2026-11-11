@@ -28,6 +28,10 @@ using Object = UnityEngine.Object;
 /// the passport covers the rows).</item>
 /// <item><c>personCalendar</c> (name): presses the calendar's date line (the office view when the reading view does
 /// not show it).</item>
+/// <item><c>personFace</c> (name): the office view, the traveller's hit zone pressed in inspect mode (their face is held;
+/// <c>personPick</c> with the text Photo then pairs it with the passport's photo, the one pair that draws a readout).</item>
+/// <item><c>personLook</c> (name): the pointer goes onto the passport in inspect mode and a still is taken lifted (the stamp's ink at a readable size).</item>
+/// <item><c>personSettle</c>: waits until the camera is still (a stamp aimed on a moving camera lands off the pointer's spot).</item>
 /// <item><c>personReadout</c> (text = a label, name): reads the compare readout at the bottom centre and the line's
 /// look, keeps them for the decision and takes the still.</item>
 /// <item><c>personDecide</c>: the decision of the case from the readouts kept (a MISMATCH, or a red line when no
@@ -60,6 +64,9 @@ public static class PersonPlayOps
         QaRunner.RegisterOp("personRulebook", RulebookOp);
         QaRunner.RegisterOp("personCalendar", CalendarOp);
         QaRunner.RegisterOp("personReadout", ReadoutOp);
+        QaRunner.RegisterOp("personFace", FaceOp);
+        QaRunner.RegisterOp("personLook", LookOp);
+        QaRunner.RegisterOp("personSettle", SettleOp);
         QaRunner.RegisterOp("personDecide", DecideOp);
         QaRunner.RegisterOp("personVerdict", VerdictOp);
     }
@@ -98,6 +105,7 @@ public static class PersonPlayOps
         yield return r.Input.Tap(Key.Tab);
         yield return QaGame.Until(() => view.IsOn == reading, 3f, reading ? "the reading view" : "the office view");
         yield return Secs(1.2f);
+        yield return QaGame.UntilCameraStill(8f);
     }
 
     /// <summary>Presses <paramref name="go"/> at its screen point with the virtual mouse; false (and the press still made) when something else is under the pointer there.</summary>
@@ -163,6 +171,14 @@ public static class PersonPlayOps
         yield return Still(r, name);
     }
 
+    /// <summary>The compare readout at the bottom centre as it shows (empty when its bar is hidden).</summary>
+    private static string StripText(CompareController compare)
+    {
+        GameObject bar = compare != null ? QaGame.Field(compare, "officeBar") as GameObject : null;
+        TMP_Text text = compare != null ? QaGame.Field(compare, "officeText") as TMP_Text : null;
+        return bar != null && bar.activeInHierarchy && text != null ? text.text : string.Empty;
+    }
+
     // ---------------- personPick ----------------
 
     private static ClueCategory CategoryOf(string text)
@@ -225,6 +241,7 @@ public static class PersonPlayOps
             r.Assert(id, Owner, false, "no passport on the desk", string.Empty);
             yield break;
         }
+        yield return ToView(r, true);
         ClueCategory want = CategoryOf(s.text);
         int slot = -1;
         for (int i = 0; i < paper.SlotCount && slot < 0; i++)
@@ -277,7 +294,7 @@ public static class PersonPlayOps
         yield return r.Input.Play(QaPaths.Click(at));
         yield return Secs(0.5f);
         CompareController compare = QaGame.Find<CompareController>();
-        bool held = (inspect != null && inspect.ValueHeld) || (compare != null && (compare.Holding || compare.Paired));
+        bool held = (inspect != null && inspect.ValueHeld) || (compare != null && (compare.Holding || compare.Paired)) || StripText(compare).Length > 0;
         Rep(r, $"   after the press: value held {held}; compare {(compare != null ? (compare.Holding ? "holding " + compare.SideA.Shown : compare.Paired ? "paired" : "empty") : "none")}");
         if (!held)
             Find(r, "S1", $"a press on the {want} box holds nothing", $"pointer ({at.x:0},{at.y:0}), under it {(top != null ? QaGame.Where(top) : "nothing")}; still {name}_picked");
@@ -421,6 +438,68 @@ public static class PersonPlayOps
         if (turned)
             yield return ToView(r, true);
         r.Assert(id, Owner, reached, reached ? "the calendar pressed" : "something else was under the pointer", $"box {Px(box)}");
+    }
+
+    // ---------------- personFace, personLook, personSettle ----------------
+
+    private static IEnumerator FaceOp(QaRunner r, QaStep s)
+    {
+        string name = Name(s);
+        string id = "person.face." + name;
+        DeskInspect inspect = QaGame.Find<DeskInspect>();
+        GuideDirector guide = QaGame.Find<GuideDirector>();
+        Collider zone = guide != null ? QaGame.Field(guide, "traveller") as Collider : null;
+        Rep(r, $"== face {name}: traveller zone {(zone == null ? "none" : zone.gameObject.activeInHierarchy ? "active" : "INACTIVE")}, inspect {(inspect != null && inspect.IsOn ? "on" : "OFF")}");
+        if (zone == null || !zone.gameObject.activeInHierarchy)
+        {
+            Find(r, "S1", "the traveller cannot be pressed to hold their face", "no hit zone");
+            r.Assert(id, Owner, false, "no traveller zone", string.Empty);
+            yield break;
+        }
+        yield return Away(r);
+        yield return ToView(r, false);
+        Rect? box = QaGame.ScreenRect(zone.gameObject);
+        bool reached = false;
+        yield return ClickOn(r, zone.gameObject, "the traveller", v => reached = v);
+        yield return Secs(0.5f);
+        CompareController compare = QaGame.Find<CompareController>();
+        bool held = compare != null && (compare.Holding || compare.Paired);
+        Rep(r, $"   after the press: face held {held} ({(compare != null && compare.Holding ? compare.SideA.Shown : "-")}); strip '{StripText(compare)}'");
+        if (!held)
+            Find(r, "S1", "a press on the traveller in inspect mode holds no face", $"zone {Px(box)}, under the pointer reached {reached}; still {name}");
+        yield return Still(r, name);
+        r.Assert(id, Owner, held, held ? "face held" : "face not held", $"zone {Px(box)}");
+    }
+
+    private static IEnumerator LookOp(QaRunner r, QaStep s)
+    {
+        string name = Name(s);
+        DeskDocument paper = Passport();
+        if (paper == null || paper.Zone != DeskZone.Desk)
+        {
+            Rep(r, $"== look {name}: no passport on the desk");
+            yield break;
+        }
+        yield return ToView(r, true);
+        yield return Away(r);
+        if (!TopPoint(paper, out Vector2 on))
+        {
+            Rep(r, $"== look {name}: no pressable point");
+            yield break;
+        }
+        yield return r.Input.MoveTo(on, 8);
+        for (float end = Time.unscaledTime + 3f; Time.unscaledTime < end && (float)QaGame.Field(paper, "_readNow") < 1f;)
+            yield return null;
+        yield return Secs(0.4f);
+        Rep(r, $"== look {name}: pointer at ({r.Input.Position.x:0},{r.Input.Position.y:0}), lift clock {(float)QaGame.Field(paper, "_readNow"):0.00}, ink {(QaGame.Field(paper, "_stamps"))} print(s)");
+        yield return Still(r, name);
+        yield return Away(r);
+    }
+
+    private static IEnumerator SettleOp(QaRunner r, QaStep s)
+    {
+        yield return QaGame.UntilCameraStill(8f);
+        yield return Secs(0.5f);
     }
 
     // ---------------- personReadout, personDecide ----------------
