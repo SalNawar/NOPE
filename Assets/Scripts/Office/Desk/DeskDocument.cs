@@ -246,9 +246,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>The paper's frame (its look's): which row of the real-size table it takes (PaperRealSizes.Of).</summary>
     private FormFrame _frame;
 
-    /// <summary>The smallest value's and the smallest label's type size (in the placed form's units; 0: none): the read-close lift reads them (CapHeight.Smallest).</summary>
-    private float _valueEm, _labelEm;
-
     /// <summary>The paper's metres per unit of its placed form: the form is laid out with its print unit 1 (as FormLayout.Check checks it: TextMeshPro measures a world-space text in metres taller than its glyphs once its size falls to a few millimetres, so a small paper laid out in metres would run past its page) and drawn this much smaller.</summary>
     private float _scale = 1f;
 
@@ -470,7 +467,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         _readNow = 0f;
         _pointerOn = false;
         _frame = FormFrame.Plain;
-        _valueEm = _labelEm = 0f;
         if (config != null)
             Size = config.paperSize;
         if (config == null || doc == null || form == null || style == null || textTemplate == null)
@@ -488,8 +484,6 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         _stamps = 0;
         _scale = FormLayout.PrintUnit(form.Spec, Size.x, style.metrics);
         _form = FormLayout.Layout(form.Spec, shown, Size.x / _scale, style.metrics, new TmpFormText(textTemplate) { ScriptOf = shown.Translated ? _ => CultureThemeService.Instance != null ? CultureThemeService.Instance.CultureFont : null : (Func<string, TMP_FontAsset>)null });
-        _valueEm = CapHeight.Smallest(_form, false);
-        _labelEm = CapHeight.Smallest(_form, true);
         List<(float x, float y)> outline = ShapePaper(art != null ? art.corner * Size.x : PaperSilhouette.Corner(look.frame, _form.Width, _form.PageHeight, _form.Unit) * _scale);
         Color cover = EmblemArt.Ink(form.Data.Cover, new Color(palette.Accent.R, palette.Accent.G, palette.Accent.B, 1f));
         PaperKind kind = PaperEdge.KindOf(look.frame);
@@ -964,6 +958,8 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         float e = DeskZones.Ease(_readNow);
         float grow = Mathf.LerpUnclamped(s, ratio * magnify, e);
         sheet.localPosition = Vector3.LerpUnclamped(local, transform.InverseTransformPoint(at), e);
+        // lifted, the sheet faces the eye upright (a paper lying flat in the office view shows edge-on, so its print never reads)
+        sheet.localRotation = Quaternion.SlerpUnclamped(turn, Quaternion.Inverse(transform.rotation) * Quaternion.LookRotation(_readEye.transform.forward, _readEye.transform.up), e);
         sheet.localScale = new Vector3(_sizeNow * grow, _sizeNow * grow, Mathf.LerpUnclamped(s, ratio, e));
     }
 
@@ -1003,46 +999,58 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
 
     /// <summary>
     /// The lifted pose seen through <paramref name="eye"/>, from the sheet as
-    /// drawn now: the sheet moved toward the eye by <paramref name="ratio"/>
-    /// (HeldOnTop: in front of every prop) and grown so it shows
-    /// <paramref name="magnify"/> times its size now (ReadClose.Magnify: its
-    /// smallest value and label at the type bars, the paper inside the
-    /// frame), its centre at <paramref name="at"/> (ReadClose.Clamp: no edge
-    /// leaves the screen, the bottom band clear). False when the paper is not
-    /// wholly in front of the eye.
+    /// drawn now: the sheet turned to face the eye, moved toward it by
+    /// <paramref name="ratio"/> (HeldOnTop: in front of every prop) and grown
+    /// so it shows <paramref name="magnify"/> times its face-on size at rest
+    /// (ReadClose.Magnify: its smallest printed value and label, measured on
+    /// its texts, at the type bars, the paper inside the frame), its centre
+    /// at <paramref name="at"/> (ReadClose.Clamp: no edge leaves the screen,
+    /// the bottom band clear). False when the paper is behind the eye.
     /// </summary>
     private bool ReadPose(Camera eye, out Vector3 at, out float ratio, out float magnify)
     {
         at = default;
         ratio = magnify = 1f;
-        float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
-        for (int i = 0; i < 4; i++)
-        {
-            Vector3 p = eye.WorldToScreenPoint(sheet.TransformPoint(new Vector3((i % 2 - 0.5f) * Size.x, (i / 2 - 0.5f) * Size.y, 0f)));
-            if (p.z <= 0f)
-                return false;
-            minX = Mathf.Min(minX, p.x);
-            minY = Mathf.Min(minY, p.y);
-            maxX = Mathf.Max(maxX, p.x);
-            maxY = Mathf.Max(maxY, p.y);
-        }
-        float w = maxX - minX, h = maxY - minY;
         Vector3 centre = eye.WorldToScreenPoint(sheet.position);
-        if (w <= 0f || h <= 0f || centre.z <= 0f)
+        float worldH = sheet.TransformVector(0f, Size.y, 0f).magnitude;
+        if (centre.z <= 0f || worldH <= 0f || eye.orthographic)
             return false;
+        // face-on at its rest depth: pixels per metre there
+        float perMetre = eye.pixelHeight / (2f * Mathf.Tan(eye.fieldOfView * 0.5f * Mathf.Deg2Rad) * centre.z);
+        float h = worldH * perMetre, w = sheet.TransformVector(Size.x, 0f, 0f).magnitude * perMetre;
+        (float valueShare, float labelShare) = LeastCapShares(worldH);
         PaperRealSizes knobs = _config.readClose;
         float bottom = knobs.bottomMargin * Screen.height;
-        magnify = ReadClose.Magnify(ReadClose.CapPixels(_valueEm * _scale, Size.y, h, CapHeight.ValueCapPerEm), ReadClose.CapPixels(_labelEm * _scale, Size.y, h, CapHeight.LabelCapPerEm),
-                                    knobs.valueCapPx, knobs.labelCapPx, w, h, Screen.width, Screen.height, bottom);
-        float midX = (minX + maxX) / 2f, midY = (minY + maxY) / 2f;
-        (float x, float y) = ReadClose.Clamp(midX, midY, w * magnify / 2f, h * magnify / 2f, Screen.width, Screen.height, bottom);
+        magnify = ReadClose.Magnify(valueShare * h, labelShare * h, knobs.valueCapPx, knobs.labelCapPx, w, h, Screen.width, Screen.height, bottom);
+        (float x, float y) = ReadClose.Clamp(centre.x, centre.y, w * magnify / 2f, h * magnify / 2f, Screen.width, Screen.height, bottom);
         ratio = OnTopRatio(eye);
-        Vector3 direction = eye.ScreenPointToRay(new Vector3(centre.x + x - midX, centre.y + y - midY, 0f)).direction;
+        Vector3 direction = eye.ScreenPointToRay(new Vector3(x, y, 0f)).direction;
         float along = Vector3.Dot(direction, eye.transform.forward);
         if (along <= 1e-4f)
             return false;
         at = eye.transform.position + direction * (centre.z * ratio / along);
         return true;
+    }
+
+    /// <summary>The cap height of the smallest value (a Value or a Hand text) and of the smallest label printed on the sheet, each as a share of the sheet's world height <paramref name="worldH"/> (0: none): the fonts' cap lines at the texts' sizes, as the reader sees them.</summary>
+    private (float value, float label) LeastCapShares(float worldH)
+    {
+        float value = float.MaxValue, label = float.MaxValue;
+        foreach (TMP_Text text in sheet.GetComponentsInChildren<TMP_Text>(false))
+        {
+            bool data = text.name == nameof(FormTextRole.Value) || text.name == nameof(FormTextRole.Hand);
+            if ((!data && text.name != nameof(FormTextRole.Label)) || string.IsNullOrWhiteSpace(text.text) || text.font == null || text.font.faceInfo.pointSize <= 0f)
+                continue;
+            float capLocal = text.font.faceInfo.capLine / text.font.faceInfo.pointSize * text.fontSize * TmpFormText.WorldEmPerFontSize;
+            float share = text.transform.TransformVector(0f, capLocal, 0f).magnitude / worldH;
+            if (share <= 0f)
+                continue;
+            if (data)
+                value = Mathf.Min(value, share);
+            else
+                label = Mathf.Min(label, share);
+        }
+        return (value == float.MaxValue ? 0f : value, label == float.MaxValue ? 0f : label);
     }
 
     /// <summary>Where a point the press met on the drawn paper lies at rest (DeskDraggable.PressAtRest): on a lifted paper, the same point of the sheet in its rest pose, so a drag begun on it holds it as at rest; else the point itself.</summary>

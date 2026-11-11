@@ -86,10 +86,6 @@ public static class ReadClose
         return across / 1000f * realScale;
     }
 
-    /// <summary>The cap height on the screen (pixels) of a text <paramref name="size"/> tall (an em, in the placed form's units) on a page <paramref name="pageHeight"/> tall in those units that shows <paramref name="pagePixels"/> tall, in a face of <paramref name="capPerEm"/>; 0 for no text or no page.</summary>
-    public static float CapPixels(float size, float pageHeight, float pagePixels, float capPerEm) =>
-        size > 0f && pageHeight > 0f ? size / pageHeight * pagePixels * capPerEm : 0f;
-
     /// <summary>
     /// How much larger the lifted paper shows than at rest: enough for its
     /// smallest value (<paramref name="valueCapPx"/> at rest) to reach

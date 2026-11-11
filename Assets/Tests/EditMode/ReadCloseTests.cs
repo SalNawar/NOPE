@@ -78,7 +78,6 @@ public class ReadCloseTests
         Assert.AreEqual(1f, ReadClose.Magnify(2f, 0f, 11f, 8f, 2000f, 100f, 1920f, 1080f, 97f), "a paper wider than the screen does not shrink");
         Assert.AreEqual(5.5f, ReadClose.Magnify(2f, 0f, 11f, 8f, 100f, 100f, 1920f, 1080f, 97f), 1e-4f);
         Assert.AreEqual(4f, ReadClose.Magnify(5f, 2f, 11f, 8f, 100f, 100f, 1920f, 1080f, 97f), 1e-4f, "the label asks more than the value");
-        Assert.AreEqual(ReadClose.CapPixels(4f, 100f, 300f, 0.5f), 6f, 1e-4f, "a type 4 units tall on a page 100 units tall shown 300 px tall, cap half its em");
     }
 
     [Test]
