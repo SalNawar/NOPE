@@ -26,3 +26,8 @@ _Recovery.meta
 ContentSheets/NarrativeWorkbook.xlsx
 ContentSheets/NarrativeWorkbook_import.txt
 ContentSheets/~$*
+
+# graphify code graph (outside Assets so Unity does not import it)
+/graphify-out/
+Assets/Scripts/graphify-out/
+Assets/Scripts/graphify-out.meta

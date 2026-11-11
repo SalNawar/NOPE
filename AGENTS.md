@@ -16,3 +16,13 @@ Never push to main. Claude processes, verifies in Unity, and merges. Never force
 Saleh's pose decision: keep the poses, use instant still-frame swaps on dialogue beats; no cross-fades or tweened traveller reactions. Check current character contracts before proposing runtime filenames or mask/draw-order changes.
 
 For hall combinations, read the full ArtDeliverables/TimeDesk/HallSlots/HALL_SLOTS_ART_REQUEST.md on origin/main. Paint against the current HallWarmStone composite and templates, not offset older layers. Coordinate with active art work to avoid duplicate production.
+
+# Code graph (graphify)
+
+Before you search `Assets/Scripts` by hand, query the code graph:
+
+```
+graphify query "<question>" --graph graphify-out/graph.json --budget 600
+```
+
+If `graphify-out/` is missing, build it: `graphify update Assets/Scripts`. Then move `Assets/Scripts/graphify-out` to the repo root. Never leave it inside `Assets` (Unity imports it). The graph covers `Assets/Scripts` only. Read the source file before you change it.
