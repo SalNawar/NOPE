@@ -136,4 +136,22 @@ public class UiPcSeamTests
             Object.DestroyImmediate(canvas);
         }
     }
+
+    /// <summary>The Settings switch reaches the one flash budget (the audit of 2026-11-11, finding 2: it did not). NeedsEditor: PlayerPrefs.</summary>
+    [Test, Category("NeedsEditor")]
+    public void ReduceFlashing_SetInSettings_ReachesTheFlashBudget()
+    {
+        bool before = ScreenSettings.ReduceFlashing;
+        try
+        {
+            ScreenSettings.ReduceFlashing = true;
+            Assert.IsTrue(FlashPolicy.ReduceFlashing, "on in Settings: every flash is a tint");
+            ScreenSettings.ReduceFlashing = false;
+            Assert.IsFalse(FlashPolicy.ReduceFlashing, "off in Settings");
+        }
+        finally
+        {
+            ScreenSettings.ReduceFlashing = before;
+        }
+    }
 }

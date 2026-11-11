@@ -284,7 +284,7 @@ DesktopWindowManager's `InputGate.Blocked` check (inserted by the carve) is kept
 
 ### GAME_FEEL gap 2: FlashPolicy and Reduce flashing
 - **`FlashBudget` / `FlashPolicy`** (Domain): at most `flashesPerSecond` (3) flashes in any second. With Reduce flashing, every flash is a static tint held `flashTintSeconds` (200 ms). Every flash asks the one static budget, which PcFrame configures from DesktopConfigSO at load.
-- **`FlashPreference`** keeps the choice in PlayerPrefs.
+- **`ScreenSettings.ReduceFlashing`** keeps the choice in PlayerPrefs and hands it to `FlashPolicy` when it is set and at start-up (`ScreenSettings.Apply`). `FlashPreference` is gone (2026-11-11: it stored the same key as another type and nothing set it).
 - **Settings** has a Reduce flashing Off / On row: since 2026-11-07 (UI-16) it is the Display group's (`BuildSettingsBasics`, `SettingsWindowController`), in the window's right column; `FlashSettingRow` is gone.
 - **Consumers.** The first is the CRT's power-on glow. HALL-FX, LIGHT and DETAIN route their flashes through `FlashPolicy.Request(now)`.
 
