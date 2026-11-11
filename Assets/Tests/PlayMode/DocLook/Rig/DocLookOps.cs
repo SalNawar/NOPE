@@ -211,7 +211,7 @@ public static class DocLookOps
         foreach (DeskDocument paper in papers)
         {
             yield return runner.Input.MoveTo(away, 1);
-            yield return Settle(paper);
+            yield return Settle(paper, camera);
             if (camera == null || !TopPoint(paper, camera, out Vector2 on))
             {
                 detail.Add($"{paper.name}: no point where it is on top");
@@ -288,12 +288,29 @@ public static class DocLookOps
                       string.Join("; ", detail) + (wrong.Count > 0 ? " | WRONG: " + string.Join("; ", wrong) : string.Empty));
     }
 
-    /// <summary>Waits until <paramref name="paper"/>'s lift clock is 0 (at most 2 s).</summary>
-    private static IEnumerator Settle(DeskDocument paper)
+    /// <summary>
+    /// Waits until <paramref name="paper"/>'s lift clock is 0 (at most 2 s) and, given a <paramref name="camera"/>, until its sheet
+    /// rect on that camera has held within 0.3 px for 1 s (at most 6 s): the reading view's framing focus springs the lens back
+    /// (46.0 to 47.5 degrees) up to 1.4 s after the view's cut, with a still gap before it, so a rest read at once, or after a
+    /// short still, is a rest on a moving lens (lift-settle-reading).
+    /// </summary>
+    private static IEnumerator Settle(DeskDocument paper, Camera camera = null)
     {
         for (float end = Time.unscaledTime + 2f; Time.unscaledTime < end && (float)QaGame.Field(paper, "_readNow") > 0f;)
             yield return null;
         yield return QaGame.Frames(2);
+        if (camera == null)
+            yield break;
+        Rect last = SheetRect(paper, camera);
+        float since = Time.unscaledTime;
+        for (float end = Time.unscaledTime + 6f; Time.unscaledTime < end && Time.unscaledTime - since < 1f;)
+        {
+            yield return null;
+            Rect now = SheetRect(paper, camera);
+            if (Travel(now, last) > 0.3f)
+                since = Time.unscaledTime;
+            last = now;
+        }
     }
 
     /// <summary>The screen rect (pixels, y up) of <paramref name="paper"/>'s sheet as drawn now: its four corners.</summary>
