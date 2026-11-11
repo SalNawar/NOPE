@@ -20055,7 +20055,8 @@ MonoBehaviour:
       categories: 0d000000
       form: 
       target: calendar
-      text: 'Click the Passport''s Valid Until, then the calendar: is it still valid?'
+      text: 'Click the Passport''s Valid Until. Press {stamps} for the office view,
+        then click the date on the monitor: is it still valid?'
     - id: stamp
       action: 6
       categories: 

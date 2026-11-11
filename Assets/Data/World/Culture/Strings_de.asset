@@ -44,7 +44,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.masthead
-    text: "SCHICHTBUCH: ABENDAUSGABE"
+    text: 'SCHICHTBUCH: ABENDAUSGABE'
     gloss: 0
     tier: 0
   - key: results.goHome
@@ -237,15 +237,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: briefing.title
-    text: "Tag {0}: Morgenbesprechung"
+    text: 'Tag {0}: Morgenbesprechung'
     gloss: 0
     tier: 0
   - key: results.title
-    text: "Tag {0}: Schichtbericht"
+    text: 'Tag {0}: Schichtbericht'
     gloss: 0
     tier: 0
   - key: briefing.newsHeader
-    text: "\u00B7 ZEITLINIEN-NACHRICHTEN \u00B7"
+    text: "\xB7 ZEITLINIEN-NACHRICHTEN \xB7"
     gloss: 0
     tier: 0
   - key: briefing.deskHeader
@@ -1309,7 +1309,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.escape
-    text: "Rechtsklick oder Esc: ein Men\u00FC, diese Karte oder die Suchleiste schlie\u00DFen; die Suche leeren; ein Textfeld verlassen; einen gehaltenen Wert loslassen; das Men\u00FC schlie\u00DFen oder ein Ziehen abbrechen. Ist nichts davon offen, schlie\u00DFt Esc das vordere Fenster und \u00F6ffnet dann die Einstellungen, die offen bleiben. Q oder ein Klick auf den Rahmen verl\u00E4sst den PC"
+    text: "Rechtsklick oder Esc: ein Men\xFC, diese Karte oder die Suchleiste schlie\xDFen;
+      die Suche leeren; ein Textfeld verlassen; einen gehaltenen Wert loslassen;
+      das Men\xFC schlie\xDFen oder ein Ziehen abbrechen. Ist nichts davon offen,
+      schlie\xDFt Esc das vordere Fenster und \xF6ffnet dann die Einstellungen, die
+      offen bleiben. Q oder ein Klick auf den Rahmen verl\xE4sst den PC"
     gloss: 0
     tier: 0
   - key: keys.help
@@ -1432,7 +1436,9 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.back
-    text: "Zur\u00FCck: ein Ziehen, das Rad, ein gehaltener Wert, der Pr\u00FCfmodus, die Stempelleiste, die Schalttafel, die Stadt, die Leseansicht. Vom freien Schreibtisch \u00F6ffnet Esc die Einstellungen"
+    text: "Zur\xFCck: ein Ziehen, das Rad, ein gehaltener Wert, der Pr\xFCfmodus,
+      die Stempelleiste, die Schalttafel, die Stadt, die Leseansicht. Vom freien
+      Schreibtisch \xF6ffnet Esc die Einstellungen"
     gloss: 0
     tier: 0
   - key: keys.desk.city
@@ -2382,7 +2388,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.warning
-    text: "Verwarnung {0}/{1}: kein Lohnabzug."
+    text: 'Verwarnung {0}/{1}: kein Lohnabzug.'
     gloss: 0
     tier: 0
   - key: citation.penalty
@@ -2634,51 +2640,56 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers
-    text: "{0} FALSCH \u00B7 Papiere: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
+    text: "{0} FALSCH \xB7 Papiere: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.said
-    text: "{0} FALSCH \u00B7 Reisender sagte: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
+    text: "{0} FALSCH \xB7 Reisender sagte: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.worn
-    text: "{0} FALSCH \u00B7 Reisender tr\xE4gt: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C: w\xFCrde eine Panik ausl\xF6sen"
+    text: "{0} FALSCH \xB7 Reisender tr\xE4gt: \u201E{1}\u201C  /  erwartet: \u201E{2}\u201C:
+      w\xFCrde eine Panik ausl\xF6sen"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.papers
-    text: "{0} FALSCH \u00B7 Papiere zeigen \u201E{1}\u201C, das zu {2} geh\xF6rt"
+    text: "{0} FALSCH \xB7 Papiere zeigen \u201E{1}\u201C, das zu {2} geh\xF6rt"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.said
-    text: "{0} FALSCH \u00B7 Reisender sagte \u201E{1}\u201C, das zu {2} geh\xF6rt"
+    text: "{0} FALSCH \xB7 Reisender sagte \u201E{1}\u201C, das zu {2} geh\xF6rt"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.worn
-    text: "{0} FALSCH \u00B7 Reisender tr\xE4gt \u201E{1}\u201C, das zu {2} geh\xF6rt: w\xFCrde eine Panik ausl\xF6sen"
+    text: "{0} FALSCH \xB7 Reisender tr\xE4gt \u201E{1}\u201C, das zu {2} geh\xF6rt:
+      w\xFCrde eine Panik ausl\xF6sen"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.papers
-    text: "{0} FALSCH \u00B7 Papiere: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
+    text: "{0} FALSCH \xB7 Papiere: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.said
-    text: "{0} FALSCH \u00B7 Reisender sagte: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
+    text: "{0} FALSCH \xB7 Reisender sagte: \u201E{1}\u201C  /  Beh\xF6rdenakten:
+      \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.worn
-    text: "{0} FALSCH \u00B7 Reisender tr\xE4gt: \u201E{1}\u201C  /  Beh\xF6rdenakten: \u201E{2}\u201C"
+    text: "{0} FALSCH \xB7 Reisender tr\xE4gt: \u201E{1}\u201C  /  Beh\xF6rdenakten:
+      \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.crossMismatch.papers
-    text: "{0} WIDERSPR\xDCCHLICH \u00B7 die Papiere widersprechen sich: \u201E{1}\u201C  /  \u201E{2}\u201C"
+    text: "{0} WIDERSPR\xDCCHLICH \xB7 die Papiere widersprechen sich: \u201E{1}\u201C 
+      /  \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: deviation.personMismatch.papers
-    text: "{0} FALSCH \u00B7 das Foto in den Papieren ist nicht der Reisende am Schreibtisch"
+    text: "{0} FALSCH \xB7 das Foto in den Papieren ist nicht der Reisende am Schreibtisch"
     gloss: 0
     tier: 0
   - key: deviation.hiddenMismatch.papers
-    text: "{0} FALSCH \u00B7 Papiere: \u201E{1}\u201C  /  die Maschine liest: \u201E{2}\u201C"
+    text: "{0} FALSCH \xB7 Papiere: \u201E{1}\u201C  /  die Maschine liest: \u201E{2}\u201C"
     gloss: 0
     tier: 0
   - key: category.Language
@@ -3057,7 +3068,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: switchboard.hint.dial
-    text: "Eine Lampe blinkt: Ring auf ihr Wappen drehen, dann auf ihre Epoche. Zellen bis zur Marke einsetzen. MASTER ziehen"
+    text: 'Eine Lampe blinkt: Ring auf ihr Wappen drehen, dann auf ihre Epoche. Zellen
+      bis zur Marke einsetzen. MASTER ziehen'
     gloss: 0
     tier: 0
   - key: switchboard.legend.origin
@@ -3093,7 +3105,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.title
-    text: "Tag {0}: Zuhause"
+    text: 'Tag {0}: Zuhause'
     gloss: 0
     tier: 0
   - key: home.breakIn
@@ -3563,7 +3575,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: doc.work_permit_debt_relief_labour
-    text: "Arbeitserlaubnis: Schuldenerlass-Arbeit"
+    text: 'Arbeitserlaubnis: Schuldenerlass-Arbeit'
     gloss: 0
     tier: 0
   - key: doc.authorised_by
