@@ -186,7 +186,7 @@ public static class DayCycle
         int walletBefore = world.money;
         bool effectApplied = ApplyDialogOutcomes(world, ledger, lib);
         if (ledger != null)
-            ledger.otherMoney = world.money - walletBefore;
+            ledger.otherMoney += world.money - walletBefore; // added: the switchboard's bonuses of the day are already on the line
         return stranded || instalmentTaken || effectApplied;
     }
 
