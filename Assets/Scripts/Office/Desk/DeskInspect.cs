@@ -318,7 +318,6 @@ public sealed class DeskInspect : MonoBehaviour
         bool office = IsOn && (view == null || view.Current == OfficeView.OfficeFocus) && (city == null || !city.IsOn);
         string hold = office ? board.HoldKey : null;
         (string a, string b, FindingLook look, _) = board.Line;
-        string label = board.DeskLabel;
         if (!office)
             a = b = null;
 
@@ -339,7 +338,7 @@ public sealed class DeskInspect : MonoBehaviour
             Place(endA, arrowA, a);
             Place(endB, arrowB, b);
             if (a != _drawnA || b != _drawnB)
-                lines.ShowLink(endA, endB, look, label);
+                lines.ShowLink(endA, endB, look, string.Empty);
             _drawnA = a;
             _drawnB = b;
             return;
