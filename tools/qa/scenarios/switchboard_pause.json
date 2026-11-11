@@ -32,7 +32,8 @@
     {"op": "flowSettings", "name": "board", "f": 25},
     {"op": "boardAssert", "name": "p1_held_committed", "text": "committed:0"},
     {"op": "boardAssert", "name": "p1_held_not_sent", "text": "sent==0"},
-    {"op": "key", "key": "Escape"},
+    {"op": "key", "key": "Q"},
+    {"op": "wait", "n": 30},
     {"op": "boardWait", "text": "sent>=1", "f": 30},
     {"op": "boardAssert", "name": "p1_sent_after_settings", "text": "sent>=1"}
   ]
