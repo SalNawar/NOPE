@@ -161,6 +161,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A document's scale on the counter (small: a share of its real size on the desk, readClose; PaperSizes.SheetScale: one world size per zone, whatever the view).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
 
+    /// <summary>The least size (screen px, both ways) of the press box of a paper on the counter: the paper shows tiny there, its box grows, not the paper (GrabPad).</summary>
+    [Min(0f)] public float counterGrabPx = 50f;
+
     /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
     [Min(0f)] public float counterRowDepth = 0.05f;
 

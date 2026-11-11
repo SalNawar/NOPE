@@ -1,0 +1,138 @@
+{
+  "name": "counter_grab",
+  "owner": "COUNTER-GRAB",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "counter_grab (2026-11-11, counter-grab): the passport on the counter at tutorial step 2: its click box, the arrow and the rim; then a press 20 px beside the visible paper drags it onto the desk. Real input only. A rig leg of person_d1, at both resolutions."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personWatch"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "g_rest",
+      "n": 2
+    },
+    {
+      "op": "personGrabBeside",
+      "name": "g_beside"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "g_after",
+      "n": 3
+    },
+    {
+      "op": "call",
+      "target": "RunManager.LoadTitleScene"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personWatch"
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "g_rest",
+      "n": 2
+    },
+    {
+      "op": "personGrabBeside",
+      "name": "g_beside"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "g_after",
+      "n": 3
+    }
+  ]
+}

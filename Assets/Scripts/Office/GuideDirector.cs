@@ -444,10 +444,14 @@ public sealed class GuideDirector : MonoBehaviour
     private void LateUpdate()
     {
         if (prompt == null || _showing == Showing.None)
+        {
+            ShowRim(null);
             return;
+        }
         bool pc = view != null && view.Current == OfficeView.MonitorFocus;
         if (pc)
         {
+            ShowRim(null);
             if (_pick.Name == "pc")
                 prompt.HideArrow();
             else
@@ -457,6 +461,8 @@ public sealed class GuideDirector : MonoBehaviour
         if (!prompt.IsShown)
             prompt.Show(prompt.Header, prompt.Line, _showing == Showing.Step);
         Target target = inspect != null && inspect.ValueHeld ? _against : _pick;
+        DeskDocument onCounter = CounterPaper(target);
+        ShowRim(onCounter);
         if (string.IsNullOrEmpty(target.Name) || (city != null && city.IsOn))
         {
             prompt.HideArrow();
@@ -472,10 +478,38 @@ public sealed class GuideDirector : MonoBehaviour
             if (!onScreen && deskView != null && deskView.IsOn && deskView.BackControl != null)
                 prompt.PointAt(deskView.BackControl);
             else
-                prompt.PointAt(_camera, world);
+                prompt.PointAt(_camera, world, onCounter != null);
         }
         else
             prompt.HideArrow();
+    }
+
+    /// <summary>The paper the "paper:" target names when it lies on the counter (it shows tiny there: the arrow sits close and the paper wears the guide's rim); else null.</summary>
+    private DeskDocument CounterPaper(Target target)
+    {
+        if (target.Form == null || target.Field || _case == null || desk == null)
+            return null;
+        for (int d = 0; d < _case.documents.Count; d++)
+        {
+            DocumentInstance doc = _case.documents[d];
+            if (doc != null && doc.template != null && doc.template.formNumber == target.Form && desk.OnCounter(d))
+                return desk.PaperOf(d);
+        }
+        return null;
+    }
+
+    /// <summary>The paper wearing the guide's rim now (HoverHighlighter.SetGuided).</summary>
+    private DeskDocument _guided;
+
+    /// <summary>Puts the guide's rim on <paramref name="paper"/> (null: off), only when it changes.</summary>
+    private void ShowRim(DeskDocument paper)
+    {
+        if (paper == _guided)
+            return;
+        _guided = paper;
+        HoverHighlighter rim = FindFirstObjectByType<HoverHighlighter>();
+        if (rim != null)
+            rim.SetGuided(paper != null ? paper.PaperFace : null, _camera);
     }
 
     private bool TryUi(string target, out RectTransform ui)
