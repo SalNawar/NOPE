@@ -16,6 +16,10 @@ public static class HallFxChecks
     [GateCheck("hallfx.city.flicker", "HALL-FX", GateKind.Play)]
     public static GateResult CityFlicker() => GateResults.Require("hallfx.city.flicker", "HALL-FX", "hall_fx_city.seq.*.flicker");
 
+    /// <summary>CITY-WEATHER: the rain streaks move down the screen along their slant (seqtools rain on city_weather's rain_fall sequence, the editor run).</summary>
+    [GateCheck("city.weather.rain.direction", "CITY", GateKind.Play)]
+    public static GateResult RainDirection() => GateResults.Require("city.weather.rain.direction", "CITY", "city_weather.seq.rain_fall.rain");
+
     /// <summary>The Helix monitor before and after a drop, under and out of the warning, passes flicker (the editor run).</summary>
     [GateCheck("hallfx.helix.flicker", "HALL-FX", GateKind.Play)]
     public static GateResult HelixFlicker() => GateResults.Require("hallfx.helix.flicker", "HALL-FX", "hall_fx_helix.seq.*.flicker");

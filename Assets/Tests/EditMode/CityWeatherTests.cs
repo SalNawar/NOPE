@@ -35,4 +35,13 @@ public class CityWeatherTests
         Assert.IsTrue(CityWeather.Rains(1, 0f, true));
         Assert.IsFalse(CityWeather.Rains(1, 1f, false));
     }
+
+    [Test]
+    public void RainSourceY_MovesUpTheTile_SoTheStreaksFallDown_AndHoldsUnderReducedMotion()
+    {
+        float a = CityWeather.RainSourceY(1.0, 900f, 256, false), b = CityWeather.RainSourceY(1.05, 900f, 256, false);
+        Assert.AreEqual(-45f, ((b - a + 384f) % 256f) - 128f, 0.01f, "45 px up the tile in 0.05 s: the pattern falls 45 px");
+        Assert.That(CityWeather.RainSourceY(123.4, 900f, 256, false), Is.InRange(0f, 256f));
+        Assert.AreEqual(0f, CityWeather.RainSourceY(5.0, 900f, 256, true));
+    }
 }

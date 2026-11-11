@@ -292,6 +292,17 @@ def cmd_all(args):
     return ok
 
 
+def cmd_rain(args, seq=None):
+    """CITY-WEATHER direction: the streaks move down the screen (dy > 0, 600 to 1200 px/s at 1080p) along their slant (within 20 degrees)."""
+    seq = seq or args.seq
+    files, _, _ = load(seq)
+    r = seqlib.rain_motion([np.asarray(Image.open(f).convert('RGB')) for f in files])
+    ok = 600 <= r['dy'] <= 1200 and r['angle'] <= 20
+    emit(args, seq, 'rain', ok, f'motion dx {r["dx"]:.0f} dy {r["dy"]:.0f} px/s, {r["angle"]:.1f} degrees off the slant',
+         'the streak axis pointing down is (%.2f, %.2f)' % (r['axis_dx'], r['axis_dy']))
+    return ok
+
+
 def cmd_gif(args):
     files, rows, _ = load(args.seq)
     frames = []
@@ -442,6 +453,7 @@ def parser():
     p = sub.add_parser('all'); p.add_argument('seq'); flicker_opts(p); flash_opts(p); latency_opts(p); sound_opts(p); cuts_opts(p)
     colour_opts(p); result_opts(p)
     p.add_argument('--budget-ms', type=float, default=1000.0 / 30 + 0.1); p.set_defaults(fn=cmd_all)
+    p = sub.add_parser('rain'); p.add_argument('seq'); result_opts(p); p.set_defaults(fn=cmd_rain)
     p = sub.add_parser('gif'); p.add_argument('seq'); p.add_argument('out'); p.add_argument('--scale', type=float, default=0.67)
     p.add_argument('--start', type=int, default=0); p.add_argument('--end', type=int); p.add_argument('--step', type=int, default=1); p.set_defaults(fn=cmd_gif)
     p = sub.add_parser('sheet'); p.add_argument('seq'); p.add_argument('out'); p.add_argument('--start', type=int, default=0)

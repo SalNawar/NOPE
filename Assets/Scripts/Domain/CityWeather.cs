@@ -13,4 +13,16 @@ public static class CityWeather
         double roll = (uint)Seeds.ForWeather(daySeed) / 4294967296.0;
         return roll < rainChance;
     }
+
+    /// <summary>
+    /// The source y (top-left origin, px) of the rain tile at a time. It falls as time grows, so the streaks
+    /// move down the screen (the source window moves up the tile); 0 under Reduced Motion.
+    /// </summary>
+    public static float RainSourceY(double seconds, float speed, int tile, bool reduced)
+    {
+        if (reduced)
+            return 0f;
+        double y = -seconds * speed % tile;
+        return (float)(y < 0 ? y + tile : y);
+    }
 }

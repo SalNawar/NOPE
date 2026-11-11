@@ -404,7 +404,7 @@ public sealed class CityR17Stage : IDisposable
         Sprite(cmd, PassAlpha, Texture2D.whiteTexture, 4, 4, new CityR17Rect(1, 1, 2, 2), view, new Vector4(tint.r, tint.g, tint.b, tint.a), NoHaze);
         if (_rain == null)
             _rain = RainTile();
-        float fall = _f.Reduced ? 0f : (float)(_f.Seconds * _config.rainSpeed % RainTileSize);
+        float fall = CityWeather.RainSourceY(_f.Seconds, _config.rainSpeed, RainTileSize, _f.Reduced);
         Sprite(cmd, PassAlpha, _rain, RainTileSize, RainTileSize, new CityR17Rect(0, fall, fr.W, fr.H), view, White, NoHaze);
     }
 
