@@ -1,0 +1,278 @@
+{
+  "name": "handback_dock",
+  "owner": "STAMP",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "handback-dock: 8 real hand-back drags on day 1 (golden seed; one shift holds 10 travellers): hb0 to hb3 from the reading view (the passport open and wide), hb10 to hb13 after the switch to the office view (the e2e_run case). stampHandBack throws if the case does not end."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "Tutorial",
+      "n": 0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb0",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb0_stamp"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb0"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb1",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb1_stamp"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb1"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb2",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb2_stamp"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb2"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb3",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb3_stamp"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb3"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb10",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb10_stamp"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb10"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb11",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb11_stamp"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb11"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb12",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb12_stamp"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb12"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "n": 45
+    },
+    {
+      "op": "counterDrag",
+      "name": "hb13",
+      "text": "office"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "correct",
+      "n": -1,
+      "name": "hb13_stamp"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "hb13"
+    }
+  ]
+}

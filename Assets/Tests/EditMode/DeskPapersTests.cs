@@ -448,6 +448,16 @@ public class DeskPapersTests
     }
 
     [Test]
+    public void AStampedPassport_ReleasedOverTheCounter_IsHandedBack_NeverDockedAtAMachine()
+    {
+        Assert.IsFalse(PaperSizes.MachineMayTake(DeskZone.Counter, true), "verdict and pointer on the counter: no machine");
+        Assert.IsTrue(PaperSizes.MachineMayTake(DeskZone.Counter, false), "no verdict: the machine rules stay");
+        Assert.IsTrue(PaperSizes.MachineMayTake(DeskZone.Desk, true), "pointer on the desk: the machine rules stay");
+        // With no dock, the drop on the counter hands back.
+        Assert.AreEqual(DropOutcome.HandsBack, AllOnDesk().Drop(0, false, DeskZone.Counter, true));
+    }
+
+    [Test]
     public void AHeldPaper_OverAMachine_ShowsAtItsDeskSize_WhateverThePointer()
     {
         // Verifier round 2 (low): the dock is the footprint's centre's, so the held size follows it too. A counter paper

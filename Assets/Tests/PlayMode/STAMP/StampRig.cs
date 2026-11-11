@@ -1633,8 +1633,9 @@ public static class StampRig
             if (counter == null)
                 throw new InvalidOperationException("stampHandBack: no counter.");
             Vector2 from = GrabPoint(tray, passport, cam);
-            // The counter's strip where it shows (the reading view's COUNTER band), else its first spot.
-            Vector2 to = QaGame.ScreenPoint(counter.Strip.gameObject) ?? Screen2(counter.Spot(0), cam);
+            // The counter's strip where it shows (the reading view's COUNTER band), else the strip's centre.
+            // Not Spot(0): the spots lie counterSpotInset past the strip's depth, so a drop there is off the counter zone.
+            Vector2 to = QaGame.ScreenPoint(counter.Strip.gameObject) ?? Screen2(counter.Strip.position, cam);
             QaPath path = QaPaths.Drag(QaRunner.ParseKind(step.path), from, to, new Vector2(Screen.width, Screen.height));
             yield return FixedStep(Settle(runner.Input.Play(path), 10));
             Report(runner, $"== stampHandBack {step.name}: passport {passport.Index} from {from} to the counter at {path.End}");
