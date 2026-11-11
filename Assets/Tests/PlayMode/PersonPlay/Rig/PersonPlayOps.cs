@@ -69,6 +69,7 @@ public static class PersonPlayOps
         QaRunner.RegisterOp("personSettle", SettleOp);
         QaRunner.RegisterOp("personDecide", DecideOp);
         QaRunner.RegisterOp("personVerdict", VerdictOp);
+        QaRunner.RegisterOp("personGrabBeside", GrabBeside);
     }
 
     // ---------------- helpers ----------------
@@ -162,13 +163,47 @@ public static class PersonPlayOps
         Rect? plateRect = plate is Component c ? QaGame.ScreenRect(c.gameObject) : null;
         Rep(r, $"== step {name} ({Screen.width}x{Screen.height}): plate {(shown ? "shown" : "NOT shown")}, header '{header}', line '{line}', arrow {(prompt != null && prompt.ArrowShown ? "shown at " + prompt.ArrowAt : "hidden")}, plate {Px(plateRect)}");
         foreach (DeskDocument p in Object.FindObjectsByType<DeskDocument>(FindObjectsInactive.Exclude).Where(p => p.isActiveAndEnabled && p.Sheet != null).OrderBy(p => p.Index))
-            Rep(r, $"   paper {p.Index} {p.name} zone {p.Zone}: click box {Px(QaGame.ScreenRect(p.gameObject))}, sheet {Px(QaGame.ScreenRect(p.Sheet.gameObject))}");
+            Rep(r, $"   paper {p.Index} {p.name} zone {p.Zone}: click box {Px(QaGame.ScreenRect(p.gameObject))}, sheet {Px(QaGame.ScreenRect(p.Sheet.gameObject))}, drawn paper {Px(QaGame.ScreenRect(p.PaperFace.gameObject))}{ArrowGap(prompt, p)}");
         bool expected = s.n <= 0 || (shown && header.Contains(s.n + "/"));
         if (!expected)
             Find(r, "S2", $"tutorial step {s.n} is not the one shown", $"header '{header}', line '{line}', still {name}");
         if (!string.IsNullOrEmpty(s.text) && !line.Contains(s.text))
             Find(r, "S3", $"the plate's line lacks '{s.text}'", $"line '{line}', still {name}");
         yield return Still(r, name);
+    }
+
+    /// <summary>The arrow's distance (px) to the middle of the paper as drawn, when the arrow shows ("" else).</summary>
+    private static string ArrowGap(GuidePrompt prompt, DeskDocument p)
+    {
+        Rect? arrow = prompt != null && prompt.ArrowShown && QaGame.Field(prompt, "arrow") is Component a ? QaGame.ScreenRect(a.gameObject) : null;
+        Rect? face = QaGame.ScreenRect(p.PaperFace.gameObject);
+        return arrow == null || face == null ? string.Empty : string.Format(CultureInfo.InvariantCulture, ", arrow {0:0}x{1:0} px, {2:0} px from this paper's middle", arrow.Value.width, arrow.Value.height, Vector2.Distance(arrow.Value.center, face.Value.center));
+    }
+
+    // ---------------- personGrabBeside ----------------
+
+    /// <summary>Presses 20 px (n) beside the passport on the counter as drawn, drags it to the desk's middle and asserts it lay on the desk (a press beside the visible paper takes it).</summary>
+    private static IEnumerator GrabBeside(QaRunner r, QaStep s)
+    {
+        DeskDocument p = Object.FindObjectsByType<DeskDocument>(FindObjectsInactive.Exclude).Where(d => d.isActiveAndEnabled && d.Sheet != null && d.Zone == DeskZone.Counter).OrderBy(d => d.Index).FirstOrDefault();
+        Rect? face = p != null ? QaGame.ScreenRect(p.PaperFace.gameObject) : null;
+        string id = "person.grabBeside." + Name(s);
+        if (face == null)
+        {
+            r.Assert(id, Owner, false, "no paper on the counter", string.Empty);
+            yield break;
+        }
+        float gap = s.n > 0 ? s.n : 20f;
+        Vector2 from = new Vector2(face.Value.xMax + gap, face.Value.center.y);
+        GameObject top = QaGame.TopAt(from);
+        bool hit = top != null && top.transform.IsChildOf(p.transform);
+        Rep(r, $"== grabBeside at {Screen.width}x{Screen.height}: drawn paper {Px(face)}, click box {Px(QaGame.ScreenRect(p.gameObject))}, press {gap:0} px beside it at ({from.x:0},{from.y:0}) meets {(top != null ? QaGame.Where(top) : "nothing")}{(hit ? string.Empty : " (NOT the paper)")}");
+        yield return Still(r, Name(s) + "_before");
+        yield return r.Input.Play(QaPaths.Drag(QaPathKind.Plain, from, new Vector2(Screen.width * 0.5f, Screen.height * 0.16f), new Vector2(Screen.width, Screen.height)));
+        yield return Secs(1.2f);
+        bool onDesk = p.Zone == DeskZone.Desk;
+        Rep(r, $"   after the drag the paper lies in zone {p.Zone}");
+        r.Assert(id, Owner, hit && onDesk, $"the press {gap:0} px beside the paper {(hit ? "met" : "missed")} it and it lies in zone {p.Zone}", string.Empty);
     }
 
     /// <summary>The compare readout at the bottom centre as it shows (empty when its bar is hidden).</summary>

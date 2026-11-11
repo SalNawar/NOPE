@@ -71,6 +71,14 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>The camera the pointer's raycast looks through (the office camera): the outline draws on it alone (BUG-10a).</summary>
     private Camera _eventCamera;
 
+    /// <summary>The guide's target (a paper on the counter at tutorial step 2): its rim shows whole until the guide clears it (SetGuided), on <see cref="_guidedCamera"/>.</summary>
+    private readonly List<(Mesh mesh, Renderer renderer)> _guided = new List<(Mesh, Renderer)>();
+    private Camera _guidedCamera;
+    private MaterialPropertyBlock _guidedBlock;
+
+    /// <summary>The prop pressed while hovered: its rim stays off until the pointer leaves it (a pressed AVAILABLE sign keeps no rim).</summary>
+    private Component _pressed;
+
     /// <summary>The cameras the hovered object's outline and the left one's draw on: the pointer's camera when each was hovered.</summary>
     private Camera _hullCamera, _fadingCamera;
 
@@ -136,8 +144,21 @@ public sealed class HoverHighlighter : MonoBehaviour
             SetHighlighted(_hovered, true);
         }
 
+        if (_pressed != _hovered)
+            _pressed = null;
+        if (_hovered is Clickable && Mouse.current != null && (Mouse.current.leftButton.wasPressedThisFrame || Mouse.current.leftButton.isPressed))
+            _pressed = _hovered;
         DrawHull();
         ApplyCursor(_hovered != null);
+    }
+
+    /// <summary>Puts the guide's rim on <paramref name="target"/> (its mesh) as seen through <paramref name="camera"/>, or takes it off (null).</summary>
+    public void SetGuided(Renderer target, Camera camera)
+    {
+        _guided.Clear();
+        _guidedCamera = camera;
+        if (target != null && target.TryGetComponent(out MeshFilter filter) && filter.sharedMesh != null)
+            _guided.Add((filter.sharedMesh, target));
     }
 
     private void OnDisable()
@@ -317,7 +338,9 @@ public sealed class HoverHighlighter : MonoBehaviour
         _shownBlock ??= new MaterialPropertyBlock();
         _fadingBlock ??= new MaterialPropertyBlock();
         Draw(_fading, _fadingShown, _fadingBlock, _fadingCamera);
-        Draw(_hull, _shown, _shownBlock, _hullCamera);
+        Draw(_hull, _pressed != null ? 0f : _shown, _shownBlock, _hullCamera);
+        _guidedBlock ??= new MaterialPropertyBlock();
+        Draw(_guided, 1f, _guidedBlock, _guidedCamera);
     }
 
     /// <summary>Draws <paramref name="hull"/> at <paramref name="shown"/> of the outline's colour (its alpha) on <paramref name="camera"/> alone (none: no draw): each mesh's silhouette into the stencil (the mask), then its rim where the mask is not (the hull), pushed out from the mesh's centre.</summary>
@@ -363,6 +386,7 @@ public sealed class HoverHighlighter : MonoBehaviour
     {
         _hull.Clear();
         _fading.Clear();
+        _guided.Clear();
         _lift = null;
         _eventCamera = null;
         _hullCamera = null;

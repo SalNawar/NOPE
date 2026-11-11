@@ -522,9 +522,49 @@ public sealed class DeskController : MonoBehaviour
         return TryFootprint(rulebook.transform, out folder);
     }
 
+    /// <summary>The counter papers' centres on the screen (FitGrabPads; reused).</summary>
+    private readonly List<(float x, float y)> _padCentres = new List<(float x, float y)>();
+
+    /// <summary>The same list without the paper being fitted.</summary>
+    private readonly List<(float x, float y)> _padOthers = new List<(float x, float y)>();
+
+    /// <summary>Each frame: every paper on the counter takes a press in a box of at least DeskConfigSO.counterGrabPx on the screen (GrabPad: the nearest paper's centre wins where boxes meet).</summary>
+    private void FitGrabPads()
+    {
+        if (config == null)
+            return;
+        Camera eye = Camera.main;
+        _padCentres.Clear();
+        for (int i = 0; i < _papers.Count; i++)
+        {
+            DeskDocument paper = _papers[i];
+            (float x, float y) centre = default;
+            bool on = paper != null && paper.isActiveAndEnabled && paper.WantsGrabPad && paper.TryScreenCentre(eye, out centre);
+            _padCentres.Add(on ? centre : (float.NaN, float.NaN));
+        }
+        for (int i = 0; i < _papers.Count; i++)
+        {
+            DeskDocument paper = _papers[i];
+            if (paper == null)
+                continue;
+            _padOthers.Clear();
+            for (int j = 0; j < _padCentres.Count; j++)
+                if (j != i && !float.IsNaN(_padCentres[j].x))
+                    _padOthers.Add(_padCentres[j]);
+            paper.FitGrabPad(eye, config.counterGrabPx, config.counterGrabMarginPx, _padOthers);
+        }
+    }
+
+    /// <summary>True when document <paramref name="document"/> lies on the counter (the guide's arrow sits closer to a paper there: it shows tiny).</summary>
+    public bool OnCounter(int document) => document >= 0 && document < _papers.Count && _papers[document] != null && _papers[document].Zone == DeskZone.Counter;
+
+    /// <summary>The paper of document <paramref name="document"/>, or null when it is not on the desk.</summary>
+    public DeskDocument PaperOf(int document) => document >= 0 && document < _papers.Count ? _papers[document] : null;
+
     /// <summary>Makes a spare paper ready (between hand-overs), hands the next arrival over on its beat, then advances a running scan (a finished paper slides back to where it was picked up, keeping its docked size until clear of the scanner) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner).</summary>
     private void Update()
     {
+        FitGrabPads();
         if (!HandOverNext())
             PrepareSpare();
         if (_state == null)

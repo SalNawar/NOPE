@@ -109,14 +109,18 @@ public sealed class GuidePrompt : MonoBehaviour
             arrow.gameObject.SetActive(false);
     }
 
+    /// <summary>The share of the lift an arrow keeps when it points at a small thing (<c>near</c>: a paper on the counter).</summary>
+    private const float NearShare = 0.45f;
+
     /// <summary>Points the arrow down at <paramref name="world"/> through <paramref name="office"/>; hidden while the point is off the screen (an arrow at the edge would point at the plate, not the thing).</summary>
-    public void PointAt(Camera office, Vector3 world)
+    public void PointAt(Camera office, Vector3 world, bool near = false)
     {
+        float lift = near ? arrowLift * NearShare : arrowLift;
         if (arrow == null)
             return;
         arrow.gameObject.SetActive(true);
         Face(false);
-        if (!OverlayProjection.TryPlace(arrow, _canvasRect, office, world, new Vector2(0f, arrowLift + Bob())))
+        if (!OverlayProjection.TryPlace(arrow, _canvasRect, office, world, new Vector2(0f, lift + Bob())))
         {
             HideArrow();
             return;
@@ -125,7 +129,7 @@ public sealed class GuidePrompt : MonoBehaviour
             return;
         // Above the point it would sit on the plate (QA2 2026-10-16): under it, pointing up.
         Face(true);
-        if (!OverlayProjection.TryPlace(arrow, _canvasRect, office, world, new Vector2(0f, -(arrowLift + Bob()))) || OverPlate())
+        if (!OverlayProjection.TryPlace(arrow, _canvasRect, office, world, new Vector2(0f, -(lift + Bob()))) || OverPlate())
             HideArrow();
     }
 
