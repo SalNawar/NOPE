@@ -208,23 +208,16 @@ public static class DocLookOps
                 papers.Add(p);
         Vector2 away = new Vector2(Screen.width * 0.5f, Screen.height * 0.03f);
         int lifted = 0;
-        var starts = new Dictionary<DeskDocument, Rect>();
-        foreach (DeskDocument p in papers)
-        {
-            starts[p] = SheetRect(p, camera);
-            detail.Add($"{p.name}: start state {PaperState(p)}");
-        }
         foreach (DeskDocument paper in papers)
         {
             yield return runner.Input.MoveTo(away, 1);
-            yield return Settle(paper);
+            yield return Settle(paper, camera);
             if (camera == null || !TopPoint(paper, camera, out Vector2 on))
             {
                 detail.Add($"{paper.name}: no point where it is on top");
                 continue;
             }
             Rect rest = SheetRect(paper, camera);
-            string stateBefore = PaperState(paper);
             yield return runner.Input.MoveTo(on, 1);
             var up = new List<Rect>();
             int most = 0;
@@ -269,17 +262,9 @@ public static class DocLookOps
                 yield return runner.Input.Tap(UnityEngine.InputSystem.Key.Space);
             float downStep = MostStep(top, down), back = Travel(down[down.Count - 1], rest);
             detail.Add(string.Format(CultureInfo.InvariantCulture,
-                "{0}: rest {1:0}x{2:0} px, lifted {3:0}x{4:0} px at ({5:0},{6:0})-({7:0},{8:0}), value {9:0.0} px, label {10:0.0} px{11}, lift {12} frames, most step {13:0}% up {14:0}% down, back {15:0.0} px (rest {16:0},{17:0} now {18:0},{19:0} size {20:0}x{21:0}, clock {22:0.00})",
+                "{0}: rest {1:0}x{2:0} px, lifted {3:0}x{4:0} px at ({5:0},{6:0})-({7:0},{8:0}), value {9:0.0} px, label {10:0.0} px{11}, lift {12} frames, most step {13:0}% up {14:0}% down, back {15:0.0} px",
                 paper.name, rest.width, rest.height, top.width, top.height, top.xMin, top.yMin, top.xMax, top.yMax, value, label, fills ? " (fills the frame)" : string.Empty,
-                frames, upStep * 100f, downStep * 100f, back, rest.center.x, rest.center.y, down[down.Count - 1].center.x, down[down.Count - 1].center.y, down[down.Count - 1].width, down[down.Count - 1].height, (float)QaGame.Field(paper, "_readNow")));
-            if (back > 2f)
-            {
-                var trail = new List<string>();
-                for (int k = 0; k < down.Count; k += 4)
-                    trail.Add($"{down[k].center.x:0},{down[k].center.y:0},{down[k].width:0}x{down[k].height:0}");
-                detail.Add($"{paper.name}: state before the lift {stateBefore}; after the settle {PaperState(paper)}");
-                detail.Add($"{paper.name}: op start {starts[paper].center.x:0},{starts[paper].center.y:0} {starts[paper].width:0}x{starts[paper].height:0}; settle trail {string.Join(" ", trail)}");
-            }
+                frames, upStep * 100f, downStep * 100f, back));
             if (value + 1e-3f < valueBar)
                 wrong.Add($"{paper.name} value {value:0.0} px < {valueBar}");
             if (!fills && label + 1e-3f < labelBar)
@@ -302,22 +287,27 @@ public static class DocLookOps
                       string.Join("; ", detail) + (wrong.Count > 0 ? " | WRONG: " + string.Join("; ", wrong) : string.Empty));
     }
 
-    /// <summary>The paper's private feel state, for the readLift log: size now and target, lowering, dirty, shown ratio, settling, sheet place and scale, root place.</summary>
-    private static string PaperState(DeskDocument p) => string.Format(CultureInfo.InvariantCulture,
-        "size {0:0.0000}/{1:0.0000} lowering {2} dirty {3} ratio {4:0.000} settling {5} sheet {6} scale {7} root {8}",
-        QaGame.Field(p, "_sizeNow"), QaGame.Field(p, "_sizeTarget"), QaGame.Field(p, "_lowering"), QaGame.Field(p, "_feelDirty"), QaGame.Field(p, "_shownRatio"), QaGame.Field(p, "_settling"),
-        p.Sheet.localPosition.ToString("0.0000"), p.Sheet.localScale.ToString("0.0000"), p.transform.position.ToString("0.0000"))
-        + string.Format(CultureInfo.InvariantCulture, " | sheet turn {0} root turn {1} size {2} camera {3} {4} fov {5:0.00} rect {6}",
-            p.Sheet.localEulerAngles.ToString("0.00"), p.transform.eulerAngles.ToString("0.00"), p.Size.ToString("0.0000"),
-            QaGame.PointerCamera() != null ? QaGame.PointerCamera().name : "none", QaGame.PointerCamera() != null ? QaGame.PointerCamera().transform.position.ToString("0.0000") : "-",
-            QaGame.PointerCamera() != null ? QaGame.PointerCamera().fieldOfView : 0f, QaGame.PointerCamera() != null ? SheetRect(p, QaGame.PointerCamera()).ToString("0.0") : "-");
-
-    /// <summary>Waits until <paramref name="paper"/>'s lift clock is 0 (at most 2 s).</summary>
-    private static IEnumerator Settle(DeskDocument paper)
+    /// <summary>
+    /// Waits until <paramref name="paper"/>'s lift clock is 0 (at most 2 s) and, given a <paramref name="camera"/>, until its sheet
+    /// rect on that camera has held within 0.3 px for 6 frames (at most 4 s): the reading view's framing focus still springs
+    /// the lens back after the view's cut, so a rest read at once is a rest on a moving lens (lift-settle-reading).
+    /// </summary>
+    private static IEnumerator Settle(DeskDocument paper, Camera camera = null)
     {
         for (float end = Time.unscaledTime + 2f; Time.unscaledTime < end && (float)QaGame.Field(paper, "_readNow") > 0f;)
             yield return null;
         yield return QaGame.Frames(2);
+        if (camera == null)
+            yield break;
+        Rect last = SheetRect(paper, camera);
+        int held = 0;
+        for (float end = Time.unscaledTime + 4f; Time.unscaledTime < end && held < 6;)
+        {
+            yield return null;
+            Rect now = SheetRect(paper, camera);
+            held = Travel(now, last) <= 0.3f ? held + 1 : 0;
+            last = now;
+        }
     }
 
     /// <summary>The screen rect (pixels, y up) of <paramref name="paper"/>'s sheet as drawn now: its four corners.</summary>
