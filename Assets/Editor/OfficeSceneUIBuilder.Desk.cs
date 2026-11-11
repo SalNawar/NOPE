@@ -771,6 +771,9 @@ public static partial class OfficeSceneUIBuilder
     /// </summary>
     private const float TopStripTop = 16f;
     private static readonly Vector2 CompareStripSize = new Vector2(760f, 56f);
+    /// <summary>The compare readout's panel (reference px), bottom centre, and its gap to the screen's bottom edge: the wood below the desk mat, clear of the papers.</summary>
+    private static readonly Vector2 CompareReadoutSize = new Vector2(1400f, 72f);
+    private const float CompareReadoutBottom = 12f;
     private static readonly Vector2 VerdictStripSize = new Vector2(820f, 72f);
 
     /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's compare strip and a gap.</summary>

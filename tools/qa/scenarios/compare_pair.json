@@ -21,6 +21,7 @@
     { "op": "click", "target": "Slot_0" },
     { "op": "wait", "n": 20 },
     { "op": "still", "name": "d1_pair_desk_line" },
+    { "op": "wait", "n": 20 },
     { "op": "key", "key": "Space" },
     { "op": "wait", "n": 20 },
     { "op": "still", "name": "d1_pair_strip" },
