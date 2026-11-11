@@ -368,6 +368,8 @@ public sealed class CaseFactory
             return violators;
 
         var standingSlots = new HashSet<int>(_appearances.Where(a => a.Value.legendary != null || HasAuthoredFault(a.Value)).Select(a => a.Key));
+        if (FirstCase.IsClean(plan.DayNumber, 1, FirstCaseClean) && !_appearances.ContainsKey(1))
+            standingSlots.Add(1); // the first traveller of the game stays clean: no guaranteed breaker stands there (FirstCase)
         var rng = new SeededRandom(Seeds.ForViolators(daySeed));
         int[] slots = ViolatorSlots.Pick(total, breakersPerRule.Count, rng, standingSlots);
         for (int i = 0; i < slots.Length; i++)
