@@ -110,7 +110,7 @@ public sealed class GuidePrompt : MonoBehaviour
     }
 
     /// <summary>The share of the lift an arrow keeps when it points at a small thing (<c>near</c>: a paper on the counter).</summary>
-    private const float NearShare = 0.55f;
+    private const float NearShare = 0.45f;
 
     /// <summary>Points the arrow down at <paramref name="world"/> through <paramref name="office"/>; hidden while the point is off the screen (an arrow at the edge would point at the plate, not the thing).</summary>
     public void PointAt(Camera office, Vector3 world, bool near = false)

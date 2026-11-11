@@ -30,8 +30,8 @@ public sealed partial class DeskDocument
         return s.z > 0f;
     }
 
-    /// <summary>Fits the pad to at least <paramref name="minPx"/> by <paramref name="minPx"/> on the screen of <paramref name="eye"/> (never less than the sheet), stopping half way to each of <paramref name="others"/> (the other counter papers' centres, px). Off when the paper does not lie on the counter or its own box is off.</summary>
-    public void FitGrabPad(Camera eye, float minPx, IReadOnlyList<(float x, float y)> others)
+    /// <summary>Fits the pad to at least <paramref name="minPx"/> by <paramref name="minPx"/> on the screen of <paramref name="eye"/> (never less than the sheet, and <paramref name="marginPx"/> past its edge), stopping half way to each of <paramref name="others"/> (the other counter papers' centres, px). Off when the paper does not lie on the counter or its own box is off.</summary>
+    public void FitGrabPad(Camera eye, float minPx, float marginPx, IReadOnlyList<(float x, float y)> others)
     {
         bool want = WantsGrabPad && eye != null && sheet != null && sheet.TryGetComponent(out BoxCollider box) && box.enabled;
         if (!want)
@@ -52,7 +52,7 @@ public sealed partial class DeskDocument
                 _pad.enabled = false;
             return;
         }
-        (float hx, float hy) = GrabPad.Half(minPx / 2f, box.size.x * scale.x * px / 2f, box.size.y * scale.y * py / 2f, at.x, at.y, others);
+        (float hx, float hy) = GrabPad.Half(minPx / 2f, marginPx, box.size.x * scale.x * px / 2f, box.size.y * scale.y * py / 2f, at.x, at.y, others);
         if (_pad == null)
             _pad = sheet.gameObject.AddComponent<BoxCollider>();
         _pad.center = box.center;

@@ -551,7 +551,7 @@ public sealed class DeskController : MonoBehaviour
             for (int j = 0; j < _padCentres.Count; j++)
                 if (j != i && !float.IsNaN(_padCentres[j].x))
                     _padOthers.Add(_padCentres[j]);
-            paper.FitGrabPad(eye, config.counterGrabPx, _padOthers);
+            paper.FitGrabPad(eye, config.counterGrabPx, config.counterGrabMarginPx, _padOthers);
         }
     }
 
