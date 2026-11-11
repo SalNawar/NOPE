@@ -1762,6 +1762,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         if (calendar.click.TryGetComponent(out DeskReaction reaction))
         {
             reaction.SetTarget(_crtReadout.DateText);
+            reaction.SetReadout(_crtReadout.DateText.GetComponent<TMP_Text>()); // the tooltip's "Today: {0}" reads the date line (it read an empty text)
             reaction.SetTooltipPoint(TopOf(calendar.click.transform, new Bounds(centre, new Vector3(size.x, size.y, size.x * 0.1f))));
         }
         return true;

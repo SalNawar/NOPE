@@ -44,7 +44,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: results.masthead
-    text: "REGISTRO DEL TURNO: EDIZIONE DELLA SERA"
+    text: 'REGISTRO DEL TURNO: EDIZIONE DELLA SERA'
     gloss: 0
     tier: 0
   - key: results.goHome
@@ -237,15 +237,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: briefing.title
-    text: "Giorno {0}: Briefing del mattino"
+    text: 'Giorno {0}: Briefing del mattino'
     gloss: 0
     tier: 0
   - key: results.title
-    text: "Giorno {0}: Rapporto del turno"
+    text: 'Giorno {0}: Rapporto del turno'
     gloss: 0
     tier: 0
   - key: briefing.newsHeader
-    text: "\u00B7 NOTIZIE DELLA LINEA TEMPORALE \u00B7"
+    text: "\xB7 NOTIZIE DELLA LINEA TEMPORALE \xB7"
     gloss: 0
     tier: 0
   - key: briefing.deskHeader
@@ -1310,7 +1310,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.escape
-    text: "Clic destro o Esc: chiudi un menu, questa scheda o il pannello di ricerca; cancella la ricerca; esci da un campo di testo; lascia un valore tenuto; chiudi il Menu o annulla un trascinamento. Altrimenti Esc chiude la finestra in primo piano, poi apre le Impostazioni, che restano aperte. Q o un clic sulla cornice lascia il PC"
+    text: 'Clic destro o Esc: chiudi un menu, questa scheda o il pannello di ricerca;
+      cancella la ricerca; esci da un campo di testo; lascia un valore tenuto; chiudi
+      il Menu o annulla un trascinamento. Altrimenti Esc chiude la finestra in primo
+      piano, poi apre le Impostazioni, che restano aperte. Q o un clic sulla cornice
+      lascia il PC'
     gloss: 0
     tier: 0
   - key: keys.help
@@ -1432,7 +1436,9 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.desk.back
-    text: "Esci da: un trascinamento, la ruota, un valore tenuto, la modalit\u00E0 ispezione, la barra dei timbri, il centralino, la citt\u00E0, la vista di lettura. Dalla scrivania libera Esc apre le Impostazioni"
+    text: "Esci da: un trascinamento, la ruota, un valore tenuto, la modalit\xE0
+      ispezione, la barra dei timbri, il centralino, la citt\xE0, la vista di lettura.
+      Dalla scrivania libera Esc apre le Impostazioni"
     gloss: 0
     tier: 0
   - key: keys.desk.city
@@ -2383,7 +2389,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: citation.warning
-    text: "Avvertimento {0}/{1}: nessuna trattenuta sulla paga."
+    text: 'Avvertimento {0}/{1}: nessuna trattenuta sulla paga.'
     gloss: 0
     tier: 0
   - key: citation.penalty
@@ -2642,51 +2648,55 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers
-    text: "{0} ERRATO \u00B7 documenti: \"{1}\"  /  previsto: \"{2}\""
+    text: "{0} ERRATO \xB7 documenti: \"{1}\"  /  previsto: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.said
-    text: "{0} ERRATO \u00B7 il viaggiatore ha detto: \"{1}\"  /  previsto: \"{2}\""
+    text: "{0} ERRATO \xB7 il viaggiatore ha detto: \"{1}\"  /  previsto: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.worn
-    text: "{0} ERRATO \u00B7 il viaggiatore indossa: \"{1}\"  /  previsto: \"{2}\": causerebbe il panico"
+    text: "{0} ERRATO \xB7 il viaggiatore indossa: \"{1}\"  /  previsto: \"{2}\":
+      causerebbe il panico"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.papers
-    text: "{0} ERRATO \u00B7 i documenti mostrano \"{1}\", che appartiene a {2}"
+    text: "{0} ERRATO \xB7 i documenti mostrano \"{1}\", che appartiene a {2}"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.said
-    text: "{0} ERRATO \u00B7 il viaggiatore ha detto \"{1}\", che appartiene a {2}"
+    text: "{0} ERRATO \xB7 il viaggiatore ha detto \"{1}\", che appartiene a {2}"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.worn
-    text: "{0} ERRATO \u00B7 il viaggiatore indossa \"{1}\", che appartiene a {2}: causerebbe il panico"
+    text: "{0} ERRATO \xB7 il viaggiatore indossa \"{1}\", che appartiene a {2}:
+      causerebbe il panico"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.papers
-    text: "{0} ERRATO \u00B7 documenti: \"{1}\"  /  registri dell'agenzia: \"{2}\""
+    text: "{0} ERRATO \xB7 documenti: \"{1}\"  /  registri dell'agenzia: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.said
-    text: "{0} ERRATO \u00B7 il viaggiatore ha detto: \"{1}\"  /  registri dell'agenzia: \"{2}\""
+    text: "{0} ERRATO \xB7 il viaggiatore ha detto: \"{1}\"  /  registri dell'agenzia:
+      \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.worn
-    text: "{0} ERRATO \u00B7 il viaggiatore indossa: \"{1}\"  /  registri dell'agenzia: \"{2}\""
+    text: "{0} ERRATO \xB7 il viaggiatore indossa: \"{1}\"  /  registri dell'agenzia:
+      \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.crossMismatch.papers
-    text: "{0} INCOERENTE \u00B7 i documenti discordano: \"{1}\"  /  \"{2}\""
+    text: "{0} INCOERENTE \xB7 i documenti discordano: \"{1}\"  /  \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.personMismatch.papers
-    text: "{0} ERRATO \u00B7 la foto sui documenti non \xE8 il viaggiatore alla scrivania"
+    text: "{0} ERRATO \xB7 la foto sui documenti non \xE8 il viaggiatore alla scrivania"
     gloss: 0
     tier: 0
   - key: deviation.hiddenMismatch.papers
-    text: "{0} ERRATO \u00B7 documenti: \"{1}\"  /  la macchina legge: \"{2}\""
+    text: "{0} ERRATO \xB7 documenti: \"{1}\"  /  la macchina legge: \"{2}\""
     gloss: 0
     tier: 0
   - key: category.Language
@@ -3064,7 +3074,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: switchboard.hint.dial
-    text: "Una spia lampeggia: gira l'anello sul suo emblema, poi sulla sua epoca. Inserisci le celle fino al segno. Tira il MASTER"
+    text: 'Una spia lampeggia: gira l''anello sul suo emblema, poi sulla sua epoca.
+      Inserisci le celle fino al segno. Tira il MASTER'
     gloss: 0
     tier: 0
   - key: switchboard.legend.origin
@@ -3100,7 +3111,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: home.title
-    text: "Giorno {0}: Casa"
+    text: 'Giorno {0}: Casa'
     gloss: 0
     tier: 0
   - key: home.breakIn
@@ -3571,7 +3582,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: doc.work_permit_debt_relief_labour
-    text: "Permesso di lavoro: Lavoro per lo Sgravio del debito"
+    text: 'Permesso di lavoro: Lavoro per lo Sgravio del debito'
     gloss: 0
     tier: 0
   - key: doc.authorised_by
@@ -6244,7 +6255,7 @@ MonoBehaviour:
     english: free
   - native: gira
     english: turn
-  - native: "l'anello"
+  - native: l'anello
     english: the ring
   - native: emblema
     english: emblem

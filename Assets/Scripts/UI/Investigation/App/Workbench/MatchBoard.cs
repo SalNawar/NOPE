@@ -297,6 +297,13 @@ public sealed class MatchBoard : MonoBehaviour
                                                     _case != null && _case.claimedEra != null ? _case.claimedEra.id : null));
         string subject = special.Today ? FindingsView.What(value.Label) : special.Value;
         Record(kind, special.Key, special.Title, special.Value, value.Key, value.Label, value.Shown, subject, What(special), FindingsView.What(value.Label), null, e.category);
+        if (compare != null)
+        {
+            string against = special.Today ? UiText.Pc.Format("compare.today", special.Value) : UiText.Pc.Get("compare.rule");
+            FindingLook look = FindingRules.Look(kind);
+            string note = look == FindingLook.Info ? UiText.Pc.Format("finding.note." + kind, What(special), FindingsView.What(value.Label)) : null;
+            compare.ShowResult(CompareReadout.Line(look, UiText.Pc.Get("compare.pair"), UiText.Pc.Get("compare.match"), UiText.Pc.Get("compare.mismatch"), note, value.Shown, against), look); // the office readout, as a pair's
+        }
     }
 
     /// <summary>
