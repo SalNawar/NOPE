@@ -126,4 +126,17 @@ public class ReadCloseTests
         turn.Want(7, false);
         Assert.AreEqual(-1, turn.Lifted);
     }
+
+    [Test]
+    public void APickedPaperSettlesAndLiftsAgainOnlyAfterThePointerLeaves()
+    {
+        var turn = new ReadTurn();
+        Assert.IsTrue(turn.Want(3, true));
+        turn.Settle(3);
+        Assert.AreEqual(-1, turn.Lifted, "the pick puts the paper down");
+        Assert.IsFalse(turn.Want(3, true), "the pointer still on it: no new lift");
+        Assert.IsTrue(turn.Want(5, true), "another paper may lift");
+        turn.Leave(3);
+        Assert.IsTrue(turn.Want(3, true), "left and back: it lifts again");
+    }
 }
