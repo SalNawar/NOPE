@@ -126,9 +126,9 @@ public static class DocLookOps
     }
 
     /// <summary>
-    /// doc-read-close (D65) at rest: each desk paper's world width over the
-    /// passport's against the table's (DeskConfigSO.readClose, within 10 %),
-    /// and the folder wider and taller than every paper. Asserts
+    /// doc-read-close (D65) at rest: each desk paper's world width against the
+    /// table's at its common scale (DeskConfigSO.readClose, within 10 %),
+    /// and the folder wider and taller on the screen than every paper. Asserts
     /// <c>readRest.&lt;name&gt;</c>; the detail lists each paper's world and
     /// screen size.
     /// </summary>
@@ -149,29 +149,26 @@ public static class DocLookOps
         }
         var wrong = new List<string>();
         var detail = new List<string>();
-        int passport = rows.FindIndex(r => r.frame == FormFrame.Booklet);
-        if (config == null || passport < 0)
-            wrong.Add($"no passport on the desk ({rows.Count} papers there)");
+        if (config == null || rows.Count == 0)
+            wrong.Add("no paper on the desk");
         else
-        {
-            float pw = rows[passport].w, pRest = config.readClose.RestWidth(FormFrame.Booklet, rows[passport].paper.Size.x / rows[passport].paper.Size.y);
             foreach (var r in rows)
             {
-                float want = config.readClose.RestWidth(r.frame, r.paper.Size.x / r.paper.Size.y) / pRest, got = r.w / pw;
-                detail.Add(string.Format(CultureInfo.InvariantCulture, "{0} {1}: {2:0}x{3:0} mm, {4:0}x{5:0} px, {6:0.00} of the passport (table {7:0.00})",
-                                         r.paper.name, r.frame, r.w * 1000f, r.h * 1000f, r.screen.width, r.screen.height, got, want));
-                if (Mathf.Abs(got / want - 1f) > 0.1f)
-                    wrong.Add($"{r.paper.name} {r.frame}: {got:0.00} of the passport, the table {want:0.00}");
+                float want = config.readClose.RestWidth(r.frame, r.paper.Size.x / r.paper.Size.y);
+                detail.Add(string.Format(CultureInfo.InvariantCulture, "{0} {1}: {2:0}x{3:0} mm (table {4:0} mm wide), {5:0}x{6:0} px",
+                                         r.paper.name, r.frame, r.w * 1000f, r.h * 1000f, want * 1000f, r.screen.width, r.screen.height));
+                if (Mathf.Abs(r.w / want - 1f) > 0.1f)
+                    wrong.Add($"{r.frame}: {r.w * 1000f:0} mm wide, the table {want * 1000f:0} mm");
             }
-        }
         DeskRulebook folder = Object.FindAnyObjectByType<DeskRulebook>(FindObjectsInactive.Exclude);
-        if (folder != null && QaGame.Field(folder, "folderFace") is Renderer face && face != null)
+        Rect? fr = folder != null ? QaGame.ScreenRect(folder.gameObject) : null;
+        if (fr != null)
         {
-            float fw = face.transform.TransformVector(DeskRulebook.BodyWidth, 0f, 0f).magnitude, fh = face.transform.TransformVector(0f, DeskRulebook.BodyHeight, 0f).magnitude;
-            detail.Add(string.Format(CultureInfo.InvariantCulture, "folder: {0:0}x{1:0} mm", fw * 1000f, fh * 1000f));
+            // on the screen: the reading view looks straight down, so pixels there are proportional to millimetres
+            detail.Add(string.Format(CultureInfo.InvariantCulture, "folder: {0:0}x{1:0} px", fr.Value.width, fr.Value.height));
             foreach (var r in rows)
-                if (r.w >= fw || r.h >= fh)
-                    wrong.Add($"{r.paper.name} ({r.w * 1000f:0}x{r.h * 1000f:0} mm) is not smaller than the folder ({fw * 1000f:0}x{fh * 1000f:0} mm)");
+                if (r.screen.width >= fr.Value.width || r.screen.height >= fr.Value.height)
+                    wrong.Add($"{r.frame} ({r.screen.width:0}x{r.screen.height:0} px) is not smaller than the folder ({fr.Value.width:0}x{fr.Value.height:0} px)");
         }
         else
             wrong.Add("no folder shown");
