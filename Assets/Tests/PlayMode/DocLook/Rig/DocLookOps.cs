@@ -41,6 +41,64 @@ public static class DocLookOps
         QaRunner.RegisterOp("coverHits", CoverHitsOp);
         QaRunner.RegisterOp("readRest", ReadRestOp);
         QaRunner.RegisterOp("readLift", ReadLiftOp);
+        QaRunner.RegisterOp("readPick", ReadPickOp);
+    }
+
+    /// <summary>
+    /// doc-read-close (D65) compare across two lifted papers, in inspect mode:
+    /// the pointer goes onto paper A, waits for the lift, clicks A's first box;
+    /// goes onto paper B (A settles), waits, clicks B's first box. Asserts
+    /// <c>readPick.&lt;name&gt;</c>: A's box is still picked once A is back at
+    /// rest, and the compare holds a pair. A still after each click.
+    /// </summary>
+    private static IEnumerator ReadPickOp(QaRunner runner, QaStep step)
+    {
+        yield return null;
+        string id = "readPick." + (string.IsNullOrEmpty(step.name) ? "pair" : step.name);
+        Camera camera = QaGame.PointerCamera();
+        var papers = new List<(DeskDocument paper, Vector2 on)>();
+        foreach (DeskDocument p in Object.FindObjectsByType<DeskDocument>(FindObjectsInactive.Exclude))
+            if (camera != null && p.Sheet != null && p.Zone == DeskZone.Desk && SlotOf(p) != null && TopPoint(p, camera, out Vector2 on))
+                papers.Add((p, on));
+        if (papers.Count < 2)
+        {
+            runner.Assert(id, "DOC-LOOK", false, $"{papers.Count} papers with a box on the desk", "Two are needed.");
+            yield break;
+        }
+        var notes = new List<string>();
+        for (int k = 0; k < 2; k++)
+        {
+            DeskDocument paper = papers[k].paper;
+            yield return runner.Input.MoveTo(papers[k].on, 1);
+            for (float end = Time.unscaledTime + 0.4f; Time.unscaledTime < end;)
+                yield return null;
+            Vector3 slot = camera.WorldToScreenPoint(SlotOf(paper).position);
+            GameObject top = QaGame.TopAt(slot);
+            notes.Add($"{paper.name} lift {(float)QaGame.Field(paper, "_readNow"):0.00}, box at ({slot.x:0},{slot.y:0}) meets {(top != null ? top.name : "nothing")}");
+            yield return runner.Input.Play(QaPaths.Click(slot));
+            for (float end = Time.unscaledTime + 0.4f; Time.unscaledTime < end;)
+                yield return null;
+            runner.Recorder.Still(System.IO.Path.Combine(runner.OutDir, "stills", $"{QaRunner.Safe(id + "_click" + k)}_{Screen.width}x{Screen.height}.png"));
+            yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the still");
+        }
+        DeskDocument a = papers[0].paper;
+        float aNow = (float)QaGame.Field(a, "_readNow");
+        bool aPicked = false;
+        foreach (object view in (IList)QaGame.Field(a, "_slots"))
+            aPicked |= (bool)QaGame.Field(view, "Picked");
+        CompareController compare = Object.FindAnyObjectByType<CompareController>(FindObjectsInactive.Exclude);
+        bool paired = compare != null && compare.Paired;
+        runner.Assert(id, "DOC-LOOK", aPicked && aNow <= 0f && paired,
+                      $"A ({a.name}) lift {aNow:0.00}, picked {aPicked}; pair {paired}", string.Join("; ", notes));
+    }
+
+    /// <summary>The first pickable box of <paramref name="paper"/> (Slot_0), or null.</summary>
+    private static Transform SlotOf(DeskDocument paper)
+    {
+        foreach (Transform t in paper.Sheet.GetComponentsInChildren<Transform>(false))
+            if (t.name == "Slot_0")
+                return t;
+        return null;
     }
 
     /// <summary>

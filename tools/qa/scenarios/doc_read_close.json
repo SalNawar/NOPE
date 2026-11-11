@@ -36,6 +36,7 @@
     { "op": "readLift", "name": "a1_reduced" },
     { "op": "cammotion", "n": 0 },
     { "op": "readLift", "name": "a1_space_off", "text": "key" },
+    { "op": "readPick", "name": "a1_office" },
     { "op": "key", "key": "Space" },
     { "op": "wait", "n": 10 },
     { "op": "call", "target": "DeskView.Toggle" },
