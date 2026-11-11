@@ -96,12 +96,6 @@
       "n": 4
     },
     {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
-    },
-    {
       "op": "wait",
       "f": 1.2
     },
@@ -123,12 +117,6 @@
       "op": "personPick",
       "text": "Valid Until",
       "name": "c1_exp"
-    },
-    {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
     },
     {
       "op": "wait",
@@ -271,12 +259,6 @@
       "name": "c2_dest"
     },
     {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
-    },
-    {
       "op": "wait",
       "f": 1.2
     },
@@ -293,12 +275,6 @@
       "op": "personPick",
       "text": "Valid Until",
       "name": "c2_exp"
-    },
-    {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
     },
     {
       "op": "wait",
@@ -430,12 +406,6 @@
       "name": "c3_dest"
     },
     {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
-    },
-    {
       "op": "wait",
       "f": 1.2
     },
@@ -452,12 +422,6 @@
       "op": "personPick",
       "text": "Valid Until",
       "name": "c3_exp"
-    },
-    {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
     },
     {
       "op": "wait",
@@ -652,12 +616,6 @@
       "n": 4
     },
     {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
-    },
-    {
       "op": "wait",
       "f": 1.2
     },
@@ -679,12 +637,6 @@
       "op": "personPick",
       "text": "Valid Until",
       "name": "m1_exp"
-    },
-    {
-      "op": "move",
-      "x": 0.5,
-      "y": 0.03,
-      "n": 10
     },
     {
       "op": "wait",

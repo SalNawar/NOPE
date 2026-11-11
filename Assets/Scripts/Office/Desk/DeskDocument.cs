@@ -433,6 +433,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     private void OnDestroy()
     {
         ReadTurns.Want(GetInstanceID(), false);
+        ReadTurns.Leave(GetInstanceID());
         if (drag != null)
         {
             drag.Dragged -= Followed;
@@ -605,7 +606,10 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         if (click == null || !click.Interactable || eventData.button != PointerEventData.InputButton.Left)
             return;
 
-        Clicked?.Invoke(this, Inspecting ? SlotUnder(eventData) : -1);
+        int slot = Inspecting ? SlotUnder(eventData) : -1;
+        if (slot >= 0)
+            ReadTurns.Settle(GetInstanceID()); // a pick puts the paper down: the next target may lie under it
+        Clicked?.Invoke(this, slot);
     }
 
     /// <summary>In inspect mode, the box under the pointer tints, and the paper asks for the read-close lift (not from the bottom band the lift keeps clear: there the lifted paper would leave the pointer and drop back under it again).</summary>
@@ -614,7 +618,10 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         SetHovered(Inspecting && click != null && click.Interactable ? SlotUnder(eventData) : -1);
         _pointerOn = Inspecting && _config != null && eventData.position.y >= _config.readClose.bottomMargin * Screen.height;
         if (!_pointerOn)
+        {
+            ReadTurns.Leave(GetInstanceID());
             return;
+        }
         if (eventData.enterEventCamera != null)
             _readEye = eventData.enterEventCamera;
         ReadTurns.Want(GetInstanceID(), true);
@@ -681,6 +688,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     {
         SetHovered(-1);
         _pointerOn = false;
+        ReadTurns.Leave(GetInstanceID());
     }
 
     /// <summary>The pickable box under the pointer's hit on this paper (-1: none).</summary>

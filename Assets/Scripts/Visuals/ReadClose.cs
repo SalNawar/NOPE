@@ -25,7 +25,7 @@ public struct PaperMm
 /// takes its world width from this table at one common scale, so the
 /// proportions hold and the folder is the largest thing. In inspect mode the
 /// paper under the pointer lifts toward the camera until its print is
-/// readable, and settles back when the pointer leaves it. Held by
+/// readable, and settles back when the pointer leaves it, or at once when a value on it is picked (it lifts again after the pointer leaves and returns). Held by
 /// DeskConfigSO.readClose; the knobs are edited there.
 /// </summary>
 [Serializable]
@@ -128,10 +128,30 @@ public sealed class ReadTurn
     /// <summary>The lifted paper's id, or -1 for none.</summary>
     public int Lifted { get; private set; } = -1;
 
-    /// <summary>Paper <paramref name="id"/> asks for the lift (<paramref name="wanted"/>) or lets it go; true while it holds the lift.</summary>
+    /// <summary>The id of the paper that settled after a pick and waits for the pointer to leave it, or -1.</summary>
+    public int Settled { get; private set; } = -1;
+
+    /// <summary>A value on the lifted paper <paramref name="id"/> was picked: it gives up the lift and does not take it again until <see cref="Leave"/>.</summary>
+    public void Settle(int id)
+    {
+        // a pick on a paper at rest changes nothing: that paper may still lift when the pointer comes up onto it
+        if (Lifted != id)
+            return;
+        Settled = id;
+        Lifted = -1;
+    }
+
+    /// <summary>The pointer left paper <paramref name="id"/> (or went to the bottom band): it may lift again.</summary>
+    public void Leave(int id)
+    {
+        if (Settled == id)
+            Settled = -1;
+    }
+
+    /// <summary>Paper <paramref name="id"/> asks for the lift (<paramref name="wanted"/>) or lets it go; true while it holds the lift. A settled paper never takes it.</summary>
     public bool Want(int id, bool wanted)
     {
-        if (wanted)
+        if (wanted && Settled != id)
             Lifted = id;
         else if (Lifted == id)
             Lifted = -1;
