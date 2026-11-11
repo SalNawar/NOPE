@@ -42,6 +42,30 @@ public static class DocLookOps
         QaRunner.RegisterOp("readRest", ReadRestOp);
         QaRunner.RegisterOp("readLift", ReadLiftOp);
         QaRunner.RegisterOp("readPick", ReadPickOp);
+        QaRunner.RegisterOp("readSpread", ReadSpreadOp);
+    }
+
+    /// <summary>
+    /// doc-read-close's setup: drags every paper on the counter onto the mat,
+    /// each to its own place of a 3 by 2 grid (screen shares 0.45, 0.6, 0.75
+    /// across, 0.62 and 0.32 up), so the rest and the lift see them on the desk.
+    /// </summary>
+    private static IEnumerator ReadSpreadOp(QaRunner runner, QaStep step)
+    {
+        yield return null;
+        Camera camera = QaGame.PointerCamera();
+        int n = 0;
+        foreach (DeskDocument paper in Object.FindObjectsByType<DeskDocument>(FindObjectsInactive.Exclude))
+        {
+            if (camera == null || paper.Sheet == null || paper.Zone != DeskZone.Counter || !TopPoint(paper, camera, out Vector2 from))
+                continue;
+            var to = new Vector2(Screen.width * (0.45f + 0.15f * (n % 3)), Screen.height * (n < 3 ? 0.62f : 0.32f));
+            yield return runner.Input.Play(QaPaths.Drag(QaPathKind.Plain, from, to, new Vector2(Screen.width, Screen.height)));
+            for (float end = Time.unscaledTime + 1f; Time.unscaledTime < end;)
+                yield return null;
+            n++;
+        }
+        runner.Assert("readSpread." + (string.IsNullOrEmpty(step.name) ? "papers" : step.name), "DOC-LOOK", n > 0, $"{n} papers moved to the desk", string.Empty);
     }
 
     /// <summary>
