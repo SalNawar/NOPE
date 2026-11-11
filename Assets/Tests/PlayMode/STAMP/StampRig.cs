@@ -1000,6 +1000,17 @@ public static class StampRig
             {
                 if (i == path.ReleaseIndex && die != null)
                 {
+                    // TEMP stamp-aim-1280 evidence
+                    {
+                        Transform sf = Surface(tray);
+                        object sfc = QaGame.Field(tray, "surface");
+                        Vector3 le = sf.InverseTransformPoint(expected), ld = sf.InverseTransformPoint(die.position);
+                        Vector2 sz = (Vector2)QaGame.Field(sfc, "size");
+                        Vector3 pl = Vector3.zero; ((DeskSurface)sfc).TryProject(cam, path.End, out pl);
+                        Vector3 lp = sf.InverseTransformPoint(pl);
+                        Report(runner, $"== TEMP release {Screen.width}x{Screen.height}: area size {sz} surfacePos {V(sf.position)} expected local {V(le)} die local {V(ld)} planeProjection local {V(lp)} cam {V(cam.transform.position)} fov {cam.fieldOfView} aspect {cam.aspect} pointer {path.End}");
+                        runner.Recorder.Still(Path.Combine(runner.OutDir, "stills", $"release_{name}_{Screen.width}x{Screen.height}.png"));
+                    }
                     dieAtRelease = $"{V(die.position)} ({Mm(Vector3.ProjectOnPlane(die.position - expected, Up(tray)).magnitude)} beside the expected point)";
                     if (folderEdge && Folder() is DeskRulebook rbNow)
                     {
