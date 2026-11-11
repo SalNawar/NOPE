@@ -26541,7 +26541,13 @@
       },
       {
         "key": "app.orders.closed",
-        "text": "Orders are closed today: nothing would arrive",
+        "text": "Orders closed today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.walletClosed",
+        "text": "Wallet {0} · Orders are closed today: it is the last day, so nothing would arrive.",
         "gloss": "None",
         "tier": "Full"
       },

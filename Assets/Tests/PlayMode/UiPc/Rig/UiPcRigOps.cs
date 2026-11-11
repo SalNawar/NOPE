@@ -921,7 +921,7 @@ public static class UiPcRigOps
         bool kept = scroll != null && (after - before).sqrMagnitude < 1f;
         bool inAccount = Shows(account.transform, AccountWindow.Amount(money));
         TMP_Text wallet = (TMP_Text)QaGame.Field(orders, "walletText");
-        bool inOrders = wallet != null && wallet.text == OrderLines.Wallet(world);
+        bool inOrders = wallet != null && wallet.text == OrderLines.Wallet(world, RunManager.Instance.Library);
         OfficeReadouts readouts = QaGame.Find<OfficeReadouts>();
         TMP_Text credits = readouts != null ? (TMP_Text)QaGame.Field(readouts, "_creditsText") : null;
         bool inHud = credits != null && credits.text == money.ToString(CultureInfo.InvariantCulture);

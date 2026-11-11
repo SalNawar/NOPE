@@ -1,0 +1,110 @@
+{
+  "name": "orders_last_day_1280",
+  "owner": "ORDERS",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "orders-last-day at 1280x1024: day 20 header, then day 21 closed header and tiles."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "jumpDay",
+      "n": 20
+    },
+    {
+      "op": "waitOffice",
+      "n": 20
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "cheat",
+      "name": "AddMoney",
+      "n": 5000
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "click",
+      "target": "StartButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.3
+    },
+    {
+      "op": "click",
+      "target": "App_orders"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d20_orders_before"
+    },
+    {
+      "op": "jumpDay",
+      "n": 21
+    },
+    {
+      "op": "waitOffice",
+      "n": 21
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "key",
+      "key": "Q"
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "click",
+      "target": "StartButton"
+    },
+    {
+      "op": "wait",
+      "f": 0.3
+    },
+    {
+      "op": "click",
+      "target": "App_orders"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "d21_orders_closed"
+    }
+  ]
+}

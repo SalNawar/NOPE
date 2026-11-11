@@ -17,7 +17,7 @@
     { "op": "click", "target": "StartButton" },
     { "op": "wait", "f": 0.3 },
     { "op": "click", "target": "App_orders" },
-    { "op": "wait", "f": 0.6 },
+    { "op": "wait", "f": 1.5 },
     { "op": "still", "name": "d20_orders_before" },
     { "op": "uipcOrder" },
     { "op": "still", "name": "d20_orders_after" },
@@ -29,7 +29,7 @@
     { "op": "click", "target": "StartButton" },
     { "op": "wait", "f": 0.3 },
     { "op": "click", "target": "App_orders" },
-    { "op": "wait", "f": 0.6 },
+    { "op": "wait", "f": 1.5 },
     { "op": "still", "name": "d21_orders_closed" }
   ]
 }

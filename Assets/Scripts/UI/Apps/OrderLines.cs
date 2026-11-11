@@ -14,13 +14,17 @@ public static class OrderLines
     /// <summary>Each branch's name key ("app.orders.branch.desk"), by the branch's number, made once.</summary>
     private static readonly string[] BranchKeys = MakeBranchKeys();
 
-    /// <summary>The wallet line over the tree.</summary>
-    public static string Wallet(WorldState world) => UiText.Pc.Format("app.orders.wallet", Money(world.money));
+    /// <summary>The wallet line over the tree; on a day orders are closed (Orders.CanOrder, BUG-28d) it says so in place of the "paid now" sentence.</summary>
+    public static string Wallet(WorldState world, ContentLibrarySO lib) =>
+        UiText.Pc.Format(Closed(world, lib) ? "app.orders.walletClosed" : "app.orders.wallet", Money(world.money));
+
+    /// <summary>True on a day orders are closed (the last day: an order would be charged and never arrive).</summary>
+    public static bool Closed(WorldState world, ContentLibrarySO lib) => !Orders.CanOrder(world.day, lib != null ? lib.LastDay : 0);
 
     /// <summary>A branch's name (a band's head and the form's section).</summary>
     public static string Branch(UpgradeBranch branch) => UiText.Pc.Get(BranchKeys[(int)branch]);
 
-    /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned"; for an owned scanner where it stands (on the node alone, where room is short; after the delivery day on the <paramref name="full"/> detail card). A day orders are closed is said once, by the window's header note (BUG-28d).</summary>
+    /// <summary>A node's state line: its price (or "not enough"), "Needs: …", "In transit · arrives day N", "Delivered day N" or "Owned"; for an owned scanner where it stands (on the node alone, where room is short; after the delivery day on the <paramref name="full"/> detail card). On a day orders are closed a tile that could be ordered says so instead of its price (BUG-28d).</summary>
     public static string State(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, OrderState state, bool full)
     {
         switch (state)
@@ -36,6 +40,8 @@ public static class OrderLines
                 string owned = delivery != null ? UiText.Pc.Format("app.orders.delivered", delivery.deliveredDay) : UiText.Pc.Get("app.orders.owned");
                 string install = Install(OrderBook.InstallStateOf(world, lib, upgrade));
                 return install == null ? owned : full ? owned + " · " + install : install;
+            case OrderState.Orderable when Closed(world, lib):
+                return UiText.Pc.Get("app.orders.closed");
             default:
                 return Money(OrderBook.Price(world, lib, upgrade));
         }

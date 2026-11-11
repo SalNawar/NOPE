@@ -40,7 +40,7 @@ using UnityEngine.UI;
 /// cancels and two quick Enters act once, while a card click never refuses
 /// the Enter or the button press that follows it; a refused press plays the
 /// error cue, so it is never silent. Ordering is refused, the
-/// button greyed and the header's closed note shown (its own keyed label),
+/// button greyed, the wallet line saying so and the tiles shown as not orderable,
 /// on a day Orders.CanOrder says no (BUG-28d: an order on the last day
 /// would never arrive).
 /// </summary>
@@ -96,9 +96,6 @@ public sealed class OrdersWindow : MonoBehaviour, IKitUser
 
     /// <summary>The chosen node's action: Order, Cancel order, Install tomorrow, Cancel install or Keep installed (hidden when there is none, or while the detail card shows another card under the pointer).</summary>
     [SerializeField] private Button actionButton;
-
-    /// <summary>The header's "Orders are closed today" note (a keyed label), shown on a day Orders.CanOrder says no (BUG-28d).</summary>
-    [SerializeField] private GameObject closedNote;
 
     /// <summary>The UI kit (run 7): a node's card and state badge come from it (UiKitNames.UpgradeCard and UpgradeBadge, one card for Orders and the House); without it the template's card stays and the badges are code-drawn.</summary>
     [SerializeField] private UiKitSO kit;
@@ -485,21 +482,21 @@ public sealed class OrdersWindow : MonoBehaviour, IKitUser
             return;
 
         if (walletText != null)
-            walletText.text = OrderLines.Wallet(world);
-        bool closed = !Orders.CanOrder(world.day, lib.LastDay);
-        if (closedNote != null && closedNote.activeSelf != closed)
-            closedNote.SetActive(closed);
+            walletText.text = OrderLines.Wallet(world, lib);
+        bool closed = OrderLines.Closed(world, lib);
 
         foreach (KeyValuePair<string, NodeView> pair in _nodes)
         {
             UpgradeSO upgrade = lib.GetUpgradeById(pair.Key);
             OrderState state = OrderBook.StateOf(world, lib, upgrade);
+            // On a closed day an orderable tile wears the look of one that cannot be ordered.
+            OrderState look = closed && state == OrderState.Orderable ? OrderState.TooDear : state;
             NodeView node = pair.Value;
             if (node.State != null)
                 node.State.text = OrderLines.State(world, lib, upgrade, state, false);
             if (kit != null)
             {
-                kit.Show(node.Face, UiKitNames.UpgradeCard(state));
+                kit.Show(node.Face, UiKitNames.UpgradeCard(look));
                 // Sheet 03: the card's pictogram tile is its band's, the locked tile while locked.
                 Sprite tile = node.HasArt ? null : kit.Get(UiKitNames.UpgradeTile(node.Branch, state));
                 if (node.Glyph != null && tile != null)
