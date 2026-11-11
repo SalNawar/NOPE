@@ -59,11 +59,11 @@ public class ReadCloseTests
             {
                 float heightPx = table.RestWidth(frame, aspect) / aspect * ppm, widthPx = heightPx * aspect;
                 float bottom = table.bottomMargin * h;
-                float magnify = ReadClose.Magnify(value * heightPx, label * heightPx, table.valueCapPx, table.labelCapPx, widthPx, heightPx, w, h, bottom);
+                float magnify = ReadClose.Magnify(value * heightPx, label * heightPx, table.valueCapPx, table.labelCapPx, widthPx, heightPx, w, h, bottom, table.topCrop);
                 Assert.GreaterOrEqual(value * heightPx * magnify, valueBar - 1e-3f, $"{name} at {w}x{h}: its smallest value");
                 Assert.LessOrEqual(widthPx * magnify, w + 1e-2f, $"{name} at {w}x{h}: inside the frame");
-                Assert.LessOrEqual(heightPx * magnify, h - bottom + 1e-2f, $"{name} at {w}x{h}: above the bottom band");
-                bool fills = widthPx * magnify >= w - 1e-2f || heightPx * magnify >= h - bottom - 1e-2f;
+                Assert.LessOrEqual(heightPx * magnify, (h - bottom) * (1f + table.topCrop) + 1e-2f, $"{name} at {w}x{h}: at most the crop share over the room");
+                bool fills = widthPx * magnify >= w - 1e-2f || heightPx * magnify >= (h - bottom) * (1f + table.topCrop) - 1e-2f;
                 if (w == 1920 && label > 0f)
                     Assert.IsTrue(label * heightPx * magnify >= table.labelCapPx - 1e-3f || fills, $"{name}: its smallest label reaches 8 px, or the paper fills the frame");
             }
@@ -77,6 +77,7 @@ public class ReadCloseTests
         Assert.AreEqual(1f, ReadClose.Magnify(2f, 0f, 11f, 8f, 2000f, 100f, 1920f, 1080f, 97f), "a paper wider than the screen does not shrink");
         Assert.AreEqual(5.5f, ReadClose.Magnify(2f, 0f, 11f, 8f, 100f, 100f, 1920f, 1080f, 97f), 1e-4f);
         Assert.AreEqual(4f, ReadClose.Magnify(5f, 2f, 11f, 8f, 100f, 100f, 1920f, 1080f, 97f), 1e-4f, "the label asks more than the value");
+        Assert.AreEqual(1.4f, ReadClose.Magnify(1f, 0f, 11f, 8f, 100f, 1000f, 1920f, 1080f, 80f, 0.4f), 1e-3f, "a tall paper may pass the room by the crop share (1000 * 1.4 px)");
     }
 
     [Test]
@@ -94,7 +95,7 @@ public class ReadCloseTests
                     Assert.LessOrEqual(y + halfH, H + 1e-3f);
                 }
         Assert.AreEqual((400f, 500f), ReadClose.Clamp(400f, 500f, 100f, 80f, W, H, Bottom), "inside: unmoved");
-        Assert.AreEqual((W / 2f, (H + Bottom) / 2f), ReadClose.Clamp(10f, 10f, 1000f, 600f, W, H, Bottom), "too large: centred");
+        Assert.AreEqual((W / 2f, Bottom + 600f), ReadClose.Clamp(10f, 10f, 1000f, 600f, W, H, Bottom), "too tall: on the bottom band, top cropped");
     }
 
     [Test]
