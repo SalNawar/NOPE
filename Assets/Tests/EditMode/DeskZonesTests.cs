@@ -43,15 +43,6 @@ public class DeskZonesTests
     }
 
     [Test]
-    public void OnTheDesk_EveryPaperReadsAtOneHeight_AWidePaperByItsWidth()
-    {
-        Assert.AreEqual(0.34f / 0.218f, DeskZones.ReadingScale(0.144f, 0.218f, 0.34f, 0.765f), 1e-4f, "a passport by its height");
-        float ticket = DeskZones.ReadingScale(0.195f, 0.17f, 0.34f, 0.765f);
-        Assert.AreEqual(0.34f * 0.765f, 0.195f * ticket, 1e-4f, "a ticket wider than the desk paper by its width");
-        Assert.AreEqual(1f, DeskZones.ReadingScale(0f, 0f, 0.34f, 0.765f), "no size");
-    }
-
-    [Test]
     public void Ease_IsSmoothstep_Clamped()
     {
         Assert.AreEqual(0f, DeskZones.Ease(-1f));

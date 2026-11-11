@@ -109,6 +109,9 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>The camera the drag is seen through (the press's; null before a drag).</summary>
     public Camera DragCamera => _camera;
 
+    /// <summary>Where a point the press met on the drawn object lies at rest (its owner's: a paper lifted to read, DeskDocument), so a drag holds it as at rest; null: the point as met.</summary>
+    public Func<Vector3, Vector3> PressAtRest { get; set; }
+
     /// <summary>
     /// Where a root the last follow placed lies once the grab scale is
     /// <paramref name="scale"/>: the held point stays where that follow put
@@ -220,7 +223,7 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         RaycastResult hit = eventData.pointerPressRaycast;
         if (hit.isValid && hit.gameObject != null && hit.gameObject.transform.IsChildOf(transform) && hit.worldPosition != Vector3.zero)
         {
-            point = hit.worldPosition;
+            point = PressAtRest != null ? PressAtRest(hit.worldPosition) : hit.worldPosition;
             return true;
         }
         return _surface.TryProject(eventData.pressEventCamera, eventData.pressPosition, out point);

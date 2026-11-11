@@ -138,7 +138,6 @@ MonoBehaviour:
         labelInk: '#191919'
         valueShare: 0.55
         labelShare: 0.66
-        reading: 1
         photo:
           x0: 0
           y0: 0

@@ -161,9 +161,6 @@ public sealed class FormArt
     /// <summary>A printed label's type size as a share of its place's height.</summary>
     public float labelShare = 0.6f;
 
-    /// <summary>The paper's size on the desk, full size, as a share of the desk's reading size (DeskConfigSO.readingHeight; 1: the same): a small or wide paper drawn with small print reads larger (the passport's booklet, the ticket, the card).</summary>
-    public float reading = 1f;
-
     /// <summary>A photo window on a paper whose template shows no photo (the transponder card): the holder's photo fitted at 4:5, never picked (none: no such window).</summary>
     public ArtBox photo;
 

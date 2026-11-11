@@ -39,11 +39,15 @@ using UnityEngine.EventSystems;
 /// PaperClicks); a right-click is no click (it backs out, ControlRules).
 /// Its size (DOC-HANDLE, BUG-1; Saleh's D1: "no need to enlarge the
 /// documents"): one world size per zone, whatever the view (PaperSizes):
-/// small on the counter, its reading size on the desk (SetZone), easing
+/// small on the counter, its real size on the desk (SetZone; the table in
+/// DeskConfigSO.readClose at one common scale), easing
 /// between the two only as a held paper's pointer crosses the counter's edge
 /// (the held point stays under the cursor: DeskDraggable.GrabScale), and its
 /// docked size in a machine until it is clear of it (SetDocked); the reading
-/// view's tilt, a click and a drop never change it. Held, it is drawn above
+/// view's tilt, a click and a drop never change it. In inspect mode the
+/// paper under the pointer lifts toward the camera until its print reads
+/// (ReadClose: the read-close lift, one paper at a time) and settles back
+/// when the pointer leaves it. Held, it is drawn above
 /// everything on the desk (HeldOnTop: moved toward the camera along its rays,
 /// its picture unchanged), its swing pivoted on the held point; let go, it
 /// rests exactly where it was released, settling as much as it was moving
@@ -62,9 +66,14 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>How far above the sheet each layer lies (metres toward the camera, never scaled with the paper: PaperLayers, the one stacking rule): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
     private const float SealLift = PaperLayers.Seal, FillLift = PaperLayers.Fill, HighlightLift = PaperLayers.Highlight, LineLift = PaperLayers.Line, PhotoLift = PaperLayers.Photo, TextLift = PaperLayers.Text, InkLift = PaperLayers.Ink;
 
-    /// <summary>The sheet's world scale lying in (or held over) <paramref name="zone"/>: the counter's share, or its reading size on the desk (at the art's reading share); no view enters it (PaperSizes.SheetScale).</summary>
-    private float ZoneScale(DeskZone zone) => _config == null ? 1f
-        : PaperSizes.SheetScale(zone, _config.counterScale, _reading * DeskZones.ReadingScale(Size.x, Size.y, _config.readingHeight, _config.paperSize.x / _config.paperSize.y));
+    /// <summary>The sheet's world scale lying in (or held over) <paramref name="zone"/>: its real size on the desk (DeskConfigSO.readClose: the table's width at one common scale), the counter's share of that on the counter; no view enters it (PaperSizes.SheetScale).</summary>
+    private float ZoneScale(DeskZone zone)
+    {
+        if (_config == null || Size.x <= 0f || Size.y <= 0f)
+            return 1f;
+        float rest = _config.readClose.RestWidth(_frame, Size.x / Size.y) / Size.x;
+        return PaperSizes.SheetScale(zone, _config.counterScale * rest, rest);
+    }
 
     /// <summary>The scale the sheet shows at once its ease ends: its docked scale while docked, else its zone's.</summary>
     private float TargetScale => _docked ? _dockScale : ZoneScale(Zone);
@@ -234,8 +243,8 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     private DeskConfigSO _config;
     private PlacedForm _form;
 
-    /// <summary>The paper's size on the desk as a share of the desk's reading size (FormArt.reading; 1 off the art).</summary>
-    private float _reading = 1f;
+    /// <summary>The paper's frame (its look's): which row of the real-size table it takes (PaperRealSizes.Of).</summary>
+    private FormFrame _frame;
 
     /// <summary>The paper's metres per unit of its placed form: the form is laid out with its print unit 1 (as FormLayout.Check checks it: TextMeshPro measures a world-space text in metres taller than its glyphs once its size falls to a few millimetres, so a small paper laid out in metres would run past its page) and drawn this much smaller.</summary>
     private float _scale = 1f;
@@ -332,6 +341,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         {
             drag.Dragged += Followed;
             drag.DragBegan += Grabbed;
+            drag.PressAtRest = AtRest;
         }
     }
 
@@ -410,6 +420,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
             _feelDirty = true;
         }
         KeepHeldPointWhileGrowing();
+        StepReadClose(Time.unscaledDeltaTime);
         Feel(Time.unscaledDeltaTime);
         if (drag != null && drag.IsDragging)
             drag.GrabScale = PaperSizes.GrabRatio(_sizeAtGrab, _sizeNow);
@@ -421,6 +432,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// <summary>The paper's printed meshes go with it (they were built for this paper alone).</summary>
     private void OnDestroy()
     {
+        ReadTurns.Want(GetInstanceID(), false);
         if (drag != null)
         {
             drag.Dragged -= Followed;
@@ -452,6 +464,9 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         _config = config;
         _slots.Clear();
         _form = null;
+        _readNow = 0f;
+        _pointerOn = false;
+        _frame = FormFrame.Plain;
         if (config != null)
             Size = config.paperSize;
         if (config == null || doc == null || form == null || style == null || textTemplate == null)
@@ -459,7 +474,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
 
         FormLook look = form.Spec.look ?? new FormLook();
         FormArt art = ArtLayout.IsArt(form.Spec) ? look.art : null;
-        _reading = art != null && art.reading > 0f ? art.reading : 1f;
+        _frame = look.frame;
         FormPalette palette = look.Palette(style.Palette());
         float height = config.paperSize.y * look.Scale;
         Resize(new Vector2(height * look.AspectOr(style.metrics.aspect), height));
@@ -543,12 +558,10 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
     /// Shows the paper for <paramref name="zone"/> (Papers, Please's counter and
     /// desk): on the counter at its counter size, lit by the room; on the desk
     /// evenly lit (the reading material; the photo in the reading tint instead
-    /// of the room's) at its reading size (DeskZones.ReadingScale to
-    /// DeskConfigSO.readingHeight), in every view (PaperSizes.SheetScale). The
-    /// size eases there (a held paper crossing the counter's edge), or is set
-    /// at once (<paramref name="instant"/>); a paper on its art reads at its
-    /// art's share of that (FormArt.reading). A docked paper keeps its docked
-    /// size until it is clear of its machine.
+    /// of the room's) at its real size (DeskConfigSO.readClose), in every view
+    /// (PaperSizes.SheetScale). The size eases there (a held paper crossing
+    /// the counter's edge), or is set at once (<paramref name="instant"/>). A
+    /// docked paper keeps its docked size until it is clear of its machine.
     /// </summary>
     public void SetZone(DeskZone zone, bool instant)
     {
@@ -595,8 +608,17 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         Clicked?.Invoke(this, Inspecting ? SlotUnder(eventData) : -1);
     }
 
-    /// <summary>In inspect mode, the box under the pointer tints.</summary>
-    public void OnPointerMove(PointerEventData eventData) => SetHovered(Inspecting && click != null && click.Interactable ? SlotUnder(eventData) : -1);
+    /// <summary>In inspect mode, the box under the pointer tints, and the paper asks for the read-close lift (not from the bottom band the lift keeps clear: there the lifted paper would leave the pointer and drop back under it again).</summary>
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        SetHovered(Inspecting && click != null && click.Interactable ? SlotUnder(eventData) : -1);
+        _pointerOn = Inspecting && _config != null && eventData.position.y >= _config.readClose.bottomMargin * Screen.height;
+        if (!_pointerOn)
+            return;
+        if (eventData.enterEventCamera != null)
+            _readEye = eventData.enterEventCamera;
+        ReadTurns.Want(GetInstanceID(), true);
+    }
 
     /// <summary>The box showing the document's row <paramref name="rowIndex"/> (DocumentRow.Index), or -1.</summary>
     public int SlotOfRow(int rowIndex)
@@ -654,8 +676,12 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         return new Vector2(local.x + _form.Width * _scale / 2f, _form.PageHeight * _scale / 2f - local.y);
     }
 
-    /// <summary>The pointer left the paper: no box tints.</summary>
-    public void OnPointerExit(PointerEventData eventData) => SetHovered(-1);
+    /// <summary>The pointer left the paper: no box tints, and a lifted paper settles back.</summary>
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        SetHovered(-1);
+        _pointerOn = false;
+    }
 
     /// <summary>The pickable box under the pointer's hit on this paper (-1: none).</summary>
     private int SlotUnder(PointerEventData eventData)
@@ -862,7 +888,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
             if (_lowerElapsed >= DeskLiftEase.Seconds)
                 _lowering = false;
         }
-        bool resting = _lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && !_physics.Moving && !_lowering;
+        bool resting = _lift.AtRest && _tiltX.AtRest && _tiltZ.AtRest && !_physics.Moving && !_lowering && _readNow <= 0f; // lifted: drawn every frame, the view may move
         if (resting && !dragged && !_feelDirty && _shownRatio == 1f)
         {
             if (bent)
@@ -924,12 +950,124 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         sheet.localRotation = turn;
         // The depth stays 1 at rest: the parts' heights over the sheet are metres (PaperLayers), so a paper read large never lifts its photo through the paper over it.
         sheet.localScale = new Vector3(_sizeNow * s, _sizeNow * s, s);
+        if (_readNow <= 0f || _readEye == null || !ReadPose(_readEye, out Vector3 at, out float ratio, out float magnify))
+            return;
+        _restLocal = local;
+        _restTurn = turn;
+        _restScale = sheet.localScale;
+        float e = DeskZones.Ease(_readNow);
+        float grow = Mathf.LerpUnclamped(s, ratio * magnify, e);
+        sheet.localPosition = Vector3.LerpUnclamped(local, transform.InverseTransformPoint(at), e);
+        // lifted, the sheet faces the eye upright (a paper lying flat in the office view shows edge-on, so its print never reads)
+        sheet.localRotation = Quaternion.SlerpUnclamped(turn, Quaternion.Inverse(transform.rotation) * Quaternion.LookRotation(_readEye.transform.forward, _readEye.transform.up), e);
+        sheet.localScale = new Vector3(_sizeNow * grow, _sizeNow * grow, Mathf.LerpUnclamped(s, ratio, e));
+    }
+
+    /// <summary>The one paper on the desk lifted to read (ReadTurn, by instance id).</summary>
+    private static readonly ReadTurn ReadTurns = new ReadTurn();
+
+    /// <summary>True while the pointer is over the paper above the lift's bottom band in inspect mode (OnPointerMove, OnPointerExit).</summary>
+    private bool _pointerOn;
+
+    /// <summary>The camera the pointer sees the paper through (the lift goes toward it).</summary>
+    private Camera _readEye;
+
+    /// <summary>The lift's clock: 0 at rest, 1 lifted (linear; drawn through DeskZones.Ease).</summary>
+    private float _readNow;
+
+    /// <summary>The sheet's rest pose under the lift (root-local place, turn, scale), last drawn while lifted: a press on the lifted paper is taken where that point rests (AtRest).</summary>
+    private Vector3 _restLocal, _restScale = Vector3.one;
+    private Quaternion _restTurn = Quaternion.identity;
+
+    /// <summary>True when the paper takes the read-close lift now: it holds the turn, inspect mode is on, the pointer is over it, it lies on the desk, takes input and is not dragged, carried or docked.</summary>
+    private bool ReadWanted => _config != null && _readEye != null && ReadTurns.Lifted == GetInstanceID() && Inspecting && _pointerOn
+        && click != null && click.Interactable && (drag == null || !drag.IsDragging) && !_carry.Running && !_docked && Zone == DeskZone.Desk;
+
+    /// <summary>Each frame: the lift's clock moves toward lifted or rest over readClose.seconds (at once under Reduced Motion); a paper that no longer takes the lift gives up its turn.</summary>
+    private void StepReadClose(float dt)
+    {
+        bool wanted = ReadWanted;
+        if (!wanted)
+            ReadTurns.Want(GetInstanceID(), false);
+        float goal = wanted ? 1f : 0f;
+        if (_readNow == goal)
+            return;
+        float seconds = MotionPreference.Reduced || _config == null ? 0f : _config.readClose.seconds;
+        _readNow = seconds > 0f ? Mathf.MoveTowards(_readNow, goal, dt / seconds) : goal;
+        _feelDirty = true;
+    }
+
+    /// <summary>
+    /// The lifted pose seen through <paramref name="eye"/>, from the sheet as
+    /// drawn now: the sheet turned to face the eye, moved toward it by
+    /// <paramref name="ratio"/> (HeldOnTop: in front of every prop) and grown
+    /// so it shows <paramref name="magnify"/> times its face-on size at rest
+    /// (ReadClose.Magnify: its smallest printed value and label, measured on
+    /// its texts, at the type bars, the paper inside the frame), its centre
+    /// at <paramref name="at"/> (ReadClose.Clamp: no edge leaves the screen,
+    /// the bottom band clear). False when the paper is behind the eye.
+    /// </summary>
+    private bool ReadPose(Camera eye, out Vector3 at, out float ratio, out float magnify)
+    {
+        at = default;
+        ratio = magnify = 1f;
+        Vector3 centre = eye.WorldToScreenPoint(sheet.position);
+        float worldH = sheet.TransformVector(0f, Size.y, 0f).magnitude;
+        if (centre.z <= 0f || worldH <= 0f || eye.orthographic)
+            return false;
+        // face-on at its rest depth: pixels per metre there
+        float perMetre = eye.pixelHeight / (2f * Mathf.Tan(eye.fieldOfView * 0.5f * Mathf.Deg2Rad) * centre.z);
+        float h = worldH * perMetre, w = sheet.TransformVector(Size.x, 0f, 0f).magnitude * perMetre;
+        (float valueShare, float labelShare) = LeastCapShares(worldH);
+        PaperRealSizes knobs = _config.readClose;
+        float bottom = knobs.bottomMargin * Screen.height;
+        magnify = ReadClose.Magnify(valueShare * h, labelShare * h, knobs.valueCapPx, knobs.labelCapPx, w, h, Screen.width, Screen.height, bottom);
+        (float x, float y) = ReadClose.Clamp(centre.x, centre.y, w * magnify / 2f, h * magnify / 2f, Screen.width, Screen.height, bottom);
+        ratio = OnTopRatio(eye);
+        Vector3 direction = eye.ScreenPointToRay(new Vector3(x, y, 0f)).direction;
+        float along = Vector3.Dot(direction, eye.transform.forward);
+        if (along <= 1e-4f)
+            return false;
+        at = eye.transform.position + direction * (centre.z * ratio / along);
+        return true;
+    }
+
+    /// <summary>The cap height of the smallest value (a Value or a Hand text) and of the smallest label printed on the sheet, each as a share of the sheet's world height <paramref name="worldH"/> (0: none): the fonts' cap lines at the texts' sizes, as the reader sees them.</summary>
+    private (float value, float label) LeastCapShares(float worldH)
+    {
+        float value = float.MaxValue, label = float.MaxValue;
+        foreach (TMP_Text text in sheet.GetComponentsInChildren<TMP_Text>(false))
+        {
+            bool data = text.name == nameof(FormTextRole.Value) || text.name == nameof(FormTextRole.Hand);
+            if ((!data && text.name != nameof(FormTextRole.Label)) || string.IsNullOrWhiteSpace(text.text) || text.font == null || text.font.faceInfo.pointSize <= 0f)
+                continue;
+            float capLocal = text.font.faceInfo.capLine / text.font.faceInfo.pointSize * text.fontSize * TmpFormText.WorldEmPerFontSize;
+            float share = text.transform.TransformVector(0f, capLocal, 0f).magnitude / worldH;
+            if (share <= 0f)
+                continue;
+            if (data)
+                value = Mathf.Min(value, share);
+            else
+                label = Mathf.Min(label, share);
+        }
+        return (value == float.MaxValue ? 0f : value, label == float.MaxValue ? 0f : label);
+    }
+
+    /// <summary>Where a point the press met on the drawn paper lies at rest (DeskDraggable.PressAtRest): on a lifted paper, the same point of the sheet in its rest pose, so a drag begun on it holds it as at rest; else the point itself.</summary>
+    private Vector3 AtRest(Vector3 world)
+    {
+        if (_readNow <= 0f || sheet == null)
+            return world;
+        Vector3 local = sheet.InverseTransformPoint(world);
+        return transform.TransformPoint(_restLocal + _restTurn * Vector3.Scale(local, _restScale));
     }
 
     /// <summary>The held ratio now (HeldOnTop.Ratio): in front of every registered obstacle (DeskObstacles.MaxHeight) and of every swept box of the desk's slide-in at its peak (DeskLayout.SweptPeak: a machine that slides out after the drag began never passes through the paper; DESK-V3, DESK-HOMES 6), and at least DeskConfigSO.heldClearance over the desk, never nearer than heldLeastRatio; 1 without the drag's camera or the config.</summary>
-    private float HeldRatio()
+    private float HeldRatio() => OnTopRatio(drag != null ? drag.DragCamera : null);
+
+    /// <summary>The ratio toward <paramref name="eye"/> that draws the paper in front of every prop (as HeldRatio; the read-close lift's too); 1 without the eye or the config.</summary>
+    private float OnTopRatio(Camera eye)
     {
-        Camera eye = drag != null ? drag.DragCamera : null;
         if (eye == null || _config == null)
             return 1f;
         float clear = Mathf.Max(Mathf.Max(DeskObstacles.Desk.MaxHeight, DeskLayout.SweptPeak()), _config.heldClearance);

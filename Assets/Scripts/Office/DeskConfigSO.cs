@@ -158,14 +158,14 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>How far nearer than the counter's far edge the papers handed over land (metres: their centres' row, DeskZones.CounterSpot); small papers there reach over the slim strip onto the desk.</summary>
     [Min(0f)] public float counterSpotInset = 0.07f;
 
-    /// <summary>A document's scale on the counter (small: a share of its own size; PaperSizes.SheetScale: one world size per zone, whatever the view).</summary>
+    /// <summary>A document's scale on the counter (small: a share of its real size on the desk, readClose; PaperSizes.SheetScale: one world size per zone, whatever the view).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
 
     /// <summary>How much nearer each next row of the counter's spots lies once a traveller's papers outnumber them (metres; the row also shifts half a spot across: a staggered fan, each paper's header in view; DeskZones.CounterSpot).</summary>
     [Min(0f)] public float counterRowDepth = 0.05f;
 
-    /// <summary>A document's height on the desk, full size, in metres (DeskZones.ReadingScale: every paper this tall, a wider one by its width): its one size on the desk, in the office view and the reading view alike (Saleh's D1), read in the reading view at 1280x720.</summary>
-    [Min(0.05f)] public float readingHeight = 0.34f;
+    /// <summary>The papers' real sizes on the desk (millimetres, one common scale: its one size on the desk, in the office view and the reading view alike, Saleh's D1) and the read-close lift in inspect mode (its type bars, its time, its bottom band): doc-read-close, Saleh 2026-11-11, "A: lift to read".</summary>
+    public PaperRealSizes readClose = new PaperRealSizes();
 
     /// <summary>How thick each thing lying on the desk is (metres; Saleh's 1007d playtest: "too flat when you see them from the side"; 2026-10-17: "use canva and blender to make actual 3d documents"): a sheet of paper, a plastic card, a passport booklet (its covers and pages), the rulebook's folder (its boards and loose sheets), each as deep as its model under its face (DeskPaperDepth). The stack makes room for it (PaperLayers.Lifts) and the contact shadow lies at its foot.</summary>
     [Min(0.0001f)] public float paperThickness = 0.0007f, cardThickness = 0.0012f, bookletThickness = 0.004f, folderThickness = 0.0055f;
