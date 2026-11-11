@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -135,6 +136,9 @@ public sealed class GuideDirector : MonoBehaviour
 
     /// <summary>The FTUE step shown (its id), or empty.</summary>
     public string StepShown => _showing == Showing.Step ? _guide?.CurrentStep(_state)?.id ?? string.Empty : string.Empty;
+
+    /// <summary>Raised when the prompt shows or hides (the wheel note yields to a step).</summary>
+    public event Action Changed;
 
     /// <summary>The prompt.</summary>
     public GuidePrompt Prompt => prompt;
@@ -414,6 +418,7 @@ public sealed class GuideDirector : MonoBehaviour
         SetTarget(target);
         if (prompt != null)
             prompt.Show(header, line, skip);
+        Changed?.Invoke();
     }
 
     private void Hide()
@@ -422,6 +427,7 @@ public sealed class GuideDirector : MonoBehaviour
         SetTarget((null, null));
         if (prompt != null)
             prompt.Hide();
+        Changed?.Invoke();
     }
 
     /// <summary>Where the arrow points from now on (and, for a comparison, once a value is held): each target is read once here (GuideTargets), so placing the arrow every frame allocates nothing.</summary>

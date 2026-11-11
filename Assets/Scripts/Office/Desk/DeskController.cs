@@ -710,7 +710,14 @@ public sealed class DeskController : MonoBehaviour
             stamps.BeginCase(passport);
         ShowCounter();
         RefreshHint();
+        CaseBegun?.Invoke();
     }
+
+    /// <summary>Raised when a case's papers begin (the booth re-applies: the note reads the new case's papers).</summary>
+    public event Action CaseBegun;
+
+    /// <summary>True when the case's papers come without a click (it has arrival papers: on the counter or on their way).</summary>
+    public bool HasArrivalPapers => _state != null && _state.ArrivalIndices.Count > 0;
 
     /// <summary>Hands paper <paramref name="i"/> over now (a paper the desk asked for); nothing unless DeskPapers agrees (a paper is handed over once).</summary>
     public void HandOver(int i) => HandOverNow(i);
