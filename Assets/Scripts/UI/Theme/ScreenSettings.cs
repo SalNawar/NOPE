@@ -58,6 +58,7 @@ public static class ScreenSettings
         set
         {
             _reduceFlashing = value;
+            FlashPolicy.ReduceFlashing = value;
             PlayerPrefs.SetInt(PlayerPrefKeys.For(FlashKey), value ? 1 : 0);
             PlayerPrefs.Save();
         }
@@ -113,6 +114,7 @@ public static class ScreenSettings
         if (PlayerPrefs.HasKey(PlayerPrefKeys.For(VsyncKey)))
             QualitySettings.vSyncCount = Vsync ? 1 : 0;
         ApplyBrightness();
+        FlashPolicy.ReduceFlashing = ReduceFlashing;
     }
 
     /// <summary>Stores a resolution.</summary>
