@@ -279,7 +279,9 @@ def cmd_all(args):
     if seqlib.is_timing(args.seq):
         # A timing sequence has frame times and no frames: the hitch measurement is all it is for.
         return cmd_hitches(args)
-    ok = cmd_flicker(args)
+    # A rain_ sequence is falling rain, moving pixels by design: it is recorded for its direction, never judged for flicker.
+    rain = os.path.basename(os.path.abspath(args.seq)).startswith('rain_')
+    ok = rain or cmd_flicker(args)
     ok = cmd_flash(args) and ok
     if seqlib.motion_still(args.seq):
         print(f'SKIP cuts {args.seq}: recorded with motion off (Reduced Motion or intensity 0: the views cut by design)')
@@ -289,7 +291,7 @@ def cmd_all(args):
     ok = cmd_sound(args) and ok
     if still_rows(args.seq):
         ok = cmd_colour(args) and ok
-    if os.path.basename(os.path.abspath(args.seq)).startswith('rain_'):
+    if rain:
         ok = cmd_rain(args) and ok   # the gate check city.weather.rain.direction reads this result
     return ok
 
