@@ -244,7 +244,7 @@ public sealed partial class GameManager : MonoBehaviour
         // by the case factory and the books, so papers and reference books can
         // never disagree during the day.
         _today = contentLibrary.BuildToday(dayPlan, _worldState);
-        _caseFactory = new CaseFactory(contentLibrary, _today);
+        _caseFactory = new CaseFactory(contentLibrary, _today, _gameConfig == null || _gameConfig.firstCaseClean);
         _characterArt = new CharacterArt(contentLibrary);
 
         // Today's interview, fixed at day start: the askable questions, which of
