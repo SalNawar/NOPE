@@ -1,0 +1,630 @@
+{
+  "name": "person_d1",
+  "owner": "PERSON-PLAY",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "person_d1 (2026-11-11, person-play-d1): day 1 played as the tutorial tells a new player, by real input only. The tutorial stays ON. No cheat, no DecideCorrectly, no game call in place of a click. The stamp of each case comes from the compare readouts on the screen (personReadout, personDecide, stampAim text readout), never from the case's truth. Cases 1 to 3 at 1920x1080, then a new run at 1280x1024 and case 1 again. Each case ends by a real stamp drag and a real hand-back drag and personVerdict asserts it was scored correct with no citation slip. The game findings are in person_report.txt (FINDING lines). Inspect mode (SPACE) is left again before the stamp. Rig help, where a step cannot be done by real input, is said in the report as RIG HELP."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1920,
+      "h": 1080
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personWatch"
+    },
+    {
+      "op": "personStep",
+      "name": "s1_call",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "s2_call_done",
+      "n": 2
+    },
+    {
+      "op": "counterDrag",
+      "name": "c1_passport",
+      "text": "office"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "s3_passport_on_desk",
+      "n": 3
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personStep",
+      "name": "s4_inspect_on",
+      "n": 4
+    },
+    {
+      "op": "personPick",
+      "text": "Destination",
+      "name": "c1_dest"
+    },
+    {
+      "op": "personStep",
+      "name": "c1_s5_after_dest_pick",
+      "n": 4
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personRulebook",
+      "name": "c1_rule"
+    },
+    {
+      "op": "personReadout",
+      "text": "destination vs rule",
+      "name": "c1_readout_destination"
+    },
+    {
+      "op": "personPick",
+      "text": "Valid Until",
+      "name": "c1_exp"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personCalendar",
+      "name": "c1_cal"
+    },
+    {
+      "op": "personReadout",
+      "text": "valid until vs calendar",
+      "name": "c1_readout_expiry"
+    },
+    {
+      "op": "personStep",
+      "name": "s6_after_compares",
+      "n": 6
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personDecide"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "readout",
+      "n": -1,
+      "name": "c1_stamp"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "c1_stamped"
+    },
+    {
+      "op": "personStep",
+      "name": "s7_stamped",
+      "n": 7
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "c1"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personVerdict",
+      "name": "c1"
+    },
+    {
+      "op": "personStep",
+      "name": "s8_handed_back",
+      "n": 0
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "counterDrag",
+      "name": "c2_passport",
+      "text": "office"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personPick",
+      "text": "Destination",
+      "name": "c2_dest"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personRulebook",
+      "name": "c2_rule"
+    },
+    {
+      "op": "personReadout",
+      "text": "destination vs rule",
+      "name": "c2_readout_destination"
+    },
+    {
+      "op": "personPick",
+      "text": "Valid Until",
+      "name": "c2_exp"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personCalendar",
+      "name": "c2_cal"
+    },
+    {
+      "op": "personReadout",
+      "text": "valid until vs calendar",
+      "name": "c2_readout_expiry"
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personDecide"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "readout",
+      "n": -1,
+      "name": "c2_stamp"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "c2_stamped"
+    },
+    {
+      "op": "stampView",
+      "n": 0
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "c2"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personVerdict",
+      "name": "c2"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "counterDrag",
+      "name": "c3_passport",
+      "text": "office"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personPick",
+      "text": "Destination",
+      "name": "c3_dest"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personRulebook",
+      "name": "c3_rule"
+    },
+    {
+      "op": "personReadout",
+      "text": "destination vs rule",
+      "name": "c3_readout_destination"
+    },
+    {
+      "op": "personPick",
+      "text": "Valid Until",
+      "name": "c3_exp"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personCalendar",
+      "name": "c3_cal"
+    },
+    {
+      "op": "personReadout",
+      "text": "valid until vs calendar",
+      "name": "c3_readout_expiry"
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personDecide"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "readout",
+      "n": -1,
+      "name": "c3_stamp"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "c3_stamped"
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "c3"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personVerdict",
+      "name": "c3"
+    },
+    {
+      "op": "call",
+      "target": "RunManager.LoadTitleScene"
+    },
+    {
+      "op": "waitScene",
+      "name": "TitleScene",
+      "f": 120
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "camres",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personWatch"
+    },
+    {
+      "op": "personStep",
+      "name": "s1_call",
+      "n": 1
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller",
+      "f": 90
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "s2_call_done",
+      "n": 2
+    },
+    {
+      "op": "counterDrag",
+      "name": "m1_passport",
+      "text": "office"
+    },
+    {
+      "op": "wait",
+      "f": 2
+    },
+    {
+      "op": "personStep",
+      "name": "s3_passport_on_desk",
+      "n": 3
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personStep",
+      "name": "s4_inspect_on",
+      "n": 4
+    },
+    {
+      "op": "personPick",
+      "text": "Destination",
+      "name": "m1_dest"
+    },
+    {
+      "op": "personStep",
+      "name": "m1_s5_after_dest_pick",
+      "n": 4
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personRulebook",
+      "name": "m1_rule"
+    },
+    {
+      "op": "personReadout",
+      "text": "destination vs rule",
+      "name": "m1_readout_destination"
+    },
+    {
+      "op": "personPick",
+      "text": "Valid Until",
+      "name": "m1_exp"
+    },
+    {
+      "op": "move",
+      "x": 0.5,
+      "y": 0.03,
+      "n": 10
+    },
+    {
+      "op": "wait",
+      "f": 1.2
+    },
+    {
+      "op": "personCalendar",
+      "name": "m1_cal"
+    },
+    {
+      "op": "personReadout",
+      "text": "valid until vs calendar",
+      "name": "m1_readout_expiry"
+    },
+    {
+      "op": "personStep",
+      "name": "s6_after_compares",
+      "n": 6
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personDecide"
+    },
+    {
+      "op": "stampView",
+      "n": 1
+    },
+    {
+      "op": "stampAim",
+      "text": "readout",
+      "n": -1,
+      "name": "m1_stamp"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "m1_stamped"
+    },
+    {
+      "op": "personStep",
+      "name": "s7_stamped",
+      "n": 7
+    },
+    {
+      "op": "stampHandBack",
+      "n": 0,
+      "name": "m1"
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "personVerdict",
+      "name": "m1"
+    },
+    {
+      "op": "personStep",
+      "name": "s8_handed_back",
+      "n": 0
+    }
+  ]
+}

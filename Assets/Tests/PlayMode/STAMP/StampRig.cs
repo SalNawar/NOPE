@@ -96,9 +96,11 @@ public static class StampRig
 
     private static bool IsDenied(string which) => !string.IsNullOrEmpty(which) && which.Trim().StartsWith("d", StringComparison.OrdinalIgnoreCase);
 
-    /// <summary>"correct": the dater of the active case's correct verdict; else Approved or Denied by name.</summary>
+    /// <summary>"correct": the dater of the active case's correct verdict; "readout": the decision person_d1 read from the compare readouts (PersonPlayOps); else Approved or Denied by name.</summary>
     private static string Which(string text)
     {
+        if (string.Equals(text, "readout", StringComparison.OrdinalIgnoreCase))
+            return PersonPlayOps.Decision ?? throw new InvalidOperationException("stamp: no decision from the readouts (personDecide runs first).");
         if (string.Equals(text, "correct", StringComparison.OrdinalIgnoreCase))
         {
             GameManager game = QaGame.Find<GameManager>();
