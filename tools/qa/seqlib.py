@@ -520,6 +520,31 @@ def hitches(frames_rows, budget_ms=1000.0 / 30 + 0.1):
 # ----------------------------------------------------------------------------------------------------------------------
 # Block artefacts (VIS audit's blockiness.py)
 
+def rain_motion(rgb_frames, fps=FPS):
+    """The rain's motion and slant from consecutive frames (CITY-WEATHER direction): the median of the frames is the static
+    city, so each frame less the median holds the streaks alone. The shift of the streaks between frames i and i+1 is the
+    peak of their circular cross-correlation (the tile wraps). Returns dx, dy in px per second (screen, top-left origin,
+    dy > 0 is down), the streak axis pointing down the screen, and the angle in degrees between the motion and that axis
+    (0: the streaks move along their slant with the lower end leading; 90 and over: across it or the wrong way)."""
+    gray = [np.asarray(f, dtype=np.float32)[..., :3].mean(axis=2) for f in rgb_frames]
+    bg = np.median(np.stack(gray), axis=0)
+    hp = [g - bg for g in gray]
+    shifts = []
+    for a, b in zip(hp, hp[1:]):
+        corr = np.fft.ifft2(np.conj(np.fft.fft2(a)) * np.fft.fft2(b)).real
+        dy, dx = np.unravel_index(np.argmax(corr), corr.shape)
+        shifts.append((dx - corr.shape[1] if dx > corr.shape[1] // 2 else dx, dy - corr.shape[0] if dy > corr.shape[0] // 2 else dy))
+    mdx, mdy = float(np.median([s[0] for s in shifts])) * fps, float(np.median([s[1] for s in shifts])) * fps
+    gy, gx = np.gradient(hp[len(hp) // 2])
+    g = 0.5 * np.arctan2(2 * float((gx * gy).sum()), float((gx * gx).sum() - (gy * gy).sum()))   # the dominant gradient's angle
+    ax, ay = -np.sin(g), np.cos(g)                                                                 # the streak axis, perpendicular to it
+    if ay < 0:
+        ax, ay = -ax, -ay                                                                          # pointing down the screen
+    norm = float(np.hypot(mdx, mdy)) or 1.0
+    angle = float(np.degrees(np.arccos(np.clip((mdx * ax + mdy * ay) / norm, -1.0, 1.0))))
+    return {'dx': mdx, 'dy': mdy, 'axis_dx': float(ax), 'axis_dy': float(ay), 'angle': angle}
+
+
 def blockiness(rgba):
     """The 8x8 block-edge ratio of an RGBA image (opaque pixels only): ~1 for clean art, well above 1 for JPEG-like
     blocks."""

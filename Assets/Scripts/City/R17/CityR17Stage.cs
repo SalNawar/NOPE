@@ -404,8 +404,8 @@ public sealed class CityR17Stage : IDisposable
         Sprite(cmd, PassAlpha, Texture2D.whiteTexture, 4, 4, new CityR17Rect(1, 1, 2, 2), view, new Vector4(tint.r, tint.g, tint.b, tint.a), NoHaze);
         if (_rain == null)
             _rain = RainTile();
-        float fall = _f.Reduced ? 0f : (float)(_f.Seconds * _config.rainSpeed % RainTileSize);
-        Sprite(cmd, PassAlpha, _rain, RainTileSize, RainTileSize, new CityR17Rect(0, fall, fr.W, fr.H), view, White, NoHaze);
+        (float rx, float ry) = CityWeather.RainSource(_f.Seconds, _config.rainSpeed, RainTileSize, _f.Reduced);
+        Sprite(cmd, PassAlpha, _rain, RainTileSize, RainTileSize, new CityR17Rect(rx, ry, fr.W, fr.H), view, White, NoHaze);
     }
 
     private const int RainTileSize = 256;
@@ -425,7 +425,7 @@ public sealed class CityR17Stage : IDisposable
             for (int k = 0; k < len; k++)
                 for (int w = 0; w < 2; w++)
                 {
-                    int cx = (x + w + k / 5) % RainTileSize, py = (y + k) % RainTileSize;
+                    int cx = (x + w + k / CityWeather.RainSlantRun) % RainTileSize, py = (y + k) % RainTileSize;
                     px[py * RainTileSize + cx] = new Color32(200, 220, 255, a);
                 }
         }

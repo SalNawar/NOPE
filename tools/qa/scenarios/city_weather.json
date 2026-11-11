@@ -101,6 +101,11 @@
       "name": "city_rain_1200_b"
     },
     {
+      "op": "record",
+      "name": "rain_fall",
+      "f": 0.5
+    },
+    {
       "op": "key",
       "key": "D"
     },
