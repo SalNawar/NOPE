@@ -26,7 +26,18 @@ MonoBehaviour:
   scanHintKey: desk.scanHint
   scanHintUntilDay: 5
   paperSize: {x: 0.26, y: 0.34}
-  readingHeight: 0.6
+  readClose:
+    passportShut: {width: 88, height: 125}
+    passportOpen: {width: 176, height: 125}
+    card: {width: 86, height: 54}
+    ticket: {width: 190, height: 82}
+    form: {width: 148, height: 210}
+    folder: {width: 240, height: 320}
+    realScale: 0.92
+    valueCapPx: 11
+    labelCapPx: 8
+    seconds: 0.18
+    bottomMargin: 0.09
   paperSpawnSlots:
   - {x: 0.5, y: 0.62}
   - {x: 0.74, y: 0.5}

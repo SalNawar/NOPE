@@ -159,7 +159,6 @@ MonoBehaviour:
         labelInk: '#0B1C2F'
         valueShare: 0.52
         labelShare: 0.6
-        reading: 1
         photo:
           x0: 0
           y0: 0

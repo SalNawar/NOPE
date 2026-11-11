@@ -199,12 +199,10 @@ public static class DocLookChecks
         return copy;
     }
 
-    /// <summary>A document's height on the desk (metres): the desk's paper height times its look's scale, brought to its reading size (DeskZones.ReadingScale, the art's reading share), as DeskDocument sizes it on the desk.</summary>
+    /// <summary>A document's height at rest on the desk (metres): its real width (DeskConfigSO.readClose, PaperRealSizes.RestWidth) over its look's aspect, as DeskDocument sizes it on the desk. The read-close lift in inspect mode is not modelled here.</summary>
     private static float DeskHeight(FormSpec spec, DeskConfigSO config)
     {
-        float height = config.paperSize.y * spec.look.Scale;
-        float width = height * spec.look.AspectOr(1f);
-        float reading = spec.look.art.reading > 0f ? spec.look.art.reading : 1f;
-        return height * reading * DeskZones.ReadingScale(width, height, config.readingHeight, config.paperSize.x / config.paperSize.y);
+        float aspect = spec.look.AspectOr(1f);
+        return config.readClose.RestWidth(spec.look.frame, aspect) / aspect;
     }
 }
