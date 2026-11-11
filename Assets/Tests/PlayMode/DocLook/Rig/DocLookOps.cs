@@ -262,9 +262,9 @@ public static class DocLookOps
                 yield return runner.Input.Tap(UnityEngine.InputSystem.Key.Space);
             float downStep = MostStep(top, down), back = Travel(down[down.Count - 1], rest);
             detail.Add(string.Format(CultureInfo.InvariantCulture,
-                "{0}: rest {1:0}x{2:0} px, lifted {3:0}x{4:0} px at ({5:0},{6:0})-({7:0},{8:0}), value {9:0.0} px, label {10:0.0} px{11}, lift {12} frames, most step {13:0}% up {14:0}% down, back {15:0.0} px",
+                "{0}: rest {1:0}x{2:0} px, lifted {3:0}x{4:0} px at ({5:0},{6:0})-({7:0},{8:0}), value {9:0.0} px, label {10:0.0} px{11}, lift {12} frames, most step {13:0}% up {14:0}% down, back {15:0.0} px (rest {16:0},{17:0} now {18:0},{19:0} size {20:0}x{21:0}, clock {22:0.00})",
                 paper.name, rest.width, rest.height, top.width, top.height, top.xMin, top.yMin, top.xMax, top.yMax, value, label, fills ? " (fills the frame)" : string.Empty,
-                frames, upStep * 100f, downStep * 100f, back));
+                frames, upStep * 100f, downStep * 100f, back, rest.center.x, rest.center.y, down[down.Count - 1].center.x, down[down.Count - 1].center.y, down[down.Count - 1].width, down[down.Count - 1].height, (float)QaGame.Field(paper, "_readNow")));
             if (value + 1e-3f < valueBar)
                 wrong.Add($"{paper.name} value {value:0.0} px < {valueBar}");
             if (!fills && label + 1e-3f < labelBar)
