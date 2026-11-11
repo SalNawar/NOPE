@@ -1642,7 +1642,7 @@ public static class StampRig
             int drags = 0;
             Vector3 lastDrag = default;
             dd.Dragged += (d, pt) => { drags++; lastDrag = pt; };
-            dd.DragEnded += (d, rel) => Report(runner, $"   DBG release={rel} counter.Contains={counter.Contains(rel)} verdictBefore={verdictBefore} hasVerdictNow={tray.HasVerdict} drags={drags} lastDrag={lastDrag} paperZone={passport.Zone} activeSame={(game != null && game.ActiveCase == inst)}");
+            dd.DragEnded += (d, rel) => Report(runner, $"   DBG release={rel} counter.Contains={counter.Contains(rel)} verdictBefore={verdictBefore} hasVerdictNow={tray.HasVerdict} drags={drags} lastDrag={lastDrag} spot0={counter.Spot(0)} spot0In={counter.Contains(counter.Spot(0))} spot1In={counter.Contains(counter.Spot(1))} to={to} cam={cam.transform.position} camNow={(Camera.main != null ? Camera.main.transform.position : Vector3.zero)} sameCam={(cam == Camera.main)} paperZone={passport.Zone} activeSame={(game != null && game.ActiveCase == inst)}");
             yield return FixedStep(Settle(runner.Input.Play(path), 10));
             Report(runner, $"   DBG after: dragEndedSeen drags={drags} ddEnabled={dd.enabled} hasVerdict={tray.HasVerdict} carrying={tray.IsCarrying} stripScreen={QaGame.ScreenPoint(counter.Strip.gameObject)} spot0={Screen2(counter.Spot(0), cam)}");
             Report(runner, $"== stampHandBack {step.name}: passport {passport.Index} from {from} to the counter at {path.End}");
