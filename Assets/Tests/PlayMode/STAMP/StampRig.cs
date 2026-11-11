@@ -1000,6 +1000,11 @@ public static class StampRig
             {
                 if (i == path.ReleaseIndex && die != null)
                 {
+                    // The camera may ease while the dater is carried (the slide-in focus lets go when a hold begins), and the die follows the pointer
+                    // through the camera of each frame: the point the player sees under the pointer is the one at the let-go, not the one before the pick-up.
+                    Ray atRelease = cam.ScreenPointToRay(path.End);
+                    if (HitBoxes(aimed, atRelease, out float releaseDistance))
+                        expected = atRelease.GetPoint(releaseDistance);
                     dieAtRelease = $"{V(die.position)} ({Mm(Vector3.ProjectOnPlane(die.position - expected, Up(tray)).magnitude)} beside the expected point)";
                     if (folderEdge && Folder() is DeskRulebook rbNow)
                     {
@@ -1066,7 +1071,7 @@ public static class StampRig
         StampPress want = !aimedIsPassport ? StampPress.NotPassport : hadVerdict ? StampPress.AlreadyStamped : StampPress.Stamped;
         if (press != want)
             fails.Add($"press {press}, expected {want}");
-        float most = !folderEdge && step.f > 0f ? step.f / 1000f : 0.003f; // f (mm) loosens a plain aim: person_d1's 1280x1024 stamp lands 21.6 mm off, a game finding
+        float most = !folderEdge && step.f > 0f ? step.f / 1000f : 0.003f; // f (mm) loosens a plain aim
         if (off > most)
             fails.Add($"landed {Mm(off)} from the pointer's spot on the aimed paper (max {Mm(most)})");
         if (picked != $"paper {aimed.Index}")
