@@ -58,7 +58,7 @@ public sealed class FlashBudget
 
 /// <summary>
 /// The one flash budget every flash goes through (G3): the Reduce flashing
-/// setting (Settings; kept per player by FlashPreference) and the shared
+/// setting (Settings; kept per player by ScreenSettings) and the shared
 /// <see cref="FlashBudget"/>, whose knobs the office's config sets when it
 /// loads (<see cref="Configure"/>, from DesktopConfigSO; until then G3's
 /// own numbers, 3 a second and a 200 ms tint). Static, so a flash anywhere
