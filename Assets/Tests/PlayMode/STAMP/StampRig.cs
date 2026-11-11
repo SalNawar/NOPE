@@ -1000,23 +1000,11 @@ public static class StampRig
             {
                 if (i == path.ReleaseIndex && die != null)
                 {
-                    // TEMP stamp-aim-1280 evidence
-                    {
-                        Transform sf = Surface(tray);
-                        object sfc = QaGame.Field(tray, "surface");
-                        Vector3 le = sf.InverseTransformPoint(expected), ld = sf.InverseTransformPoint(die.position);
-                        Vector2 sz = (Vector2)QaGame.Field(sfc, "size");
-                        Vector3 pl = Vector3.zero; ((DeskSurface)sfc).TryProject(cam, path.End, out pl);
-                        Vector3 lp = sf.InverseTransformPoint(pl);
-                        Report(runner, $"== TEMP release {Screen.width}x{Screen.height}: area size {sz} surfacePos {V(sf.position)} expected local {V(le)} die local {V(ld)} planeProjection local {V(lp)} cam {V(cam.transform.position)} fov {cam.fieldOfView} aspect {cam.aspect} pointer {path.End}");
-                        Camera dc = drag.DragCamera;
-                        Vector2 dp = (Vector2)QaGame.Field(drag, "_pointer");
-                        var am = typeof(DeskStampTray).GetMethod("Aim", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                        Vector3? ah = dc != null ? (Vector3?)am.Invoke(tray, new object[] { dc.ScreenPointToRay(dp) }) : null;
-                        Vector3? ah2 = (Vector3?)am.Invoke(tray, new object[] { cam.ScreenPointToRay(path.End) });
-                        Report(runner, $"== TEMP game aim: dragCam {(dc != null ? dc.name : "null")} is main {dc == cam} pos {(dc != null ? V(dc.transform.position) : "-")} _pointer {dp} aimDragCam {(ah.HasValue ? V(ah.Value) : "NULL")} aimMainCam {(ah2.HasValue ? V(ah2.Value) : "NULL")} camPixelRect {cam.pixelRect} screen {Screen.width}x{Screen.height}");
-                        runner.Recorder.Still(Path.Combine(runner.OutDir, "stills", $"release_{name}_{Screen.width}x{Screen.height}.png"));
-                    }
+                    // The camera may ease while the dater is carried (the slide-in focus lets go when a hold begins), and the die follows the pointer
+                    // through the camera of each frame: the point the player sees under the pointer is the one at the let-go, not the one before the pick-up.
+                    Ray atRelease = cam.ScreenPointToRay(path.End);
+                    if (HitBoxes(aimed, atRelease, out float releaseDistance))
+                        expected = atRelease.GetPoint(releaseDistance);
                     dieAtRelease = $"{V(die.position)} ({Mm(Vector3.ProjectOnPlane(die.position - expected, Up(tray)).magnitude)} beside the expected point)";
                     if (folderEdge && Folder() is DeskRulebook rbNow)
                     {
@@ -1083,7 +1071,7 @@ public static class StampRig
         StampPress want = !aimedIsPassport ? StampPress.NotPassport : hadVerdict ? StampPress.AlreadyStamped : StampPress.Stamped;
         if (press != want)
             fails.Add($"press {press}, expected {want}");
-        float most = !folderEdge && step.f > 0f ? step.f / 1000f : 0.003f; // f (mm) loosens a plain aim: person_d1's 1280x1024 stamp lands 21.6 mm off, a game finding
+        float most = !folderEdge && step.f > 0f ? step.f / 1000f : 0.003f; // f (mm) loosens a plain aim
         if (off > most)
             fails.Add($"landed {Mm(off)} from the pointer's spot on the aimed paper (max {Mm(most)})");
         if (picked != $"paper {aimed.Index}")
