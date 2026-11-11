@@ -3,7 +3,7 @@
   "owner": "ORDERS",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "orders-last-day: on day 20 an order is placed (uipcOrder asserts one order, charged once); on day 21, the last day, Orders shows the closed note and its cards are greyed, since an order would be charged and never arrive." },
+    { "op": "note", "text": "orders-last-day: on day 20 an order is placed (uipcOrder asserts one order, charged once); on day 21, the last day, the wallet line says orders are closed today and each card that could be ordered reads Orders closed today with no price, since an order would be charged and never arrive." },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },
