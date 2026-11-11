@@ -71,7 +71,8 @@ public static class DocLookOps
     /// <summary>
     /// doc-read-close (D65) compare across two lifted papers, in inspect mode:
     /// the pointer goes onto paper A, waits for the lift, clicks A's first box;
-    /// goes onto paper B (A settles), waits, clicks B's first box. Asserts
+    /// leaves A through the bottom band (A settles), goes onto paper B, waits,
+    /// clicks B's first box. Asserts
     /// <c>readPick.&lt;name&gt;</c>: A's box is still picked once A is back at
     /// rest, and the compare holds a pair. A still after each click.
     /// </summary>
@@ -93,6 +94,10 @@ public static class DocLookOps
         for (int k = 0; k < 2; k++)
         {
             DeskDocument paper = papers[k].paper;
+            // off the lifted paper first (it covers the others), through the bottom band where nothing lifts, until it settles
+            yield return runner.Input.MoveTo(new Vector2(Screen.width * 0.5f, Screen.height * 0.03f), 1);
+            if (k > 0)
+                yield return Settle(papers[0].paper);
             yield return runner.Input.MoveTo(papers[k].on, 1);
             for (float end = Time.unscaledTime + 0.4f; Time.unscaledTime < end;)
                 yield return null;
@@ -240,7 +245,7 @@ public static class DocLookOps
             bool fills = top.width >= Screen.width * 0.97f || top.height >= (Screen.height - bottomPx) * 0.97f;
             float upStep = MostStep(rest, up);
             int frames = up.FindIndex(r => Travel(r, top) <= 0.02f * Mathf.Max(1f, Travel(rest, top))) + 1;
-            runner.Recorder.Still(System.IO.Path.Combine(runner.OutDir, "stills", $"{QaRunner.Safe(id + "_" + paper.name)}_{Screen.width}x{Screen.height}.png"));
+            runner.Recorder.Still(System.IO.Path.Combine(runner.OutDir, "stills", $"{QaRunner.Safe(id + "_" + papers.IndexOf(paper) + "_" + QaGame.Field(paper, "_frame"))}_{Screen.width}x{Screen.height}.png"));
             yield return QaGame.Until(() => !runner.Recorder.StillPending, 10f, "the still");
             // text "key": inspect mode ends with the paper lifted (SPACE), then starts again for the next paper
             if (step.text == "key")
