@@ -312,7 +312,7 @@ public sealed class OrdersWindow : MonoBehaviour, IKitUser
         switch (OrderBook.StateOf(world, lib, upgrade))
         {
             case OrderState.Orderable:
-                enabled = Orders.CanOrder(world.day);
+                enabled = Orders.CanOrder(world.day, lib != null ? lib.LastDay : 0);
                 return NodeAction.Order;
             case OrderState.TooDear:
             case OrderState.Locked:
@@ -486,7 +486,7 @@ public sealed class OrdersWindow : MonoBehaviour, IKitUser
 
         if (walletText != null)
             walletText.text = OrderLines.Wallet(world);
-        bool closed = !Orders.CanOrder(world.day);
+        bool closed = !Orders.CanOrder(world.day, lib.LastDay);
         if (closedNote != null && closedNote.activeSelf != closed)
             closedNote.SetActive(closed);
 

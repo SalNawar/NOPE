@@ -157,6 +157,6 @@ public static class Orders
     /// <summary>The day an order arrives: the start of the day after it was placed.</summary>
     public static int ArrivalDay(OrderEntry entry) => entry != null ? entry.orderedDay + 1 : 0;
 
-    /// <summary>True when an order can be placed on <paramref name="day"/> (P0-A seam; owner CONTENT, consumed by UI-PC and DESK-PLAN). The P0 stub: every day, as today.</summary>
-    public static bool CanOrder(int day) => true;
+    /// <summary>True when an order can be placed on <paramref name="day"/> (BUG-28d): never on the last day, which ends the run before the order arrives. A <paramref name="lastDay"/> of 0 or less means no last day is known.</summary>
+    public static bool CanOrder(int day, int lastDay) => lastDay <= 0 || day < lastDay;
 }
