@@ -107,7 +107,7 @@ public sealed class CityR17ConfigSO : ScriptableObject
     public Color rainTint = new Color(0.12f, 0.18f, 0.28f, 0.6f);
 
     [Tooltip("A rainy day's streaks: how fast they fall (plate px a second).")]
-    public float rainSpeed = 900f;
+    public float rainSpeed = 600f;
 
     [Header("Budget")]
     [Tooltip("The city's CPU budget a frame (ms): over it, the hall windows' redraw rate halves until it fits.")]

@@ -289,14 +289,19 @@ def cmd_all(args):
     ok = cmd_sound(args) and ok
     if still_rows(args.seq):
         ok = cmd_colour(args) and ok
+    if os.path.basename(os.path.abspath(args.seq)).startswith('rain_'):
+        ok = cmd_rain(args) and ok   # the gate check city.weather.rain.direction reads this result
     return ok
 
 
 def cmd_rain(args, seq=None):
     """CITY-WEATHER direction: the streaks move down the screen (dy > 0, 600 to 1200 px/s at 1080p) along their slant (within 20 degrees)."""
     seq = seq or args.seq
-    files, _, _ = load(seq)
+    files, rows, _ = load(seq)
     r = seqlib.rain_motion([np.asarray(Image.open(f).convert('RGB')) for f in files])
+    scale = float(rows[0]['screenW']) / float(rows[0]['capW'])   # the capture may be smaller than the screen
+    r['dx'] *= scale
+    r['dy'] *= scale
     ok = 600 <= r['dy'] <= 1200 and r['angle'] <= 20
     emit(args, seq, 'rain', ok, f'motion dx {r["dx"]:.0f} dy {r["dy"]:.0f} px/s, {r["angle"]:.1f} degrees off the slant',
          'the streak axis pointing down is (%.2f, %.2f)' % (r['axis_dx'], r['axis_dy']))
