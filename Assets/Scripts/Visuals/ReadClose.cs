@@ -131,12 +131,14 @@ public sealed class ReadTurn
     /// <summary>The id of the paper that settled after a pick and waits for the pointer to leave it, or -1.</summary>
     public int Settled { get; private set; } = -1;
 
-    /// <summary>A value on paper <paramref name="id"/> was picked: it gives up the lift and does not take it again until <see cref="Leave"/>.</summary>
+    /// <summary>A value on the lifted paper <paramref name="id"/> was picked: it gives up the lift and does not take it again until <see cref="Leave"/>.</summary>
     public void Settle(int id)
     {
+        // a pick on a paper at rest changes nothing: that paper may still lift when the pointer comes up onto it
+        if (Lifted != id)
+            return;
         Settled = id;
-        if (Lifted == id)
-            Lifted = -1;
+        Lifted = -1;
     }
 
     /// <summary>The pointer left paper <paramref name="id"/> (or went to the bottom band): it may lift again.</summary>

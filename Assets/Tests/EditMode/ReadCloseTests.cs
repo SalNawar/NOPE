@@ -139,4 +139,12 @@ public class ReadCloseTests
         turn.Leave(3);
         Assert.IsTrue(turn.Want(3, true), "left and back: it lifts again");
     }
+
+    [Test]
+    public void APickOnAPaperAtRest_DoesNotStopItsLift()
+    {
+        var turn = new ReadTurn();
+        turn.Settle(3);
+        Assert.IsTrue(turn.Want(3, true), "it was not lifted when picked: it lifts as usual");
+    }
 }
