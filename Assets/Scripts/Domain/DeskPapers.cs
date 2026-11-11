@@ -535,6 +535,12 @@ public static class PaperSizes
     public static float GrabRatio(float from, float to) => from > 0f && to > 0f ? to / from : 1f;
 
     /// <summary>
+    /// Whether a release can dock at a machine: not once the passport carries its verdict and the pointer is on the counter,
+    /// as that drop hands the papers back whatever machine the paper's footprint overlaps (an open booklet is wide).
+    /// </summary>
+    public static bool MachineMayTake(DeskZone under, bool verdict) => !(verdict && under == DeskZone.Counter);
+
+    /// <summary>
     /// The zone whose size a held paper shows at, its pointer over
     /// <paramref name="under"/> (its zone <paramref name="recorded"/>; the
     /// passport carrying its <paramref name="verdict"/> or not;

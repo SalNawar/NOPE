@@ -951,7 +951,7 @@ public sealed class DeskController : MonoBehaviour
         if (paper != null && _state != null)
         {
             Vector3 at = paper.transform.position;
-            bool overMachine = DockAt(PaperFootprint(paper, at), at.y) != null;
+            bool overMachine = PaperSizes.MachineMayTake(under, stamps != null && stamps.HasVerdict) && DockAt(PaperFootprint(paper, at), at.y) != null;
             DeskZone sized = PaperSizes.HeldZone(under, _state.ZoneOf(paper.Index), stamps != null && stamps.HasVerdict, overMachine);
             if (paper.Zone != sized)
                 paper.SetZone(sized, false);
@@ -997,7 +997,8 @@ public sealed class DeskController : MonoBehaviour
 
         // A machine takes only its documents (MachineIntake; Saleh's 1018a playtest): the chip reader a chip card
         // in its slot or a passport on its pad, the scanner any case paper on its bed; anything else is refused.
-        IPaperDock dock = DockAt(PaperFootprint(paper, at), at.y);
+        // A stamped passport released over the counter is handed back, whatever machine its footprint overlaps (PaperSizes.MachineMayTake).
+        IPaperDock dock = PaperSizes.MachineMayTake(zone, verdict) ? DockAt(PaperFootprint(paper, at), at.y) : null;
         if (dock != null && dock.Machine == DeskMachine.ChipReader)
         {
             // Off the scanner: a paper that waited beside it leaves the feed, as any drop off the scanner (DeskPapers.LeaveFeed).
