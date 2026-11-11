@@ -4,7 +4,7 @@ Time Sorter, a Unity 6 (6000.4.11f1) game. `docs/FEATURES.md` is the behaviour c
 
 ## Building the demo
 
-A standalone Windows demo (a release player: no dev overlay, no cheats):
+A standalone Windows demo (a release player). The cheat menu ships in it while `DemoBuild.DemoCheats` is `true` (F9 or `~` opens it); set it to `false` for a build that goes to someone outside:
 
 1. In the editor: **Time Sorter > Build Windows Demo**. It builds the enabled scenes of the build settings (TitleScene first, then the art office AnimeHall, OfficeGameplay and HomeScene) to `E:/unity/NOPE-builds/TimeSorter_Demo/TimeSorter.exe`.
 2. From the command line (with no editor open on that project):

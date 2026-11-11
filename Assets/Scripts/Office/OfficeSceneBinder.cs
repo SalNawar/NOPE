@@ -263,6 +263,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     {
         SceneManager.sceneLoaded -= HandleLoaded;
         DeskLayout.Unbind();
+        HoldRegistry.Desk.End(HoldRegistry.Desk.Current); // the office is gone: its hold goes too, uncalled (the holder may be destroyed already)
         if (config != null)
             config.layout.UsePainted(null, null);
     }

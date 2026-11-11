@@ -137,13 +137,13 @@ public sealed partial class SwitchboardView : MonoBehaviour
         DestroyGateArt();
     }
 
-    /// <summary>Starts the day once the shift knows it, then runs the rules, the turn, the office view's glow, the hand and the drawing (unscaled time: a hit-stop never stops a calibration).</summary>
+    /// <summary>Starts the day once the shift knows it, then runs the rules, the turn, the office view's glow, the hand and the drawing (unscaled time: a hit-stop never stops a calibration; a full pause holds the rules: Settings open or the focus lost, PauseState.FullHeld).</summary>
     private void Update()
     {
         float dt = Time.unscaledDeltaTime;
         if (_board == null)
             TryBeginDay();
-        if (_board != null)
+        if (_board != null && !PauseState.Shared.FullHeld)
         {
             _board.Tick(dt);
             PlayEvents();
