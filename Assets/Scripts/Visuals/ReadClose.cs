@@ -31,9 +31,6 @@ public struct PaperMm
 [Serializable]
 public sealed class PaperRealSizes
 {
-    /// <summary>A passport, shut (millimetres): half the open booklet along its fold.</summary>
-    public PaperMm passportShut = new PaperMm(88f, 125f);
-
     /// <summary>A passport, open (millimetres).</summary>
     public PaperMm passportOpen = new PaperMm(176f, 125f);
 
@@ -45,9 +42,6 @@ public sealed class PaperRealSizes
 
     /// <summary>A form or a permit (millimetres).</summary>
     public PaperMm form = new PaperMm(148f, 210f);
-
-    /// <summary>The rulebook's folder, shut (millimetres). The folder keeps its built size (it is at about this size at realScale); the papers come down to it.</summary>
-    public PaperMm folder = new PaperMm(240f, 320f);
 
     /// <summary>World metres per real metre on the desk (one scale for every paper): the folder's own scale, measured 0.92 (doc-legibility REPORT, 3.3).</summary>
     public float realScale = 0.92f;
