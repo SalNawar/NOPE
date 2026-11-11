@@ -306,7 +306,11 @@ public static class DocLookOps
     private static string PaperState(DeskDocument p) => string.Format(CultureInfo.InvariantCulture,
         "size {0:0.0000}/{1:0.0000} lowering {2} dirty {3} ratio {4:0.000} settling {5} sheet {6} scale {7} root {8}",
         QaGame.Field(p, "_sizeNow"), QaGame.Field(p, "_sizeTarget"), QaGame.Field(p, "_lowering"), QaGame.Field(p, "_feelDirty"), QaGame.Field(p, "_shownRatio"), QaGame.Field(p, "_settling"),
-        p.Sheet.localPosition.ToString("0.0000"), p.Sheet.localScale.ToString("0.0000"), p.transform.position.ToString("0.0000"));
+        p.Sheet.localPosition.ToString("0.0000"), p.Sheet.localScale.ToString("0.0000"), p.transform.position.ToString("0.0000"))
+        + string.Format(CultureInfo.InvariantCulture, " | sheet turn {0} root turn {1} size {2} camera {3} {4} fov {5:0.00} rect {6}",
+            p.Sheet.localEulerAngles.ToString("0.00"), p.transform.eulerAngles.ToString("0.00"), p.Size.ToString("0.0000"),
+            QaGame.PointerCamera() != null ? QaGame.PointerCamera().name : "none", QaGame.PointerCamera() != null ? QaGame.PointerCamera().transform.position.ToString("0.0000") : "-",
+            QaGame.PointerCamera() != null ? QaGame.PointerCamera().fieldOfView : 0f, QaGame.PointerCamera() != null ? SheetRect(p, QaGame.PointerCamera()).ToString("0.0") : "-");
 
     /// <summary>Waits until <paramref name="paper"/>'s lift clock is 0 (at most 2 s).</summary>
     private static IEnumerator Settle(DeskDocument paper)
