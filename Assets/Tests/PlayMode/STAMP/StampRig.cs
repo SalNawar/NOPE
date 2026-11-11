@@ -1633,18 +1633,11 @@ public static class StampRig
             if (counter == null)
                 throw new InvalidOperationException("stampHandBack: no counter.");
             Vector2 from = GrabPoint(tray, passport, cam);
-            // The counter's strip where it shows (the reading view's COUNTER band), else its first spot.
-            Vector2 to = QaGame.ScreenPoint(counter.Strip.gameObject) ?? Screen2(counter.Spot(0), cam);
+            // The counter's strip where it shows (the reading view's COUNTER band), else the strip's centre.
+            // Not Spot(0): the spots lie counterSpotInset past the strip's depth, so a drop there is off the counter zone.
+            Vector2 to = QaGame.ScreenPoint(counter.Strip.gameObject) ?? Screen2(counter.Strip.position, cam);
             QaPath path = QaPaths.Drag(QaRunner.ParseKind(step.path), from, to, new Vector2(Screen.width, Screen.height));
-            // TEMP debug (handback-debug): what the game sees at the release.
-            var dd = passport.GetComponent<DeskDraggable>();
-            bool verdictBefore = tray.HasVerdict;
-            int drags = 0;
-            Vector3 lastDrag = default;
-            dd.Dragged += (d, pt) => { drags++; lastDrag = pt; };
-            dd.DragEnded += (d, rel) => Report(runner, $"   DBG release={rel} counter.Contains={counter.Contains(rel)} verdictBefore={verdictBefore} hasVerdictNow={tray.HasVerdict} drags={drags} lastDrag={lastDrag} spot0={counter.Spot(0)} spot0In={counter.Contains(counter.Spot(0))} spot1In={counter.Contains(counter.Spot(1))} to={to} cam={cam.transform.position} camNow={(Camera.main != null ? Camera.main.transform.position : Vector3.zero)} sameCam={(cam == Camera.main)} paperZone={passport.Zone} activeSame={(game != null && game.ActiveCase == inst)}");
             yield return FixedStep(Settle(runner.Input.Play(path), 10));
-            Report(runner, $"   DBG after: dragEndedSeen drags={drags} ddEnabled={dd.enabled} hasVerdict={tray.HasVerdict} carrying={tray.IsCarrying} stripScreen={QaGame.ScreenPoint(counter.Strip.gameObject)} spot0={Screen2(counter.Spot(0), cam)}");
             Report(runner, $"== stampHandBack {step.name}: passport {passport.Index} from {from} to the counter at {path.End}");
         }
         // The case ends: the papers go; a citation slip (a wrong call) shows after it and holds the day until the player acknowledges it.
