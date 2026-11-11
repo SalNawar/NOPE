@@ -208,6 +208,9 @@ public static class DocLookOps
                 papers.Add(p);
         Vector2 away = new Vector2(Screen.width * 0.5f, Screen.height * 0.03f);
         int lifted = 0;
+        var starts = new Dictionary<DeskDocument, Rect>();
+        foreach (DeskDocument p in papers)
+            starts[p] = SheetRect(p, camera);
         foreach (DeskDocument paper in papers)
         {
             yield return runner.Input.MoveTo(away, 1);
@@ -265,6 +268,13 @@ public static class DocLookOps
                 "{0}: rest {1:0}x{2:0} px, lifted {3:0}x{4:0} px at ({5:0},{6:0})-({7:0},{8:0}), value {9:0.0} px, label {10:0.0} px{11}, lift {12} frames, most step {13:0}% up {14:0}% down, back {15:0.0} px (rest {16:0},{17:0} now {18:0},{19:0} size {20:0}x{21:0}, clock {22:0.00})",
                 paper.name, rest.width, rest.height, top.width, top.height, top.xMin, top.yMin, top.xMax, top.yMax, value, label, fills ? " (fills the frame)" : string.Empty,
                 frames, upStep * 100f, downStep * 100f, back, rest.center.x, rest.center.y, down[down.Count - 1].center.x, down[down.Count - 1].center.y, down[down.Count - 1].width, down[down.Count - 1].height, (float)QaGame.Field(paper, "_readNow")));
+            if (back > 2f)
+            {
+                var trail = new List<string>();
+                for (int k = 0; k < down.Count; k += 4)
+                    trail.Add($"{down[k].center.x:0},{down[k].center.y:0},{down[k].width:0}x{down[k].height:0}");
+                detail.Add($"{paper.name}: op start {starts[paper].center.x:0},{starts[paper].center.y:0} {starts[paper].width:0}x{starts[paper].height:0}; settle trail {string.Join(" ", trail)}");
+            }
             if (value + 1e-3f < valueBar)
                 wrong.Add($"{paper.name} value {value:0.0} px < {valueBar}");
             if (!fills && label + 1e-3f < labelBar)
