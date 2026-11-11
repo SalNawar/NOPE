@@ -199,7 +199,7 @@ public static class PersonPlayOps
         bool hit = top != null && top.transform.IsChildOf(p.transform);
         Rep(r, $"== grabBeside at {Screen.width}x{Screen.height}: drawn paper {Px(face)}, click box {Px(QaGame.ScreenRect(p.gameObject))}, press {gap:0} px beside it at ({from.x:0},{from.y:0}) meets {(top != null ? QaGame.Where(top) : "nothing")}{(hit ? string.Empty : " (NOT the paper)")}");
         yield return Still(r, Name(s) + "_before");
-        yield return r.Input.Play(QaPaths.Drag(QaPathKind.Plain, from, new Vector2(Screen.width * 0.5f, Screen.height * 0.3f), new Vector2(Screen.width, Screen.height)));
+        yield return r.Input.Play(QaPaths.Drag(QaPathKind.Plain, from, new Vector2(Screen.width * 0.5f, Screen.height * 0.16f), new Vector2(Screen.width, Screen.height)));
         yield return Secs(1.2f);
         bool onDesk = p.Zone == DeskZone.Desk;
         Rep(r, $"   after the drag the paper lies in zone {p.Zone}");
