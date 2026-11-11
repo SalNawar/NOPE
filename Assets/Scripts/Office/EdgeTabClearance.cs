@@ -33,6 +33,7 @@ public sealed class EdgeTabClearance : MonoBehaviour
     private Camera _office;
     private CinemachineCamera _view;
     private float[] _applied = new float[0];
+    private Canvas[] _canvases = new Canvas[0];
     private readonly Vector3[] _corners = new Vector3[4];
 
     /// <summary>The office camera and the office view's Cinemachine camera (null: the office camera's own pose), from the office binder.</summary>
@@ -47,7 +48,10 @@ public sealed class EdgeTabClearance : MonoBehaviour
         if (tabs == null)
             return;
         if (_applied.Length != tabs.Length)
+        {
             _applied = new float[tabs.Length];
+            _canvases = new Canvas[tabs.Length];
+        }
 
         bool found = TryCalendarRect(out Rect cal);
         float margin = config != null ? config.edgeTabCalendarClearance : 0f;
@@ -56,7 +60,7 @@ public sealed class EdgeTabClearance : MonoBehaviour
             RectTransform tab = tabs[i];
             if (tab == null || !tab.gameObject.activeInHierarchy)
                 continue;
-            Canvas canvas = tab.GetComponentInParent<Canvas>();
+            Canvas canvas = _canvases[i] != null ? _canvases[i] : _canvases[i] = tab.GetComponentInParent<Canvas>();
             float scale = canvas != null ? canvas.rootCanvas.scaleFactor : 1f;
             if (scale <= 0f)
                 continue;

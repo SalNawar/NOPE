@@ -13,4 +13,20 @@ public static class CityWeather
         double roll = (uint)Seeds.ForWeather(daySeed) / 4294967296.0;
         return roll < rainChance;
     }
+
+    /// <summary>The rain streak's slant: it leans 1 px across for every this many px down (the tile's streaks and the fall share it).</summary>
+    public const int RainSlantRun = 5;
+
+    /// <summary>
+    /// The source window's corner (x, y: px, top-left origin) in the rain tile at a time. The window moves up the tile, so
+    /// the streaks fall down the screen, and right by 1/<see cref="RainSlantRun"/> of that, so each streak slides along its
+    /// own slant, lower end first. It repeats every tile * slant px of fall (the tile's own period in both axes); 0 under Reduced Motion.
+    /// </summary>
+    public static (float x, float y) RainSource(double seconds, float speed, int tile, bool reduced)
+    {
+        if (reduced)
+            return (0f, 0f);
+        double period = (double)tile * RainSlantRun, s = seconds * speed % period;
+        return ((float)(s / RainSlantRun), (float)((period - s) % period));
+    }
 }

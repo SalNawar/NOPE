@@ -42,13 +42,6 @@ public static class DeskZones
         return (x, far - inset - row * rowDepth);
     }
 
-    /// <summary>A document's scale on the desk (full size): its height brought to <paramref name="readingHeight"/>, or for a paper wider than the desk paper's <paramref name="deskAspect"/> its width to that height's width; 1 for a paper of no size.</summary>
-    public static float ReadingScale(float width, float height, float readingHeight, float deskAspect)
-    {
-        float tall = Math.Max(height, deskAspect > 0f ? width / deskAspect : height);
-        return tall > 0f ? readingHeight / tall : 1f;
-    }
-
     /// <summary>Smoothstep over [0, 1] (clamped): the stamp bar's slide and a document's change of size.</summary>
     public static float Ease(float t)
     {

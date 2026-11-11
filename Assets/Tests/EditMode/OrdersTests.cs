@@ -166,9 +166,11 @@ public class OrdersTests
     }
 
     [Test]
-    public void CanOrder_EveryDay()
+    public void CanOrder_EveryDayButTheLast()
     {
-        for (int day = 1; day <= 21; day++)
-            Assert.IsTrue(Orders.CanOrder(day));
+        for (int day = 1; day <= 20; day++)
+            Assert.IsTrue(Orders.CanOrder(day, 21));
+        Assert.IsFalse(Orders.CanOrder(21, 21), "an order on the last day would be charged and never arrive");
+        Assert.IsTrue(Orders.CanOrder(21, 0), "no known last day, no closed day");
     }
 }

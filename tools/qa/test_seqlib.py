@@ -511,5 +511,36 @@ class DirtyTests(unittest.TestCase):
         self.assertEqual([], seqtools.dirty_paths('ProjectSettings/QualitySettings.asset\n'))
 
 
+class RainMotionTests(unittest.TestCase):
+    @staticmethod
+    def frames(step_y, step_x):
+        """A static grey city with sparse streaks leaning like '/' (the lower end to the left), sliding by a step a frame."""
+        rng = np.random.RandomState(1)
+        base = np.zeros((128, 128), dtype=np.float32)
+        for _ in range(30):
+            x, y = rng.randint(128), rng.randint(128)
+            for k in range(20):
+                base[(y + k) % 128, (x - k // 5) % 128] = 200
+        out = []
+        for i in range(8):
+            rain = np.roll(base, (i * step_y, i * step_x), axis=(0, 1))
+            f = np.clip(60 + rain, 0, 255).astype(np.uint8)
+            out.append(np.stack([f, f, f], axis=2))
+        return out
+
+    def test_down_along_the_slant_passes(self):
+        r = seqlib.rain_motion(self.frames(5, -1), fps=30)
+        self.assertGreater(r['dy'], 0)
+        self.assertLess(r['angle'], 20)
+
+    def test_up_fails(self):
+        r = seqlib.rain_motion(self.frames(-5, 1), fps=30)
+        self.assertLess(r['dy'], 0)
+        self.assertGreater(r['angle'], 90)
+
+    def test_across_the_slant_fails(self):
+        self.assertGreater(seqlib.rain_motion(self.frames(0, 5), fps=30)['angle'], 20)
+
+
 if __name__ == '__main__':
     unittest.main()

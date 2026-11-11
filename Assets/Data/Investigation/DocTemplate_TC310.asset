@@ -175,7 +175,6 @@ MonoBehaviour:
         labelInk: '#34405A'
         valueShare: 0.62
         labelShare: 0.66
-        reading: 1
         photo:
           x0: 0
           y0: 0

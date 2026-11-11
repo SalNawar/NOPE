@@ -61,7 +61,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The office case HUD (piece 10) under the office overlay canvas, rebuilt
     /// each run: an always-active full-screen host (OfficeCaseHud, no graphic)
-    /// and its Root, top centre: the office compare strip (CompareBar,
+    /// and its Root, its one child: the office compare readout, at the bottom centre (CompareBar,
     /// inactive; the CompareController draws it), where the claim tag was (no
     /// claim is printed: the personalities spec's B1). No part takes raycasts.
     /// Returns the HUD and the strip's object and text through out parameters.
@@ -71,7 +71,12 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(overlay, "OfficeCaseHud");
         Transform host = Panel(overlay, "OfficeCaseHud", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         Transform root = Panel(host, "Root", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        compareText = TopStrip(root, "CompareStrip", CompareStripSize, TopStripTop, Tooltip, ThemeRoleId.CompareBar, 18, Ink, out Transform compare);
+        compareText = TopStrip(root, "CompareStrip", CompareStripSize, TopStripTop, Tooltip, ThemeRoleId.CompareBar, 40, Ink, out Transform compare);
+        var readout = (RectTransform)compare;
+        readout.anchorMin = readout.anchorMax = new Vector2(0.5f, 0f);
+        readout.sizeDelta = CompareReadoutSize;
+        readout.anchoredPosition = new Vector2(0f, CompareReadoutBottom + CompareReadoutSize.y / 2f);
+        compareText.fontSizeMin = 32f;
         compareStrip = compare.gameObject;
         compareStrip.SetActive(false);
 

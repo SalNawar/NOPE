@@ -1,0 +1,76 @@
+{
+  "name": "compare_pair_1280",
+  "owner": "compare-hud",
+  "seed": 12345,
+  "steps": [
+    {
+      "op": "note",
+      "text": "compare-hud: the compare_pair flow at 1280x1024 from a fresh run: face held, then the pair made, both in inspect mode."
+    },
+    {
+      "op": "title"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "newRun",
+      "text": "Biscuit"
+    },
+    {
+      "op": "waitOffice",
+      "n": 1
+    },
+    {
+      "op": "startShift"
+    },
+    {
+      "op": "wait",
+      "f": 1.0
+    },
+    {
+      "op": "sign"
+    },
+    {
+      "op": "waitTraveller"
+    },
+    {
+      "op": "wait",
+      "f": 2.0
+    },
+    {
+      "op": "key",
+      "key": "Space"
+    },
+    {
+      "op": "wait",
+      "n": 10
+    },
+    {
+      "op": "call",
+      "target": "DeskInspect.TravellerClicked"
+    },
+    {
+      "op": "wait",
+      "n": 10
+    },
+    {
+      "op": "still",
+      "name": "d1_face_held_1280b"
+    },
+    {
+      "op": "click",
+      "target": "Slot_0"
+    },
+    {
+      "op": "wait",
+      "n": 20
+    },
+    {
+      "op": "still",
+      "name": "d1_pair_desk_line_1280b"
+    }
+  ]
+}

@@ -39,9 +39,7 @@ using UnityEngine.UI;
 /// which go as the player moves on (the next left-press that makes no new
 /// result, or a new value held) and with inspect mode (leaving it clears the
 /// line and lets go of a held value); outside inspect mode nothing is drawn
-/// over the office. While the line
-/// labels a pair, the office compare strip does not repeat it
-/// (CompareController.SetStripCovered; the desk-first polish). A logged
+/// over the office. The office compare readout (bottom centre) shows the pair too. A logged
 /// difference marks its papers' boxes (FindingMarks) for the rest of the
 /// case. Scanning stays optional: a scanned paper's copy, search and links
 /// reach the PC (CaseDocumentsPresenter). InvestigationUIController hands it
@@ -320,7 +318,6 @@ public sealed class DeskInspect : MonoBehaviour
         bool office = IsOn && (view == null || view.Current == OfficeView.OfficeFocus) && (city == null || !city.IsOn);
         string hold = office ? board.HoldKey : null;
         (string a, string b, FindingLook look, _) = board.Line;
-        string label = board.DeskLabel;
         if (!office)
             a = b = null;
 
@@ -333,22 +330,19 @@ public sealed class DeskInspect : MonoBehaviour
             _drawnA = _drawnB = null;
             if (!shown)
                 endA.gameObject.SetActive(false);
-            Cover(false);
             return;
         }
         _drawnHold = null;
         if (a != null && b != null)
         {
-            bool shownA = Place(endA, arrowA, a);
-            bool shownB = Place(endB, arrowB, b);
+            Place(endA, arrowA, a);
+            Place(endB, arrowB, b);
             if (a != _drawnA || b != _drawnB)
-                lines.ShowLink(endA, endB, look, label);
+                lines.ShowLink(endA, endB, look, string.Empty);
             _drawnA = a;
             _drawnB = b;
-            Cover(shownA && shownB);
             return;
         }
-        Cover(false);
         if (_drawnA != null || endA.gameObject.activeSelf || endB.gameObject.activeSelf)
         {
             lines.Clear();
@@ -367,13 +361,6 @@ public sealed class DeskInspect : MonoBehaviour
         if (pressed && IsOn && !board.IsHolding && board.LineVersion == _seenLine && board.Line.a != null)
             board.ClearLine();
         _seenLine = board.LineVersion;
-    }
-
-    /// <summary>Tells the office compare strip whether the line over the office labels the pair now.</summary>
-    private void Cover(bool covered)
-    {
-        if (compare != null)
-            compare.SetStripCovered(covered);
     }
 
     /// <summary>Puts <paramref name="end"/> over the value with <paramref name="key"/> on the screen (shown), with its <paramref name="arrow"/> pointing the way when the value is off the screen, or hides it when the value is not on the desk or not in view.</summary>

@@ -44,7 +44,7 @@ public static class OrderBook
     /// <summary>Orders <paramref name="upgrade"/> when it is an Orders node that can be ordered on a day orders are open (Orders.CanOrder; BUG-28d: an order on the last day would be charged and never arrive): the price leaves the wallet now and the order joins the log, arriving at the start of tomorrow's shift. True when placed.</summary>
     public static bool Order(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade)
     {
-        if (world == null || upgrade == null || upgrade.venue != UpgradeVenue.Orders || !Orders.CanOrder(world.day))
+        if (world == null || upgrade == null || upgrade.venue != UpgradeVenue.Orders || !Orders.CanOrder(world.day, lib != null ? lib.LastDay : 0))
             return false;
 
         int price = Price(world, lib, upgrade);

@@ -18,12 +18,10 @@ using UnityEngine;
 /// the bubble light through the ICompareHighlight they pass. On the PC the
 /// workbench (MatchBoard) draws the pair: the held value, the line between
 /// the two and the finding (the PC workbench spec §4); at the office the
-/// strip shows the pair as one short, quiet line (optional; the verdict and
-/// the two values), keeps it after the workbench lets the pair go (Release;
-/// until the next pick or Clear: Saleh's playtest 2026-11-07, item 14, "UI
-/// for comparing still missing"), and steps aside while the desk's line
-/// labels the pair itself (SetStripCovered; the desk-first polish,
-/// 2026-10-05).
+/// readout (bottom centre, also in inspect mode) shows the held value and then
+/// the pair (the verdict and the two values), and keeps it after the workbench
+/// lets the pair go (Release; until the next pick or Clear: Saleh's playtest
+/// 2026-11-07 and 2026-11-11, "no hud elemnt for compare").
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
@@ -51,9 +49,6 @@ public sealed class CompareController : MonoBehaviour
     /// <summary>Where each side lit up by its own object (a desk row, the bubble; null: nowhere, or a PC row lit by its key).</summary>
     private ICompareHighlight _highlightA;
     private ICompareHighlight _highlightB;
-
-    /// <summary>True while the desk's line over the office labels the pair (DeskInspect): the office strip then does not repeat it.</summary>
-    private bool _stripCovered;
 
     /// <summary>True while the strip shows a note that replaced the pair's line (a deviation logged, already documented): the desk's line does not hide it.</summary>
     private bool _stripNote;
@@ -131,15 +126,6 @@ public sealed class CompareController : MonoBehaviour
 
         if (step == CompareStep.Paired)
             PairCompared?.Invoke(_pair.A.Evidence, _pair.B.Evidence);
-    }
-
-    /// <summary>The desk's line over the office labels the pair (<paramref name="covered"/>) or no longer does (DeskInspect): the office strip steps aside while it does, unless it carries a note (a deviation logged).</summary>
-    public void SetStripCovered(bool covered)
-    {
-        if (covered == _stripCovered)
-            return;
-        _stripCovered = covered;
-        ShowStrip();
     }
 
     /// <summary>The present culture's compare colours (CultureThemeService at scene load; piece 6).</summary>
@@ -238,13 +224,12 @@ public sealed class CompareController : MonoBehaviour
         ShowStrip();
     }
 
-    /// <summary>The office strip shows while a value is picked, and keeps a finished pair's line, except a plain pair the desk's line labels now.</summary>
+    /// <summary>The office strip shows while a value is picked, and keeps a finished pair's line.</summary>
     private void ShowStrip()
     {
         if (officeBar == null)
             return;
-        bool pairShown = _pair.IsPaired || _stripKept;
-        bool on = (_pair.HasA || _stripKept) && (_stripNote || !(_stripCovered && pairShown));
+        bool on = _pair.HasA || _stripKept;
         if (officeBar.activeSelf != on)
             officeBar.SetActive(on);
     }
