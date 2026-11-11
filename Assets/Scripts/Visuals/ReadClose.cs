@@ -52,8 +52,8 @@ public sealed class PaperRealSizes
     /// <summary>How long the lift and the settle take (seconds; instant under Reduced Motion).</summary>
     public float seconds = 0.18f;
 
-    /// <summary>How much taller than the room above the bottom band a lifted paper may grow (a share of that room): the top of the sheet is cropped, so a tall form still reaches the type bars (tc520-read-bar).</summary>
-    public float topCrop = 0.4f;
+    /// <summary>How much taller than the room above the bottom band a lifted paper may grow (a share of that room): the top of the sheet is cropped, so a tall form still reaches the type bars (tc520-read-bar). 0.9 keeps the lower half in view: the open passport's data page (its smallest value is 0.0065 of its height and needs 0.73).</summary>
+    public float topCrop = 0.9f;
 
     /// <summary>The band at the screen's bottom (a share of its height) that a lifted paper never covers: the compare readout's place at the bottom centre.</summary>
     public float bottomMargin = 0.09f;

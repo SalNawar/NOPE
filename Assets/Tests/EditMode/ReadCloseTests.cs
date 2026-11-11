@@ -13,7 +13,7 @@ public class ReadCloseTests
     /// <summary>One paper kind for the lift: its frame, its art's aspect, and its smallest value's and label's cap height as shares of its height on the screen (0: not measured).</summary>
     private static readonly (string name, FormFrame frame, float aspect, float value, float label)[] Kinds =
     {
-        ("TC-101 passport (not measured: under every measured share)", FormFrame.Booklet, 0.65435f, 0.0125f, 0f),
+        ("TC-101 passport (measured lifted in the built player, 2026-11-11: 8.9 and 7.6 px on 1376 px)", FormFrame.Booklet, 0.65435f, 8.9f / 1376f, 7.6f / 1376f),
         ("TC-240 card", FormFrame.Card, 1.75055f, 6.0f / 317.0f, 2.8f / 317.0f),
         ("TC-230 ticket", FormFrame.Ticket, 1.2938f, 7.8f / 428.9f, 4.5f / 428.9f),
         ("TC-610 permit", FormFrame.Folded, 1.08368f, 5.7f / 400.4f, 0f),

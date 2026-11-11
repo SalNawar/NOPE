@@ -1,0 +1,33 @@
+{
+  "name": "read_passport_d1",
+  "owner": "DOC-LOOK",
+  "seed": 12345,
+  "steps": [
+    { "op": "note", "text": "passport-read-bar: day 1, case 1, the passport on the mat in the reading view, then lifted in inspect mode, at 1920x1080 and 1280x1024." },
+    { "op": "title" },
+    { "op": "camres", "w": 1920, "h": 1080 },
+    { "op": "newRun", "text": "Biscuit" },
+    { "op": "waitOffice", "n": 1 },
+    { "op": "startShift" },
+    { "op": "cheat", "name": "Tutorial", "n": 0 },
+    { "op": "sign" },
+    { "op": "waitTraveller", "f": 90 },
+    { "op": "wait", "f": 2 },
+    { "op": "counterDrag", "name": "d1_passport", "text": "office" },
+    { "op": "stampView", "n": 1 },
+    { "op": "wait", "f": 1 },
+    { "op": "still", "name": "d1_rest_reading" },
+    { "op": "key", "key": "Space" },
+    { "op": "wait", "f": 0.5 },
+    { "op": "readLift", "name": "d1_reading" },
+    { "op": "key", "key": "Space" },
+    { "op": "wait", "f": 0.5 },
+    { "op": "camres", "w": 1280, "h": 1024 },
+    { "op": "wait", "f": 1 },
+    { "op": "key", "key": "Space" },
+    { "op": "wait", "f": 0.5 },
+    { "op": "readLift", "name": "d1_reading_1280" },
+    { "op": "key", "key": "Space" },
+    { "op": "camres", "w": 1920, "h": 1080 }
+  ]
+}
