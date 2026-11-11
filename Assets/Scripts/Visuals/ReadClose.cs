@@ -52,6 +52,9 @@ public sealed class PaperRealSizes
     /// <summary>How long the lift and the settle take (seconds; instant under Reduced Motion).</summary>
     public float seconds = 0.18f;
 
+    /// <summary>How much taller than the room above the bottom band a lifted paper may grow (a share of that room): the top of the sheet is cropped, so a tall form still reaches the type bars (tc520-read-bar).</summary>
+    public float topCrop = 0.4f;
+
     /// <summary>The band at the screen's bottom (a share of its height) that a lifted paper never covers: the compare readout's place at the bottom centre.</summary>
     public float bottomMargin = 0.09f;
 
@@ -88,17 +91,17 @@ public static class ReadClose
     /// more than lets the paper (<paramref name="widthPx"/> by
     /// <paramref name="heightPx"/> at rest) fit a screen
     /// <paramref name="screenW"/> by <paramref name="screenH"/> above its
-    /// bottom band <paramref name="bottomPx"/>; never under 1. A text of 0
+    /// bottom band <paramref name="bottomPx"/> (its height may pass that room by the share <paramref name="topCrop"/>; Clamp then crops its top); never under 1. A text of 0
     /// asks nothing.
     /// </summary>
-    public static float Magnify(float valueCapPx, float labelCapPx, float valueBar, float labelBar, float widthPx, float heightPx, float screenW, float screenH, float bottomPx)
+    public static float Magnify(float valueCapPx, float labelCapPx, float valueBar, float labelBar, float widthPx, float heightPx, float screenW, float screenH, float bottomPx, float topCrop = 0f)
     {
         float need = 1f;
         if (valueCapPx > 0f)
             need = Math.Max(need, valueBar / valueCapPx);
         if (labelCapPx > 0f)
             need = Math.Max(need, labelBar / labelCapPx);
-        float fit = widthPx > 0f && heightPx > 0f ? Math.Min(screenW / widthPx, (screenH - bottomPx) / heightPx) : 1f;
+        float fit = widthPx > 0f && heightPx > 0f ? Math.Min(screenW / widthPx, (screenH - bottomPx) * (1f + topCrop) / heightPx) : 1f;
         return Math.Max(1f, Math.Min(need, fit));
     }
 
@@ -113,7 +116,8 @@ public static class ReadClose
     public static (float x, float y) Clamp(float x, float y, float halfW, float halfH, float screenW, float screenH, float bottomPx)
     {
         x = 2f * halfW >= screenW ? screenW / 2f : Math.Min(Math.Max(x, halfW), screenW - halfW);
-        y = 2f * halfH >= screenH - bottomPx ? (screenH + bottomPx) / 2f : Math.Min(Math.Max(y, bottomPx + halfH), screenH - halfH);
+        // a paper taller than the room sits on the bottom band and loses its top
+        y = 2f * halfH >= screenH - bottomPx ? bottomPx + halfH : Math.Min(Math.Max(y, bottomPx + halfH), screenH - halfH);
         return (x, y);
     }
 }

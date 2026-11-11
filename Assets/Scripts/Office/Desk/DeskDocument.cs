@@ -1021,7 +1021,7 @@ public sealed partial class DeskDocument : MonoBehaviour, IPointerClickHandler, 
         (float valueShare, float labelShare) = LeastCapShares(worldH);
         PaperRealSizes knobs = _config.readClose;
         float bottom = knobs.bottomMargin * Screen.height;
-        magnify = ReadClose.Magnify(valueShare * h, labelShare * h, knobs.valueCapPx, knobs.labelCapPx, w, h, Screen.width, Screen.height, bottom);
+        magnify = ReadClose.Magnify(valueShare * h, labelShare * h, knobs.valueCapPx, knobs.labelCapPx, w, h, Screen.width, Screen.height, bottom, knobs.topCrop);
         (float x, float y) = ReadClose.Clamp(centre.x, centre.y, w * magnify / 2f, h * magnify / 2f, Screen.width, Screen.height, bottom);
         ratio = OnTopRatio(eye);
         Vector3 direction = eye.ScreenPointToRay(new Vector3(x, y, 0f)).direction;

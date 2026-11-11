@@ -243,6 +243,7 @@ public static class DocLookOps
             (float value, float label) = LeastCaps(paper, camera);
             float bottomPx = ((DeskConfigSO)QaGame.Field(paper, "_config")).readClose.bottomMargin * Screen.height;
             bool fills = top.width >= Screen.width * 0.97f || top.height >= (Screen.height - bottomPx) * 0.97f;
+            bool cropped = top.height > Screen.height - bottomPx + 1f; // the lift crops a tall paper's top (readClose.topCrop)
             float upStep = MostStep(rest, up);
             int frames = up.FindIndex(r => Travel(r, top) <= 0.02f * Mathf.Max(1f, Travel(rest, top))) + 1;
             runner.Recorder.Still(System.IO.Path.Combine(runner.OutDir, "stills", $"{QaRunner.Safe(id + "_" + papers.IndexOf(paper) + "_" + QaGame.Field(paper, "_frame"))}_{Screen.width}x{Screen.height}.png"));
@@ -269,7 +270,7 @@ public static class DocLookOps
                 wrong.Add($"{paper.name} value {value:0.0} px < {valueBar}");
             if (!fills && label + 1e-3f < labelBar)
                 wrong.Add($"{paper.name} label {label:0.0} px < {labelBar}");
-            if (top.xMin < -1f || top.xMax > Screen.width + 1f || top.yMax > Screen.height + 1f)
+            if (top.xMin < -1f || top.xMax > Screen.width + 1f || (top.yMax > Screen.height + 1f && !cropped))
                 wrong.Add($"{paper.name} leaves the screen");
             if (top.yMin < bottomPx - 1f)
                 wrong.Add($"{paper.name} bottom {top.yMin:0} px under the band {bottomPx:0} px");
