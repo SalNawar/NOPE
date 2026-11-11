@@ -210,7 +210,10 @@ public static class DocLookOps
         int lifted = 0;
         var starts = new Dictionary<DeskDocument, Rect>();
         foreach (DeskDocument p in papers)
+        {
             starts[p] = SheetRect(p, camera);
+            detail.Add($"{p.name}: start state {PaperState(p)}");
+        }
         foreach (DeskDocument paper in papers)
         {
             yield return runner.Input.MoveTo(away, 1);
@@ -221,6 +224,7 @@ public static class DocLookOps
                 continue;
             }
             Rect rest = SheetRect(paper, camera);
+            string stateBefore = PaperState(paper);
             yield return runner.Input.MoveTo(on, 1);
             var up = new List<Rect>();
             int most = 0;
@@ -273,6 +277,7 @@ public static class DocLookOps
                 var trail = new List<string>();
                 for (int k = 0; k < down.Count; k += 4)
                     trail.Add($"{down[k].center.x:0},{down[k].center.y:0},{down[k].width:0}x{down[k].height:0}");
+                detail.Add($"{paper.name}: state before the lift {stateBefore}; after the settle {PaperState(paper)}");
                 detail.Add($"{paper.name}: op start {starts[paper].center.x:0},{starts[paper].center.y:0} {starts[paper].width:0}x{starts[paper].height:0}; settle trail {string.Join(" ", trail)}");
             }
             if (value + 1e-3f < valueBar)
@@ -296,6 +301,12 @@ public static class DocLookOps
                       string.Format(CultureInfo.InvariantCulture, "{0}x{1}{2}: {3} of {4} papers lifted, {5} wrong", Screen.width, Screen.height, MotionPreference.Reduced ? " reduced" : string.Empty, lifted, papers.Count, wrong.Count),
                       string.Join("; ", detail) + (wrong.Count > 0 ? " | WRONG: " + string.Join("; ", wrong) : string.Empty));
     }
+
+    /// <summary>The paper's private feel state, for the readLift log: size now and target, lowering, dirty, shown ratio, settling, sheet place and scale, root place.</summary>
+    private static string PaperState(DeskDocument p) => string.Format(CultureInfo.InvariantCulture,
+        "size {0:0.0000}/{1:0.0000} lowering {2} dirty {3} ratio {4:0.000} settling {5} sheet {6} scale {7} root {8}",
+        QaGame.Field(p, "_sizeNow"), QaGame.Field(p, "_sizeTarget"), QaGame.Field(p, "_lowering"), QaGame.Field(p, "_feelDirty"), QaGame.Field(p, "_shownRatio"), QaGame.Field(p, "_settling"),
+        p.Sheet.localPosition.ToString("0.0000"), p.Sheet.localScale.ToString("0.0000"), p.transform.position.ToString("0.0000"));
 
     /// <summary>Waits until <paramref name="paper"/>'s lift clock is 0 (at most 2 s).</summary>
     private static IEnumerator Settle(DeskDocument paper)
