@@ -1009,6 +1009,12 @@ public static class StampRig
                         Vector3 pl = Vector3.zero; ((DeskSurface)sfc).TryProject(cam, path.End, out pl);
                         Vector3 lp = sf.InverseTransformPoint(pl);
                         Report(runner, $"== TEMP release {Screen.width}x{Screen.height}: area size {sz} surfacePos {V(sf.position)} expected local {V(le)} die local {V(ld)} planeProjection local {V(lp)} cam {V(cam.transform.position)} fov {cam.fieldOfView} aspect {cam.aspect} pointer {path.End}");
+                        Camera dc = drag.DragCamera;
+                        Vector2 dp = (Vector2)QaGame.Field(drag, "_pointer");
+                        var am = typeof(DeskStampTray).GetMethod("Aim", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                        Vector3? ah = dc != null ? (Vector3?)am.Invoke(tray, new object[] { dc.ScreenPointToRay(dp) }) : null;
+                        Vector3? ah2 = (Vector3?)am.Invoke(tray, new object[] { cam.ScreenPointToRay(path.End) });
+                        Report(runner, $"== TEMP game aim: dragCam {(dc != null ? dc.name : "null")} is main {dc == cam} pos {(dc != null ? V(dc.transform.position) : "-")} _pointer {dp} aimDragCam {(ah.HasValue ? V(ah.Value) : "NULL")} aimMainCam {(ah2.HasValue ? V(ah2.Value) : "NULL")} camPixelRect {cam.pixelRect} screen {Screen.width}x{Screen.height}");
                         runner.Recorder.Still(Path.Combine(runner.OutDir, "stills", $"release_{name}_{Screen.width}x{Screen.height}.png"));
                     }
                     dieAtRelease = $"{V(die.position)} ({Mm(Vector3.ProjectOnPlane(die.position - expected, Up(tray)).magnitude)} beside the expected point)";
