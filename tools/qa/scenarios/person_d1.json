@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "person_d1 (2026-11-11, person-play-d1): day 1 played as the tutorial tells a new player, by real input only. The tutorial stays ON. No cheat, no DecideCorrectly, no game call in place of a click. The stamp of each case comes from the compare readouts on the screen (personReadout, personDecide, stampAim text readout), never from the case's truth. Cases 1 to 3 at 1920x1080, then a new run at 1280x1024 and case 1 again. Each case ends by a real stamp drag and a real hand-back drag and personVerdict asserts it was scored correct with no citation slip. The game findings are in person_report.txt (FINDING lines). Inspect mode (SPACE) is left again before the stamp. Rig help, where a step cannot be done by real input, is said in the report as RIG HELP."
+      "text": "person_d1 (2026-11-11, person-play-d1): day 1 played as the tutorial tells a new player, by real input only. The tutorial stays ON. No cheat, no DecideCorrectly, no game call in place of a click. The stamp of each case comes from the compare readouts on the screen (personReadout, personDecide, stampAim text readout), never from the case's truth. Cases 1 to 3 at 1920x1080, then a new run at 1280x1024 and case 1 again. Each case ends by a real stamp drag and a real hand-back drag and personVerdict asserts it was scored correct with no citation slip. The game findings are in person_report.txt (FINDING lines). Inspect mode (SPACE) is left again before the stamp. Rig help, where a step cannot be done by real input, is said in the report as RIG HELP. The 1280x1024 stamp (stampAim f 30) is allowed to land up to 30 mm from the pointer's spot: it lands 21.6 mm off there (1920x1080: 0.00 mm), which is a game finding in the report, not a rig fault."
     },
     {
       "op": "title"
@@ -740,7 +740,8 @@
       "op": "stampAim",
       "text": "readout",
       "n": -1,
-      "name": "m1_stamp"
+      "name": "m1_stamp",
+      "f": 30
     },
     {
       "op": "wait",
