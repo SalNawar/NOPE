@@ -16,16 +16,13 @@ using System.Linq;
 public sealed class CaseBoardPresenter
 {
     private readonly IReadOnlyList<CaseBoardView> _views;
-    private readonly IReadOnlyList<RecordsView> _records;
     private CaseInstance _case;
-    private string _lookedUp;
     private string _noRecord;
 
     /// <summary>A presenter over the panes' boards and Records views (null entries skipped).</summary>
     public CaseBoardPresenter(IReadOnlyList<CaseBoardView> views, IReadOnlyList<RecordsView> records)
     {
         _views = views ?? Array.Empty<CaseBoardView>();
-        _records = records ?? Array.Empty<RecordsView>();
     }
 
     /// <summary>Raised once per case and number when the scanned papers name no record on file: the query looked up (the façade logs FindingKind.NoRecord).</summary>
@@ -38,7 +35,6 @@ public sealed class CaseBoardPresenter
     public void BeginCase(CaseInstance inst)
     {
         _case = inst;
-        _lookedUp = null;
         _noRecord = null;
         foreach (CaseBoardView view in _views)
             if (view != null)
@@ -68,13 +64,7 @@ public sealed class CaseBoardPresenter
                     (documents[i].fields ?? Array.Empty<DocumentField>()).Select(f => f != null && (shows == null || shows(i, f.category)) ? f : null).ToList()));
 
         (model.Record, model.By, model.Query) = RecordLookup.Find(registry != null ? registry.Records : null, model.Scanned);
-        if (model.Record != null && model.Query != _lookedUp)
-        {
-            _lookedUp = model.Query;
-            foreach (RecordsView records in _records)
-                if (records != null)
-                    records.Reveal(model.Query, null);
-        }
+        // the Lens screen (2026-11-12): the clerk types the number in the Registry; the PC does not look the record up by itself
         if (model.By == LookupBy.NoRecord && model.Query != _noRecord)
         {
             _noRecord = model.Query;

@@ -187,7 +187,7 @@ public static class LensOps
 
     private static IEnumerator Registry(QaRunner runner, QaStep s)
     {
-        RecordsView view = QaGame.Find<RecordsView>() ?? throw new InvalidOperationException("No Registry view is loaded.");
+        RecordsView view = UnityEngine.Object.FindObjectsByType<RecordsView>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).FirstOrDefault() ?? throw new InvalidOperationException("No Registry is open on a side."); // each side has its own view: the open one
         ((TMP_InputField)QaGame.Field(view, "searchInput")).text = s.text;
         view.Search();
         yield return QaGame.Frames(15);

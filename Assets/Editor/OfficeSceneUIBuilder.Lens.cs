@@ -50,7 +50,7 @@ public static partial class OfficeSceneUIBuilder
                       LensEmptyText = 30, LensKeyText = 24;
 
     /// <summary>A dock item's size: the least width, the wish, the height; its icon (a page with a band on top).</summary>
-    private static readonly Vector2 LensItemSize = new Vector2(190f, 56f);
+    private static readonly Vector2 LensItemSize = new Vector2(190f, 64f);
     private const float LensItemMinWidth = 70f, LensBand = 8f;
     private static readonly Vector2 LensIconSize = new Vector2(26f, 34f);
 
@@ -256,7 +256,7 @@ public static partial class OfficeSceneUIBuilder
         Button item = MakeButton(row, "ItemTemplate", null, Vector2.zero, Vector2.one, WbSurface, ThemeRoleId.Button);
         DestroyChildIfPresent(item.transform, "Label");
         HorizontalLayoutGroup content = GetOrAdd<HorizontalLayoutGroup>(item.gameObject);
-        content.padding = new RectOffset(10, 10, 0, 0);
+        content.padding = new RectOffset(6, 6, 0, 0);
         content.spacing = 8f;
         content.childAlignment = TextAnchor.MiddleLeft;
         content.childControlWidth = true;
@@ -269,22 +269,23 @@ public static partial class OfficeSceneUIBuilder
         size.minHeight = size.preferredHeight = LensItemSize.y;
         size.flexibleWidth = 0f;
         GetOrAdd<CanvasGroup>(item.gameObject);
-        BuildDockIcon(item.transform, true);
+        // twelve items share the row (about 105 wide each): the icon is a band along the top edge and the name takes two lines
+        Transform icon = BuildDockIcon(item.transform, true);
+        icon.GetComponent<LayoutElement>().ignoreLayout = true;
+        PlaceRect(icon, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -LensBand), Vector2.zero);
         UnreadDot(item.transform);
-        TMP_Text label = WbText(item.transform, "Label", null, "Passport", LensDockText, ThemeRoleId.Button, TextAlignmentOptions.MidlineLeft);
+        TMP_Text label = WbText(item.transform, "Label", null, "Passport", LensDockText, ThemeRoleId.Button, TextAlignmentOptions.Center, wrap: true);
         label.enableAutoSizing = true;
         label.fontSizeMax = LensDockText;
         label.fontSizeMin = LensDockTextMin;
-        label.textWrappingMode = TextWrappingModes.NoWrap;
+        label.margin = new Vector4(0f, LensBand, 0f, 0f);
         label.overflowMode = TextOverflowModes.Ellipsis;
         LayoutElement labelRoom = GetOrAdd<LayoutElement>(label.gameObject);
         labelRoom.minWidth = 0f;
         labelRoom.flexibleWidth = 1f;
-        Transform side = Panel(item.transform, "Side", Center, Center, Vector2.zero, new Vector2(28f, 26f), WbAction, ThemeRoleId.PrimaryAction);
+        Transform side = Panel(item.transform, "Side", Vector2.one, Vector2.one, new Vector2(-11f, -10f), new Vector2(22f, 20f), WbAction, ThemeRoleId.PrimaryAction); // a badge on the top right corner, over the band
         side.GetComponent<Image>().raycastTarget = false;
-        LayoutElement sideSize = GetOrAdd<LayoutElement>(side.gameObject);
-        sideSize.minWidth = sideSize.preferredWidth = 28f;
-        sideSize.minHeight = sideSize.preferredHeight = 26f;
+        GetOrAdd<LayoutElement>(side.gameObject).ignoreLayout = true;
         TMP_Text sideText = WbText(side, "Text", null, "L", LensLineText, ThemeRoleId.PrimaryAction, TextAlignmentOptions.Center, FontStyles.Bold);
         sideText.overflowMode = TextOverflowModes.Overflow;
         side.gameObject.SetActive(false);
@@ -321,9 +322,9 @@ public static partial class OfficeSceneUIBuilder
         return dock;
     }
 
-    /// <summary>The notice's place: centred under the header, over the sides (BuildAppToast fills it).</summary>
+    /// <summary>The notice's place: centred above the answer plate's place, low on the sides; it does not cover the tag strips or the plate (BuildAppToast fills it).</summary>
     private static Transform BuildToastHost(Transform body) =>
-        Panel(body, "ToastHost", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -(LensHeaderHeight + 8f + LensToastSize.y / 2f)), LensToastSize, null);
+        Panel(body, "ToastHost", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, LensDockBottom + LensDockHeight + 8f + LensPlateSize.y + 8f + LensToastSize.y / 2f), LensToastSize, null);
 
     /// <summary>The findings list: the findings view (OfficeSceneUIBuilder.Workbench) as a panel dropping down under the chip, at the right, closed until the chip is clicked.</summary>
     private static FindingsView BuildFindingsPanel(Transform body, out RectTransform panel)
