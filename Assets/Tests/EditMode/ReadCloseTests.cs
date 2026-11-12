@@ -37,7 +37,7 @@ public class ReadCloseTests
             (FormFrame.BottomBand, 0.7728f, 148f),
             (FormFrame.SideBand, 0.74991f, 148f),
         };
-        // the folder keeps its built size, about 240 x 320 mm at realScale (not a knob)
+        // the folder grows with the papers (D66: the builder's RulebookGrowth 1.8, realScale 0.92 x 1.8): about 240 x 320 mm at realScale
         float folderW = 0.240f * table.realScale, folderH = 0.320f * table.realScale;
         foreach ((FormFrame frame, float aspect, float realWidth) in papers)
         {
