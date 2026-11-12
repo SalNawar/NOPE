@@ -764,8 +764,8 @@
    "op": "still",
    "name": "qp_win_back"
   },
-  {"op": "note", "text": "pc-lens: the first taskbar button is the Lens screen's (Home keeps it open behind the desktop), and the Lens screen covers the taskbar: Home again before the next Start click."},
-  {"op": "click", "target": "HomeButton"},
+  {"op": "note", "text": "pc-lens: the taskbar button clicked above can be the Lens screen's (Home keeps it open behind the desktop), and the Lens screen covers the taskbar: Home again (a call: it does nothing when the screen is not up) before the next Start click."},
+  {"op": "call", "target": "InvestigationApp.Home"},
   {"op": "wait", "f": 0.6},
   {
    "op": "recStart",
