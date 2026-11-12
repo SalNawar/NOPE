@@ -130,7 +130,7 @@
     },
     {
       "op": "note",
-      "text": "(b) The mat's left part, near the red book and the left stack."
+      "text": "(b) The mat's left part, near the red book and the left stack. D66 (the folder grew 1.8 times): let go at 0.30 across, not 0.26; at 0.26 the larger folder's left edge passed the desk's area and the clamp moved it 50 px (paper-scale-18, run 1)."
     },
     {
       "op": "drop",
@@ -138,7 +138,7 @@
       "name": "b_mat_left",
       "path": "Plain",
       "target": "Rulebook",
-      "x2": 0.26,
+      "x2": 0.3,
       "y2": 0.31
     },
     {
@@ -232,7 +232,7 @@
     },
     {
       "op": "note",
-      "text": "(r) Round 2, the verifier's F1 (a15): the folder let go half over the scanner's empty tray on the machine rail. The rail's trays, their track cuts, the lamps' bezels and the bolts stand there from day 1; kept clear of the tray's home alone it rested under the tray's rim. It takes the least move clear of the whole rail (about 160 px, eased, drawn above every prop on the way: F4; round 3: the folder is let go where the pointer is, no longer a drag threshold short of it, so it lies 2 cm further over the rail): f 170; drop.r_half_scanner_tray.covered asserts nothing hides it."
+      "text": "(r) Round 2, the verifier's F1 (a15): the folder let go half over the scanner's empty tray on the machine rail. The rail's trays, their track cuts, the lamps' bezels and the bolts stand there from day 1; kept clear of the tray's home alone it rested under the tray's rim. It takes the least move clear of the whole rail (about 160 px, eased, drawn above every prop on the way: F4; round 3: the folder is let go where the pointer is, no longer a drag threshold short of it, so it lies 2 cm further over the rail): f 170; drop.r_half_scanner_tray.covered asserts nothing hides it. D66 (the folder grew 1.8 times, so its far part lies further over the rail): f 240 (paper-scale-18 run 1: 226 px)."
     },
     {
       "op": "drop",
@@ -242,12 +242,12 @@
       "target": "Rulebook",
       "x2": 0.8225,
       "y2": 0.4383,
-      "f": 170
+      "f": 240
     },
     {
       "op": "restTrace",
       "name": "r_half_scanner_tray",
-      "f": 170
+      "f": 240
     },
     {
       "op": "still",
@@ -472,7 +472,7 @@
     },
     {
       "op": "note",
-      "text": "(h) Day 12: the folder let go over the scanner's track, its right edge near the scanner's casing (round 1 rested it there, partly under the tray's rim). It takes the least move clear of the rail (about 63 px; round 2 read 43 px, when the folder was let go a drag threshold short of the pointer, 2.6 cm less far over the rail; restTrace measures the rule's move on the desk, as the reading camera leans toward the scanner when the cursor nears it: CAM's SlideInFocus): f 80; covered asserts nothing hides it. The cursor then waits just above the scanner, and slideClear asserts the scanner never lies over the folder."
+      "text": "(h) Day 12: the folder let go over the scanner's track, its right edge near the scanner's casing (round 1 rested it there, partly under the tray's rim). It takes the least move clear of the rail (about 63 px; round 2 read 43 px, when the folder was let go a drag threshold short of the pointer, 2.6 cm less far over the rail; restTrace measures the rule's move on the desk, as the reading camera leans toward the scanner when the cursor nears it: CAM's SlideInFocus): f 80; covered asserts nothing hides it. The cursor then waits just above the scanner, and slideClear asserts the scanner never lies over the folder. D66 (the folder grew 1.8 times): f 140 (paper-scale-18 run 1: 129 px)."
     },
     {
       "op": "track",
@@ -498,7 +498,7 @@
     {
       "op": "restTrace",
       "name": "h_d12_scanner_strip",
-      "f": 80
+      "f": 140
     },
     {
       "op": "covered",
@@ -536,7 +536,7 @@
     },
     {
       "op": "note",
-      "text": "(i) Day 12: the folder let go over the chip reader's track (round 1: in its slide strip, 2.5 cm from the reader). It takes the least move clear of the rail (about 63 px): f 80; covered asserts nothing hides it. The cursor near the reader slides it out, and slideClear asserts it never lies over the folder. (The intercom's strip, left of the mat, lies inside the tool pods' keep-out.)"
+      "text": "(i) Day 12: the folder let go over the chip reader's track (round 1: in its slide strip, 2.5 cm from the reader). It takes the least move clear of the rail (about 63 px): f 80; covered asserts nothing hides it. The cursor near the reader slides it out, and slideClear asserts it never lies over the folder. (The intercom's strip, left of the mat, lies inside the tool pods' keep-out.) D66 (the folder grew 1.8 times): f 150 (paper-scale-18 run 1: 138 px)."
     },
     {
       "op": "drag",
@@ -553,7 +553,7 @@
     {
       "op": "restTrace",
       "name": "i_d12_reader_strip",
-      "f": 80
+      "f": 150
     },
     {
       "op": "covered",
