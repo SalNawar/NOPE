@@ -403,6 +403,7 @@ public static partial class OfficeSceneUIBuilder
         WireHelixRivers(scene, gameManager);
         OrderDesktopLayers(root);
         ApplyKit(canvas, officeCanvas);
+        LensDockLabelWraps(canvas.transform);
         SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer); // what the kit pass added to the desktop is on its layer too
         CheckThemeTags(canvas, officeCanvas);
         CheckLabelKeysAndRoles(library, canvas, officeCanvas);

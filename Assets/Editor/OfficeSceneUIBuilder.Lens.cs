@@ -322,6 +322,22 @@ public static partial class OfficeSceneUIBuilder
         return dock;
     }
 
+    /// <summary>After the kit pass (it puts a button's label on one line at the plate's size): a dock item's name takes two lines and shrinks down to <see cref="LensDockTextMin"/>.</summary>
+    private static void LensDockLabelWraps(Transform root)
+    {
+        foreach (LensDock dock in root.GetComponentsInChildren<LensDock>(true))
+        {
+            TMP_Text label = dock.transform.Find("Row/ItemTemplate/Label").GetComponent<TMP_Text>();
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.alignment = TextAlignmentOptions.Center;
+            label.overflowMode = TextOverflowModes.Ellipsis;
+            label.margin = new Vector4(0f, LensBand, 0f, 0f);
+            label.enableAutoSizing = true;
+            label.fontSizeMax = Mathf.Min(label.fontSizeMax, 22f);
+            label.fontSizeMin = LensDockTextMin;
+        }
+    }
+
     /// <summary>The notice's place: centred above the answer plate's place, low on the sides; it does not cover the tag strips or the plate (BuildAppToast fills it).</summary>
     private static Transform BuildToastHost(Transform body) =>
         Panel(body, "ToastHost", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, LensDockBottom + LensDockHeight + 8f + LensPlateSize.y + 8f + LensToastSize.y / 2f), LensToastSize, null);
