@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-/// <summary>What a desktop shortcut does (the PC redesign KB1, section 3.4). Not serialized. FocusSearch, Step1 to Step4, NextStep, PrevStep, ToggleSplit, IntoResults, Pin, Follow and FollowOther have no key since the Lens screen.</summary>
+/// <summary>What a desktop shortcut does (the PC redesign KB1, section 3.4). Not serialized. FocusSearch, Step1 to Step4, NextStep, PrevStep, ToggleSplit, IntoResults, Pin, Back, Forward, Follow and FollowOther have no key since the Lens screen.</summary>
 public enum AppCommand
 {
     /// <summary>Ctrl+K, Ctrl+F: opens or restores the Investigation app and opens its search drawer, the field focused.</summary>
@@ -23,9 +23,9 @@ public enum AppCommand
     ToggleSplit,
     /// <summary>Ctrl+B: the findings column on or off.</summary>
     ToggleFindings,
-    /// <summary>Alt+←: back in the active pane.</summary>
+    /// <summary>Retired with the Lens screen (no key): back in the active pane.</summary>
     Back,
-    /// <summary>Alt+→: forward in the active pane.</summary>
+    /// <summary>Retired with the Lens screen (no key): forward in the active pane.</summary>
     Forward,
     /// <summary>Tab: the next region.</summary>
     NextRegion,
@@ -304,7 +304,6 @@ public static class ShortcutMap
         new ShortcutCardRow("Enter", "keys.ordersAct", AppCommand.NodeAct),
         new ShortcutCardRow("F6, Shift+F6", "keys.otherPane", AppCommand.OtherPane),
         new ShortcutCardRow("Ctrl+B", "keys.findings", AppCommand.ToggleFindings),
-        new ShortcutCardRow("Alt+←, Alt+→", "keys.history", AppCommand.Back, AppCommand.Forward),
         new ShortcutCardRow("Tab, Shift+Tab", "keys.regions", AppCommand.NextRegion, AppCommand.PrevRegion),
         new ShortcutCardRow("↑ ↓ Home End PgUp PgDn", "keys.rows", AppCommand.RowUp, AppCommand.RowDown, AppCommand.RowFirst, AppCommand.RowLast,
                             AppCommand.PageUp, AppCommand.PageDown),
@@ -368,10 +367,6 @@ public static class ShortcutMap
             return true;
         if (k.Key == ShortcutKey.F6 && !k.Ctrl && !k.Alt)
             return Is(AppCommand.OtherPane, out command);
-        if (k.Alt && !k.Ctrl && !k.Shift && k.Key == ShortcutKey.Left)
-            return Is(AppCommand.Back, out command);
-        if (k.Alt && !k.Ctrl && !k.Shift && k.Key == ShortcutKey.Right)
-            return Is(AppCommand.Forward, out command);
         if (k.Key == ShortcutKey.Tab && !k.Ctrl && !k.Alt)
             return Is(k.Shift ? AppCommand.PrevRegion : AppCommand.NextRegion, out command);
         if (c.ListFocused)

@@ -28,6 +28,13 @@ public sealed class LensDocDrag : MonoBehaviour, IBeginDragHandler, IDragHandler
             _scroll.enabled = false;
     }
 
+    private void OnDisable()
+    {
+        _mine = false;
+        if (_scroll != null)
+            _scroll.enabled = true;
+    }
+
     /// <inheritdoc />
     public void OnDrag(PointerEventData e)
     {

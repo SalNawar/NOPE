@@ -318,8 +318,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soOffice, "dayText", dayText);
         CrtClock crtClock = Object.FindFirstObjectByType<CrtClock>(FindObjectsInactive.Include);
         SetRef(soOffice, "crtDateText", crtClock != null ? crtClock.transform.Find("Date").GetComponent<TMP_Text>() : null);
-        SetRef(soOffice, "dateButton", dateButton);
-        SetRef(soOffice, "app", app.App);
         SetRef(soOffice, "resultText", verdictText);
         SetRef(soOffice, "resultBackdrop", verdictStrip.gameObject);
         SetRef(soOffice, "resultRibbon", verdictRibbon);
@@ -1095,7 +1093,7 @@ public static partial class OfficeSceneUIBuilder
             { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },
             { DesktopAppIds.Orders, BuildOrdersWindow(windowLayer, config) },
             { DesktopAppIds.Notes, BuildNotesWindow(windowLayer, config) },
-            { DesktopAppIds.Settings, BuildSettingsWindow(windowLayer) },
+            { DesktopAppIds.Settings, BuildSettingsWindow(root.Find("LensLayer")) }, // on the Lens layer, so it opens in front of the Investigation window
         };
         DesktopIcons icons = BuildDesktopIcons(canvas, windows, feed, out DesktopContextMenu contextMenu);
         WireIconSettings(windows[DesktopAppIds.Settings], icons);

@@ -27297,13 +27297,13 @@
       },
       {
         "key": "finding.note.OtherPlace",
-        "text": "That book row is about another place than the one claimed. Nothing logged.",
+        "text": "These two things do not relate.",
         "gloss": "None",
         "tier": "Flavour"
       },
       {
         "key": "finding.note.OtherPerson",
-        "text": "That record belongs to someone else. Nothing logged.",
+        "text": "These two things do not relate.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -27321,7 +27321,7 @@
       },
       {
         "key": "finding.note.RuleByComparison",
-        "text": "Check this rule by comparing: hold the value against the books or the record.",
+        "text": "These two things do not relate.",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -33515,11 +33515,11 @@
           },
           {
             "key": "finding.note.OtherPlace",
-            "text": "سطر الكتاب هذا عن مكان غير المكان المدعى. لم يسجل شيء."
+            "text": "هذان الشيئان لا علاقة بينهما."
           },
           {
             "key": "finding.note.OtherPerson",
-            "text": "هذا السجل يخص شخصا آخر. لم يسجل شيء."
+            "text": "هذان الشيئان لا علاقة بينهما."
           },
           {
             "key": "finding.note.TwoTruths",
@@ -33531,7 +33531,7 @@
           },
           {
             "key": "finding.note.RuleByComparison",
-            "text": "تحقق من هذه القاعدة بالمقارنة: قارن القيمة بالكتب أو بالسجل."
+            "text": "هذان الشيئان لا علاقة بينهما."
           },
           {
             "key": "finding.note.RuleNotForTraveller",
@@ -37127,6 +37127,14 @@
           }
         ],
         "words": [
+          {
+            "native": "الشيئان",
+            "english": "things"
+          },
+          {
+            "native": "بينهما",
+            "english": "between them"
+          },
           {
             "native": "مسافة",
             "english": "space"
@@ -42439,11 +42447,11 @@
           },
           {
             "key": "finding.note.OtherPlace",
-            "text": "Αυτή η γραμμή του βιβλίου αφορά άλλον τόπο από τον δηλωμένο. Δεν καταγράφηκε τίποτα."
+            "text": "Αυτά τα δύο πράγματα δεν σχετίζονται."
           },
           {
             "key": "finding.note.OtherPerson",
-            "text": "Αυτή η εγγραφή ανήκει σε κάποιον άλλο. Δεν καταγράφηκε τίποτα."
+            "text": "Αυτά τα δύο πράγματα δεν σχετίζονται."
           },
           {
             "key": "finding.note.TwoTruths",
@@ -42455,7 +42463,7 @@
           },
           {
             "key": "finding.note.RuleByComparison",
-            "text": "Έλεγξε αυτόν τον κανόνα με σύγκριση: σύγκρινε την τιμή με τα βιβλία ή την εγγραφή."
+            "text": "Αυτά τα δύο πράγματα δεν σχετίζονται."
           },
           {
             "key": "finding.note.RuleNotForTraveller",
@@ -46051,6 +46059,10 @@
           }
         ],
         "words": [
+          {
+            "native": "σχετίζονται",
+            "english": "are related"
+          },
           {
             "native": "πλευράς",
             "english": "side"
@@ -50755,11 +50767,11 @@
           },
           {
             "key": "finding.note.OtherPlace",
-            "text": "Quella riga del manuale riguarda un luogo diverso da quello dichiarato. Nulla registrato."
+            "text": "Queste due cose non sono collegate."
           },
           {
             "key": "finding.note.OtherPerson",
-            "text": "Quella scheda appartiene a qualcun altro. Nulla registrato."
+            "text": "Queste due cose non sono collegate."
           },
           {
             "key": "finding.note.TwoTruths",
@@ -50771,7 +50783,7 @@
           },
           {
             "key": "finding.note.RuleByComparison",
-            "text": "Verifica questa regola con un confronto: confronta il valore con i manuali o con la scheda."
+            "text": "Queste due cose non sono collegate."
           },
           {
             "key": "finding.note.RuleNotForTraveller",
@@ -54367,6 +54379,14 @@
           }
         ],
         "words": [
+          {
+            "native": "Queste",
+            "english": "these"
+          },
+          {
+            "native": "collegate",
+            "english": "connected"
+          },
           {
             "native": "Home",
             "english": "home"
@@ -59191,11 +59211,11 @@
           },
           {
             "key": "finding.note.OtherPlace",
-            "text": "Diese Buchzeile betrifft einen anderen Ort als den angegebenen. Nichts erfasst."
+            "text": "Diese zwei Dinge haben nichts miteinander zu tun."
           },
           {
             "key": "finding.note.OtherPerson",
-            "text": "Diese Akte gehört jemand anderem. Nichts erfasst."
+            "text": "Diese zwei Dinge haben nichts miteinander zu tun."
           },
           {
             "key": "finding.note.TwoTruths",
@@ -59207,7 +59227,7 @@
           },
           {
             "key": "finding.note.RuleByComparison",
-            "text": "Prüfe diese Regel durch Vergleich: Halte den Wert gegen die Bücher oder die Akte."
+            "text": "Diese zwei Dinge haben nichts miteinander zu tun."
           },
           {
             "key": "finding.note.RuleNotForTraveller",
@@ -62803,6 +62823,14 @@
           }
         ],
         "words": [
+          {
+            "native": "miteinander",
+            "english": "with each other"
+          },
+          {
+            "native": "tun",
+            "english": "do"
+          },
           {
             "native": "Funde",
             "english": "findings"
@@ -67827,11 +67855,11 @@
           },
           {
             "key": "finding.note.OtherPlace",
-            "text": "该行涉及的是其他地点，并非所称地点。未记录。"
+            "text": "这两样东西没有关联。"
           },
           {
             "key": "finding.note.OtherPerson",
-            "text": "该记录属于他人。未记录。"
+            "text": "这两样东西没有关联。"
           },
           {
             "key": "finding.note.TwoTruths",
@@ -67843,7 +67871,7 @@
           },
           {
             "key": "finding.note.RuleByComparison",
-            "text": "此规则需比对检查：用该数值对照参考书或档案。"
+            "text": "这两样东西没有关联。"
           },
           {
             "key": "finding.note.RuleNotForTraveller",
@@ -71439,6 +71467,14 @@
           }
         ],
         "words": [
+          {
+            "native": "这两样东西",
+            "english": "these two things"
+          },
+          {
+            "native": "关联",
+            "english": "relation"
+          },
           {
             "native": "无发现",
             "english": "no findings"
@@ -75819,11 +75855,11 @@
           },
           {
             "key": "finding.note.OtherPlace",
-            "text": "その資料の行は申告地とは別の場所のものです。記録なし。"
+            "text": "この二つは関係がありません。"
           },
           {
             "key": "finding.note.OtherPerson",
-            "text": "その記録は別人のものです。記録なし。"
+            "text": "この二つは関係がありません。"
           },
           {
             "key": "finding.note.TwoTruths",
@@ -75835,7 +75871,7 @@
           },
           {
             "key": "finding.note.RuleByComparison",
-            "text": "この規則は照合で確認: 値を資料か記録と照合してください。"
+            "text": "この二つは関係がありません。"
           },
           {
             "key": "finding.note.RuleNotForTraveller",
@@ -79431,6 +79467,10 @@
           }
         ],
         "words": [
+          {
+            "native": "この二つ",
+            "english": "these two"
+          },
           {
             "native": "所見なし",
             "english": "no findings"

@@ -171,13 +171,13 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The answer plate: centred over the sides' bottom edge, one plate on at a time
+    /// The answer plate: centred above the dock (its bottom edge 8 units over the dock's top), one plate on at a time
     /// (MatchBoard): holding ("Pick a second thing."), a match, a difference or a note,
     /// each with a headline (static, bold) over its line (what MatchBoard writes).
     /// </summary>
     private static LensPlateParts BuildAnswerPlate(Transform body)
     {
-        Transform root = Panel(body, "AnswerPlate", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, LensDockBottom + LensDockHeight + LensDockGap), LensPlateSize, null);
+        Transform root = Panel(body, "AnswerPlate", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, LensDockBottom + LensDockHeight + 8f + LensPlateSize.y / 2f), LensPlateSize, null); // its bottom edge 8 above the dock; built after the sides, so it draws over them
         var parts = new LensPlateParts
         {
             Hold = AnswerPlate(root, "Hold", WbHoldBg, WbHold, ThemeRoleId.Holding, null),

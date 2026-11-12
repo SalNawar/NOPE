@@ -494,12 +494,11 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: finding.note.OtherPlace
-    text: Diese Buchzeile betrifft einen anderen Ort als den angegebenen. Nichts
-      erfasst.
+    text: "Diese zwei Dinge haben nichts miteinander zu tun."
     gloss: 0
     tier: 0
   - key: finding.note.OtherPerson
-    text: "Diese Akte geh\xF6rt jemand anderem. Nichts erfasst."
+    text: "Diese zwei Dinge haben nichts miteinander zu tun."
     gloss: 0
     tier: 0
   - key: finding.note.TwoTruths
@@ -512,8 +511,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: finding.note.RuleByComparison
-    text: "Pr\xFCfe diese Regel durch Vergleich: Halte den Wert gegen die B\xFCcher
-      oder die Akte."
+    text: "Diese zwei Dinge haben nichts miteinander zu tun."
     gloss: 0
     tier: 0
   - key: finding.note.RuleNotForTraveller
@@ -4171,6 +4169,10 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "miteinander"
+    english: with each other
+  - native: "tun"
+    english: do
   - native: kaufen
     english: buy
   - native: Stempelschublade

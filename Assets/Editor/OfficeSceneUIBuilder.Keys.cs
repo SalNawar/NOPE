@@ -92,7 +92,7 @@ public static partial class OfficeSceneUIBuilder
     {
         Transform root = canvas.transform;
         DesktopConfigSO config = EnsureDesktopConfig();
-        DesktopWindow card = Need(root, "InvestigationUI/WindowLayer/ShortcutsWindow")?.GetComponent<DesktopWindow>(); // the Investigation window is on the Lens layer, not the window layer
+        DesktopWindow card = Need(root, "LensLayer/ShortcutsWindow")?.GetComponent<DesktopWindow>(); // the card is on the Lens layer with Settings, in front of the Investigation window
         DesktopContextMenu menu = Need(root, "ContextMenu")?.GetComponent<DesktopContextMenu>();
         NotesWindow notes = root.GetComponentInChildren<NotesWindow>(true);
         OrdersWindow orders = root.GetComponentInChildren<OrdersWindow>(true);

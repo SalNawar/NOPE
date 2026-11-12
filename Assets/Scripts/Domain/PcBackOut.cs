@@ -111,10 +111,11 @@ public static class PcBackOut
     /// (GameConfigSO.escBacksOutFirst, D13). Settings is the pause Esc opens
     /// (R3/R4: "Esc opens the same Settings window everywhere"; the gate check
     /// flow.esc.pc): Esc never closes it, so Esc twice from the desk keeps the
-    /// PC open with Settings in front and the shift clock held.
+    /// PC open with Settings in front and the shift clock held. The Investigation window (the Lens screen) is not closed by Esc either:
+    /// the pick, then inspect back out first (the chain), then Esc opens Settings (the Lens spec section 2).
     /// </summary>
     public static bool ClosesFront(string frontAppId, bool windowInFront, bool escBacksOutFirst) =>
-        windowInFront && escBacksOutFirst && frontAppId != DesktopAppIds.Settings;
+        windowInFront && escBacksOutFirst && frontAppId != DesktopAppIds.Settings && frontAppId != DesktopAppIds.Investigation;
 
     /// <summary>What a back-out does on the PC while its screen is off; <paramref name="fromKey"/> is true for Esc, false for a right-click.</summary>
     public static PcBackOutStep ScreenOff(bool fromKey) => fromKey ? PcBackOutStep.WakeAndOpenSettings : PcBackOutStep.Swallow;

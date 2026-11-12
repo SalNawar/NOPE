@@ -73,6 +73,7 @@ public sealed class LensDock : MonoBehaviour
     public void Show(IReadOnlyList<ShelfItem> items)
     {
         Wire();
+        HideGhost(); // a drag that started on an item below never ends
         foreach (GameObject made in _made)
             if (made != null)
             {

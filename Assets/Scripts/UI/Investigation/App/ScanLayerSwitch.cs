@@ -234,6 +234,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
             if (!line.TryGetComponent(out Button button)) // never ?? on a Unity object: a destroyed one is not null to it (BUG-58a)
                 button = line.AddComponent<Button>();
             button.onClick.AddListener(() => clicked()); // the desktop's mouse click is the press's one sound (BUG-21c)
+            line.GetComponent<Graphic>().raycastTarget = true; // the template's graphic takes no clicks
         }
         _lines.Add(line);
         return line;

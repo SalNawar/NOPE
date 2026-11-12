@@ -191,6 +191,24 @@ public sealed partial class InvestigationApp
             rightPane.SetDrop(side == LensSide.Right);
     }
 
+    /// <summary>A drag that will not end (the dock redrew, a case began or ended): the ghost and the drop frame go, nothing is being moved.</summary>
+    private void CancelDrag()
+    {
+        _moving = null;
+        HoverSide(null);
+        if (menus != null)
+            menus.HideGhost();
+    }
+
+    /// <summary>The document as a side shows it when it is on a side (its pane's Current carries the Registry's lookup); else <paramref name="doc"/>.</summary>
+    private LinkTarget Carry(LinkTarget doc)
+    {
+        foreach (LensSide side in Sides)
+            if (PaneOf(side) != null && LensSides.Same(_sides[side], doc))
+                return PaneOf(side).Current;
+        return doc;
+    }
+
     /// <summary>A dock item is dragged: the side under the pointer shows the strong frame.</summary>
     private void DockDragging(Vector2 screen, Camera camera) => HoverSide(SideAt(screen, camera));
 
@@ -201,7 +219,7 @@ public sealed partial class InvestigationApp
         LensSide? side = SideAt(screen, camera);
         if (!side.HasValue || item.Target.IsNone)
             return;
-        _sides.Place(item.Target, side.Value);
+        _sides.Place(Carry(item.Target), side.Value);
         ApplySides(side.Value);
     }
 
@@ -244,7 +262,7 @@ public sealed partial class InvestigationApp
         if (!to.HasValue)
             _sides.PutAway(from);
         else if (to.Value != from)
-            _sides.Place(_sides[from], to.Value, from);
+            _sides.Place(Carry(_sides[from]), to.Value, from);
         ApplySides();
     }
 }

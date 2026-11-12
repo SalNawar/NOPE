@@ -159,6 +159,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     {
         Init();
         ResetSearchCase();
+        CancelDrag();
         _traveller = travellerName ?? string.Empty;
         ShowWho();
         _badges.Clear();
@@ -183,6 +184,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     public void EndCase()
     {
         Init();
+        CancelDrag();
         _papers = null;
         _traveller = null;
         ResetSearchCase();
@@ -263,7 +265,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             return false;
         OpenWindow();
         LensSide at = _sides.Selected;
-        _sides.Put(target);
+        _sides.Put(Carry(target));
         return ApplySides(at);
     }
 
@@ -271,6 +273,13 @@ public sealed partial class InvestigationApp : MonoBehaviour
     public void OpenPair(LinkTarget left, LinkTarget right)
     {
         Init();
+        if (LensSides.Same(left, right)) // both picks on one paper: it goes on the selected side only, the other side keeps its paper
+        {
+            LensSide at = _sides.Selected;
+            _sides.Place(left, at);
+            ApplySides(at);
+            return;
+        }
         if (!left.IsNone)
             _sides.Place(left, LensSide.Left);
         if (!right.IsNone)
@@ -424,27 +433,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
         RefreshShelf();
     }
 
-    /// <summary>
-    /// Holds today's date on the workbench (the taskbar's date), to match with
-    /// an expiry or a ticket's date, with inspect on; the app opens. Nothing
-    /// when the agency's calendar has no readable date, or while the app is not
-    /// on the PC yet (OnPc: the desk's calendar is compared in inspect mode
-    /// instead).
-    /// </summary>
-    public void HoldToday()
-    {
-        Init();
-        string today = Today;
-        if (today == null || board == null || !OnPc)
-            return;
-        OpenWindow();
-        if (AllowPick())
-            board.PickToday(today);
-    }
-
-    /// <summary>Today's date as the papers print it (the Calendar view's), or null.</summary>
-    private string Today => leftPane != null && leftPane.View(AppTab.Calendar) is CalendarView calendar ? calendar.Today : null;
-
     /// <summary>A side showed a source: it is seen when the app shows.</summary>
     private void PaneShown(AppPane pane, AppTab tab)
     {
@@ -470,7 +458,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// today's rules, the calendar: Feature.Records, Rulebook, Calendar) and
     /// the desktop shows only the apps introduced (Feature.App), this app
     /// itself opening only once it is (OnPc); a side left on the
-    /// books before any is introduced turns to today's rules; set at the
+    /// books before any is introduced is emptied; set at the
     /// day's start.
     /// </summary>
     public void SetIntroductions(Introductions introductions, int day)
@@ -481,10 +469,12 @@ public sealed partial class InvestigationApp : MonoBehaviour
         if (icons != null)
             icons.ShowApps(id => _introductions.Has(_day, Feature.App(id)));
         RefreshShelf();
-        // A side left on a book no day has introduced yet shows today's rules instead (the right side starts on the books).
-        foreach (AppPane pane in new[] { leftPane, rightPane })
-            if (pane != null && pane.ActiveTab == AppTab.Reference && !_items.Exists(x => x.Group == ShelfGroup.Books) && pane.Hosts(AppTab.Rules))
-                pane.Show(AppTab.Rules);
+        // A side left on a book no day has introduced yet is emptied (through the sides, so they agree with the panes).
+        if (!_items.Exists(x => x.Group == ShelfGroup.Books))
+        {
+            _sides.RemoveWhere(t => t.Tab == AppTab.Reference);
+            ApplySides();
+        }
     }
 
     /// <summary>What the day has introduced (SetIntroductions).</summary>
@@ -497,7 +487,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// it when the scanner is available or it is needed"); true until a day
     /// says (SetIntroductions). While false nothing opens the app: no icon
     /// (DesktopIcons.ShowApps), no link (Mail's Rules link hides), no dock
-    /// jump, no hold of today's date from the taskbar.
+    /// jump.
     /// </summary>
     public bool OnPc { get; private set; } = true;
 
@@ -551,6 +541,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         {
             _items.Clear();
             _items.AddRange(items);
+            CancelDrag(); // the items a drag started on are replaced
             menus.Show(_items);
         }
         MarkShelf();

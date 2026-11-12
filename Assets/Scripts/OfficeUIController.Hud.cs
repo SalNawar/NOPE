@@ -32,8 +32,6 @@ public sealed partial class OfficeUIController
 
         if (dayText != null)
             dayText.text = TrayDate(world.day);
-        if (dateButton != null)
-            dateButton.interactable = app != null && app.OnPc;
     }
 
     /// <summary>The tray clock's date for <paramref name="day"/>: today in the agency's calendar, in capitals ("14 MAR 2150", TrayClock), or the plain day when the library has no readable first date.</summary>

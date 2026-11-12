@@ -92,7 +92,6 @@ public static partial class OfficeSceneUIBuilder
         stack.childForceExpandHeight = true;
         clockText = TrayText(dateButton.transform, "ClockText", "09:00");
         dayText = TrayText(dateButton.transform, "DayText", "14 MAR 2150");
-        BuildHoverHint(dateButton, "tray.date.hint", null, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
         // The row is NOT laid out here: the layout groups lay it out when the scene loads, as every
         // other layout group this builder makes. Laying it out before the save (round 4 did) marks the
         // readouts' rects as driven, and Unity writes driven rect values as zero: the saved scene then

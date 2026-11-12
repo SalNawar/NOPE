@@ -29,7 +29,7 @@ public class ShortcutMapTests
     private static readonly AppCommand[] NoKey =
     {
         AppCommand.FocusSearch, AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4, AppCommand.NextStep, AppCommand.PrevStep,
-        AppCommand.ToggleSplit, AppCommand.IntoResults, AppCommand.Pin, AppCommand.Follow, AppCommand.FollowOther
+        AppCommand.ToggleSplit, AppCommand.IntoResults, AppCommand.Pin, AppCommand.Back, AppCommand.Forward, AppCommand.Follow, AppCommand.FollowOther
     };
 
     private static List<AppCommand> Keyed() => Enum.GetValues(typeof(AppCommand)).Cast<AppCommand>().Except(NoKey).ToList();
@@ -107,8 +107,8 @@ public class ShortcutMapTests
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6, shift: true), App));
         Assert.AreEqual(AppCommand.ToggleFindings, Resolve(K(ShortcutKey.B, ctrl: true), App));
         Assert.IsNull(Resolve(K(ShortcutKey.S, ctrl: true, shift: true), App), "the step hints' chord is retired");
-        Assert.AreEqual(AppCommand.Back, Resolve(K(ShortcutKey.Left, alt: true), App));
-        Assert.AreEqual(AppCommand.Forward, Resolve(K(ShortcutKey.Right, alt: true), App));
+        Assert.IsNull(Resolve(K(ShortcutKey.Left, alt: true), App), "Alt+Left (history) is retired");
+        Assert.IsNull(Resolve(K(ShortcutKey.Right, alt: true), App), "Alt+Right (history) is retired");
         Assert.AreEqual(AppCommand.NextRegion, Resolve(K(ShortcutKey.Tab), App));
         Assert.AreEqual(AppCommand.PrevRegion, Resolve(K(ShortcutKey.Tab, shift: true), App));
         Assert.AreEqual(AppCommand.ZoomIn, Resolve(K(ShortcutKey.Equals, ctrl: true), App));
@@ -147,8 +147,8 @@ public class ShortcutMapTests
     }
 
     [Test]
-    public void AltArrows_AreHistory_EvenInAList() =>
-        Assert.AreEqual(AppCommand.Back, Resolve(K(ShortcutKey.Left, alt: true), AppList));
+    public void AltArrows_AreRetired_EvenInAList() =>
+        Assert.IsNull(Resolve(K(ShortcutKey.Left, alt: true), AppList));
 
     [Test]
     public void NotesFocused_CtrlVAddsTheClip()

@@ -35,12 +35,6 @@ public sealed partial class OfficeUIController : MonoBehaviour
     /// <summary>The desk CRT's clock plate's date ("14 MAR 2150", CrtClock; optional).</summary>
     [SerializeField] private TMP_Text crtDateText;
 
-    /// <summary>The date's button: a click holds today's date on the Investigation app's workbench, to compare with an expiry or a ticket's date.</summary>
-    [SerializeField] private Button dateButton;
-
-    /// <summary>The Investigation app (the date is held on its workbench).</summary>
-    [SerializeField] private InvestigationApp app;
-
     [Header("Citation Slip (optional, null-safe)")]
     /// <summary>Panel shown when a citation is issued.</summary>
     [SerializeField] private GameObject citationPanel;
@@ -85,13 +79,6 @@ public sealed partial class OfficeUIController : MonoBehaviour
         resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
         if (changed && !string.IsNullOrEmpty(text))
             UiAppear.Of(resultBackdrop, AppearStyle.Whip).Open(); // the verdict ribbon whips in (the game feel)
-    }
-
-    /// <summary>The date's button holds today on the app's workbench.</summary>
-    private void Awake()
-    {
-        if (dateButton != null && app != null)
-            dateButton.onClick.AddListener(app.HoldToday);
     }
 
     /// <summary>

@@ -542,11 +542,11 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: finding.note.OtherPlace
-    text: That book row is about another place than the one claimed. Nothing logged.
+    text: "These two things do not relate."
     gloss: 0
     tier: 1
   - key: finding.note.OtherPerson
-    text: That record belongs to someone else. Nothing logged.
+    text: "These two things do not relate."
     gloss: 0
     tier: 1
   - key: finding.note.TwoTruths
@@ -558,8 +558,7 @@ MonoBehaviour:
     gloss: 0
     tier: 1
   - key: finding.note.RuleByComparison
-    text: 'Check this rule by comparing: hold the value against the books or the
-      record.'
+    text: "These two things do not relate."
     gloss: 0
     tier: 1
   - key: finding.note.RuleNotForTraveller

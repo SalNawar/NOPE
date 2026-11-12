@@ -55,6 +55,7 @@ public class PcDesktopRulesTests
         Assert.AreEqual(PcBackOutStep.OpenSettings, PcBackOut.Resolve(DesktopEscape.None, true, PcBackOut.ClosesFront(DesktopAppIds.Settings, true, true)), "Settings in front: Esc keeps it in front");
         Assert.IsTrue(PcBackOut.ClosesFront(DesktopAppIds.Notes, true, true), "another app's window closes");
         Assert.IsTrue(PcBackOut.ClosesFront(null, true, true), "a window of no app (a document) closes");
+        Assert.IsFalse(PcBackOut.ClosesFront(DesktopAppIds.Investigation, true, true), "the Lens window stays: Esc goes on to Settings");
         Assert.IsFalse(PcBackOut.ClosesFront(DesktopAppIds.Notes, true, false), "the knob off: Esc brings Settings forward");
         Assert.IsFalse(PcBackOut.ClosesFront(null, false, true), "no window in front: Esc brings Settings forward");
     }

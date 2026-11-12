@@ -19,6 +19,7 @@ public sealed class LensDockItem : MonoBehaviour, IBeginDragHandler, IDragHandle
     {
         if (e.button != PointerEventData.InputButton.Left)
             return;
+        e.eligibleForClick = false; // a drag that ends on this item is not a click
         _dock.ShowGhost(_item);
         _dock.ItemDragging(e.position, e.pressEventCamera);
     }

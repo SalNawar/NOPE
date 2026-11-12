@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// whose builder-made entries are shown per target: on
 /// the empty desktop "Arrange icons" (DesktopIcons.Arrange), on an icon "Open"
 /// (its app), on a row of the
-/// Investigation app "Copy value", "Copy row", "Pin" or "Unpin" and, when the
+/// Investigation app "Copy value", "Copy row" and, when the
 /// row can be picked, "Pick for compare". It opens with its top-left at the
 /// target's right edge, kept inside the desktop, above every window; an entry closes it,
 /// and so do a press outside it and Escape (the keyboard poller:
@@ -30,7 +30,7 @@ public sealed class DesktopContextMenu : MonoBehaviour
     /// <summary>"Copy row" (a row's entry: "Label: value").</summary>
     [SerializeField] private Button copyRowEntry;
 
-    /// <summary>"Pin" or "Unpin" (a row's entry).</summary>
+    /// <summary>"Pin" or "Unpin" (a row's entry; retired with the Lens screen, never shown).</summary>
     [SerializeField] private Button pinEntry;
 
     /// <summary>"Pick for compare" (a pickable row's entry).</summary>
@@ -68,7 +68,7 @@ public sealed class DesktopContextMenu : MonoBehaviour
         Show(Target.Icon, false, at);
     }
 
-    /// <summary>Opens a row's menu (Copy value, Copy row, Pin or Unpin as <paramref name="pinned"/> says, Pick for compare when it can be picked) beside it (<paramref name="at"/>).</summary>
+    /// <summary>Opens a row's menu (Copy value, Copy row, Pick for compare when it can be picked; <paramref name="pinned"/> is unused since the Pin entry went) beside it (<paramref name="at"/>).</summary>
     public void ShowForRow(InvestigationApp app, AppRow row, bool pinned, RectTransform at)
     {
         _app = app;
@@ -99,14 +99,8 @@ public sealed class DesktopContextMenu : MonoBehaviour
         Entry(openEntry, target == Target.Icon);
         Entry(copyEntry, target == Target.Row);
         Entry(copyRowEntry, target == Target.Row);
-        Entry(pinEntry, target == Target.Row);
+        Entry(pinEntry, false); // pins have no key or list since the Lens screen: the entry never shows
         Entry(pickEntry, target == Target.Row && _row != null && _row.Pickable);
-        if (pinEntry != null && target == Target.Row)
-        {
-            TMP_Text label = pinEntry.GetComponentInChildren<TMP_Text>(true);
-            if (label != null)
-                label.text = UiText.Pc.Get(pinned ? "menu.unpin" : "menu.pin");
-        }
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
 
