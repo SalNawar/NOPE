@@ -8,6 +8,10 @@
       "text": "FOLD-01 rounds 3 and 4 (Papers, Please 1:1): a paper pressed on the counter follows the pointer one to one onto the desk, in the office view and the reading view, at 1920x1080 and 1280x1024, on days 1 and 12, with full motion and Reduced Motion, and rests with the point that was pressed under the pointer. Each counterDrag presses the paper's visible click box at its middle, near edge or far edge (round 3 pressed its root), drags it at P-SLOW, P-PLAIN, P-FAST or P-FLICK and lets it go mid-mat, at the far corners or near the counter. counterDrag.<name>.follow: the pressed point 8 px or less at 1080p from the pointer on every held frame. .hold: no held frame with the root more than 5 mm from where the pointer asks (G1: the desk surface's clamp; G2: the bound at the back step's lip while the size grows). .rest: on the desk; let go where it lies wholly on the desk once grown, the pressed point rests 8 px or less from the spot under the pointer (G4, FOLD-02); let go before, it slides onto the desk, eased, and rests wholly short of the back step (G3, by design). The drags carry the round 3 verifier's names where they repeat his (o2, o4, o7, r2, r6, r8, r9, c0, e0 to e2). Round 4 fix 1 (the round 4 verifier's P1): a paper resting with a part past the desk surface's clamp area, pressed on that part, never moves at the pick-up: the edge block (d1_e1 to d1_e4: the passport laid at the reading view's bottom, pressed on its near part, dragged up at P-SLOW and sideways at P-PLAIN) and the far-part block (d12_f1, f3, f4: the day 12 large form pressed on the far part of its counter click box), both screens. counterdrag.tsv lists every frame."
     },
     {
+      "op": "note",
+      "text": "D66 (paper-scale-18, 2026-11-12: the papers grew 1.8 times and the counter spots moved 5.6 cm nearer, counterSpotInset 0.07 to 0.126): the o4 mid-lip legs let go at y 0.244, not 0.3, so the drag from the counter spot keeps its length (at 0.3 the drag at 1280x1024 was 7 px and the paper stayed on the counter); d1_e3_setup_near_again lays the passport at y -0.42, not -0.48 (at -0.48 the 32 cm passport could not reach: its root held 45 mm short), its near part still past the clamp area (-0.5075)."
+    },
+    {
       "op": "title"
     },
     {
@@ -200,7 +204,7 @@
       "x": 0,
       "y": 0,
       "path": "Plain",
-      "target2": "m:-0.25,0.3"
+      "target2": "m:-0.25,0.244"
     },
     {
       "op": "recStop"
@@ -379,7 +383,7 @@
       "x": 0,
       "y": 0,
       "path": "Plain",
-      "target2": "m:0.1,-0.48",
+      "target2": "m:0.1,-0.42",
       "target": "index:0"
     },
     {
@@ -478,7 +482,7 @@
       "x": 0,
       "y": 0,
       "path": "Plain",
-      "target2": "m:-0.25,0.3"
+      "target2": "m:-0.25,0.244"
     },
     {
       "op": "still",
@@ -632,7 +636,7 @@
       "x": 0,
       "y": 0,
       "path": "Plain",
-      "target2": "m:-0.25,0.3"
+      "target2": "m:-0.25,0.244"
     },
     {
       "op": "recStop"
