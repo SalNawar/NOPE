@@ -1489,8 +1489,12 @@ MonoBehaviour:
       side
     gloss: 0
     tier: 1
+  - key: keys.inspect
+    text: Inspect on or off
+    gloss: 0
+    tier: 1
   - key: keys.pick
-    text: Hold the focused value, then compare it with the next one
+    text: Pick the focused value
     gloss: 0
     tier: 1
   - key: keys.copy

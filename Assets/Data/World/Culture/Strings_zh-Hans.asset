@@ -1361,6 +1361,10 @@ MonoBehaviour:
     text: "\u5728\u53E6\u4E00\u4FA7\u8DDF\u968F\u6570\u503C\u7684\u94FE\u63A5\uFF0C\u6216\u6253\u5F00\u7126\u70B9\u641C\u7D22\u7ED3\u679C"
     gloss: 0
     tier: 0
+  - key: keys.inspect
+    text: "\u5F00\u542F\u6216\u5173\u95ED\u68C0\u67E5"
+    gloss: 0
+    tier: 0
   - key: keys.pick
     text: "\u9009\u53D6\u7126\u70B9\u6570\u503C\uFF0C\u518D\u4E0E\u4E0B\u4E00\u4E2A\u6BD4\u5BF9"
     gloss: 0
@@ -4060,6 +4064,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "\u5F00\u542F\u6216\u5173\u95ED\u68C0\u67E5"
+    english: inspect on or off
   - native: "\u5FAE\u7F29\u5370\u5237"
     english: microprint
   - native: "\u91CD\u590D"

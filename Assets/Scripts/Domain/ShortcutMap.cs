@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-/// <summary>What a desktop shortcut does (the PC redesign KB1, section 3.4). Not serialized.</summary>
+/// <summary>What a desktop shortcut does (the PC redesign KB1, section 3.4). Not serialized. FocusSearch, Step1 to Step4, NextStep, PrevStep, ToggleSplit, IntoResults, Pin, Follow and FollowOther have no key since the Lens screen.</summary>
 public enum AppCommand
 {
     /// <summary>Ctrl+K, Ctrl+F: opens or restores the Investigation app and opens its search drawer, the field focused.</summary>
@@ -35,8 +35,10 @@ public enum AppCommand
     Follow,
     /// <summary>Ctrl+Enter on a focused item: the same, in the other pane.</summary>
     FollowOther,
-    /// <summary>Space on a focused row: picks it for compare.</summary>
+    /// <summary>Enter on a focused value: picks it for compare.</summary>
     Pick,
+    /// <summary>Space: inspect on or off (the Lens screen).</summary>
+    ToggleInspect,
     /// <summary>Ctrl+C on a focused row: copies its value as shown.</summary>
     Copy,
     /// <summary>Ctrl+Shift+C on a focused row: copies "Label: value".</summary>
@@ -294,29 +296,22 @@ public static class ShortcutMap
     /// <summary>The F1 card, in the order of section 3.4: every command on exactly one row.</summary>
     public static readonly IReadOnlyList<ShortcutCardRow> Card = new[]
     {
-        new ShortcutCardRow("Ctrl+K, Ctrl+F", "keys.focusSearch", AppCommand.FocusSearch),
-        new ShortcutCardRow("↓", "keys.intoResults", AppCommand.IntoResults),
         new ShortcutCardRow("Esc", "keys.escape", AppCommand.Escape),
         new ShortcutCardRow("F1", "keys.help", AppCommand.Help),
         new ShortcutCardRow("Enter", "keys.openIcon", AppCommand.OpenIcon),
         new ShortcutCardRow("← → ↑ ↓", "keys.icons", AppCommand.IconLeft, AppCommand.IconRight, AppCommand.IconUp, AppCommand.IconDown),
         new ShortcutCardRow("← → ↑ ↓", "keys.orders", AppCommand.NodeLeft, AppCommand.NodeRight, AppCommand.NodeUp, AppCommand.NodeDown),
         new ShortcutCardRow("Enter", "keys.ordersAct", AppCommand.NodeAct),
-        new ShortcutCardRow("Ctrl+1 … Ctrl+4", "keys.step", AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4),
-        new ShortcutCardRow("Ctrl+Tab, Ctrl+Shift+Tab", "keys.nextStep", AppCommand.NextStep, AppCommand.PrevStep),
         new ShortcutCardRow("F6, Shift+F6", "keys.otherPane", AppCommand.OtherPane),
-        new ShortcutCardRow("Ctrl+\\", "keys.split", AppCommand.ToggleSplit),
         new ShortcutCardRow("Ctrl+B", "keys.findings", AppCommand.ToggleFindings),
         new ShortcutCardRow("Alt+←, Alt+→", "keys.history", AppCommand.Back, AppCommand.Forward),
         new ShortcutCardRow("Tab, Shift+Tab", "keys.regions", AppCommand.NextRegion, AppCommand.PrevRegion),
         new ShortcutCardRow("↑ ↓ Home End PgUp PgDn", "keys.rows", AppCommand.RowUp, AppCommand.RowDown, AppCommand.RowFirst, AppCommand.RowLast,
                             AppCommand.PageUp, AppCommand.PageDown),
-        new ShortcutCardRow("Enter", "keys.follow", AppCommand.Follow),
-        new ShortcutCardRow("Ctrl+Enter", "keys.followOther", AppCommand.FollowOther),
-        new ShortcutCardRow("Space", "keys.pick", AppCommand.Pick),
+        new ShortcutCardRow("Space", "keys.inspect", AppCommand.ToggleInspect),
+        new ShortcutCardRow("Enter", "keys.pick", AppCommand.Pick),
         new ShortcutCardRow("Ctrl+C, Ctrl+Shift+C", "keys.copy", AppCommand.Copy, AppCommand.CopyRow),
         new ShortcutCardRow("Ctrl+V", "keys.paste", AppCommand.Paste),
-        new ShortcutCardRow("Ctrl+P", "keys.pin", AppCommand.Pin),
         new ShortcutCardRow("Ctrl+=, Ctrl+-, Ctrl+0", "keys.zoom", AppCommand.ZoomIn, AppCommand.ZoomOut, AppCommand.ZoomReset),
         new ShortcutCardRow("Shift+F10, Menu", "keys.contextMenu", AppCommand.ContextMenu),
     };
@@ -334,7 +329,7 @@ public static class ShortcutMap
         if (context.MenuOpen && found != AppCommand.Escape)
             return false;
         if (context.TextFieldFocused && !PassesInField(found) &&
-            !(context.SearchFocused && (found == AppCommand.NextRegion || found == AppCommand.PrevRegion || found == AppCommand.IntoResults)))
+            !(context.SearchFocused && (found == AppCommand.NextRegion || found == AppCommand.PrevRegion)))
             return false;
         command = found;
         return true;
@@ -342,22 +337,18 @@ public static class ShortcutMap
 
     /// <summary>The chords that cannot be typing: they pass while a text field has the keyboard.</summary>
     private static bool PassesInField(AppCommand command) =>
-        command == AppCommand.FocusSearch || StepPosition(command) > 0 || command == AppCommand.OtherPane || command == AppCommand.ToggleSplit ||
-        command == AppCommand.ToggleFindings || command == AppCommand.Escape || command == AppCommand.Help;
+        command == AppCommand.OtherPane || command == AppCommand.ToggleFindings || command == AppCommand.Escape || command == AppCommand.Help;
 
     /// <summary>The table: the chord's command in the context, before the menu and field filters.</summary>
     private static bool Lookup(KeyChord k, ShortcutContext c, out AppCommand command)
     {
         bool plain = !k.Ctrl && !k.Shift && !k.Alt;
         bool ctrl = k.Ctrl && !k.Shift && !k.Alt;
-        bool ctrlShift = k.Ctrl && k.Shift && !k.Alt;
 
         if (k.Key == ShortcutKey.Escape && plain)
             return Is(AppCommand.Escape, out command);
         if (k.Key == ShortcutKey.F1 && plain)
             return Is(AppCommand.Help, out command);
-        if ((k.Key == ShortcutKey.F || k.Key == ShortcutKey.K) && ctrl)
-            return Is(AppCommand.FocusSearch, out command);
         if ((k.Key == ShortcutKey.F10 && k.Shift && !k.Ctrl && !k.Alt) || (k.Key == ShortcutKey.Menu && plain))
             return Is(AppCommand.ContextMenu, out command);
 
@@ -371,12 +362,9 @@ public static class ShortcutMap
             return true;
         if (!c.AppFocused)
             return None(out command);
-        if (c.SearchFocused && c.ResultsShown && plain && k.Key == ShortcutKey.Down)
-            return Is(AppCommand.IntoResults, out command);
-
+        if (k.Key == ShortcutKey.Space && plain)
+            return Is(AppCommand.ToggleInspect, out command);
         if (ctrl && App(k.Key, out command))
-            return true;
-        if (ctrlShift && AppShift(k.Key, out command))
             return true;
         if (k.Key == ShortcutKey.F6 && !k.Ctrl && !k.Alt)
             return Is(AppCommand.OtherPane, out command);
@@ -387,7 +375,7 @@ public static class ShortcutMap
         if (k.Key == ShortcutKey.Tab && !k.Ctrl && !k.Alt)
             return Is(k.Shift ? AppCommand.PrevRegion : AppCommand.NextRegion, out command);
         if (c.ListFocused)
-            return List(k, plain, ctrl, ctrlShift, out command);
+            return List(k, plain, ctrl, k.Ctrl && k.Shift && !k.Alt, out command);
         return None(out command);
     }
 
@@ -424,14 +412,7 @@ public static class ShortcutMap
     {
         switch (key)
         {
-            case ShortcutKey.Digit1: return Is(AppCommand.Step1, out command);
-            case ShortcutKey.Digit2: return Is(AppCommand.Step2, out command);
-            case ShortcutKey.Digit3: return Is(AppCommand.Step3, out command);
-            case ShortcutKey.Digit4: return Is(AppCommand.Step4, out command);
-            case ShortcutKey.Tab: return Is(AppCommand.NextStep, out command);
-            case ShortcutKey.Backslash: return Is(AppCommand.ToggleSplit, out command);
             case ShortcutKey.B: return Is(AppCommand.ToggleFindings, out command);
-            case ShortcutKey.P: return Is(AppCommand.Pin, out command);
             default: return Zoom(key, out command);
         }
     }
@@ -448,17 +429,7 @@ public static class ShortcutMap
         }
     }
 
-    /// <summary>The app's Ctrl+Shift chords.</summary>
-    private static bool AppShift(ShortcutKey key, out AppCommand command)
-    {
-        switch (key)
-        {
-            case ShortcutKey.Tab: return Is(AppCommand.PrevStep, out command);
-            default: return None(out command);
-        }
-    }
-
-    /// <summary>A focused list: the arrows, Home, End, the page keys, Enter, Space and the copies.</summary>
+    /// <summary>A focused list: the arrows, Home, End, the page keys, Enter (picks) and the copies.</summary>
     private static bool List(KeyChord k, bool plain, bool ctrl, bool ctrlShift, out AppCommand command)
     {
         if (plain)
@@ -472,11 +443,8 @@ public static class ShortcutMap
                 case ShortcutKey.End: return Is(AppCommand.RowLast, out command);
                 case ShortcutKey.PageUp: return Is(AppCommand.PageUp, out command);
                 case ShortcutKey.PageDown: return Is(AppCommand.PageDown, out command);
-                case ShortcutKey.Enter: return Is(AppCommand.Follow, out command);
-                case ShortcutKey.Space: return Is(AppCommand.Pick, out command);
+                case ShortcutKey.Enter: return Is(AppCommand.Pick, out command);
             }
-        if (ctrl && k.Key == ShortcutKey.Enter)
-            return Is(AppCommand.FollowOther, out command);
         if (ctrl && k.Key == ShortcutKey.C)
             return Is(AppCommand.Copy, out command);
         if (ctrlShift && k.Key == ShortcutKey.C)

@@ -26,7 +26,10 @@ public enum DesktopEscape
     CancelDrag,
 
     /// <summary>A value (or a rule, or the date) is held for click-and-match: it is let go (the PC workbench spec §4.1).</summary>
-    ReleaseHold
+    ReleaseHold,
+
+    /// <summary>Inspect is on (the Lens screen): it turns off. Last, so the pick, the menus and the drags back out first.</summary>
+    InspectOff
 }
 
 /// <summary>The desktop state the Escape rule reads.</summary>
@@ -59,10 +62,14 @@ public readonly struct DesktopEscapeState
     /// <summary>The workbench holds a value, a rule or the date for click-and-match.</summary>
     public readonly bool Holding;
 
+    /// <summary>Inspect is on (the Lens screen).</summary>
+    public readonly bool Inspecting;
+
     /// <summary>Creates a state.</summary>
     public DesktopEscapeState(bool menuOpen, bool cardOpen, bool resultsOpen, bool searchFocused, bool searchHasText, bool fieldFocused, bool startMenuOpen,
-                              bool dragging, bool holding = false)
+                              bool dragging, bool holding = false, bool inspecting = false)
     {
+        Inspecting = inspecting;
         Holding = holding;
         MenuOpen = menuOpen;
         CardOpen = cardOpen;
@@ -81,7 +88,7 @@ public readonly struct DesktopEscapeState
 /// first of: close a context menu, close the shortcut card, clear the focused
 /// search field's text, close the search drawer, leave a focused field, let
 /// go of a held value (the workbench), close the Start menu, cancel a drag,
-/// else None. The desktop's keyboard
+/// turn inspect off (the Lens screen), else None. The desktop's keyboard
 /// poller (DesktopKeyboard) takes the press when the rule returns something
 /// and stamps the frame, so the PC frame's own Escape (OfficeViewController)
 /// skips that press; on None the frame closes and the office's order goes on.
@@ -108,6 +115,8 @@ public static class DesktopEscapeRule
             return DesktopEscape.CloseStartMenu;
         if (state.Dragging)
             return DesktopEscape.CancelDrag;
+        if (state.Inspecting)
+            return DesktopEscape.InspectOff;
         return DesktopEscape.None;
     }
 }

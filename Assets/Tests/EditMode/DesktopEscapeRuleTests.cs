@@ -4,8 +4,8 @@ using NUnit.Framework;
 public class DesktopEscapeRuleTests
 {
     private static DesktopEscape Resolve(bool menu = false, bool card = false, bool results = false, bool searchFocused = false, bool searchText = false,
-                                         bool field = false, bool startMenu = false, bool drag = false, bool holding = false) =>
-        DesktopEscapeRule.Resolve(new DesktopEscapeState(menu, card, results, searchFocused, searchText, field, startMenu, drag, holding));
+                                         bool field = false, bool startMenu = false, bool drag = false, bool holding = false, bool inspecting = false) =>
+        DesktopEscapeRule.Resolve(new DesktopEscapeState(menu, card, results, searchFocused, searchText, field, startMenu, drag, holding, inspecting));
 
     [Test]
     public void NothingOpen_None() => Assert.AreEqual(DesktopEscape.None, Resolve());
@@ -21,6 +21,17 @@ public class DesktopEscapeRuleTests
         Assert.AreEqual(DesktopEscape.CloseStartMenu, Resolve(startMenu: true));
         Assert.AreEqual(DesktopEscape.CancelDrag, Resolve(drag: true));
         Assert.AreEqual(DesktopEscape.ReleaseHold, Resolve(holding: true));
+        Assert.AreEqual(DesktopEscape.InspectOff, Resolve(inspecting: true));
+    }
+
+    [Test]
+    public void Inspect_BacksOutAfterTheHeldPickAndEveryOtherStep_BeforeTheFrame()
+    {
+        Assert.AreEqual(DesktopEscape.ReleaseHold, Resolve(holding: true, inspecting: true), "pick first, then inspect");
+        Assert.AreEqual(DesktopEscape.CloseMenu, Resolve(menu: true, inspecting: true));
+        Assert.AreEqual(DesktopEscape.CancelDrag, Resolve(drag: true, inspecting: true));
+        Assert.AreEqual(DesktopEscape.InspectOff, Resolve(inspecting: true), "then None lets the frame (the PC settings) take the next press");
+        Assert.AreEqual(DesktopEscape.None, Resolve());
     }
 
     [Test]

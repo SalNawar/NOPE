@@ -28694,8 +28694,14 @@
         "tier": "Flavour"
       },
       {
+        "key": "keys.inspect",
+        "text": "Inspect on or off",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "keys.pick",
-        "text": "Hold the focused value, then compare it with the next one",
+        "text": "Pick the focused value",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -34292,6 +34298,10 @@
             "text": "اتبع رابط القيمة, أو افتح نتيجة البحث المحددة, في الجهة الأخرى"
           },
           {
+            "key": "keys.inspect",
+            "text": "تفعيل الفحص أو إيقافه"
+          },
+          {
             "key": "keys.pick",
             "text": "امسك القيمة المحددة, ثم قارنها بالتالية"
           },
@@ -36977,6 +36987,14 @@
           }
         ],
         "words": [
+          {
+            "native": "تفعيل",
+            "english": "turning on"
+          },
+          {
+            "native": "إيقافه",
+            "english": "turning it off"
+          },
           {
             "native": "تكرر",
             "english": "repeat"
@@ -43116,6 +43134,10 @@
             "text": "Μετάβαση στον σύνδεσμο μιας τιμής ή άνοιγμα του εστιασμένου αποτελέσματος στην άλλη πλευρά"
           },
           {
+            "key": "keys.inspect",
+            "text": "Ενεργοποίηση ή απενεργοποίηση επιθεώρησης"
+          },
+          {
             "key": "keys.pick",
             "text": "Κράτα την εστιασμένη τιμή και μετά σύγκρινέ τη με την επόμενη"
           },
@@ -45801,6 +45823,14 @@
           }
         ],
         "words": [
+          {
+            "native": "Ενεργοποίηση",
+            "english": "turning on"
+          },
+          {
+            "native": "απενεργοποίηση",
+            "english": "turning off"
+          },
           {
             "native": "επαναλαμβάνει",
             "english": "repeat"
@@ -51344,6 +51374,10 @@
             "text": "Segui il collegamento di un valore, o apri il risultato selezionato, sull'altro lato"
           },
           {
+            "key": "keys.inspect",
+            "text": "Ispezione attiva o disattiva"
+          },
+          {
             "key": "keys.pick",
             "text": "Tieni il valore selezionato, poi confrontalo con il successivo"
           },
@@ -54029,6 +54063,14 @@
           }
         ],
         "words": [
+          {
+            "native": "attiva",
+            "english": "on"
+          },
+          {
+            "native": "disattiva",
+            "english": "off"
+          },
           {
             "native": "ripetere",
             "english": "repeat"
@@ -59670,6 +59712,10 @@
           {
             "key": "keys.followOther",
             "text": "Dem Link eines Werts folgen oder das fokussierte Suchergebnis auf der anderen Seite öffnen"
+          },
+          {
+            "key": "keys.inspect",
+            "text": "Prüfen ein oder aus"
           },
           {
             "key": "keys.pick",
@@ -68208,6 +68254,10 @@
             "text": "在另一侧跟随数值的链接，或打开焦点搜索结果"
           },
           {
+            "key": "keys.inspect",
+            "text": "开启或关闭检查"
+          },
+          {
             "key": "keys.pick",
             "text": "选取焦点数值，再与下一个比对"
           },
@@ -70893,6 +70943,10 @@
           }
         ],
         "words": [
+          {
+            "native": "开启或关闭检查",
+            "english": "inspect on or off"
+          },
           {
             "native": "微缩印刷",
             "english": "microprint"
@@ -76096,6 +76150,10 @@
             "text": "反対側で、値のリンクをたどるか、フォーカス中の検索結果を開く"
           },
           {
+            "key": "keys.inspect",
+            "text": "検査のオンとオフ"
+          },
+          {
             "key": "keys.pick",
             "text": "フォーカス中の値を保持し、次の値と照合"
           },
@@ -78781,6 +78839,10 @@
           }
         ],
         "words": [
+          {
+            "native": "検査のオンとオフ",
+            "english": "inspect on or off"
+          },
           {
             "native": "繰り返して",
             "english": "repeat"

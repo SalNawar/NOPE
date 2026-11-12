@@ -1380,6 +1380,10 @@ MonoBehaviour:
       anderen Seite \xF6ffnen"
     gloss: 0
     tier: 0
+  - key: keys.inspect
+    text: "Pr\u00FCfen ein oder aus"
+    gloss: 0
+    tier: 0
   - key: keys.pick
     text: "Den fokussierten Wert halten und dann mit dem n\xE4chsten vergleichen"
     gloss: 0

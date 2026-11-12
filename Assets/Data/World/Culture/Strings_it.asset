@@ -1381,6 +1381,10 @@ MonoBehaviour:
       lato
     gloss: 0
     tier: 0
+  - key: keys.inspect
+    text: "Ispezione attiva o disattiva"
+    gloss: 0
+    tier: 0
   - key: keys.pick
     text: Tieni il valore selezionato, poi confrontalo con il successivo
     gloss: 0
@@ -4119,6 +4123,10 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   words:
+  - native: "attiva"
+    english: on
+  - native: "disattiva"
+    english: off
   - native: ripetere
     english: repeat
   - native: Compra

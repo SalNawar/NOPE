@@ -25,16 +25,25 @@ public class ShortcutMapTests
     /// <summary>No window has the focus; an icon is selected.</summary>
     private static readonly ShortcutContext Icons = new ShortcutContext(frameOpen: true, desktopFocused: true, iconSelected: true);
 
+    /// <summary>The commands that lost their keys with the Lens screen (the enum keeps them).</summary>
+    private static readonly AppCommand[] NoKey =
+    {
+        AppCommand.FocusSearch, AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4, AppCommand.NextStep, AppCommand.PrevStep,
+        AppCommand.ToggleSplit, AppCommand.IntoResults, AppCommand.Pin, AppCommand.Follow, AppCommand.FollowOther
+    };
+
+    private static List<AppCommand> Keyed() => Enum.GetValues(typeof(AppCommand)).Cast<AppCommand>().Except(NoKey).ToList();
+
     private static AppCommand? Resolve(KeyChord chord, ShortcutContext context) =>
         ShortcutMap.Resolve(chord, context, out AppCommand command) ? command : (AppCommand?)null;
 
     [Test]
-    public void AnywhereOnTheDesktop_CtrlF_Esc_F1()
+    public void AnywhereOnTheDesktop_Esc_F1()
     {
         foreach (ShortcutContext c in new[] { App, Icons, new ShortcutContext(frameOpen: true) })
         {
-            Assert.AreEqual(AppCommand.FocusSearch, Resolve(K(ShortcutKey.F, ctrl: true), c));
-            Assert.AreEqual(AppCommand.FocusSearch, Resolve(K(ShortcutKey.K, ctrl: true), c));
+            Assert.IsNull(Resolve(K(ShortcutKey.F, ctrl: true), c));
+            Assert.IsNull(Resolve(K(ShortcutKey.K, ctrl: true), c));
             Assert.AreEqual(AppCommand.Escape, Resolve(K(ShortcutKey.Escape), c));
             Assert.AreEqual(AppCommand.Help, Resolve(K(ShortcutKey.F1), c));
         }
@@ -66,36 +75,42 @@ public class ShortcutMapTests
     }
 
     [Test]
-    public void CtrlDigits_GoToThatGuidedStep()
+    public void TheGuidedStepsAndTheSplit_HaveNoKeys()
     {
-        ShortcutKey[] digits = { ShortcutKey.Digit1, ShortcutKey.Digit2, ShortcutKey.Digit3, ShortcutKey.Digit4 };
-        AppCommand[] steps = { AppCommand.Step1, AppCommand.Step2, AppCommand.Step3, AppCommand.Step4 };
-        for (int i = 0; i < digits.Length; i++)
-        {
-            Assert.AreEqual(steps[i], Resolve(K(digits[i], ctrl: true), App));
-            Assert.AreEqual(i + 1, ShortcutMap.StepPosition(steps[i]));
-        }
-        Assert.AreEqual(CaseGuide.Stages.Count, steps.Length, "one chord per guided step");
-        Assert.AreEqual(0, ShortcutMap.StepPosition(AppCommand.Pin));
-        Assert.IsNull(Resolve(K(ShortcutKey.Digit5, ctrl: true), App), "no fifth step: the PC does not decide (the stamps do)");
+        foreach (ShortcutKey key in new[] { ShortcutKey.Digit1, ShortcutKey.Digit2, ShortcutKey.Digit3, ShortcutKey.Digit4, ShortcutKey.Tab, ShortcutKey.Backslash, ShortcutKey.P })
+            Assert.IsNull(Resolve(K(key, ctrl: true), App), key.ToString());
+        Assert.IsNull(Resolve(K(ShortcutKey.Tab, ctrl: true, shift: true), App));
+    }
+
+    [Test]
+    public void Space_IsInspect_WithTheAppFocused_AListOrNot()
+    {
+        Assert.AreEqual(AppCommand.ToggleInspect, Resolve(K(ShortcutKey.Space), App));
+        Assert.AreEqual(AppCommand.ToggleInspect, Resolve(K(ShortcutKey.Space), AppList));
+        Assert.IsNull(Resolve(K(ShortcutKey.Space), Icons), "the app must have the focus");
+        Assert.IsNull(Resolve(K(ShortcutKey.Space, ctrl: true), App));
+    }
+
+    [Test]
+    public void Enter_OnAFocusedValue_Picks_CtrlEnterIsNothing()
+    {
+        Assert.AreEqual(AppCommand.Pick, Resolve(K(ShortcutKey.Enter), AppList));
+        Assert.IsNull(Resolve(K(ShortcutKey.Enter, ctrl: true), AppList));
+        Assert.IsNull(Resolve(K(ShortcutKey.Enter), App), "no focus ring: no pick");
     }
 
     [Test]
     public void TheAppsChords()
     {
-        Assert.AreEqual(AppCommand.NextStep, Resolve(K(ShortcutKey.Tab, ctrl: true), App));
-        Assert.AreEqual(AppCommand.PrevStep, Resolve(K(ShortcutKey.Tab, ctrl: true, shift: true), App));
         Assert.IsNull(Resolve(K(ShortcutKey.PageUp, ctrl: true, shift: true), App), "the navigator's order is retired");
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6), App));
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6, shift: true), App));
-        Assert.AreEqual(AppCommand.ToggleSplit, Resolve(K(ShortcutKey.Backslash, ctrl: true), App));
         Assert.AreEqual(AppCommand.ToggleFindings, Resolve(K(ShortcutKey.B, ctrl: true), App));
         Assert.IsNull(Resolve(K(ShortcutKey.S, ctrl: true, shift: true), App), "the step hints' chord is retired");
         Assert.AreEqual(AppCommand.Back, Resolve(K(ShortcutKey.Left, alt: true), App));
         Assert.AreEqual(AppCommand.Forward, Resolve(K(ShortcutKey.Right, alt: true), App));
         Assert.AreEqual(AppCommand.NextRegion, Resolve(K(ShortcutKey.Tab), App));
         Assert.AreEqual(AppCommand.PrevRegion, Resolve(K(ShortcutKey.Tab, shift: true), App));
-        Assert.AreEqual(AppCommand.Pin, Resolve(K(ShortcutKey.P, ctrl: true), App));
         Assert.AreEqual(AppCommand.ZoomIn, Resolve(K(ShortcutKey.Equals, ctrl: true), App));
         Assert.AreEqual(AppCommand.ZoomOut, Resolve(K(ShortcutKey.Minus, ctrl: true), App));
         Assert.AreEqual(AppCommand.ZoomReset, Resolve(K(ShortcutKey.Digit0, ctrl: true), App));
@@ -104,7 +119,7 @@ public class ShortcutMapTests
     [Test]
     public void TheAppsChords_NeedTheApp()
     {
-        foreach (KeyChord chord in new[] { K(ShortcutKey.Digit1, ctrl: true), K(ShortcutKey.Tab), K(ShortcutKey.B, ctrl: true), K(ShortcutKey.P, ctrl: true), K(ShortcutKey.Equals, ctrl: true) })
+        foreach (KeyChord chord in new[] { K(ShortcutKey.Space), K(ShortcutKey.Tab), K(ShortcutKey.B, ctrl: true), K(ShortcutKey.Equals, ctrl: true) })
             Assert.IsNull(Resolve(chord, Icons), chord.ToString());
     }
 
@@ -119,9 +134,7 @@ public class ShortcutMapTests
         Assert.AreEqual(AppCommand.RowLast, Resolve(K(ShortcutKey.End), AppList));
         Assert.AreEqual(AppCommand.PageUp, Resolve(K(ShortcutKey.PageUp), AppList));
         Assert.AreEqual(AppCommand.PageDown, Resolve(K(ShortcutKey.PageDown), AppList));
-        Assert.AreEqual(AppCommand.Follow, Resolve(K(ShortcutKey.Enter), AppList));
-        Assert.AreEqual(AppCommand.FollowOther, Resolve(K(ShortcutKey.Enter, ctrl: true), AppList));
-        Assert.AreEqual(AppCommand.Pick, Resolve(K(ShortcutKey.Space), AppList));
+        Assert.AreEqual(AppCommand.Pick, Resolve(K(ShortcutKey.Enter), AppList));
         Assert.AreEqual(AppCommand.Copy, Resolve(K(ShortcutKey.C, ctrl: true), AppList));
         Assert.AreEqual(AppCommand.CopyRow, Resolve(K(ShortcutKey.C, ctrl: true, shift: true), AppList));
     }
@@ -129,7 +142,7 @@ public class ShortcutMapTests
     [Test]
     public void TheRowKeys_NeedAListFocused()
     {
-        foreach (KeyChord chord in new[] { K(ShortcutKey.Up), K(ShortcutKey.Home), K(ShortcutKey.Space), K(ShortcutKey.Enter), K(ShortcutKey.C, ctrl: true) })
+        foreach (KeyChord chord in new[] { K(ShortcutKey.Up), K(ShortcutKey.Home), K(ShortcutKey.Enter), K(ShortcutKey.C, ctrl: true) })
             Assert.IsNull(Resolve(chord, App), chord.ToString());
     }
 
@@ -149,17 +162,14 @@ public class ShortcutMapTests
     public void ATextField_OnlyTheChordsThatCannotBeTypingPass()
     {
         var field = new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true, listFocused: true, notesFocused: true);
-        Assert.AreEqual(AppCommand.FocusSearch, Resolve(K(ShortcutKey.F, ctrl: true), field));
-        Assert.AreEqual(AppCommand.Step3, Resolve(K(ShortcutKey.Digit3, ctrl: true), field));
         Assert.AreEqual(AppCommand.OtherPane, Resolve(K(ShortcutKey.F6), field));
-        Assert.AreEqual(AppCommand.ToggleSplit, Resolve(K(ShortcutKey.Backslash, ctrl: true), field));
         Assert.AreEqual(AppCommand.ToggleFindings, Resolve(K(ShortcutKey.B, ctrl: true), field));
         Assert.AreEqual(AppCommand.Escape, Resolve(K(ShortcutKey.Escape), field));
         Assert.AreEqual(AppCommand.Help, Resolve(K(ShortcutKey.F1), field));
 
         // The field keeps its own Ctrl+C/V, the arrows, Home, End, Space, Enter and Tab.
         foreach (KeyChord typing in new[] { K(ShortcutKey.C, ctrl: true), K(ShortcutKey.V, ctrl: true), K(ShortcutKey.Up), K(ShortcutKey.Home), K(ShortcutKey.Space),
-                                            K(ShortcutKey.Enter), K(ShortcutKey.Tab), K(ShortcutKey.P, ctrl: true), K(ShortcutKey.Equals, ctrl: true), K(ShortcutKey.Left, alt: true) })
+                                            K(ShortcutKey.Enter), K(ShortcutKey.Tab), K(ShortcutKey.Equals, ctrl: true), K(ShortcutKey.Left, alt: true) })
             Assert.IsNull(Resolve(typing, field), typing.ToString());
     }
 
@@ -194,7 +204,7 @@ public class ShortcutMapTests
         Assert.AreEqual(AppCommand.Escape, Resolve(K(ShortcutKey.Escape), menu));
         Assert.IsNull(Resolve(K(ShortcutKey.F1), menu));
         Assert.IsNull(Resolve(K(ShortcutKey.Down), menu));
-        Assert.IsNull(Resolve(K(ShortcutKey.F, ctrl: true), menu));
+        Assert.IsNull(Resolve(K(ShortcutKey.B, ctrl: true), menu));
     }
 
     [Test]
@@ -217,29 +227,10 @@ public class ShortcutMapTests
     }
 
     [Test]
-    public void DownFromTheSearchField_GoesIntoTheResults()
+    public void DownFromTheSearchField_IsNotIntoTheResults_TheFieldKeepsIt()
     {
-        Assert.AreEqual(AppCommand.IntoResults, Resolve(K(ShortcutKey.Down), SearchWithResults));
-        var noResults = new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true, searchFocused: true);
-        Assert.IsNull(Resolve(K(ShortcutKey.Down), noResults), "no hit listed: the field keeps its arrow");
-        var otherField = new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true, resultsShown: true);
-        Assert.IsNull(Resolve(K(ShortcutKey.Down), otherField), "another field keeps its arrows");
-        Assert.IsNull(Resolve(K(ShortcutKey.Down, ctrl: true), SearchWithResults));
-        Assert.IsNull(Resolve(K(ShortcutKey.Down, shift: true), SearchWithResults), "Shift+Down selects in the field");
-        Assert.IsNull(Resolve(K(ShortcutKey.Up), SearchWithResults), "the field keeps Up");
-        Assert.IsNull(Resolve(K(ShortcutKey.Enter), SearchWithResults), "the field's own Enter opens the first hit");
-    }
-
-    [Test]
-    public void InTheResults_TheArrowsWalkTheHits_EnterOpens_CtrlEnterInTheOtherPane()
-    {
-        var results = new ShortcutContext(frameOpen: true, appFocused: true, listFocused: true, resultsShown: true);
-        Assert.AreEqual(AppCommand.RowDown, Resolve(K(ShortcutKey.Down), results));
-        Assert.AreEqual(AppCommand.RowUp, Resolve(K(ShortcutKey.Up), results));
-        Assert.AreEqual(AppCommand.Follow, Resolve(K(ShortcutKey.Enter), results));
-        Assert.AreEqual(AppCommand.FollowOther, Resolve(K(ShortcutKey.Enter, ctrl: true), results));
-        Assert.IsNull(Resolve(K(ShortcutKey.Down), new ShortcutContext(frameOpen: false, appFocused: true, textFieldFocused: true, searchFocused: true, resultsShown: true)),
-                      "nothing while the frame is closed");
+        Assert.IsNull(Resolve(K(ShortcutKey.Down), SearchWithResults));
+        Assert.IsNull(Resolve(K(ShortcutKey.Enter), SearchWithResults));
     }
 
     [Test]
@@ -277,7 +268,8 @@ public class ShortcutMapTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(row.TextKey));
             seen.AddRange(row.Commands);
         }
-        CollectionAssert.AreEquivalent(Enum.GetValues(typeof(AppCommand)).Cast<AppCommand>().ToList(), seen);
+        CollectionAssert.AreEquivalent(Keyed(), seen, "every command with a key, once; the retired ones are off the card");
+        CollectionAssert.Contains(seen, AppCommand.ToggleInspect);
     }
 
     [Test]
@@ -302,7 +294,7 @@ public class ShortcutMapTests
                 foreach (ShortcutContext c in contexts)
                     if (ShortcutMap.Resolve(K(key, (mods & 1) != 0, (mods & 2) != 0, (mods & 4) != 0), c, out AppCommand command))
                         reached.Add(command);
-        CollectionAssert.AreEquivalent(Enum.GetValues(typeof(AppCommand)).Cast<AppCommand>().ToList(), reached);
+        CollectionAssert.AreEquivalent(Keyed(), reached);
     }
 
     /// <summary>The keys of today's ui strings (world_source.json).</summary>
