@@ -308,6 +308,9 @@ public sealed class PaperCover : MonoBehaviour
         mark.localRotation = Quaternion.Euler(pitch, yaw, 0f);
     }
 
+    /// <summary>The cover's front while the booklet shows shut or swings (what is drawn over its data page, one page high), else null (open, or no booklet).</summary>
+    public Renderer ShutFace => _shown && _flip.State != CoverState.Open ? front : null;
+
     /// <summary>A press on the booklet (DeskDocument's pointer down, the left button): a shut cover swings open on the press frame (GAME_FEEL_BIBLE A1); a drag from it works open or closed.</summary>
     public void Press()
     {
