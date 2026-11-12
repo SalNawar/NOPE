@@ -367,12 +367,9 @@ public sealed partial class InvestigationApp
         }
     }
 
-    /// <summary>Ctrl+K, Ctrl+F: the app opened or restored, the search drawer open, its field focused (its text selected).</summary>
+    /// <summary>Ctrl+K, Ctrl+F: nothing (the search drawer does not open, see OpenSearch).</summary>
     private void FocusSearch()
     {
-        OpenWindow();
-        OpenSearch();
-        SetRegion(AppRegion.Search, 0, true);
     }
 
     /// <summary>Tab (1) or Shift+Tab (-1): the next region that is there; the first press starts at the region's home.</summary>

@@ -210,12 +210,9 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// form's. Pass a document copy 520 u and a page kind its pane's width,
     /// and Show again when the pane's width changes (a maximise). The slots
     /// <paramref name="pickable"/> accepts (every slot when null) get a button
-    /// and tint under the pointer, lit while their key is picked (Bind); the
-    /// slots <paramref name="linkHint"/> gives a hint get a ↗ with that hint,
-    /// and the cells of a table row <paramref name="cellLinkHint"/> gives a
-    /// hint (the slot and the cell's index) get one each at the cell's top
-    /// right; with <paramref name="linkHint"/> the tables' last column leaves
-    /// the ↗'s room. A text <paramref name="scriptOf"/> gives a font (a
+    /// and tint under the pointer, lit while their key is picked (Bind). The
+    /// <paramref name="linkHint"/> and <paramref name="cellLinkHint"/> hints
+    /// are ignored: no slot gets a ↗ (smart links are off). A text <paramref name="scriptOf"/> gives a font (a
     /// transcript line in its tongue's script) is measured and printed in it.
     /// The found mark clears. Returns the placed form (null without a style or
     /// text template).
@@ -226,6 +223,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         _hovered = null;
         _form = null;
         _marks.Clear();
+        linkHint = null; // no ↗ anywhere: the PC does not open the related document for the clerk (the Lens screen)
+        cellLinkHint = null;
         if (style == null || textTemplate == null)
             return null;
 

@@ -39,12 +39,9 @@ public sealed partial class InvestigationApp
     /// <summary>True while the drawer lists hits (↓ in the field goes into them; Tab visits them).</summary>
     public bool ResultsListed => searchBox != null && searchBox.HitRows.Count > 0;
 
-    /// <summary>Opens the search drawer, its field empty and ready (the shelf's Search button, Ctrl+K).</summary>
+    /// <summary>The search drawer does not open: the PC does not find a word in every paper for the clerk (the Lens screen; the Registry keeps its own search field).</summary>
     public void OpenSearch()
     {
-        Init();
-        if (searchBox != null)
-            searchBox.Open();
     }
 
     /// <summary>Escape's CloseResults (and a press on the dim): the drawer closes; the ring goes back to the panes.</summary>

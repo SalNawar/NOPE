@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -27,9 +28,11 @@ using UnityEngine.UI;
 /// the date are injected per day by GameManager through the façade and
 /// DayReference. Each evidence box is marked with its key for the keys, the
 /// copy and the pins (AppRow: "Aster Vale · Born"). Each pane has one. Its
-/// item is the record looked up ("rec:{id}", IAppItems).
+/// item is the record looked up ("rec:{id}", IAppItems). A lookup that finds
+/// no record prints its "no entry" line, which the player can click to hold it
+/// on the workbench (MatchBoard.PickNoRecord) against a citizen or registry ID.
 /// </summary>
-public sealed class RecordsView : AppView, IAppItems
+public sealed class RecordsView : AppView, IAppItems, IPointerClickHandler
 {
     [Header("Lookup")]
     /// <summary>Where the player types a name or a number.</summary>
@@ -62,6 +65,9 @@ public sealed class RecordsView : AppView, IAppItems
 
     /// <summary>The box a link went to (its pick key; null: none), marked found.</summary>
     private string _foundKey;
+
+    /// <summary>The words of the query line as last drawn (the line a click on "no entry" is found by).</summary>
+    private string _queryLine;
 
     /// <summary>The lookup shown (trimmed; null: none).</summary>
     public string Query { get; private set; }
@@ -203,15 +209,10 @@ public sealed class RecordsView : AppView, IAppItems
         if (page == null || Form == null || extractForm == null)
             return;
         FormData data = extractForm.Page(_agency);
-        data.Text = new Dictionary<string, string>
-        {
-            {
-                RecordExtractPage.QuerySlot,
-                Query == null ? UiText.Pc.Get("records.idle")
-                : _current != null ? UiText.Pc.Format("records.onFile", Query, _today ?? string.Empty)
-                : UiText.Pc.Format("records.noRecord", Query, _today ?? string.Empty)
-            }
-        };
+        _queryLine = Query == null ? UiText.Pc.Get("records.idle")
+                   : _current != null ? UiText.Pc.Format("records.onFile", Query, _today ?? string.Empty)
+                   : UiText.Pc.Format("records.noRecord", Query, _today ?? string.Empty);
+        data.Text = new Dictionary<string, string> { { RecordExtractPage.QuerySlot, _queryLine } };
         var groups = new List<FormGroup>();
         if (_current != null)
             foreach (RecordGroup group in _current.Groups)
@@ -262,6 +263,24 @@ public sealed class RecordsView : AppView, IAppItems
                 found = slot.Index;
         }
         Form.MarkFound(found);
+    }
+
+    /// <summary>A click on the "no entry" line (a lookup with no record): the line is held on the workbench (it is plain text, no slot, so the click is found by its place on the form).</summary>
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        MatchBoard board = GetComponentInParent<InvestigationApp>()?.Board;
+        if (board == null || Query == null || _current != null || Form == null || Form.Placed == null)
+            return;
+        var rt = (RectTransform)Form.transform;
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, eventData.position, eventData.pressEventCamera, out Vector2 local))
+            return;
+        Rect r = rt.rect;
+        foreach (FormItem item in Form.Placed.Items)
+            if (item.Kind == FormItemKind.Text && item.Slot < 0 && item.Text == _queryLine && item.Rect.Contains(local.x - r.xMin, r.yMax - local.y))
+            {
+                board.PickNoRecord(Query);
+                return;
+            }
     }
 
     /// <summary>A box was clicked: its row goes into the compare (the box lights by its key).</summary>

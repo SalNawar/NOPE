@@ -57,7 +57,7 @@ public sealed class MatchBoard : MonoBehaviour
     /// <summary>A note: nothing logged.</summary>
     [SerializeField] private TMP_Text infoText;
 
-    /// <summary>What a value, a rule or the date held is: its key, where it is, what it reads; a rule or today for the specials.</summary>
+    /// <summary>What a value, a rule or the date held is: its key, where it is, what it reads; a rule, today or the Registry's no-entry line for the specials.</summary>
     private sealed class Held
     {
         public string Key;
@@ -65,6 +65,7 @@ public sealed class MatchBoard : MonoBehaviour
         public string Value;
         public TravelRuleSO Rule;
         public bool Today;
+        public bool NoRecord;
     }
 
     private readonly FindingLog _log = new FindingLog();
@@ -200,7 +201,15 @@ public sealed class MatchBoard : MonoBehaviour
         PickSpecial(new Held { Key = EntryKeys.CalendarToday, Title = UiText.Pc.Get("app.tab.calendar"), Value = todayText ?? string.Empty, Today = true });
     }
 
-    /// <summary>A rule or the date clicked: judged against the value held, else held (see PickRule).</summary>
+    /// <summary>The Registry's "no entry" line for <paramref name="query"/> was clicked (RecordsView): as a rule is; held against a citizen or registry ID that is that number it logs "No record on file".</summary>
+    public void PickNoRecord(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return;
+        PickSpecial(new Held { Key = EntryKeys.NoRecord(query), Title = UiText.Pc.Get("app.tab.records"), Value = query.Trim(), NoRecord = true });
+    }
+
+    /// <summary>A rule, the date or the no-entry line clicked: judged against the value held, else held (see PickRule).</summary>
     private void PickSpecial(Held special)
     {
         Wire();
@@ -228,7 +237,8 @@ public sealed class MatchBoard : MonoBehaviour
         _special = special;
         _holdKey = special.Key;
         ClearLink();
-        ShowStatus(FindingLook.Info, special.Today ? UiText.Pc.Format("status.holdingToday", special.Value) : UiText.Pc.Format("status.holdingRule", special.Value), true);
+        ShowStatus(FindingLook.Info, special.NoRecord ? UiText.Pc.Format("status.holding", special.Value, special.Title)
+                                   : special.Today ? UiText.Pc.Format("status.holdingToday", special.Value) : UiText.Pc.Format("status.holdingRule", special.Value), true);
         Changed?.Invoke();
     }
 
@@ -286,6 +296,14 @@ public sealed class MatchBoard : MonoBehaviour
     private void Judge(Held special, ComparePick value)
     {
         CompareEvidence e = value.Evidence;
+        if (special.NoRecord)
+        {
+            // The Registry found no record of the number: a citizen or registry ID that is that number is the difference; any other value has nothing to do with it.
+            bool same = e.category == ClueCategory.CitizenId && Values.Match(e.value, special.Value);
+            Record(same ? FindingKind.NoRecord : FindingKind.NothingToCompare, special.Key, special.Title, special.Value, value.Key, value.Label, value.Shown, special.Value,
+                   What(special), FindingsView.What(value.Label), null, e.category);
+            return;
+        }
         FindingKind kind;
         if (special.Today)
             kind = _case != null && _case.facts != null && _case.facts.Today.HasValue
@@ -328,31 +346,6 @@ public sealed class MatchBoard : MonoBehaviour
         Changed?.Invoke();
     }
 
-    /// <summary>
-    /// The case board's lookup found no record of <paramref name="query"/>
-    /// (the scanner app spec §2.1: the NO RECORD plate is itself a finding):
-    /// logged as a difference ("No record on file"), once per case and query;
-    /// no line is drawn.
-    /// </summary>
-    public void LogNoRecord(string query)
-    {
-        if (string.IsNullOrWhiteSpace(query))
-            return;
-        Wire();
-        var finding = new Finding(FindingKind.NoRecord, NoRecordKey(query), string.Empty, UiText.Pc.Get("app.tab.records"), query.Trim(), string.Empty, string.Empty,
-                                  query.Trim(), null, ClueCategory.CitizenId);
-        if (!_log.Add(finding))
-            return;
-        ShowStatus(FindingLook.Info, UiText.Pc.Format("status.logged", FindingsView.Title(finding))); // a hint, never a proof (BUG-47b)
-        if (findings != null)
-            findings.Show(_log);
-        Logged?.Invoke(finding);
-        Changed?.Invoke();
-    }
-
-    /// <summary>A NO RECORD finding's key ("norecord:NHA-512"): no row has it, so a revisit opens Records only by its own link.</summary>
-    private static string NoRecordKey(string query) => "norecord:" + query.Trim();
-
     /// <summary>A missing paper's finding key ("missing:TC-230"): no row has it, so a revisit opens nothing.</summary>
     private static string MissingKey(string requestId) => InterviewUnlocks.Missing(requestId);
 
@@ -360,7 +353,7 @@ public sealed class MatchBoard : MonoBehaviour
     private static bool IsTruth(CompareEvidence e) => e.kind == EvidenceKind.ReferenceEntry || e.kind == EvidenceKind.RecordField;
 
     /// <summary>What a held rule or the date is, in a note ("Today's date", "The rule").</summary>
-    private static string What(Held special) => UiText.Pc.Get(special.Today ? "finding.what.today" : "finding.what.rule");
+    private static string What(Held special) => special.NoRecord ? special.Title : UiText.Pc.Get(special.Today ? "finding.what.today" : "finding.what.rule");
 
     /// <summary>A result: the line between the two values, the status line (a note names <paramref name="whatA"/> and <paramref name="whatB"/>) and, for a logged kind, the findings, titled by <paramref name="subject"/> (a pair already logged is only shown again); <paramref name="proof"/> is the deviation the pair proved, or null.</summary>
     private void Record(FindingKind kind, string keyA, string titleA, string valueA, string keyB, string titleB, string valueB, string subject, string whatA,

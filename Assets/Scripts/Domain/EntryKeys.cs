@@ -48,6 +48,7 @@ public static class EntryKeys
     private const string RecordCardPrefix = "rec:";
     private const string RulePrefix = "rule:";
     private const string DeviationPrefix = "dev:";
+    private const string NoRecordPrefix = "norecord:";
 
     /// <summary>The calendar's today as a value the workbench holds and matches (the PC workbench spec IA6).</summary>
     public const string CalendarToday = "cal:today";
@@ -63,6 +64,9 @@ public static class EntryKeys
 
     /// <summary>Rule <paramref name="index"/> of the day's directives ("rule:1"; a search result's key).</summary>
     public static string Rule(int index) => RulePrefix + index.ToString(CultureInfo.InvariantCulture);
+
+    /// <summary>The Registry's no-entry line for <paramref name="query"/>, as a value the workbench holds ("norecord:NHA-512"; no row has it).</summary>
+    public static string NoRecord(string query) => NoRecordPrefix + (query ?? string.Empty).Trim();
 
     /// <summary>The case's deviation of <paramref name="category"/> ("dev:Currency"; a search result's key).</summary>
     public static string Deviation(ClueCategory category) => DeviationPrefix + category;

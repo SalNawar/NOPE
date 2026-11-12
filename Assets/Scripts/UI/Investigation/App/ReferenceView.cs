@@ -9,12 +9,12 @@ using UnityEngine.UI;
 /// art exists (SlotArt.CoverFor), and the book's Register (Form_Register,
 /// TC-911 to TC-916 by the book's place in the library, on a FormPage cloned
 /// per book at the pane's width): the edition line, then a table of PLACE,
-/// ERA, VALUE and NOTE over today's places (ReferenceRows): the claimed
-/// place's row first, noted "Claimed"; a row whose value history changed
+/// ERA, VALUE and NOTE over today's places (ReferenceRows) in their natural
+/// order (no claimed row first, no "Claimed" note, no "Claimed place only"
+/// filter: SetClaim); a row whose value history changed
 /// noted "Revised" (FactTable.IsChanged; the value and the evidence stay
 /// canonical); the Costume Guide (a book with groupByEra) under era heading
-/// rows, the claimed era first, the present last. "Claimed place only" (on
-/// at each case's start, AP8) shows the claimed row alone. Each row is a
+/// rows, the present last. Each row is a
 /// pick, the same as ever (EvidencePicks.ForBookRow, PickKeys.BookRow), lit
 /// while its key is picked (CM3). The books are built on the first case; the
 /// register works between travellers too (a day source), and a register is
@@ -68,8 +68,6 @@ public sealed class ReferenceView : AppView, IAppItems
     /// <summary>The introduction registry (BuildBooks): a book is on the shelf from the day it is introduced (Feature.Book of its category).</summary>
     private Introductions _introductions = Introductions.None;
     private string _presentEra;
-    private string _claimedNation;
-    private string _claimedEra;
     private int _selected = -1;
     private bool _built;
 
@@ -165,13 +163,14 @@ public sealed class ReferenceView : AppView, IAppItems
         Select(_pages.Count > 0 ? FirstOnShelf() : -1);
     }
 
-    /// <summary>A new case's claim (null ids for none): its row comes first, and "Claimed place only" turns on (AP8).</summary>
+    /// <summary>A new case's claim is not used: the books keep their natural order, with no "Claimed" note and no "Claimed place only" filter (it is off and hidden), so the PC does not point at the place to check.</summary>
     public void SetClaim(string nationId, string eraId)
     {
-        _claimedNation = nationId;
-        _claimedEra = eraId;
         if (claimedOnly != null)
-            claimedOnly.SetIsOnWithoutNotify(true);
+        {
+            claimedOnly.SetIsOnWithoutNotify(false);
+            claimedOnly.gameObject.SetActive(false);
+        }
         Redraw();
     }
 
@@ -261,7 +260,7 @@ public sealed class ReferenceView : AppView, IAppItems
         }
         bool only = claimedOnly != null && claimedOnly.isOn;
         IReadOnlyList<FactRow> rows = _facts != null ? _facts.Rows(book.category) : null;
-        _lines[index] = ReferenceRows.Arrange(rows, _claimedNation, _claimedEra, only, book.groupByEra, _eraOrder, _presentEra);
+        _lines[index] = ReferenceRows.Arrange(rows, null, null, only, book.groupByEra, _eraOrder, _presentEra);
 
         FormData data = registerForm.Page(_agency);
         data.FormNumber = RegisterPage.FormNumber(registerForm.form.formNumber, index);

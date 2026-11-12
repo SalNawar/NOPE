@@ -181,7 +181,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
         }
     }
 
-    /// <summary>The chip's record, a line per printed field in the print's order; a value that differs from the print glows.</summary>
+    /// <summary>The chip's record, a line per printed field in the print's order. No line glows: the clerk compares the chip value with the print (a line that differs still logs the reading when clicked).</summary>
     private void DrawChip()
     {
         if (title != null)
@@ -200,8 +200,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
             {
                 int field = i;
                 string value = chip[i].value;
-                bool glows = differ.Contains(i);
-                Line(UiText.Pc.Format("layers.chip.line", UiText.Pc.DocumentWord(chip[i].label), value), glows, glows ? () => Picked?.Invoke(document, field, value, ScanLayer.Chip) : (Action)null);
+                Line(UiText.Pc.Format("layers.chip.line", UiText.Pc.DocumentWord(chip[i].label), value), false, differ.Contains(i) ? () => Picked?.Invoke(document, field, value, ScanLayer.Chip) : (Action)null);
             }
     }
 

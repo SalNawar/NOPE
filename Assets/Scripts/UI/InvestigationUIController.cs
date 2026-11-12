@@ -201,7 +201,6 @@ public sealed class InvestigationUIController : MonoBehaviour
         _documents.PapersChanged += ShowMissing;
         _documents.PapersChanged += RefreshBoard;
         _interview.MissingChanged += RefreshBoard;
-        _caseBoard.NoRecord += LogNoRecord;
         foreach (CaseBoardView board in _caseBoard.Views)
             if (board != null)
                 board.FlagRequested += FlagMissingFromApp;
@@ -286,7 +285,6 @@ public sealed class InvestigationUIController : MonoBehaviour
         _documents.PapersChanged -= ShowMissing;
         _documents.PapersChanged -= RefreshBoard;
         _interview.MissingChanged -= RefreshBoard;
-        _caseBoard.NoRecord -= LogNoRecord;
         foreach (CaseBoardView board in _caseBoard.Views)
             if (board != null)
                 board.FlagRequested -= FlagMissingFromApp;
@@ -440,13 +438,6 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>Asks question <paramref name="choiceId"/> from the desk's card ring (InterviewPresenter.Ask); false when nothing was asked.</summary>
     public bool AskProtocol(string choiceId) => _currentCase != null && _interview != null && _interview.Ask(choiceId);
-
-    /// <summary>The case board's lookup found no record of the scanned papers' number or name: the workbench logs it (the scanner app spec §2.1).</summary>
-    private void LogNoRecord(string query)
-    {
-        if (Board != null && _currentCase != null)
-            Board.LogNoRecord(query);
-    }
 
     /// <summary>The case board again, from the case's papers, the day's registry, directives and papers menu (a scan, a hand-over, a flag).</summary>
     private void RefreshBoard()

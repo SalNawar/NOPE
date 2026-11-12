@@ -208,14 +208,13 @@ public sealed partial class InvestigationApp : MonoBehaviour
         ShowWho();
     }
 
-    /// <summary>The status line's idle plate: who is at the desk with the counters ("<b>Yichen (Soldier)</b> · Papers: 1 of 2 received, 0 scanned"), else "Waiting for the next traveller".</summary>
+    /// <summary>The status line's idle plate: who is at the desk ("<b>Yichen (Soldier)</b>"), else "Waiting for the next traveller". The paper counters are not shown (they tell the clerk what is left to do).</summary>
     private void ShowWho()
     {
         if (board == null)
             return;
         board.SetIdleHint(_traveller == null ? UiText.Pc.Get("idle.waiting")
-                        : _counters == null ? UiText.Pc.Format("app.atDesk.name", _traveller)
-                        : UiText.Pc.Format("app.atDesk", _traveller, _counters));
+                        : UiText.Pc.Format("app.atDesk.name", _traveller));
     }
 
     /// <summary>Something new for the source (a transcript line, a logged deviation): its chip dotted unless a showing pane shows it; the icon dotted while the app is down.</summary>
@@ -228,7 +227,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             icons.SetBadge(DesktopAppIds.Investigation, IconBadge.Dot);
     }
 
-    /// <summary>Paper <paramref name="paper"/> was scanned (ScanArrival): the app opens when closed, the paper shows in each Papers view showing none, Papers dotted unless seen, a toast names it.</summary>
+    /// <summary>Paper <paramref name="paper"/> was scanned (ScanArrival): the app opens on that paper when closed, the paper shows in each Papers view showing none, Papers dotted unless seen, a toast names it.</summary>
     public void Scanned(int paper, string paperName)
     {
         Init();
@@ -243,33 +242,12 @@ public sealed partial class InvestigationApp : MonoBehaviour
                 documents.Select(paper);
         }
         if (arrival.OpenApp)
-        {
-            OpenWindow();
-            OpenBoard(paper);
-        }
+            OpenOnTarget(LinkTarget.ToTab(AppTab.Documents, paper));
         if (arrival.BadgeDocuments)
             Arrived(AppTab.Documents);
         if (arrival.Toast && toast != null)
-            toast.Show(UiText.Pc.Format("app.toast.scanned", paperName), config != null ? config.toastSeconds : 4f, () =>
-            {
-                OpenWindow();
-                OpenBoard(paper);
-            });
-    }
-
-    /// <summary>
-    /// The case board up (the scanner app spec §2: "when a scan lands, the app
-    /// opens to that traveller's case board"): the scanned paper on the left
-    /// and the board on the right, or the board alone in one pane; the
-    /// scanned paper alone where no pane hosts a board.
-    /// </summary>
-    private void OpenBoard(int paper)
-    {
-        LinkTarget scanned = LinkTarget.ToTab(AppTab.Documents, paper);
-        if (!Hosts(AppTab.Board))
-            OpenOnTarget(scanned);
-        else
-            OpenPair(_split ? scanned : LinkTarget.None, LinkTarget.ToTab(AppTab.Board));
+            toast.Show(UiText.Pc.Format("app.toast.scanned", paperName), config != null ? config.toastSeconds : 4f,
+                () => OpenOnTarget(LinkTarget.ToTab(AppTab.Documents, paper)));
     }
 
     /// <summary>Opens the app (a minimised one restores) on the source on the target side: Mail's directive memo shows today's rules.</summary>
@@ -411,29 +389,10 @@ public sealed partial class InvestigationApp : MonoBehaviour
         MarkShelf();
     }
 
-    /// <summary>A step was gone to: its pair of documents put up, the right side the target.</summary>
+    /// <summary>A step was gone to: nothing is put up. The PC does not choose the documents for the clerk (the Lens screen).</summary>
     private void StageShown(GuideStage stage)
     {
-        LinkTarget firstPaper = LinkTarget.ToTab(AppTab.Documents, 0);
-        switch (stage)
-        {
-            case GuideStage.Papers:
-                OpenPair(firstPaper, PaperCount > 1 ? LinkTarget.ToTab(AppTab.Documents, 1) : LinkTarget.ToTab(AppTab.Transcript));
-                break;
-            case GuideStage.Records:
-                OpenPair(firstPaper, guide.RecordsTarget());
-                break;
-            case GuideStage.Books:
-                OpenPair(firstPaper, guide.BooksTarget());
-                break;
-            case GuideStage.Rules:
-                OpenPair(LinkTarget.ToTab(AppTab.Rules), firstPaper);
-                break;
-        }
     }
-
-    /// <summary>The papers of the case (the left pane's Papers view's).</summary>
-    private int PaperCount => leftPane != null && leftPane.View(AppTab.Documents) != null ? leftPane.View(AppTab.Documents).Chips.Count : 0;
 
     /// <summary>The findings or what is held changed: the findings column opens from its rail at the first finding (or folds back at a new case).</summary>
     private void BoardChanged()
@@ -658,8 +617,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
                     items.Add(new ShelfItem(ShelfGroup.Traveller, documents.Chips[i].Label, LinkTarget.ToTab(AppTab.Documents, i), documents.Chips[i].Available));
         if (_traveller != null && Hosts(AppTab.Transcript))
             items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Pc.Get("app.tab.transcript"), LinkTarget.ToTab(AppTab.Transcript), true));
-        if (_traveller != null && Hosts(AppTab.Board) && Introduced(Feature.Scanner))
-            items.Add(new ShelfItem(ShelfGroup.Traveller, UiText.Pc.Get("app.tab.board"), LinkTarget.ToTab(AppTab.Board), true));
         if (Hosts(AppTab.Records) && Introduced(Feature.Records))
             items.Add(new ShelfItem(ShelfGroup.Agency, UiText.Pc.Get("app.tab.records"), LinkTarget.ToTab(AppTab.Records), true));
         if (Hosts(AppTab.Rules) && Introduced(Feature.Rulebook))
@@ -727,14 +684,12 @@ public sealed partial class InvestigationApp : MonoBehaviour
         return null;
     }
 
-    /// <summary>True for the traveller's readable document not opened yet this case, or a source with something new (the agency's documents and the books are reference: no dot for being unopened).</summary>
+    /// <summary>True for a source with something new (a transcript line). A paper not opened yet has no dot: the clerk decides what to read.</summary>
     private bool Unread(ShelfItem item)
     {
         if (!item.Available || _traveller == null)
             return false;
-        if (item.Target.Item < 0 && _badges.IsBadged(item.Target.Tab))
-            return true;
-        return item.Group == ShelfGroup.Traveller && !_opened.Contains(DocKey(item.Target.Tab, item.Target.Item));
+        return item.Target.Item < 0 && _badges.IsBadged(item.Target.Tab);
     }
 
     /// <summary>A document's key for the opened set ("Documents:1", "Records:-1").</summary>
