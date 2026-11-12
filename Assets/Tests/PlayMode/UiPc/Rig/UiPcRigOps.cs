@@ -676,6 +676,7 @@ public static class UiPcRigOps
         int opened = 0;
         foreach (string id in DesktopAppIds.DefaultOrder)
         {
+            yield return LensHome(runner);
             yield return ClickObject(runner, start);
             yield return QaGame.Frames(3);
             Transform entry = menu.Find("App_" + id);
@@ -725,14 +726,14 @@ public static class UiPcRigOps
             "8 windows: labelled buttons plus \"» N\", nothing over the tray, the chevron brings each waiting window forward (BUG-21a)");
     }
 
-    /// <summary>The Lens case screen covers the taskbar: while it shows, its Home key is clicked, so that the taskbar takes the next click (the window stays open behind the desktop).</summary>
+    /// <summary>The Lens case screen covers the taskbar: while it shows, it goes Home (InvestigationApp.Home, what its Home key does), so that the taskbar takes the next click; the window stays open behind the desktop. Rig housekeeping, not a press: two objects are named HomeButton, and the window can show some frames after its click.</summary>
     private static IEnumerator LensHome(QaRunner runner)
     {
+        yield return QaGame.Frames(6);
         InvestigationApp app = QaGame.Find<InvestigationApp>();
-        GameObject home = app != null && app.IsShowing ? QaGame.GameObjectAt("HomeButton") : null;
-        if (home == null)
+        if (app == null || !app.IsShowing)
             yield break;
-        yield return ClickObject(runner, home.transform);
+        app.Home();
         yield return QaGame.Frames(6);
     }
 
