@@ -182,7 +182,7 @@ public static class PersonPlayOps
 
     // ---------------- personGrabBeside ----------------
 
-    /// <summary>Presses 20 px (n) beside the passport on the counter as drawn, drags it to the desk's middle and asserts it lay on the desk (a press beside the visible paper takes it).</summary>
+    /// <summary>Presses 20 px (n) beside the passport on the counter as drawn (its own right edge at its middle row), drags it to the desk's middle and asserts it lay on the desk (a press beside the visible paper takes it).</summary>
     private static IEnumerator GrabBeside(QaRunner r, QaStep s)
     {
         DeskDocument p = Object.FindObjectsByType<DeskDocument>(FindObjectsInactive.Exclude).Where(d => d.isActiveAndEnabled && d.Sheet != null && d.Zone == DeskZone.Counter).OrderBy(d => d.Index).FirstOrDefault();
@@ -194,7 +194,17 @@ public static class PersonPlayOps
             yield break;
         }
         float gap = s.n > 0 ? s.n : 20f;
+        // beside the face's own edge at its middle row, not past its screen box: a paper seen at a slant has a box
+        // that reaches past its edge (D66: about 4 px at 1.8, so 20 px past the box was 24 px past the edge)
+        Camera cam = QaGame.PointerCamera();
         Vector2 from = new Vector2(face.Value.xMax + gap, face.Value.center.y);
+        if (cam != null)
+        {
+            Vector3 a = cam.WorldToScreenPoint(p.PaperFace.transform.TransformPoint(new Vector3(-0.5f, 0f, 0f)));
+            Vector3 b = cam.WorldToScreenPoint(p.PaperFace.transform.TransformPoint(new Vector3(0.5f, 0f, 0f)));
+            Vector3 edge = b.x >= a.x ? b : a;
+            from = new Vector2(edge.x + gap, edge.y);
+        }
         GameObject top = QaGame.TopAt(from);
         bool hit = top != null && top.transform.IsChildOf(p.transform);
         Rep(r, $"== grabBeside at {Screen.width}x{Screen.height}: drawn paper {Px(face)}, click box {Px(QaGame.ScreenRect(p.gameObject))}, press {gap:0} px beside it at ({from.x:0},{from.y:0}) meets {(top != null ? QaGame.Where(top) : "nothing")}{(hit ? string.Empty : " (NOT the paper)")}");
