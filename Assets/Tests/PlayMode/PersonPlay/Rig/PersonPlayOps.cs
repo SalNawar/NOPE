@@ -413,7 +413,7 @@ public static class PersonPlayOps
         if (rp == null || !Related(under, row.gameObject))
         {
             Find(r, "S2", "the passport (or something else) covers the rulebook's rule row", $"row point {(rp.HasValue ? rp.Value.ToString() : "off screen")}, under it {(under != null ? QaGame.Where(under) : "nothing")}; still {name}_folder; the folder must be dragged clear first");
-            yield return Clear(r, rb);
+            yield return Clear(r, rb, under, rp);
             rp = QaGame.ScreenPoint(row.gameObject);
             under = rp.HasValue ? QaGame.TopAt(rp.Value) : null;
             yield return Still(r, name + "_folder_clear");
@@ -426,9 +426,23 @@ public static class PersonPlayOps
         r.Assert(id, Owner, reached, reached ? "the rule row pressed" : "the rule row was covered", $"row {Array.IndexOf(rows, row)}");
     }
 
-    /// <summary>Drags the folder left by a real press on a visible part of it, as a player moves a book off a paper.</summary>
-    private static IEnumerator Clear(QaRunner r, DeskRulebook rb)
+    /// <summary>
+    /// Clears the rule row by a real drag, as a player does. A paper over the row (<paramref name="under"/> at
+    /// <paramref name="rowPoint"/>) is dragged right by its press there, off the folder: since D66 the open folder fills
+    /// the mat's left part, so a drag of the folder to the left went into its pocket, and the mat keeps the open spread
+    /// (rule 2), so the folder cannot clear a paper in the mat's middle. Anything else: the folder is dragged left.
+    /// </summary>
+    private static IEnumerator Clear(QaRunner r, DeskRulebook rb, GameObject under, Vector2? rowPoint)
     {
+        var screen = new Vector2(Screen.width, Screen.height);
+        if (under != null && rowPoint.HasValue && under.GetComponentInParent<DeskDocument>() != null)
+        {
+            Vector2 to = rowPoint.Value + new Vector2(Screen.width * 0.17f, 0f);
+            Rep(r, $"   drag the paper over the row from ({rowPoint.Value.x:0},{rowPoint.Value.y:0}) to ({to.x:0},{to.y:0})");
+            yield return r.Input.Play(QaPaths.Drag(QaPathKind.Plain, rowPoint.Value, to, screen));
+            yield return Secs(1.5f);
+            yield break;
+        }
         Rect? fr = QaGame.ScreenRect(rb.gameObject);
         if (fr == null)
             yield break;
@@ -441,7 +455,7 @@ public static class PersonPlayOps
                 continue;
             Vector2 to = q + new Vector2(-Screen.width * 0.17f, 0f);
             Rep(r, $"   drag the folder from ({q.x:0},{q.y:0}) to ({to.x:0},{to.y:0})");
-            yield return r.Input.Play(QaPaths.Drag(QaPathKind.Plain, q, to, new Vector2(Screen.width, Screen.height)));
+            yield return r.Input.Play(QaPaths.Drag(QaPathKind.Plain, q, to, screen));
             yield return Secs(1.5f);
             yield break;
         }
