@@ -41,6 +41,7 @@ public static partial class OfficeSceneUIBuilder
     {
         DesktopConfigSO config = EnsureDesktopConfig();
         DestroyChildIfPresent(windowLayer, "ShortcutsWindow");
+        DestroyOnOldWindowLayer(windowLayer, "ShortcutsWindow");
         DesktopWindow card = BuildOSWindow(windowLayer, "ShortcutsWindow", "window.shortcuts", null, null, config.shortcutCardSize);
         Transform win = card.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);

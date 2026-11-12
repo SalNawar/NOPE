@@ -322,6 +322,14 @@ public static partial class OfficeSceneUIBuilder
         return dock;
     }
 
+    /// <summary>A scene built before the Lens screen has Settings and the shortcut card on the window layer: that copy goes, so the scene holds one of each (on the Lens layer).</summary>
+    private static void DestroyOnOldWindowLayer(Transform layer, string name)
+    {
+        Transform old = layer.parent != null ? layer.parent.Find("InvestigationUI/WindowLayer") : null;
+        if (old != null && old != layer)
+            DestroyChildIfPresent(old, name);
+    }
+
     /// <summary>After the kit pass (it puts a button's label on one line at the plate's size): a dock item's name takes two lines and shrinks down to <see cref="LensDockTextMin"/>.</summary>
     private static void LensDockLabelWraps(Transform root)
     {

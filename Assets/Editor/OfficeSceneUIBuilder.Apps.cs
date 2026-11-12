@@ -302,6 +302,7 @@ public static partial class OfficeSceneUIBuilder
     {
         DesktopConfigSO config = EnsureDesktopConfig();
         DestroyChildIfPresent(windowLayer, "SettingsWindow");
+        DestroyOnOldWindowLayer(windowLayer, "SettingsWindow");
         DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", null, null, config.settingsWindowSize);
         Transform win = chrome.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);
