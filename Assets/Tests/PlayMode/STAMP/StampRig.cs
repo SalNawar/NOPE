@@ -631,6 +631,9 @@ public static class StampRig
             log.Append("taken out of its pocket; ");
             for (float waited = 0f; folder.PocketMoving && waited < 3f; waited += Time.unscaledDeltaTime)
                 yield return null;
+            // D66 rule 1: as it lands, the papers under it slide aside; the set-up measures them where they rest.
+            for (float waited = 0f; Papers().Any(p => p.IsSliding) && waited < 3f; waited += Time.unscaledDeltaTime)
+                yield return null;
         }
         string state = "not checked";
         var screen = new Vector2(Screen.width, Screen.height);

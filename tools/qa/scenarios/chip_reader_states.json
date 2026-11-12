@@ -3,7 +3,7 @@
   "owner": "CHIP-READER",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "chip-reader-display (Saleh's playtest of 2026-11-07, item 15: 'Chip reader has text on it instead of actual machine'): the painted reader's readout is a VFD window (PaintedReadout: a dark glass the line's size behind the text, a bezel round it, the text inset in the glass). Day 18 has the reader by the plan. The stills show the window from the chair (office view) and in the reading view (Tab) at 1080p, then the traveller's passport dragged onto the reader: the window while it reads (READING with its dots) and with its result (CHIP OK, NO CHIP or MISMATCH with its lines in turn; which one the seed's traveller gives). Every state must sit inside the window, nothing on the cream." },
+    { "op": "note", "text": "chip-reader-display (Saleh's playtest of 2026-11-07, item 15: 'Chip reader has text on it instead of actual machine'): the painted reader's readout is a VFD window (PaintedReadout: a dark glass the line's size behind the text, a bezel round it, the text inset in the glass). Day 18 has the reader by the plan. The stills show the window from the chair (office view) and in the reading view (Tab) at 1080p, then the traveller's passport dragged onto the reader: the window while it reads (READING with its dots) and with its result (CHIP OK, NO CHIP or MISMATCH with its lines in turn; which one the seed's traveller gives). Every state must sit inside the window, nothing on the cream. D66 (2026-11-12): last, at 1080p, the first paper of the papers (the passport) dragged from the counter onto the reader; passport_on_pad shows it on the RF pad, sized to fit it (DockFit)." },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },
@@ -31,6 +31,13 @@
     { "op": "still", "name": "window_result_3" },
     { "op": "res", "w": 1280, "h": 1024 },
     { "op": "wait", "f": 1.0 },
-    { "op": "still", "name": "window_result_54" }
+    { "op": "still", "name": "window_result_54" },
+    { "op": "res", "w": 1920, "h": 1080 },
+    { "op": "wait", "f": 1.0 },
+    { "op": "drag", "name": "passport_on_pad", "path": "Plain", "target": "Office/Desk/Papers/PaperTemplate(Clone)", "target2": "Office/DeskHardware/ChipReader" },
+    { "op": "wait", "f": 0.6 },
+    { "op": "still", "name": "passport_on_pad" },
+    { "op": "wait", "f": 0.5 },
+    { "op": "still", "name": "passport_on_pad_2" }
   ]
 }
