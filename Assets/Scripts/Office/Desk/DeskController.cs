@@ -366,7 +366,7 @@ public sealed class DeskController : MonoBehaviour
         if (config == null || !DeskLayout.Bound || !rulebook.TryBoxCorners(_folderCorners, rulebook.Opened))
             return;
         DeskFrame frame = DeskLayout.Frame;
-        DeskRect folder = FrameRect(frame, _folderCorners, 8), mat = DeskLayout.Mat.Rect;
+        DeskRect folder = FrameRect(frame, _folderCorners, 8);
         Vector3 at = rulebook.transform.position, onto = OntoMat(at);
         if (onto.sqrMagnitude > 1e-8f)
         {
@@ -378,18 +378,34 @@ public sealed class DeskController : MonoBehaviour
             DeskDocument paper = _papers[i];
             if (paper == null || !paper.isActiveAndEnabled || paper.Zone != DeskZone.Desk || paper.Index == _dragged || _docks.IsDocked(paper.Index))
                 continue;
-            paper.RestCorners(paper.transform.position, _restingCorners);
-            DeskRect r = FrameRect(frame, _restingCorners, 4);
-            (float x, _) = FolderRoom.Aside((r.CentreX, r.CentreY, r.Width, r.Height), (folder.CentreX, folder.CentreY, folder.Width, folder.Height), (mat.CentreX, mat.CentreY, mat.Width, mat.Height));
-            float move = x - r.CentreX;
-            if (Mathf.Abs(move) < 1e-5f)
+            Vector3 target = OffFolder(paper, paper.transform.position, folder);
+            float move = Vector3.Distance(target, paper.transform.position);
+            if (move < 1e-5f)
                 continue;
-            Vector3 target = paper.transform.position + frame.Right * move;
-            paper.Carry(new List<Vector3> { target }, paper.transform.rotation, Seconds(Mathf.Abs(move)), () => ApplyLive(paper));
+            paper.Carry(new List<Vector3> { target }, paper.transform.rotation, Seconds(move), () => ApplyLive(paper));
             ApplyLive(paper);
         }
 
         float Seconds(float length) => UiMotion.Amount.Still ? 0f : DeskCarry.Seconds(length, config.dockSpeed, config.paperSlideSeconds);
+    }
+
+    /// <summary>Where a desk paper about to lie with its root at <paramref name="root"/> goes to lie beside the folder whose footprint is <paramref name="folder"/> (D66 rule 1, FolderRoom.Aside): <paramref name="root"/> itself when it is clear of it.</summary>
+    private Vector3 OffFolder(DeskDocument paper, Vector3 root, DeskRect folder)
+    {
+        DeskFrame frame = DeskLayout.Frame;
+        DeskRect mat = DeskLayout.Mat.Rect;
+        paper.RestCorners(root, _restingCorners);
+        DeskRect r = FrameRect(frame, _restingCorners, 4);
+        (float x, _) = FolderRoom.Aside((r.CentreX, r.CentreY, r.Width, r.Height), (folder.CentreX, folder.CentreY, folder.Width, folder.Height), (mat.CentreX, mat.CentreY, mat.Width, mat.Height));
+        return root + frame.Right * (x - r.CentreX);
+    }
+
+    /// <summary>As OffFolder, for a paper let go on the folder that lies out of its pocket (shut or open): it never rests on it, so the rule rows show.</summary>
+    private Vector3 OffFolder(DeskDocument paper, Vector3 root)
+    {
+        if (rulebook == null || !rulebook.isActiveAndEnabled || rulebook.Pocketed || _rulebookDragged || !DeskLayout.Bound || !rulebook.TryBoxCorners(_folderCorners, rulebook.Opened))
+            return root;
+        return OffFolder(paper, root, FrameRect(DeskLayout.Frame, _folderCorners, 8));
     }
 
     /// <summary>The move (world, along the desk) that brings the open folder's spread, its root at <paramref name="root"/>, whole onto the mat (D66 rule 2: RectClamp.Shift each way); zero while it is shut or the desk is unbound.</summary>
@@ -1159,7 +1175,7 @@ public sealed class DeskController : MonoBehaviour
                 break;
             default:
                 paper.SetZone(lies, false);
-                LayDown(paper, Rest(paper, at, false), at);
+                LayDown(paper, lies == DeskZone.Desk ? OffFolder(paper, Rest(paper, at, false)) : Rest(paper, at, false), at);
                 if (lies == DeskZone.Desk)
                     Read(paper);
                 break;
