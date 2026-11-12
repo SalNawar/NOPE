@@ -599,6 +599,78 @@
     {
       "op": "probe",
       "name": "end"
+    },
+    {
+      "op": "note",
+      "text": "(s) D66 rule 2 (2026-11-12): the 1.8 folder opened at the mat's left edge laid its left page about 260 px past the mat, through the slot module and the wallet. The shut folder let go at the mat's left part, then a press on it opens it: as it opens it slides by its overhang, so the open spread lies whole on the mat (s_open_left_edge). Then the open folder let go at the same place, at 1920x1080 and at 1280x1024: it rests with its spread whole on the mat (s_open_let_go_*)."
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "s_shut_left_edge",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.3,
+      "y2": 0.31
+    },
+    {
+      "op": "still",
+      "name": "s_shut_left_edge"
+    },
+    {
+      "op": "click",
+      "target": "Office/Rulebook/Booklet/CardClick"
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "still",
+      "name": "s_open_left_edge"
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "s_open_let_go_1920",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.3,
+      "y2": 0.31
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s_open_let_go_1920"
+    },
+    {
+      "op": "res",
+      "w": 1280,
+      "h": 1024
+    },
+    {
+      "op": "wait",
+      "f": 1.5
+    },
+    {
+      "op": "drop",
+      "text": "root",
+      "name": "s_open_let_go_1280",
+      "path": "Plain",
+      "target": "Rulebook",
+      "x2": 0.3,
+      "y2": 0.31
+    },
+    {
+      "op": "wait",
+      "f": 1
+    },
+    {
+      "op": "still",
+      "name": "s_open_let_go_1280"
     }
   ]
 }
