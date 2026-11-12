@@ -31,7 +31,7 @@ MonoBehaviour:
     card: {width: 86, height: 54}
     ticket: {width: 190, height: 82}
     form: {width: 148, height: 210}
-    realScale: 0.92
+    realScale: 1.656
     valueCapPx: 11
     labelCapPx: 8
     seconds: 0.18

@@ -449,6 +449,7 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(office, "Rulebook");
         Transform book = EnsureChild(office, "Rulebook");
         Transform booklet = EnsureChild(book, "Booklet"); // lifted by the papers' stack (DeskController), the root on the desk plane
+        booklet.localScale = new Vector3(RulebookGrowth, 1f, RulebookGrowth); // grown across and along, never in depth: its model, lifts and shadow keep their real thickness
         // The folder is its model (Saleh 2026-10-17: "use canva and blender to make actual 3d documents"): its art on its top (the rules print on its top sheet, on this plane), its boards, spine, sheets, flaps and clip under it.
         GameObject card = PrimitivePart(booklet, "Card", PrimitiveType.Quad, Vector3.zero, new Vector3(RulebookFolderSize.x, RulebookFolderSize.y, 1f),
                                         CelMaterial("Rulebook_FolderModel", AssetDatabase.LoadAssetAtPath<Texture2D>(ArtSlots.AssetRoot + ArtSlots.RulebookFolder + ".png"), 0f));
@@ -672,6 +673,9 @@ public static partial class OfficeSceneUIBuilder
         return rulebook;
     }
 
+    /// <summary>How much larger the folder lies on the desk than its built size, across and along (D66, Saleh 2026-11-12: "Yes, grow 1.8x"): the papers grow by the same share (PaperRealSizes.realScale 0.92 x 1.8), so the folder stays the largest thing.</summary>
+    private const float RulebookGrowth = 1.8f;
+
     /// <summary>The folder's spine across its face (the face's unit space: the crease between the rivets, measured on Forms/rulebook_folder at 51.1% of its width) and the front board's outer edge (its body's left edge, DeskRulebook.BodyCentreX less half its BodyWidth).</summary>
     private const float RulebookSpine = 0.011f, RulebookBoardEdge = DeskRulebook.BodyCentreX - DeskRulebook.BodyWidth / 2f;
 
@@ -681,7 +685,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The rulebook folder's front board (FolderCover; Saleh's D3: the folder
     /// opens and closes), in the folder card's plane (the booklet turned as the
-    /// card is, unscaled): a hinge on the spine, FolderCover.Lift over the
+    /// card is, the booklet's growth undone): a hinge on the spine (grown in its plane), FolderCover.Lift over the
     /// face, carrying the board's outside (the cel material in the folder's
     /// manila; shut, it lies over the right sheet), the Bureau's seal on it with
     /// the folder's title over and under it (its cover words), and
@@ -696,12 +700,14 @@ public static partial class OfficeSceneUIBuilder
         Transform root = EnsureChild(booklet, "Cover");
         root.localPosition = Vector3.zero;
         root.localRotation = Quaternion.Euler(90f, 0f, 0f); // the card's plane: x across, y up the page, +z into the desk
-        root.localScale = Vector3.one;
+        // the booklet grows across and along only (RulebookGrowth): undone here, so the board swings in an even frame and does not squash on its way up
+        root.localScale = new Vector3(1f / RulebookGrowth, 1f / RulebookGrowth, 1f);
         Transform hinge = EnsureChild(root, "Hinge");
         float w = RulebookFolderSize.x, h = RulebookFolderSize.y;
         float board = (RulebookSpine - RulebookBoardEdge) * w, tall = DeskRulebook.BodyHeight * h, middle = DeskRulebook.BodyCentreY * h;
-        hinge.localPosition = new Vector3(RulebookSpine * w, 0f, -FolderCover.Lift);
+        hinge.localPosition = new Vector3(RulebookSpine * w * RulebookGrowth, 0f, -FolderCover.Lift);
         hinge.localRotation = Quaternion.identity;
+        hinge.localScale = new Vector3(RulebookGrowth, RulebookGrowth, 1f); // the board grown in its own plane: it keeps its size through the swing
         const float gap = 0.00005f;
         Material outside = EnsureMaterial("Rulebook_CoverOutside", "TimeDesk/DocumentCel", m =>
         {

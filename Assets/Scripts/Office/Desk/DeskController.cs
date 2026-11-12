@@ -219,6 +219,8 @@ public sealed class DeskController : MonoBehaviour
             rulebook.ShowDepth(config);
             rulebook.UseConfig(config);
         }
+        if (rulebook != null)
+            rulebook.Laid += FolderLaid;
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan += RulebookLifted;
@@ -251,6 +253,8 @@ public sealed class DeskController : MonoBehaviour
         }
         if (stamps != null)
             stamps.Changed -= ShowCounter;
+        if (rulebook != null)
+            rulebook.Laid -= FolderLaid;
         if (rulebook != null && rulebook.Drag != null)
         {
             rulebook.Drag.DragBegan -= RulebookLifted;
@@ -332,6 +336,7 @@ public sealed class DeskController : MonoBehaviour
             // rack, the pocket...; Saleh's playtest of 2026-10-28, point 2: "folder clipping detain button"), as DOC-HANDLE keeps
             // it clear of the machines: a folder let go half over the back step lay through what stands there.
             Vector3 rest = RestOf(folder, at, counter != null && counter.Contains(released), true, "folder");
+            rest += OntoMat(rest); // an open folder let go near an edge lies with its spread whole on the mat (D66 rule 2)
             // Along the desk, drawn above every prop as it was held (DeskRulebook.RestAt; FOLD-01 round 2, F4): over a casing's
             // height it hopped toward the camera, a quarter bigger, and through a tray's rim it went under it.
             List<Vector3> way = (rest - at).sqrMagnitude > 1e-8f ? new List<Vector3> { rest } : null;
@@ -346,6 +351,63 @@ public sealed class DeskController : MonoBehaviour
         }
         RulebookLifted(drag);
     }
+
+    /// <summary>
+    /// The folder came out of its pocket onto the mat or starts to open
+    /// (DeskRulebook.Laid; D66, the director's call of 2026-11-12): open, it
+    /// slides by its overhang so its spread lies whole on the mat (rule 2,
+    /// OntoMat); then every desk paper under it that is not held slides
+    /// aside, the shorter way along the desk that clears it and stays on the
+    /// mat (rule 1, FolderRoom.Aside), so the rule rows show. Each move eases
+    /// on the papers' slide; at once under Reduced Motion.
+    /// </summary>
+    private void FolderLaid()
+    {
+        if (config == null || !DeskLayout.Bound || !rulebook.TryBoxCorners(_folderCorners, rulebook.Opened))
+            return;
+        DeskFrame frame = DeskLayout.Frame;
+        DeskRect folder = FrameRect(frame, _folderCorners, 8), mat = DeskLayout.Mat.Rect;
+        Vector3 at = rulebook.transform.position, onto = OntoMat(at);
+        if (onto.sqrMagnitude > 1e-8f)
+        {
+            rulebook.RestAt(new List<Vector3> { at + onto }, Seconds(onto.magnitude));
+            folder = new DeskRect(folder.CentreX + Vector3.Dot(onto, frame.Right), folder.CentreY + Vector3.Dot(onto, frame.Forward), folder.Width, folder.Height);
+        }
+        for (int i = 0; i < _papers.Count; i++)
+        {
+            DeskDocument paper = _papers[i];
+            if (paper == null || !paper.isActiveAndEnabled || paper.Zone != DeskZone.Desk || paper.Index == _dragged || _docks.IsDocked(paper.Index))
+                continue;
+            paper.RestCorners(paper.transform.position, _restingCorners);
+            DeskRect r = FrameRect(frame, _restingCorners, 4);
+            (float x, _) = FolderRoom.Aside((r.CentreX, r.CentreY, r.Width, r.Height), (folder.CentreX, folder.CentreY, folder.Width, folder.Height), (mat.CentreX, mat.CentreY, mat.Width, mat.Height));
+            float move = x - r.CentreX;
+            if (Mathf.Abs(move) < 1e-5f)
+                continue;
+            Vector3 target = paper.transform.position + frame.Right * move;
+            paper.Carry(new List<Vector3> { target }, paper.transform.rotation, Seconds(Mathf.Abs(move)), () => ApplyLive(paper));
+            ApplyLive(paper);
+        }
+
+        float Seconds(float length) => UiMotion.Amount.Still ? 0f : DeskCarry.Seconds(length, config.dockSpeed, config.paperSlideSeconds);
+    }
+
+    /// <summary>The move (world, along the desk) that brings the open folder's spread, its root at <paramref name="root"/>, whole onto the mat (D66 rule 2: RectClamp.Shift each way); zero while it is shut or the desk is unbound.</summary>
+    private Vector3 OntoMat(Vector3 root)
+    {
+        if (!rulebook.Opened || !DeskLayout.Bound || !rulebook.TryBoxCorners(_matCorners, true))
+            return Vector3.zero;
+        DeskFrame frame = DeskLayout.Frame;
+        DeskRect box = FrameRect(frame, _matCorners, 8), mat = DeskLayout.Mat.Rect;
+        Vector2 by = frame.Local(root) - frame.Local(rulebook.transform.position);
+        float x = box.CentreX + by.x, y = box.CentreY + by.y;
+        float dx = RectClamp.Shift(x - box.Width / 2f, x + box.Width / 2f, mat.CentreX - mat.Width / 2f, mat.CentreX + mat.Width / 2f, false);
+        float dy = RectClamp.Shift(y - box.Height / 2f, y + box.Height / 2f, mat.CentreY - mat.Height / 2f, mat.CentreY + mat.Height / 2f, false);
+        return frame.Right * dx + frame.Forward * dy;
+    }
+
+    /// <summary>OntoMat's buffer (the folder's eight box corners; FolderLaid holds _folderCorners meanwhile).</summary>
+    private readonly Vector3[] _matCorners = new Vector3[8];
 
     /// <summary>
     /// Where the held folder's root may go (its drag's Bound; FOLD-01 round
@@ -364,7 +426,8 @@ public sealed class DeskController : MonoBehaviour
         DeskRect box = RestRect(_folderCorners, 8);
         Vector3 shift = at - rulebook.transform.position;
         var footprint = new DeskRect(box.CentreX + Vector3.Dot(shift, RestRight), box.CentreY + Vector3.Dot(shift, RestForward), box.Width, box.Height);
-        return Inward(footprint, at, Vector3.zero, true);
+        Vector3 held = Inward(footprint, at, Vector3.zero, true);
+        return held + OntoMat(held); // open, it is held with its spread on the mat, so a let-go never slides after (D66 rule 2)
     }
 
     /// <summary>

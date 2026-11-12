@@ -430,8 +430,21 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
         TurnTo(page, true);
     }
 
-    /// <summary>Swings the folder open when it is shut (FolderCover; nothing without one); true when it started.</summary>
-    public bool Open() => folderCover != null && folderCover.Shut && folderCover.Open();
+    /// <summary>Swings the folder open when it is shut (FolderCover; nothing without one); true when it started. It is laid (Laid) as it starts, or as it lands when it still comes out of its pocket.</summary>
+    public bool Open()
+    {
+        if (folderCover == null || !folderCover.Shut || !folderCover.Open())
+            return false;
+        if (!_carry.Running)
+            Laid?.Invoke();
+        return true;
+    }
+
+    /// <summary>Raised when the folder comes out of its pocket onto the mat (as it lands) or starts to open: the desk lays its open spread on the mat and moves the papers under it aside (DeskController.FolderLaid; D66 rules 1 and 2).</summary>
+    public event Action Laid;
+
+    /// <summary>True while the folder swings open or lies open (its spread is what it covers).</summary>
+    public bool Opened => folderCover != null && folderCover.Opened;
 
     /// <summary>Turns to <paramref name="page"/> (ShowPage's turn), shut or open; <paramref name="flick"/>: a change of page flicks the loose sheets (their rows riding it).</summary>
     private void TurnTo(int page, bool flick)
@@ -529,12 +542,12 @@ public sealed partial class DeskRulebook : MonoBehaviour, IHoverLift
     /// prop: HeldOnTop) the box is scaled back from the eye (FOLD-01 round 2).
     /// False without the box.
     /// </summary>
-    public bool TryBoxCorners(Vector3[] corners)
+    public bool TryBoxCorners(Vector3[] corners, bool open = false)
     {
         if (_cardBox == null || corners == null || corners.Length < 8)
             return false;
         Transform t = _cardBox.transform;
-        Vector3 c = _cardBox.center, h = _cardBox.size / 2f;
+        Vector3 c = open ? _cardCentre : _cardBox.center, h = (open ? _cardSize : _cardBox.size) / 2f; // open: the whole spread, also while it is still shut or swinging (D66 rules 1 and 2)
         for (int i = 0; i < 8; i++)
             corners[i] = t.TransformPoint(c + new Vector3((i & 1) == 0 ? -h.x : h.x, (i & 2) == 0 ? -h.y : h.y, (i & 4) == 0 ? -h.z : h.z));
         if (_heldEye != null && _heldRatio > 0f && _heldRatio < 1f)

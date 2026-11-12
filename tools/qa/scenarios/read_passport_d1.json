@@ -24,6 +24,7 @@
     { "op": "wait", "f": 0.5 },
     { "op": "camres", "w": 1280, "h": 1024 },
     { "op": "wait", "f": 1 },
+    { "op": "still", "name": "d1_rest_reading_1280" },
     { "op": "key", "key": "Space" },
     { "op": "wait", "f": 0.5 },
     { "op": "readLift", "name": "d1_reading_1280" },

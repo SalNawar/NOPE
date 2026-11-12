@@ -212,7 +212,7 @@ public sealed partial class DeskRulebook
         OutOfPocket();
         var way = new List<Vector3> { PocketRoot + Vector3.up * PocketLift, _readAt + Vector3.up * PocketLift, _readAt };
         float seconds = UiMotion.Amount.Still ? 0f : CarrySeconds(way);
-        _carry.Start(transform, way, _readTurn, seconds, null);
+        _carry.Start(transform, way, _readTurn, seconds, () => Laid?.Invoke());
         SizeTo(0f, seconds);
         ShowMotion();
         return true;
