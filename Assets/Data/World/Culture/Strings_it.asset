@@ -1385,6 +1385,62 @@ MonoBehaviour:
     text: "Ispezione attiva o disattiva"
     gloss: 0
     tier: 0
+  - key: lens.home
+    text: "Home"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.none
+    text: "Nessun rilievo"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.one
+    text: "1 rilievo"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.many
+    text: "{0} rilievi"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect
+    text: "Ispeziona"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect.key
+    text: "Spazio"
+    gloss: 0
+    tier: 0
+  - key: lens.tag.here
+    text: "Il prossimo documento si apre qui"
+    gloss: 0
+    tier: 0
+  - key: lens.tag.other
+    text: "Seleziona questo lato"
+    gloss: 0
+    tier: 0
+  - key: lens.empty
+    text: "Trascina qui un documento, o clicca un documento nel dock."
+    gloss: 0
+    tier: 0
+  - key: lens.pick.second
+    text: "Scegli una seconda cosa."
+    gloss: 0
+    tier: 0
+  - key: lens.answer.match
+    text: "Dati coincidenti"
+    gloss: 0
+    tier: 0
+  - key: lens.answer.differ
+    text: "Discrepanza"
+    gloss: 0
+    tier: 0
+  - key: lens.answer.none
+    text: "Nessun rapporto"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect.hint
+    text: "Premi Spazio per ispezionare."
+    gloss: 0
+    tier: 0
   - key: keys.pick
     text: Tieni il valore selezionato, poi confrontalo con il successivo
     gloss: 0

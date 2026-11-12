@@ -329,7 +329,8 @@ public sealed class DesktopKeyboard : MonoBehaviour
             field != null,
             shell != null && shell.StartMenuOpen,
             manager != null && manager.Dragging,
-            app != null && app.Holding);
+            app != null && app.HasPick,
+            app != null && app.Inspecting);
         DesktopEscape step = DesktopEscapeRule.Resolve(state);
         EscapeTakenFrame = Time.frameCount; // every back-out on the PC is the desktop's: it never closes the PC (only Q and the bezel do)
         DesktopWindow front = manager != null ? manager.FocusedWindow : null;
@@ -386,6 +387,9 @@ public sealed class DesktopKeyboard : MonoBehaviour
                 break;
             case DesktopEscape.ReleaseHold:
                 app.ReleaseHold();
+                break;
+            case DesktopEscape.InspectOff:
+                app.SetInspect(false);
                 break;
         }
     }

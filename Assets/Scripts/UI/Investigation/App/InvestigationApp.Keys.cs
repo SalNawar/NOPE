@@ -8,25 +8,19 @@ using UnityEngine.UI;
 /// <summary>
 /// The Investigation app's keys, focus ring, clipboard, pins, recent items
 /// and zoom (redesign phase 20; the PC redesign KB1-KB5, CP1-CP3, PR1-PR2;
-/// the PC workbench spec section 7). The desktop's keyboard poller
-/// (DesktopKeyboard) runs the app's commands here. Ctrl+K and Ctrl+F open or
-/// restore the app and open its search drawer, the field focused; Ctrl+1…4
-/// put a guided step's pair of documents up, Ctrl+Tab and Ctrl+Shift+Tab the
-/// next or previous one; F6 makes the other side the target; Ctrl+\ joins or
-/// splits the panes; Ctrl+B hides or shows the findings column (the panes
-/// take its width; saved per player); Alt+← and Alt+→ walk the target pane's
-/// history. Tab and Shift+Tab walk the regions (AppFocus: with the drawer
-/// open its field and its hits (or its pins and recent items before anything
-/// is typed); otherwise the menu bar, the target pane's values, the other
-/// pane's, the findings and the held value's Cancel) with the focus ring,
+/// the PC workbench spec section 7; the Lens spec section 2). The desktop's
+/// keyboard poller (DesktopKeyboard) runs the app's commands here. Space turns
+/// inspect on or off (InvestigationApp.Lens); F6 makes the other side the
+/// selected one; Ctrl+B opens or closes the findings list. Tab and Shift+Tab
+/// walk the regions (AppFocus: the dock, the target side's values, the other
+/// side's, the findings and the held value) with the focus ring,
 /// which scrolls a list to what it is on; ↓ in
 /// the field takes it to the first hit, ↑ on the first hit back to the field;
 /// inside a region the arrows, Home, End, PgUp and PgDn move the ring over its
 /// items (the values in reading order, turning the page at a page's end),
-/// Enter presses the focused item (a menu title or row, a finding, Cancel, a
-/// hit, a pin) or follows the focused value's smart link in its
-/// own pane (Ctrl+Enter: the other one), Space picks the focused value (as a
-/// click does: held, then matched), Ctrl+C copies its value as shown and
+/// Enter presses the focused item (a dock item, a finding, a hit, a pin) or,
+/// on a focused value, picks it (as a click does, with inspect on: held, then
+/// matched), Ctrl+C copies its value as shown and
 /// Ctrl+Shift+C "Label: value" (the one clipboard, AppClipboard, and the
 /// system clipboard), Ctrl+P pins the focused value or the target pane's
 /// document. Pins (PinBoard, at most DesktopConfigSO.pinsMax) and recent
@@ -71,10 +65,7 @@ public sealed partial class InvestigationApp
     private AppRegion _region = AppRegion.PaneContent;
     private int _item;
     private bool _ringOn;
-    private bool _findingsShown = true;
-    private bool _railShown;
-    private float _findingsWidth;
-    private float _findingsGap;
+    private bool _findingsShown;
     private int _zoom = AppZoom.Normal;
     private string _clipTraveller = string.Empty;
 
@@ -93,11 +84,13 @@ public sealed partial class InvestigationApp
     /// <summary>True while the workbench holds a value, a rule or the date (Escape lets go).</summary>
     public bool Holding => board != null && board.IsHolding;
 
-    /// <summary>Escape's ReleaseHold: the held value is let go.</summary>
+    /// <summary>Escape's ReleaseHold: the held value is let go and the result line goes.</summary>
     public void ReleaseHold()
     {
-        if (board != null)
-            board.Release();
+        if (board == null)
+            return;
+        board.Release();
+        board.ClearLine();
     }
 
     /// <summary>The zoom levels (DesktopConfigSO).</summary>
@@ -107,18 +100,13 @@ public sealed partial class InvestigationApp
     private int DefaultZoom => AppZoom.Parse(DesktopPreferences.DefaultZoom, Levels);
 
     /// <summary>What the regions read of the app now.</summary>
-    private AppFocusState FocusState => new AppFocusState(SearchOpen, ResultsListed || QuickRowsListed, _split, _findingsShown, Holding);
+    private AppFocusState FocusState => new AppFocusState(SearchOpen, ResultsListed || QuickRowsListed, true, _findingsShown, Holding);
 
     /// <summary>The pins and recent items with their knobs, the views' items followed, the findings column and the zoom as the player left them (once, from Init).</summary>
     private void InitKeys()
     {
         _pins = new PinBoard(config != null ? config.pinsMax : 1);
         _recent = new RecentList(config != null ? config.recentItems : 1);
-        if (findingsColumn != null && mainColumn != null)
-        {
-            _findingsWidth = -findingsColumn.offsetMin.x;
-            _findingsGap = -mainColumn.offsetMax.x - _findingsWidth;
-        }
         foreach (AppPane pane in Panes())
             foreach (AppTab tab in TabOrder.Default)
             {
@@ -126,7 +114,7 @@ public sealed partial class InvestigationApp
                 if (view != null)
                     view.ChipsChanged += () => ItemChanged(view);
             }
-        ApplyFindings(DesktopPreferences.SidebarShown);
+        ApplyFindings(false);
         SetZoom(DefaultZoom);
         DrawLists();
     }
@@ -195,7 +183,9 @@ public sealed partial class InvestigationApp
                 break;
             case AppCommand.ToggleFindings:
                 ApplyFindings(!_findingsShown);
-                DesktopPreferences.SidebarShown = _findingsShown;
+                break;
+            case AppCommand.ToggleInspect:
+                ToggleInspect();
                 break;
             case AppCommand.NextRegion:
                 MoveRegion(1);
@@ -227,19 +217,8 @@ public sealed partial class InvestigationApp
             case AppCommand.FollowOther:
                 PressFocused(false);
                 break;
-            case AppCommand.Back:
-                TargetPane.Back();
-                break;
-            case AppCommand.Forward:
-                TargetPane.Forward();
-                break;
             case AppCommand.OtherPane:
-                if (_split)
-                    SetTarget(Other(TargetPane));
-                Refocus();
-                break;
-            case AppCommand.ToggleSplit:
-                ToggleSplit();
+                PaneClicked(Other(PaneOf(_sides.Selected)));
                 Refocus();
                 break;
             case AppCommand.Pick:
@@ -449,7 +428,7 @@ public sealed partial class InvestigationApp
         return false;
     }
 
-    /// <summary>Enter: presses the focused item (a menu title or row, a finding, Cancel, a pin or recent item), opens the focused search hit, or follows the focused value's smart link, in its own pane (<paramref name="samePane"/>) or the other one (Ctrl+Enter).</summary>
+    /// <summary>Presses the focused item (a dock item, a finding, a pin or recent item) or opens the focused search hit (in the other side when not <paramref name="samePane"/>); a focused value is picked by Enter's own command, not here.</summary>
     private void PressFocused(bool samePane)
     {
         Collect();
@@ -462,12 +441,7 @@ public sealed partial class InvestigationApp
             return;
         }
         if (IsContent(_region))
-        {
-            AppRow row = _targets[_item].GetComponent<AppRow>();
-            if (row != null && !row.Link.IsNone)
-                Follow(ContentPane(), row.Link, samePane);
-            return;
-        }
+            return; // Enter on a value picks it (AppCommand.Pick); the PC follows no links (the Lens screen)
         RectTransform target = _targets[_item];
         if (target.TryGetComponent(out Button button) && button.interactable)
             button.onClick.Invoke();
@@ -652,23 +626,17 @@ public sealed partial class InvestigationApp
         return null;
     }
 
-    /// <summary>Shows or hides the findings column (a slim rail while nothing is logged); the main column takes the width it leaves.</summary>
+    /// <summary>Opens or closes the findings list under the header's chip (nothing opens while no finding is logged).</summary>
     private void ApplyFindings(bool shown)
     {
+        shown &= board != null && board.Log.Items.Count > 0;
         _findingsShown = shown;
-        _railShown = FindingsRail;
-        float width = !shown ? 0f : _railShown ? findingsRail : _findingsWidth;
-        if (findingsColumn != null)
+        if (findingsColumn != null && findingsColumn.gameObject.activeSelf != shown)
         {
-            if (findingsColumn.gameObject.activeSelf != shown)
-                findingsColumn.gameObject.SetActive(shown);
-            findingsColumn.offsetMin = new Vector2(-width, findingsColumn.offsetMin.y);
+            findingsColumn.gameObject.SetActive(shown);
+            if (shown)
+                findingsColumn.SetAsLastSibling();
         }
-        if (board != null && board.Findings != null)
-            board.Findings.SetRail(_railShown);
-        if (mainColumn != null)
-            mainColumn.offsetMax = new Vector2(shown ? -(width + _findingsGap) : 0f, mainColumn.offsetMax.y);
-        Layout();
         if (!shown && _region == AppRegion.Findings)
             SetRegion(AppFocus.Home(FocusState), 0, _ringOn);
     }
@@ -699,7 +667,7 @@ public sealed partial class InvestigationApp
         }
     }
 
-    /// <summary>True for a pane region: the target pane's (PaneContent) or, while split, the other one's (OtherPane).</summary>
+    /// <summary>True for a pane region: the target side's (PaneContent) or the other one's (OtherPane).</summary>
     private static bool IsContent(AppRegion region) => region == AppRegion.PaneContent || region == AppRegion.OtherPane;
 
     /// <summary>The pane whose values the ring is in: the target, or the other one in the OtherPane region; null outside the panes.</summary>
@@ -707,7 +675,7 @@ public sealed partial class InvestigationApp
     {
         if (_region == AppRegion.PaneContent)
             return TargetPane;
-        return _region == AppRegion.OtherPane && _split ? Other(TargetPane) : null;
+        return _region == AppRegion.OtherPane ? Other(TargetPane) : null;
     }
 
     /// <summary>True when <paramref name="view"/> is the active view of a showing pane.</summary>

@@ -106,8 +106,8 @@ public sealed partial class InvestigationApp
         LinkTarget target = SmartLinks.ForEntry(e.Key, _papers);
         if (target.IsNone)
             target = LinkTarget.ToTab(e.Source);
-        if (otherPane && _split)
-            SetTarget(Other(TargetPane));
+        if (otherPane)
+            PaneClicked(Other(PaneOf(_sides.Selected)));
         if (!OpenOnTarget(target))
         {
             Notice(UiText.Pc.Get("app.jump.gone"));

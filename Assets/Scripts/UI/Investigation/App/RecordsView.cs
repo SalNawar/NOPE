@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -29,10 +28,12 @@ using UnityEngine.UI;
 /// DayReference. Each evidence box is marked with its key for the keys, the
 /// copy and the pins (AppRow: "Aster Vale · Born"). Each pane has one. Its
 /// item is the record looked up ("rec:{id}", IAppItems). A lookup that finds
-/// no record prints its "no entry" line, which the player can click to hold it
-/// on the workbench (MatchBoard.PickNoRecord) against a citizen or registry ID.
+/// no record prints its "no entry" line, which the player can pick (inspect on)
+/// to hold it on the workbench (MatchBoard.PickNoRecord) against a citizen or
+/// registry ID: a clear button over the line, marked as a row keyed by the
+/// lookup (EntryKeys.NoRecord), so the workbench's line can end on it.
 /// </summary>
-public sealed class RecordsView : AppView, IAppItems, IPointerClickHandler
+public sealed class RecordsView : AppView, IAppItems
 {
     [Header("Lookup")]
     /// <summary>Where the player types a name or a number.</summary>
@@ -66,8 +67,11 @@ public sealed class RecordsView : AppView, IAppItems, IPointerClickHandler
     /// <summary>The box a link went to (its pick key; null: none), marked found.</summary>
     private string _foundKey;
 
-    /// <summary>The words of the query line as last drawn (the line a click on "no entry" is found by).</summary>
+    /// <summary>The words of the query line as last drawn (the line the "no entry" button is placed over).</summary>
     private string _queryLine;
+
+    /// <summary>The clear button over the "no entry" line (made at the first lookup that finds nothing).</summary>
+    private GameObject _noEntry;
 
     /// <summary>The lookup shown (trimmed; null: none).</summary>
     public string Query { get; private set; }
@@ -263,30 +267,52 @@ public sealed class RecordsView : AppView, IAppItems, IPointerClickHandler
                 found = slot.Index;
         }
         Form.MarkFound(found);
+        MarkNoEntry();
     }
 
-    /// <summary>A click on the "no entry" line (a lookup with no record): the line is held on the workbench (it is plain text, no slot, so the click is found by its place on the form).</summary>
-    public void OnPointerClick(PointerEventData eventData)
+    /// <summary>The "no entry" line (a lookup with no record) is a thing to pick: a clear button over its text, marked as a row keyed by the lookup so the workbench's line can end on it (it plays only with inspect on: PcInspect); hidden while the line is not there.</summary>
+    private void MarkNoEntry()
     {
-        MatchBoard board = GetComponentInParent<InvestigationApp>()?.Board;
-        if (board == null || Query == null || _current != null || Form == null || Form.Placed == null)
+        FormItem? line = null;
+        if (Query != null && _current == null && Form != null && Form.Placed != null)
+            foreach (FormItem item in Form.Placed.Items)
+                if (item.Kind == FormItemKind.Text && item.Slot < 0 && item.Text == _queryLine)
+                    line = item;
+        if (!line.HasValue)
+        {
+            if (_noEntry != null)
+                _noEntry.SetActive(false);
             return;
-        var rt = (RectTransform)Form.transform;
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, eventData.position, eventData.pressEventCamera, out Vector2 local))
-            return;
-        Rect r = rt.rect;
-        foreach (FormItem item in Form.Placed.Items)
-            if (item.Kind == FormItemKind.Text && item.Slot < 0 && item.Text == _queryLine && item.Rect.Contains(local.x - r.xMin, r.yMax - local.y))
-            {
-                board.PickNoRecord(Query);
-                return;
-            }
+        }
+        if (_noEntry == null)
+        {
+            _noEntry = new GameObject("NoEntryLine", typeof(RectTransform), typeof(Image), typeof(Button));
+            _noEntry.transform.SetParent(Form.transform, false);
+            _noEntry.GetComponent<Image>().color = Color.clear;
+        }
+        FaceRect at = line.Value.Rect;
+        var box = (RectTransform)_noEntry.transform;
+        box.anchorMin = box.anchorMax = box.pivot = new Vector2(0f, 1f);
+        box.anchoredPosition = new Vector2(at.XMin, -at.YMin);
+        box.sizeDelta = new Vector2(at.Width, at.YMax - at.YMin);
+        box.SetAsLastSibling();
+        _noEntry.SetActive(true);
+        var button = _noEntry.GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        string query = Query;
+        button.onClick.AddListener(() =>
+        {
+            MatchBoard board = GetComponentInParent<InvestigationApp>()?.Board;
+            if (board != null && PcInspect.Allows(this))
+                board.PickNoRecord(query);
+        });
+        AppRow.Mark(_noEntry, AppTab.Records, EntryKeys.NoRecord(query), UiText.Pc.Get("app.tab.records"), UiText.Pc.Get("app.tab.records"), query, button);
     }
 
     /// <summary>A box was clicked: its row goes into the compare (the box lights by its key).</summary>
     private void Pick(FormSlot slot)
     {
-        if (compareController != null && TryRow(slot, out RecordRow row) && RecordExtractPage.IsPickable(row))
+        if (compareController != null && TryRow(slot, out RecordRow row) && RecordExtractPage.IsPickable(row) && PcInspect.Allows(this))
             compareController.Select(EvidencePicks.ForRecord(_current, row), null);
     }
 }

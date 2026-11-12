@@ -6,11 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// The office builder's Investigation app panes (redesign phase 18; the PC
 /// spec's AP2, AP9, LK2, CM3; the PC workbench spec IA5, §3, §5): a pane
-/// (AppPane) framed by a hairline (the target's, a stronger one), its header
-/// (a button: a click makes the side the target; the side's tag, filled with
-/// the primary colour on the target, quiet on the other; the document's name,
-/// bold, on one line (wave 5 A3: a slim header, the room to the document);
-/// "Opens here" on the target; a hairline under it), its content with a view per source
+/// (AppPane) framed by a hairline (the target's, a stronger one), its tag
+/// strip (the Lens screen: a button, a click makes the side the target; one
+/// text, in the primary colour on the target, muted on the other; a hairline
+/// under it), its content with a view per source
 /// and the no-case state (its words wrapping and shrinking to fit); the ↗ (a
 /// drawn glyph in the link ink, 28 u, with its hover hint) and the found
 /// outline, which the forms' FormView clones; and the hover hints of the
@@ -29,12 +28,6 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The ↗'s hit box (a square).</summary>
     private const float LinkSize = 28f;
-
-    /// <summary>The side tag's size in a pane's header.</summary>
-    private static readonly Vector2 PaneTagSize = new Vector2(72f, 28f);
-
-    /// <summary>The target hint's width at a pane header's right.</summary>
-    private const float PaneHintWidth = 130f;
 
     /// <summary>The accent (the found mark, the Orders' selection): the focus ring's built colour.</summary>
     private static readonly Color AccentInk = new Color(0.95f, 0.55f, 0.1f, 1f);
@@ -58,9 +51,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// A pane named <paramref name="name"/> filling <paramref name="area"/>
     /// (the app lays the two out at runtime): its hairline frames, its header
-    /// (the side's tags, "Left" when <paramref name="left"/> else "Right", the
-    /// title, the target hint), the content with the eight views and the
-    /// no-case state; it shows <paramref name="start"/> first and its rows
+    /// (the slim tag strip of the Lens screen: one text, "The next paper opens
+    /// here" or "Select this side"; <paramref name="left"/> says which side),
+    /// the content with the eight views, the no-case state and the empty state; it shows <paramref name="start"/> first and its rows
     /// pick into <paramref name="compare"/>. Its views come back in
     /// <paramref name="views"/>.
     /// </summary>
@@ -69,37 +62,14 @@ public static partial class OfficeSceneUIBuilder
         Transform paneRoot = Panel(area, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, WbScreen, ThemeRoleId.WindowBody);
         AppPane pane = paneRoot.gameObject.AddComponent<AppPane>();
 
-        float head = WbSize.PaneHead;
+        float head = LensTagHeight;
         Button header = MakeButton(paneRoot, "PaneHeader", null, new Vector2(0f, 1f), Vector2.one, WbSurface, ThemeRoleId.Surface);
         DestroyChildIfPresent(header.transform, "Label");
         PlaceRect(header.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -head), Vector2.zero);
         HairlineEdge(header.transform, "Rule", 1);
-        string sideKey = left ? "app.side.left" : "app.side.right";
-        // The side tag and the title in a row: the tag as wide as its word in any language (QA2 2026-10-16: "Αριστερά" ran out of a
-        // fixed 72), the title the rest, up to the target hint (AppPane moves the row's right end).
-        Transform lead = Panel(header.transform, "Lead", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(lead, Vector2.zero, Vector2.one, new Vector2(PcSize.L, 0f), new Vector2(-(PaneHintWidth + PcSize.L), 0f));
-        HorizontalLayoutGroup leadRow = GetOrAdd<HorizontalLayoutGroup>(lead.gameObject);
-        leadRow.spacing = PcSize.M;
-        leadRow.childAlignment = TextAnchor.MiddleLeft;
-        leadRow.childControlWidth = true;
-        leadRow.childControlHeight = true;
-        leadRow.childForceExpandWidth = false;
-        leadRow.childForceExpandHeight = false;
-        Transform tagTarget = PaneTag(lead, "TagTarget", sideKey, WbAction, ThemeRoleId.PrimaryAction);
-        Transform tag = PaneTag(lead, "Tag", sideKey, WbInfoBg, ThemeRoleId.Info);
-        // The title is the pane's to write (the document shown), never a theme's keyed label (a theme applied again would reset it).
-        TMP_Text title = WbText(lead, "TitleText", null, UiText.Get(AppTabTitleKey(start)), PcType.Body, ThemeRoleId.Surface, TextAlignmentOptions.MidlineLeft,
-                                FontStyles.Bold);
-        LayoutElement titleRoom = GetOrAdd<LayoutElement>(title.gameObject);
-        titleRoom.minWidth = 0f;
-        titleRoom.flexibleWidth = 1f;
-        title.enableAutoSizing = true;
-        title.fontSizeMax = PcType.Body;
-        title.fontSizeMin = PcType.Caption;
-        title.overflowMode = TextOverflowModes.Ellipsis;
-        TMP_Text hint = WbText(header.transform, "HintTarget", "app.pane.shelfHere", null, PcType.Caption, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.MidlineRight);
-        PlaceRect(hint.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-(PaneHintWidth + PcSize.L), 0f), new Vector2(-PcSize.L, 0f));
+        // The slim tag strip: one text, "The next paper opens here" (the primary colour) on the selected side, "Select this side" (muted) on the other.
+        TMP_Text tagHere = StripText(header.transform, "TagTarget", "lens.tag.here", ThemeRoleId.PrimaryAction, ThemePart.Fill, FontStyles.Bold);
+        TMP_Text tagOther = StripText(header.transform, "Tag", "lens.tag.other", ThemeRoleId.SurfaceMuted, ThemePart.Ink, FontStyles.Normal);
 
         Transform content = Panel(paneRoot, "Content", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, WbScreen, ThemeRoleId.WindowBody);
         PlaceRect(content, Vector2.zero, Vector2.one, new Vector2(1f, 1f), new Vector2(-1f, -head));
@@ -129,46 +99,37 @@ public static partial class OfficeSceneUIBuilder
         noCaseText.fontSizeMin = NoCaseTextMin;
         noCase.gameObject.SetActive(false);
 
+        // The empty state: a side with no document says how to put one there.
+        Transform empty = Panel(content, "Empty", new Vector2(0.1f, 0.35f), new Vector2(0.9f, 0.65f), Vector2.zero, Vector2.zero, null);
+        TMP_Text emptyText = WbText(empty, "Text", "lens.empty", null, LensEmptyText, ThemeRoleId.SurfaceMuted, TextAlignmentOptions.Center, FontStyles.Normal, true);
+        emptyText.overflowMode = TextOverflowModes.Overflow;
+        empty.gameObject.SetActive(false);
+
         Transform frame = HairlineFrame(paneRoot);
         Transform strong = HairlineFrame(paneRoot, WbLineStrong, ThemeRoleId.HairlineStrong, 2f, "FrameStrong");
         strong.gameObject.SetActive(false);
 
         var so = new SerializedObject(pane);
         SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules, views.Calendar, views.Board });
-        Wire(so, "titleText", title);
-        Wire(so, "titleRow", lead);
         Wire(so, "headerButton", header);
         Wire(so, "noCase", noCase.gameObject);
-        SerializedArrays.Set(so, "targetParts", new Object[] { tagTarget.gameObject, hint.gameObject, strong.gameObject });
-        SerializedArrays.Set(so, "otherParts", new Object[] { tag.gameObject, frame.gameObject });
+        Wire(so, "emptyState", empty.gameObject);
+        Wire(so, "strongFrame", strong.gameObject);
+        SerializedArrays.Set(so, "targetParts", new Object[] { tagHere.gameObject, strong.gameObject });
+        SerializedArrays.Set(so, "otherParts", new Object[] { tagOther.gameObject, frame.gameObject });
         so.FindProperty("startTab").enumValueIndex = (int)start;
-        so.FindProperty("titleRightInsets").vector2Value = new Vector2(-(PaneHintWidth + PcSize.L), -PcSize.L);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
         return pane;
     }
 
-    /// <summary>A source's name key ("app.tab.documents").</summary>
-    private static string AppTabTitleKey(AppTab tab) => "app.tab." + tab.ToString().ToLowerInvariant();
-
-    /// <summary>A side tag in a pane's header row: a plate in <paramref name="role"/>'s colours with its keyed word (Caption, bold), at least <see cref="PaneTagSize"/> and as wide as the word with a margin.</summary>
-    private static Transform PaneTag(Transform row, string name, string key, Color fill, ThemeRoleId role)
+    /// <summary>A text of the tag strip: keyed <paramref name="key"/>, Lens strip size, in <paramref name="role"/>'s <paramref name="part"/> colour, one line, a side margin.</summary>
+    private static TMP_Text StripText(Transform strip, string name, string key, ThemeRoleId role, ThemePart part, FontStyles style)
     {
-        Transform tag = Panel(row, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, fill, role);
-        tag.GetComponent<Image>().raycastTarget = false;
-        LayoutElement size = GetOrAdd<LayoutElement>(tag.gameObject);
-        size.minWidth = PaneTagSize.x;
-        size.preferredHeight = PaneTagSize.y;
-        HorizontalLayoutGroup pad = GetOrAdd<HorizontalLayoutGroup>(tag.gameObject);
-        pad.padding = new RectOffset((int)PcSize.S, (int)PcSize.S, 0, 0);
-        pad.childAlignment = TextAnchor.MiddleCenter;
-        pad.childControlWidth = true;
-        pad.childControlHeight = true;
-        pad.childForceExpandWidth = true;
-        pad.childForceExpandHeight = true;
-        TMP_Text word = WbText(tag, "Text", key, null, PcType.Caption, role, TextAlignmentOptions.Center, FontStyles.Bold);
-        word.overflowMode = TextOverflowModes.Overflow;
-        return tag;
+        TMP_Text text = WbText(strip, name, key, null, LensTagText, role, TextAlignmentOptions.MidlineLeft, style);
+        SceneUiKit.Tag(text, role, part, key, style, style == FontStyles.Bold ? ThemeTextKind.Heading : ThemeTextKind.Body, false);
+        PlaceRect(text.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.L, 0f), new Vector2(-PcSize.L, 0f));
+        return text;
     }
 
     /// <summary>

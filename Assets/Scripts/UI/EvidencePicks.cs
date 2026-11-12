@@ -20,15 +20,15 @@ public static class EvidencePicks
             CompareEvidence.FromDocumentField(f, document));
     }
 
-    /// <summary>What a desk machine reads on a document's field (the desk machines spec §1): "Travel Passport · Its chip" or "· Under UV light", the reading as its value (a missing microprint: the layer's "none" line), a fault the machine marks: the truth that box is held against (DiscrepancyLog's hidden proof).</summary>
-    public static ComparePick ForHidden(int document, DocumentRow row, string value, ScanLayer layer, string documentName)
+    /// <summary>What a desk machine reads on a document's field (the desk machines spec §1): "Travel Passport · Its chip" or "· Under UV light", the reading as its value (a missing microprint: the layer's "none" line), a fault the machine marks (<paramref name="fault"/>; false for a chip line that equals the print): the truth that box is held against (DiscrepancyLog's hidden proof).</summary>
+    public static ComparePick ForHidden(int document, DocumentRow row, string value, ScanLayer layer, string documentName, bool fault = true)
     {
         DocumentField f = row.Field;
         string shown = string.IsNullOrEmpty(value) ? UiText.Pc.Format("layers.uv.MicroprintMissing", UiText.Pc.DocumentWord(f.label)) : value;
         return new ComparePick(PickKeys.Hidden(document, row.Index, layer),
             UiText.Pc.Format("document.compareLabel", documentName, UiText.Pc.Get(HiddenLabelKey(layer))),
             shown,
-            CompareEvidence.ForHidden(f.category, value, document, true));
+            CompareEvidence.ForHidden(f.category, value, document, fault));
     }
 
     /// <summary>The UI string key naming a machine's reading of <paramref name="layer"/> ("Its chip", "Its microprint", "Under UV light"): the compare's label and the citation's.</summary>

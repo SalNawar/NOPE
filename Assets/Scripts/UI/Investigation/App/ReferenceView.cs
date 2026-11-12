@@ -375,6 +375,8 @@ public sealed class ReferenceView : AppView, IAppItems
     /// <summary>A row of book <paramref name="index"/>'s register was clicked: the entry goes into the compare as a truth source.</summary>
     private void Pick(int index, FormSlot slot)
     {
+        if (!PcInspect.Allows(this))
+            return;
         if (_compare != null && TrySeal(slot, out AgencyOffice office, out string seal))
             _compare.Select(EvidencePicks.ForSeal(_books[index], office, seal), null);
         else if (_compare != null && TryFact(index, slot, out FactRow fact))

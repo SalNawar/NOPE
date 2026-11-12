@@ -296,7 +296,7 @@ public sealed class TranscriptView : AppView, IAppItems
     /// <summary>An answer's row was clicked: its fact goes into the compare as the traveller's statement.</summary>
     private void Pick(FormSlot slot)
     {
-        if (_compare != null && TryLine(slot, out int line) && _lines[line].IsAnswer)
+        if (_compare != null && TryLine(slot, out int line) && _lines[line].IsAnswer && PcInspect.Allows(this))
             _compare.Select(EvidencePicks.ForAnswer(line, _lines[line], _translation), null);
     }
 

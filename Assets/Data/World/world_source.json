@@ -28700,6 +28700,90 @@
         "tier": "Flavour"
       },
       {
+        "key": "lens.home",
+        "text": "Home",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.findings.none",
+        "text": "No findings",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.findings.one",
+        "text": "1 finding",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.findings.many",
+        "text": "{0} findings",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.inspect",
+        "text": "Inspect",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.inspect.key",
+        "text": "Space",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.tag.here",
+        "text": "The next paper opens here",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.tag.other",
+        "text": "Select this side",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.empty",
+        "text": "Drop a paper here, or click a paper in the dock.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.pick.second",
+        "text": "Pick a second thing.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.answer.match",
+        "text": "Matching data",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.answer.differ",
+        "text": "Discrepancy",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.answer.none",
+        "text": "No relation",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "lens.inspect.hint",
+        "text": "Press Space to inspect.",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "keys.pick",
         "text": "Pick the focused value",
         "gloss": "None",
@@ -34302,6 +34386,62 @@
             "text": "تفعيل الفحص أو إيقافه"
           },
           {
+            "key": "lens.home",
+            "text": "الرئيسية"
+          },
+          {
+            "key": "lens.findings.none",
+            "text": "لا نتائج"
+          },
+          {
+            "key": "lens.findings.one",
+            "text": "نتيجة واحدة"
+          },
+          {
+            "key": "lens.findings.many",
+            "text": "{0} نتائج"
+          },
+          {
+            "key": "lens.inspect",
+            "text": "فحص"
+          },
+          {
+            "key": "lens.inspect.key",
+            "text": "مسافة"
+          },
+          {
+            "key": "lens.tag.here",
+            "text": "الورقة التالية تفتح هنا"
+          },
+          {
+            "key": "lens.tag.other",
+            "text": "اختر هذا الجانب"
+          },
+          {
+            "key": "lens.empty",
+            "text": "أسقط ورقة هنا أو انقر ورقة في الرف."
+          },
+          {
+            "key": "lens.pick.second",
+            "text": "اختر شيئا ثانيا."
+          },
+          {
+            "key": "lens.answer.match",
+            "text": "بيانات متطابقة"
+          },
+          {
+            "key": "lens.answer.differ",
+            "text": "تناقض"
+          },
+          {
+            "key": "lens.answer.none",
+            "text": "لا علاقة"
+          },
+          {
+            "key": "lens.inspect.hint",
+            "text": "اضغط المسافة للفحص."
+          },
+          {
             "key": "keys.pick",
             "text": "امسك القيمة المحددة, ثم قارنها بالتالية"
           },
@@ -36987,6 +37127,38 @@
           }
         ],
         "words": [
+          {
+            "native": "مسافة",
+            "english": "space"
+          },
+          {
+            "native": "تفتح",
+            "english": "opens"
+          },
+          {
+            "native": "الجانب",
+            "english": "side"
+          },
+          {
+            "native": "أسقط",
+            "english": "drop"
+          },
+          {
+            "native": "ثانيا",
+            "english": "second"
+          },
+          {
+            "native": "علاقة",
+            "english": "relation"
+          },
+          {
+            "native": "اضغط",
+            "english": "press"
+          },
+          {
+            "native": "المسافة",
+            "english": "the space"
+          },
           {
             "native": "تفعيل",
             "english": "turning on"
@@ -43138,6 +43310,62 @@
             "text": "Ενεργοποίηση ή απενεργοποίηση επιθεώρησης"
           },
           {
+            "key": "lens.home",
+            "text": "Αρχική"
+          },
+          {
+            "key": "lens.findings.none",
+            "text": "Κανένα εύρημα"
+          },
+          {
+            "key": "lens.findings.one",
+            "text": "1 εύρημα"
+          },
+          {
+            "key": "lens.findings.many",
+            "text": "{0} ευρήματα"
+          },
+          {
+            "key": "lens.inspect",
+            "text": "Επιθεώρηση"
+          },
+          {
+            "key": "lens.inspect.key",
+            "text": "Διάστημα"
+          },
+          {
+            "key": "lens.tag.here",
+            "text": "Το επόμενο έγγραφο ανοίγει εδώ"
+          },
+          {
+            "key": "lens.tag.other",
+            "text": "Επιλογή αυτής της πλευράς"
+          },
+          {
+            "key": "lens.empty",
+            "text": "Άφησε ένα έγγραφο εδώ ή κάνε κλικ σε ένα έγγραφο στη δεξαμενή."
+          },
+          {
+            "key": "lens.pick.second",
+            "text": "Διάλεξε ένα δεύτερο στοιχείο."
+          },
+          {
+            "key": "lens.answer.match",
+            "text": "Τα δεδομένα ταιριάζουν"
+          },
+          {
+            "key": "lens.answer.differ",
+            "text": "Ασυμφωνία"
+          },
+          {
+            "key": "lens.answer.none",
+            "text": "Καμία σχέση"
+          },
+          {
+            "key": "lens.inspect.hint",
+            "text": "Πάτα Διάστημα για επιθεώρηση."
+          },
+          {
             "key": "keys.pick",
             "text": "Κράτα την εστιασμένη τιμή και μετά σύγκρινέ τη με την επόμενη"
           },
@@ -45823,6 +46051,26 @@
           }
         ],
         "words": [
+          {
+            "native": "πλευράς",
+            "english": "side"
+          },
+          {
+            "native": "δεξαμενή",
+            "english": "dock"
+          },
+          {
+            "native": "δεύτερο",
+            "english": "second"
+          },
+          {
+            "native": "δεδομένα",
+            "english": "data"
+          },
+          {
+            "native": "σχέση",
+            "english": "relation"
+          },
           {
             "native": "Ενεργοποίηση",
             "english": "turning on"
@@ -51378,6 +51626,62 @@
             "text": "Ispezione attiva o disattiva"
           },
           {
+            "key": "lens.home",
+            "text": "Home"
+          },
+          {
+            "key": "lens.findings.none",
+            "text": "Nessun rilievo"
+          },
+          {
+            "key": "lens.findings.one",
+            "text": "1 rilievo"
+          },
+          {
+            "key": "lens.findings.many",
+            "text": "{0} rilievi"
+          },
+          {
+            "key": "lens.inspect",
+            "text": "Ispeziona"
+          },
+          {
+            "key": "lens.inspect.key",
+            "text": "Spazio"
+          },
+          {
+            "key": "lens.tag.here",
+            "text": "Il prossimo documento si apre qui"
+          },
+          {
+            "key": "lens.tag.other",
+            "text": "Seleziona questo lato"
+          },
+          {
+            "key": "lens.empty",
+            "text": "Trascina qui un documento, o clicca un documento nel dock."
+          },
+          {
+            "key": "lens.pick.second",
+            "text": "Scegli una seconda cosa."
+          },
+          {
+            "key": "lens.answer.match",
+            "text": "Dati coincidenti"
+          },
+          {
+            "key": "lens.answer.differ",
+            "text": "Discrepanza"
+          },
+          {
+            "key": "lens.answer.none",
+            "text": "Nessun rapporto"
+          },
+          {
+            "key": "lens.inspect.hint",
+            "text": "Premi Spazio per ispezionare."
+          },
+          {
             "key": "keys.pick",
             "text": "Tieni il valore selezionato, poi confrontalo con il successivo"
           },
@@ -54063,6 +54367,46 @@
           }
         ],
         "words": [
+          {
+            "native": "Home",
+            "english": "home"
+          },
+          {
+            "native": "rilievo",
+            "english": "finding"
+          },
+          {
+            "native": "rilievi",
+            "english": "findings"
+          },
+          {
+            "native": "Ispeziona",
+            "english": "inspect"
+          },
+          {
+            "native": "Spazio",
+            "english": "space"
+          },
+          {
+            "native": "dock",
+            "english": "dock"
+          },
+          {
+            "native": "seconda",
+            "english": "second"
+          },
+          {
+            "native": "coincidenti",
+            "english": "matching"
+          },
+          {
+            "native": "Discrepanza",
+            "english": "discrepancy"
+          },
+          {
+            "native": "ispezionare",
+            "english": "to inspect"
+          },
           {
             "native": "attiva",
             "english": "on"
@@ -59718,6 +60062,62 @@
             "text": "Prüfen ein oder aus"
           },
           {
+            "key": "lens.home",
+            "text": "Start"
+          },
+          {
+            "key": "lens.findings.none",
+            "text": "Keine Funde"
+          },
+          {
+            "key": "lens.findings.one",
+            "text": "1 Fund"
+          },
+          {
+            "key": "lens.findings.many",
+            "text": "{0} Funde"
+          },
+          {
+            "key": "lens.inspect",
+            "text": "Prüfen"
+          },
+          {
+            "key": "lens.inspect.key",
+            "text": "Leertaste"
+          },
+          {
+            "key": "lens.tag.here",
+            "text": "Das nächste Papier öffnet hier"
+          },
+          {
+            "key": "lens.tag.other",
+            "text": "Diese Seite wählen"
+          },
+          {
+            "key": "lens.empty",
+            "text": "Papier hier ablegen oder in der Ablage anklicken."
+          },
+          {
+            "key": "lens.pick.second",
+            "text": "Ein zweites Ding wählen."
+          },
+          {
+            "key": "lens.answer.match",
+            "text": "Daten stimmen überein"
+          },
+          {
+            "key": "lens.answer.differ",
+            "text": "Abweichung"
+          },
+          {
+            "key": "lens.answer.none",
+            "text": "Kein Bezug"
+          },
+          {
+            "key": "lens.inspect.hint",
+            "text": "Zum Prüfen die Leertaste drücken."
+          },
+          {
             "key": "keys.pick",
             "text": "Den fokussierten Wert halten und dann mit dem nächsten vergleichen"
           },
@@ -62403,6 +62803,46 @@
           }
         ],
         "words": [
+          {
+            "native": "Funde",
+            "english": "findings"
+          },
+          {
+            "native": "Fund",
+            "english": "finding"
+          },
+          {
+            "native": "Leertaste",
+            "english": "space key"
+          },
+          {
+            "native": "ablegen",
+            "english": "put down"
+          },
+          {
+            "native": "Ablage",
+            "english": "tray"
+          },
+          {
+            "native": "anklicken",
+            "english": "click"
+          },
+          {
+            "native": "zweites",
+            "english": "second"
+          },
+          {
+            "native": "Ding",
+            "english": "thing"
+          },
+          {
+            "native": "Bezug",
+            "english": "relation"
+          },
+          {
+            "native": "drücken",
+            "english": "press"
+          },
           {
             "native": "kaufen",
             "english": "buy"
@@ -68258,6 +68698,62 @@
             "text": "开启或关闭检查"
           },
           {
+            "key": "lens.home",
+            "text": "主页"
+          },
+          {
+            "key": "lens.findings.none",
+            "text": "无发现"
+          },
+          {
+            "key": "lens.findings.one",
+            "text": "1 项发现"
+          },
+          {
+            "key": "lens.findings.many",
+            "text": "{0} 项发现"
+          },
+          {
+            "key": "lens.inspect",
+            "text": "检查"
+          },
+          {
+            "key": "lens.inspect.key",
+            "text": "空格"
+          },
+          {
+            "key": "lens.tag.here",
+            "text": "下一份文件在此打开"
+          },
+          {
+            "key": "lens.tag.other",
+            "text": "选择此侧"
+          },
+          {
+            "key": "lens.empty",
+            "text": "把文件拖到这里，或点击托盘中的文件。"
+          },
+          {
+            "key": "lens.pick.second",
+            "text": "再选第二项。"
+          },
+          {
+            "key": "lens.answer.match",
+            "text": "数据一致"
+          },
+          {
+            "key": "lens.answer.differ",
+            "text": "不符"
+          },
+          {
+            "key": "lens.answer.none",
+            "text": "无关联"
+          },
+          {
+            "key": "lens.inspect.hint",
+            "text": "按空格键进行检查。"
+          },
+          {
             "key": "keys.pick",
             "text": "选取焦点数值，再与下一个比对"
           },
@@ -70943,6 +71439,46 @@
           }
         ],
         "words": [
+          {
+            "native": "无发现",
+            "english": "no findings"
+          },
+          {
+            "native": "项发现",
+            "english": "findings"
+          },
+          {
+            "native": "下一份文件在此打开",
+            "english": "the next paper opens here"
+          },
+          {
+            "native": "选择此侧",
+            "english": "select this side"
+          },
+          {
+            "native": "把文件拖到这里",
+            "english": "drop the paper here"
+          },
+          {
+            "native": "或点击托盘中的文件",
+            "english": "or click a paper in the dock"
+          },
+          {
+            "native": "再选第二项",
+            "english": "pick a second thing"
+          },
+          {
+            "native": "数据一致",
+            "english": "matching data"
+          },
+          {
+            "native": "无关联",
+            "english": "no relation"
+          },
+          {
+            "native": "按空格键进行检查",
+            "english": "press Space to inspect"
+          },
           {
             "native": "开启或关闭检查",
             "english": "inspect on or off"
@@ -76154,6 +76690,62 @@
             "text": "検査のオンとオフ"
           },
           {
+            "key": "lens.home",
+            "text": "ホーム"
+          },
+          {
+            "key": "lens.findings.none",
+            "text": "所見なし"
+          },
+          {
+            "key": "lens.findings.one",
+            "text": "所見1件"
+          },
+          {
+            "key": "lens.findings.many",
+            "text": "所見{0}件"
+          },
+          {
+            "key": "lens.inspect",
+            "text": "検査"
+          },
+          {
+            "key": "lens.inspect.key",
+            "text": "スペース"
+          },
+          {
+            "key": "lens.tag.here",
+            "text": "次の書類はここに開きます"
+          },
+          {
+            "key": "lens.tag.other",
+            "text": "この側を選ぶ"
+          },
+          {
+            "key": "lens.empty",
+            "text": "ここに書類をドロップするか、ドックの書類をクリック。"
+          },
+          {
+            "key": "lens.pick.second",
+            "text": "もう1つ選んでください。"
+          },
+          {
+            "key": "lens.answer.match",
+            "text": "データ一致"
+          },
+          {
+            "key": "lens.answer.differ",
+            "text": "相違"
+          },
+          {
+            "key": "lens.answer.none",
+            "text": "関係なし"
+          },
+          {
+            "key": "lens.inspect.hint",
+            "text": "スペースキーで検査します。"
+          },
+          {
             "key": "keys.pick",
             "text": "フォーカス中の値を保持し、次の値と照合"
           },
@@ -78839,6 +79431,42 @@
           }
         ],
         "words": [
+          {
+            "native": "所見なし",
+            "english": "no findings"
+          },
+          {
+            "native": "次の書類はここに開きます",
+            "english": "the next paper opens here"
+          },
+          {
+            "native": "この側を選ぶ",
+            "english": "select this side"
+          },
+          {
+            "native": "ここに書類をドロップするか",
+            "english": "drop a paper here, or"
+          },
+          {
+            "native": "ドックの書類をクリック",
+            "english": "click a paper in the dock"
+          },
+          {
+            "native": "つ選んでください",
+            "english": "pick one"
+          },
+          {
+            "native": "データ一致",
+            "english": "matching data"
+          },
+          {
+            "native": "関係なし",
+            "english": "no relation"
+          },
+          {
+            "native": "スペースキーで検査します",
+            "english": "press Space to inspect"
+          },
           {
             "native": "検査のオンとオフ",
             "english": "inspect on or off"

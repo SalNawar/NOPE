@@ -19,6 +19,9 @@ public sealed class ShiftClockReadouts : MonoBehaviour
     /// <summary>Tray clock text on the desktop's taskbar ("09:00").</summary>
     [SerializeField] private TMP_Text trayClockText;
 
+    /// <summary>The Investigation app's header time ("09:00"; optional).</summary>
+    [SerializeField] private TMP_Text lensClockText;
+
     /// <summary>The desk CRT's clock plate's time ("09:00"; optional).</summary>
     [SerializeField] private TMP_Text crtClockText;
 
@@ -48,6 +51,8 @@ public sealed class ShiftClockReadouts : MonoBehaviour
         string text = ShiftClock.Format(minute);
         if (trayClockText != null)
             trayClockText.text = text;
+        if (lensClockText != null)
+            lensClockText.text = text;
         if (crtClockText != null)
             crtClockText.text = text;
         if (_officeClockText != null)

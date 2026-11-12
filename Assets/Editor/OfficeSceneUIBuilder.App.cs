@@ -5,25 +5,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The office builder's Investigation app as a workbench (the PC workbench
-/// spec, docs/superpowers/specs/2026-09-30-pc-workbench-design.md, §2, §3,
-/// §5): one desktop window on the window layer ("Investigation"; the
-/// restored size from DesktopConfigSO, maximised on its first open). Under
-/// its title bar (just "Investigation"): the menu bar (the desk-first
-/// redesign, item 8: the documents' menus and their drop-down, MenuBarView;
-/// Search), then the work area down to the window's foot (the main column
-/// with the status line, which says who is at the desk while idle and holds
-/// the notice (the scan toast) at its right end, and the two panes with the
-/// gutter and the line layer over them (AppPane, MatchLines); the findings
-/// column at its right, a rail while empty: FindingsView) and the search
-/// drawer (OfficeSceneUIBuilder.Search); the drop-down is built last so it
-/// draws over the work. The guided steps (GuideBar) run headless on the
-/// body (no pills, no foot: the desk leads since the desk-first redesign;
-/// no decision: the stamps decide since the PC clean-up). The panes'
-/// views are forms (OfficeSceneUIBuilder.AppViews, PcForms) behind IAppView.
-/// The workbench's parts are OfficeSceneUIBuilder.Workbench's. Rebuilt fresh
-/// on each run (the one convergence policy of this partial, audit R6-008);
-/// every reference it wires is checked (Wire, audit R6-004). Part of
+/// The office builder's Investigation app as the Lens case screen (the PC Lens
+/// spec, docs/superpowers/specs/2026-11-12-pc-lens-case-screen.md; before it the
+/// PC workbench spec, §2, §3, §5): one desktop window on the Lens layer
+/// (OfficeSceneUIBuilder.Lens: above the taskbar, so it covers the whole glass;
+/// maximised on its first open; its title bar is built but hidden, the app's
+/// header is its own). The body holds the header (Home, the traveller, the
+/// findings chip, Inspect, the time), the two sides (AppPane, MatchLines over
+/// them), the answer plate (MatchBoard's four plates), the dock (LensDock), the
+/// notice (the scan toast, a copy, "Press Space to inspect.") and the findings
+/// list (FindingsView) under the chip. The guided steps (GuideBar) run headless
+/// on the body. The panes' views are forms (OfficeSceneUIBuilder.AppViews,
+/// PcForms) behind IAppView. The workbench's parts are OfficeSceneUIBuilder.Workbench's.
+/// Rebuilt fresh on each run (the one convergence policy of this partial, audit
+/// R6-008); every reference it wires is checked (Wire, audit R6-004). Part of
 /// <see cref="OfficeSceneUIBuilder"/>; Build() calls it in its order.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -46,6 +41,9 @@ public static partial class OfficeSceneUIBuilder
         public CaseBoardView[] CaseBoards;
         public GuideBar Guide;
         public MatchBoard Board;
+
+        /// <summary>The header's time text (the shift clock writes it: ShiftClockReadouts.lensClockText).</summary>
+        public TMP_Text ClockText;
     }
 
     /// <summary>Sets an object reference, logging an error when the property does not exist (audit R6-004: a renamed field is never skipped silently).</summary>
@@ -61,48 +59,48 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the Investigation app on <paramref name="windowLayer"/>; its rows
-    /// pick into <paramref name="compare"/>. The retired per-source windows,
-    /// phase 17's case-tile window, the compare dock and the desktop's scan
-    /// toast (on <paramref name="investHost"/>, now in the status line) go.
+    /// Builds the Investigation app on the Lens layer (a child of the desktop
+    /// canvas, above the taskbar); its rows pick into <paramref name="compare"/>.
+    /// The retired per-source windows (and an older build's app on
+    /// <paramref name="windowLayer"/>), phase 17's case-tile window, the compare
+    /// dock and the desktop's scan toast (on <paramref name="investHost"/>) go.
     /// </summary>
     private static AppParts BuildInvestigationApp(Transform windowLayer, Transform investHost, CompareController compare)
     {
+        Transform lensLayer = EnsureLensLayer(investHost.parent);
         foreach (string retired in new[] { "InvestigationWindow", "DirectivesWindow", "IconScannerWindow", "RecordsWindow", "TranscriptWindow",
                                            "DocumentWindowTemplate", "BookWindowTemplate", "InvestigationApp" })
+        {
             DestroyChildIfPresent(windowLayer, retired);
+            DestroyChildIfPresent(lensLayer, retired);
+        }
         DestroyChildIfPresent(investHost, "CompareDock");
         DestroyChildIfPresent(investHost, "AppToast");
 
         DesktopConfigSO config = EnsureDesktopConfig();
-        DesktopWindow window = BuildOSWindow(windowLayer, "InvestigationApp", "app.title", null, string.Empty, config.investigationWindowSize);
+        DesktopWindow window = BuildOSWindow(lensLayer, "InvestigationApp", "app.title", null, string.Empty, config.investigationWindowSize);
         Transform win = window.transform;
         DestroyChildIfPresent(win, "Body");
-        TMP_Text title = win.Find("Header/TitleText").GetComponent<TMP_Text>();
-        title.text = UiText.Get("app.title");
-        float top = config.titleBarHeight;
+        win.Find("Header/TitleText").GetComponent<TMP_Text>().text = UiText.Get("app.title"); // the taskbar button reads it
+        win.Find("Header").gameObject.SetActive(false); // no title bar: the Lens header is the app's own
 
         var parts = new AppParts { Window = window };
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -top));
+        PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
-        // The menu bar, then the work area under it, down to the window's foot.
-        AppMenuBar bar = BuildMenuBar(body);
-        Transform work = Panel(body, "Work", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(work, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -WbSize.MenuBar));
-
-        FindingsView findings = BuildFindingsColumn(work, out RectTransform findingsColumn);
-        Transform main = Panel(work, "Main", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(main, Vector2.zero, Vector2.one, new Vector2(WbSize.Pad, 12f), new Vector2(-(WbSize.Findings + WbSize.Gap), -12f));
-        AppStatus status = BuildStatusLine(main);
-
-        Transform panes = Panel(main, "Panes", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(panes, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -WbSize.PanesTop));
-        AppPane left = BuildAppPane(panes, "PaneLeft", AppTab.Documents, compare, config, true, out PaneViews leftViews);
-        AppPane right = BuildAppPane(panes, "PaneRight", AppTab.Reference, compare, config, false, out PaneViews rightViews);
-        PlaceRect(right.transform, new Vector2(0.5f, 0f), Vector2.one, new Vector2(config.paneGap / 2f, 0f), Vector2.zero);
-        right.gameObject.SetActive(false);
-        MatchLines lines = BuildMatchLines(panes, right.gameObject);
+        LensHeaderParts header = BuildLensHeader(body);
+        parts.ClockText = header.Clock;
+        Transform sides = BuildLensSides(body);
+        AppPane left = BuildAppPane(sides, "PaneLeft", AppTab.Documents, compare, config, true, out PaneViews leftViews);
+        AppPane right = BuildAppPane(sides, "PaneRight", AppTab.Reference, compare, config, false, out PaneViews rightViews);
+        PlaceLensPanes(left, right);
+        MatchLines lines = BuildMatchLines(sides, null);
+        var soLines = new SerializedObject(lines);
+        soLines.FindProperty("pointerLine").boolValue = false; // a held value shows its outline only
+        soLines.FindProperty("dashResults").boolValue = true; // a result is a dashed line, with no label
+        soLines.ApplyModifiedProperties();
+        LensPlateParts plate = BuildAnswerPlate(body);
+        LensDock dock = BuildLensDock(body);
 
         parts.Documents = new[] { leftViews.Documents, rightViews.Documents };
         parts.Records = new[] { leftViews.Records, rightViews.Records };
@@ -113,22 +111,22 @@ public static partial class OfficeSceneUIBuilder
         parts.Calendar = new[] { leftViews.Calendar, rightViews.Calendar };
         parts.CaseBoards = new[] { leftViews.Board, rightViews.Board };
 
-        AppToast toast = BuildAppToast(status.Root);
+        AppToast toast = BuildAppToast(BuildToastHost(body));
+        FindingsView findings = BuildFindingsPanel(body, out RectTransform findingsPanel);
+        body.Find("DockGhost").SetAsLastSibling();
         parts.App = win.gameObject.AddComponent<InvestigationApp>();
         parts.Guide = body.gameObject.AddComponent<GuideBar>();
-        parts.Board = work.gameObject.AddComponent<MatchBoard>();
+        parts.Board = body.gameObject.AddComponent<MatchBoard>();
 
         var soBoard = new SerializedObject(parts.Board);
         Wire(soBoard, "compare", compare);
         Wire(soBoard, "app", parts.App);
         Wire(soBoard, "lines", lines);
         Wire(soBoard, "findings", findings);
-        Wire(soBoard, "idleText", status.Idle);
-        Wire(soBoard, "holdText", status.Hold);
-        Wire(soBoard, "cancelButton", status.Cancel);
-        Wire(soBoard, "matchText", status.Match);
-        Wire(soBoard, "differText", status.Differ);
-        Wire(soBoard, "infoText", status.Info);
+        Wire(soBoard, "holdText", plate.Hold);
+        Wire(soBoard, "matchText", plate.Match);
+        Wire(soBoard, "differText", plate.Differ);
+        Wire(soBoard, "infoText", plate.Info);
         soBoard.ApplyModifiedProperties();
 
         foreach (RulesView rules in parts.Rules)
@@ -142,18 +140,19 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "window", window);
         Wire(so, "leftPane", left);
         Wire(so, "rightPane", right);
-        Wire(so, "work", work);
-        Wire(so, "findingsColumn", findingsColumn);
-        so.FindProperty("findingsRail").floatValue = WbSize.Rail;
-        Wire(so, "mainColumn", main);
         Wire(so, "guide", parts.Guide);
-        Wire(so, "menus", bar.View);
+        Wire(so, "menus", dock);
         Wire(so, "board", parts.Board);
         Wire(so, "toast", toast);
+        Wire(so, "travellerText", header.Traveller);
+        Wire(so, "homeButton", header.Home);
+        Wire(so, "findingsChip", header.Chip);
+        Wire(so, "findingsChipText", header.ChipText);
+        Wire(so, "findingsColumn", findingsPanel);
+        Wire(so, "inspectButton", header.Inspect);
+        Wire(so, "inspectOn", header.InspectOn);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
-        BuildAppSearch(parts.App, body, bar.Search, config);
-        bar.Dropdown.SetAsLastSibling();
         return parts;
     }
 

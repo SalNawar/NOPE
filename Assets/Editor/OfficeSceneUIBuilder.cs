@@ -297,6 +297,15 @@ public static partial class OfficeSceneUIBuilder
                                              new[] { speechBubble, deskTooltip, boardTooltip }, deskTooltip, boardTooltip, gameManager, trayClockText, shiftClock, library,
                                              fallbackHud, pcFrame, stampTray, caseHud, deskViewBack, out Clickable readySign);
 
+        // The shift clock also writes the Lens header's time.
+        ShiftClockReadouts lensClock = Object.FindFirstObjectByType<ShiftClockReadouts>(FindObjectsInactive.Include);
+        if (lensClock != null)
+        {
+            var soLensClock = new SerializedObject(lensClock);
+            Wire(soLensClock, "lensClockText", app.ClockText);
+            soLensClock.ApplyModifiedProperties();
+        }
+
         // The Tier-2 images' art slots (OfficeSceneUIBuilder.Art.cs, redesign phase 27), before the desktop's layer is applied to its covers.
         BuildArtSlots(app.Reference, officeView);
 

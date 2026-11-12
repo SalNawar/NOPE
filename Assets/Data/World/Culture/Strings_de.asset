@@ -1384,6 +1384,62 @@ MonoBehaviour:
     text: "Pr\u00FCfen ein oder aus"
     gloss: 0
     tier: 0
+  - key: lens.home
+    text: "Start"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.none
+    text: "Keine Funde"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.one
+    text: "1 Fund"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.many
+    text: "{0} Funde"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect
+    text: "Pr\u00FCfen"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect.key
+    text: "Leertaste"
+    gloss: 0
+    tier: 0
+  - key: lens.tag.here
+    text: "Das n\u00E4chste Papier \u00F6ffnet hier"
+    gloss: 0
+    tier: 0
+  - key: lens.tag.other
+    text: "Diese Seite w\u00E4hlen"
+    gloss: 0
+    tier: 0
+  - key: lens.empty
+    text: "Papier hier ablegen oder in der Ablage anklicken."
+    gloss: 0
+    tier: 0
+  - key: lens.pick.second
+    text: "Ein zweites Ding w\u00E4hlen."
+    gloss: 0
+    tier: 0
+  - key: lens.answer.match
+    text: "Daten stimmen \u00FCberein"
+    gloss: 0
+    tier: 0
+  - key: lens.answer.differ
+    text: "Abweichung"
+    gloss: 0
+    tier: 0
+  - key: lens.answer.none
+    text: "Kein Bezug"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect.hint
+    text: "Zum Pr\u00FCfen die Leertaste dr\u00FCcken."
+    gloss: 0
+    tier: 0
   - key: keys.pick
     text: "Den fokussierten Wert halten und dann mit dem n\xE4chsten vergleichen"
     gloss: 0

@@ -7,12 +7,14 @@ using UnityEngine.UI;
 /// <summary>
 /// The workbench's click-and-match (the PC workbench spec §4; lessons 2 and
 /// D5: the player points, the game only confirms; a book or a rule is held
-/// like a paper): a click on a value holds it (the status line says what is
-/// held, Cancel lets go, a dashed line runs from it to the pointer), a click
+/// like a paper): a click on a value holds it (its outline shows, the answer
+/// plate says "Pick a second thing."), a click
 /// on another value compares the two through the one compare
 /// (CompareController: the Domain's ComparePair, PairCompared, the Deviation
-/// Report's proof are untouched) and the result is drawn as a labelled line
-/// between the two values (MatchLines), said on the status line and, when it
+/// Report's proof are untouched) and the result is drawn as a dashed line
+/// between the two values (MatchLines), said on the answer plate (the Lens
+/// screen: a headline, "Matching data", "Discrepancy" or "No relation", over
+/// the line written here) and, when it
 /// means something, logged in the findings (FindingLog; FindingRules says
 /// what a pair means, RuleChecks what a rule says of a value, AgainstToday
 /// what the calendar says of a date). A rule of today's memo and the
@@ -38,23 +40,23 @@ public sealed class MatchBoard : MonoBehaviour
     /// <summary>The findings column.</summary>
     [SerializeField] private FindingsView findings;
 
-    [Header("The status line: one plate per state, each in its role's colours")]
-    /// <summary>Nothing held, nothing just compared: who is at the desk, or that the desk waits (the app's line).</summary>
+    [Header("The answer plate: one plate per state, each in its role's colours")]
+    /// <summary>Nothing held, nothing just compared: no plate (wired to nothing on the Lens screen; the app writes the traveller line itself).</summary>
     [SerializeField] private TMP_Text idleText;
 
-    /// <summary>A value, a rule or the date held.</summary>
+    /// <summary>A value, a rule or the date held: "Pick a second thing.".</summary>
     [SerializeField] private TMP_Text holdText;
 
-    /// <summary>Lets go of what is held (Esc too).</summary>
+    /// <summary>Lets go of what is held (Esc too); none on the Lens screen.</summary>
     [SerializeField] private Button cancelButton;
 
-    /// <summary>A match, a rule met, a date that holds, just logged.</summary>
+    /// <summary>A match, a rule met, a date that holds, just logged (headline "Matching data").</summary>
     [SerializeField] private TMP_Text matchText;
 
-    /// <summary>A difference, a rule broken, a date that fails, just logged.</summary>
+    /// <summary>A difference, a rule broken, a date that fails, just logged (headline "Discrepancy").</summary>
     [SerializeField] private TMP_Text differText;
 
-    /// <summary>A note: nothing logged.</summary>
+    /// <summary>A note: nothing logged (headline "No relation").</summary>
     [SerializeField] private TMP_Text infoText;
 
     /// <summary>What a value, a rule or the date held is: its key, where it is, what it reads; a rule, today or the Registry's no-entry line for the specials.</summary>
@@ -363,14 +365,14 @@ public sealed class MatchBoard : MonoBehaviour
         FindingLook look = FindingRules.Look(kind);
         bool hint = FindingShades.Of(kind, finding.Proof) == FindingShade.Hint;
         _holdKey = null;
-        Link(keyA, keyB, look, FindingRules.LinkKey(kind), hint);
+        Link(keyA, keyB, look, hint);
         if (!FindingRules.IsLogged(kind))
             ShowStatus(FindingLook.Info, UiText.Pc.Format("finding.note." + kind, whatA, whatB));
         else if (!_log.Add(finding))
-            ShowStatus(FindingLook.Info, UiText.Pc.Get("status.already"));
+            ShowStatus(look, UiText.Pc.Get("status.already"));
         else
         {
-            ShowStatus(hint ? FindingLook.Info : look, UiText.Pc.Format(finding.Proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
+            ShowStatus(look, UiText.Pc.Format(finding.Proof ? "status.evidence" : "status.logged", FindingsView.Title(finding)));
             if (findings != null)
                 findings.Show(_log);
             Logged?.Invoke(finding);
@@ -385,8 +387,8 @@ public sealed class MatchBoard : MonoBehaviour
             return;
         app.OpenPair(Target(finding.KeyA), Target(finding.KeyB));
         bool hint = FindingShades.Of(finding.Kind, finding.Proof) == FindingShade.Hint;
-        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), FindingRules.LinkKey(finding.Kind), hint);
-        ShowStatus(hint ? FindingLook.Info : FindingRules.Look(finding.Kind), UiText.Pc.Format("status.shown", FindingsView.Title(finding)));
+        Link(finding.KeyA, finding.KeyB, FindingRules.Look(finding.Kind), hint);
+        ShowStatus(FindingRules.Look(finding.Kind), UiText.Pc.Format("status.shown", FindingsView.Title(finding)));
     }
 
     /// <summary>Where a value's key is read: its paper, record, book row or line (SmartLinks.ForKey), a rule's memo, the calendar.</summary>
@@ -399,14 +401,14 @@ public sealed class MatchBoard : MonoBehaviour
         return app.LinkFor(key);
     }
 
-    /// <summary>The line between two keys, redrawn each frame as their rows move; its label the ui string <paramref name="labelKey"/> (the PC's; the desk's line has no label).</summary>
-    private void Link(string keyA, string keyB, FindingLook look, string labelKey, bool hint = false)
+    /// <summary>The line between two keys, redrawn each frame as their rows move; it has no label (the answer plate says the answer; the desk's line has none either).</summary>
+    private void Link(string keyA, string keyB, FindingLook look, bool hint = false)
     {
         _linkA = keyA;
         _linkB = keyB;
         _linkLook = look;
         _linkHint = hint;
-        _linkLabel = UiText.Pc.Get(labelKey);
+        _linkLabel = string.Empty;
         LineVersion++;
         DrawLine();
     }
@@ -483,12 +485,12 @@ public sealed class MatchBoard : MonoBehaviour
         }
     }
 
-    /// <summary>The status line: the plate of <paramref name="look"/> with <paramref name="line"/> (null: the idle words), or the holding plate.</summary>
+    /// <summary>The answer plate: the plate of <paramref name="look"/> with <paramref name="line"/> (null: the idle words, none on the Lens screen), or the holding plate, which says only to pick a second thing.</summary>
     private void ShowStatus(FindingLook look, string line, bool holding = false)
     {
         bool idle = line == null && !holding;
         Set(idleText, idle, _hint);
-        Set(holdText, holding, line);
+        Set(holdText, holding, UiText.Pc.Get("lens.pick.second"));
         Set(matchText, !idle && !holding && look == FindingLook.Match, line);
         Set(differText, !idle && !holding && look == FindingLook.Differ, line);
         Set(infoText, !idle && !holding && look == FindingLook.Info, line);

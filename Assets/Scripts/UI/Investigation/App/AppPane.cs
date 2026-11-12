@@ -6,13 +6,13 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
-/// One pane of the Investigation app (the PC redesign AP2, AP5, AP8, AP9;
-/// the PC workbench spec IA5, §3): its header (a button: a click makes this
-/// side the target of the shelf) with its side tag ("Left", "Right"), the
-/// name of the document it shows and, on the target side, "Shelf opens
-/// here" (the other side's says a click makes it the target), and its
-/// content (the source's view; between travellers a case source shows the
-/// no-case state, "Waiting for the next traveller", instead). The views are
+/// One side of the Investigation app's Lens screen (the PC redesign AP2, AP5,
+/// AP8, AP9; the PC workbench spec IA5, §3; the Lens spec): its tag strip (a
+/// button: a click makes this side the target of the dock) with one text,
+/// "The next paper opens here" on the target side or "Select this side" on
+/// the other, and its content (the source's view; between travellers a case
+/// source shows the no-case state, "Waiting for the next traveller", instead;
+/// a side with no document shows the empty state, SetEmpty). The views are
 /// IAppView components, each drawing its page as a form (FormPage). The
 /// pane has no tabs of its own: the app's shelf, steps and links choose its
 /// source and its item. Each pane has its own views and its own
@@ -30,14 +30,20 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>The views, one per source (their Tab says which).</summary>
     [SerializeField] private AppView[] views = new AppView[0];
 
-    /// <summary>The header's title: the document it shows.</summary>
+    /// <summary>The header's title: the document it shows (none on the Lens screen: the document prints its own title).</summary>
     [SerializeField] private TMP_Text titleText;
 
-    /// <summary>The header (a click makes this side the target).</summary>
+    /// <summary>The tag strip (a click makes this side the target).</summary>
     [SerializeField] private Button headerButton;
 
     /// <summary>The no-case state over the content (a case source between travellers).</summary>
     [SerializeField] private GameObject noCase;
+
+    /// <summary>The empty state over the content (the side holds no document: "Drop a paper here, or click a paper in the dock.").</summary>
+    [SerializeField] private GameObject emptyState;
+
+    /// <summary>The strong frame (shown on the target side, and on the side a drag is over: SetDrop).</summary>
+    [SerializeField] private GameObject strongFrame;
 
     /// <summary>The header's parts shown while this side is the target (the filled side tag, "Opens here", the strong frame).</summary>
     [SerializeField] private GameObject[] targetParts = new GameObject[0];
@@ -62,6 +68,8 @@ public sealed partial class AppPane : MonoBehaviour
     private AppTab _active;
     private bool _caseOn;
     private bool _ready;
+    private bool _empty;
+    private bool _isTarget;
 
     /// <summary>Raised when a source is shown (the app clears its badge).</summary>
     public event Action<AppPane, AppTab> Shown;
@@ -197,6 +205,7 @@ public sealed partial class AppPane : MonoBehaviour
     /// </summary>
     public void SetTarget(bool on)
     {
+        _isTarget = on;
         foreach (GameObject part in targetParts)
             if (part != null && part.activeSelf != on)
                 part.SetActive(on);
@@ -208,6 +217,23 @@ public sealed partial class AppPane : MonoBehaviour
         RectTransform inset = titleRow != null ? titleRow : titleText != null ? titleText.rectTransform : null;
         if (inset != null)
             inset.offsetMax = new Vector2(on ? titleRightInsets.x : titleRightInsets.y, inset.offsetMax.y);
+    }
+
+    /// <summary>The side holds no document (<paramref name="on"/>: the empty state shows, no view) or does.</summary>
+    public void SetEmpty(bool on)
+    {
+        Init();
+        if (_empty == on)
+            return;
+        _empty = on;
+        Apply();
+    }
+
+    /// <summary>A drag is over this side (the strong frame shows, as on the target side), or left it.</summary>
+    public void SetDrop(bool on)
+    {
+        if (strongFrame != null && strongFrame.activeSelf != (on || _isTarget))
+            strongFrame.SetActive(on || _isTarget);
     }
 
     /// <summary>The hint among the target parts (the one part that is a text), or null.</summary>
@@ -288,14 +314,16 @@ public sealed partial class AppPane : MonoBehaviour
         Title();
     }
 
-    /// <summary>Which view shows and the no-case state.</summary>
+    /// <summary>Which view shows, the no-case state and the empty state (an empty side shows no view; its empty state wins over the no-case state).</summary>
     private void Apply()
     {
         bool blocked = Blocked;
         foreach (KeyValuePair<AppTab, IAppView> pair in _views)
-            pair.Value.SetVisible(pair.Key == _active && !blocked);
-        if (noCase != null && noCase.activeSelf != blocked)
-            noCase.SetActive(blocked);
+            pair.Value.SetVisible(pair.Key == _active && !blocked && !_empty);
+        if (noCase != null && noCase.activeSelf != (blocked && !_empty))
+            noCase.SetActive(blocked && !_empty);
+        if (emptyState != null && emptyState.activeSelf != _empty)
+            emptyState.SetActive(_empty);
         Title();
         Changed?.Invoke(this);
     }

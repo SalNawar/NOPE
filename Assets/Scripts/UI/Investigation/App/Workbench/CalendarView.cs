@@ -60,7 +60,7 @@ public sealed class CalendarView : AppView
         if (todayButton != null)
             todayButton.onClick.AddListener(() =>
             {
-                if (board != null && _today != null)
+                if (board != null && _today != null && PcInspect.Allows(this))
                     board.PickToday(_today);
             });
     }

@@ -1365,6 +1365,62 @@ MonoBehaviour:
     text: "\u5F00\u542F\u6216\u5173\u95ED\u68C0\u67E5"
     gloss: 0
     tier: 0
+  - key: lens.home
+    text: "\u4E3B\u9875"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.none
+    text: "\u65E0\u53D1\u73B0"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.one
+    text: "1 \u9879\u53D1\u73B0"
+    gloss: 0
+    tier: 0
+  - key: lens.findings.many
+    text: "{0} \u9879\u53D1\u73B0"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect
+    text: "\u68C0\u67E5"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect.key
+    text: "\u7A7A\u683C"
+    gloss: 0
+    tier: 0
+  - key: lens.tag.here
+    text: "\u4E0B\u4E00\u4EFD\u6587\u4EF6\u5728\u6B64\u6253\u5F00"
+    gloss: 0
+    tier: 0
+  - key: lens.tag.other
+    text: "\u9009\u62E9\u6B64\u4FA7"
+    gloss: 0
+    tier: 0
+  - key: lens.empty
+    text: "\u628A\u6587\u4EF6\u62D6\u5230\u8FD9\u91CC\uFF0C\u6216\u70B9\u51FB\u6258\u76D8\u4E2D\u7684\u6587\u4EF6\u3002"
+    gloss: 0
+    tier: 0
+  - key: lens.pick.second
+    text: "\u518D\u9009\u7B2C\u4E8C\u9879\u3002"
+    gloss: 0
+    tier: 0
+  - key: lens.answer.match
+    text: "\u6570\u636E\u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: lens.answer.differ
+    text: "\u4E0D\u7B26"
+    gloss: 0
+    tier: 0
+  - key: lens.answer.none
+    text: "\u65E0\u5173\u8054"
+    gloss: 0
+    tier: 0
+  - key: lens.inspect.hint
+    text: "\u6309\u7A7A\u683C\u952E\u8FDB\u884C\u68C0\u67E5\u3002"
+    gloss: 0
+    tier: 0
   - key: keys.pick
     text: "\u9009\u53D6\u7126\u70B9\u6570\u503C\uFF0C\u518D\u4E0E\u4E0B\u4E00\u4E2A\u6BD4\u5BF9"
     gloss: 0

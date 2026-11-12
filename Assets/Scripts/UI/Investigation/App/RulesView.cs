@@ -119,7 +119,7 @@ public sealed class RulesView : AppView
     private void Pick(FormSlot slot)
     {
         TravelRuleSO rule = RuleOf(slot, out int index);
-        if (rule != null && board != null)
+        if (rule != null && board != null && PcInspect.Allows(this))
             board.PickRule(index, rule);
     }
 

@@ -17,9 +17,11 @@ using UnityEngine.UI;
 /// desk machines spec §1), set by CaseDocumentsPresenter: the UV tab shows
 /// only from the UV torch's day and lists only the marks its cone has shown,
 /// the CHIP tab only from the chip reader's day and a chip once read; a
-/// glowing line is clicked to log it (Picked: the machine's reading held
-/// against its box). Each Documents view has one; a paper shown anew opens
-/// on PRINT.
+/// glowing UV line is clicked to log it (Picked: the machine's reading held
+/// against its box). Every chip line is a value to pick with inspect on, like
+/// a printed field (ChipPicked: the reading goes into the one compare; no line
+/// glows or is clickable by itself). Each Documents view has one; a paper
+/// shown anew opens on PRINT.
 /// </summary>
 public sealed class ScanLayerSwitch : MonoBehaviour
 {
@@ -66,6 +68,9 @@ public sealed class ScanLayerSwitch : MonoBehaviour
 
     /// <summary>A glowing line clicked (the desk machines spec §1): the paper, the box's index in its fields, what the machine reads there and on which layer; CaseDocumentsPresenter logs it against the box.</summary>
     public event Action<int, int, string, ScanLayer> Picked;
+
+    /// <summary>A chip line picked with inspect on: the paper, the box's index in its fields, what the chip reads there, and whether that differs from the print (the evidence's fault flag, never shown); CaseDocumentsPresenter puts it into the compare.</summary>
+    public event Action<int, int, string, bool> ChipPicked;
 
     private void Awake() => Wire();
 
@@ -181,7 +186,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
         }
     }
 
-    /// <summary>The chip's record, a line per printed field in the print's order. No line glows: the clerk compares the chip value with the print (a line that differs still logs the reading when clicked).</summary>
+    /// <summary>The chip's record, a line per printed field in the print's order. No line glows: the clerk compares the chip value with the print, picking the two values in inspect.</summary>
     private void DrawChip()
     {
         if (title != null)
@@ -200,16 +205,24 @@ public sealed class ScanLayerSwitch : MonoBehaviour
             {
                 int field = i;
                 string value = chip[i].value;
-                Line(UiText.Pc.Format("layers.chip.line", UiText.Pc.DocumentWord(chip[i].label), value), false, differ.Contains(i) ? () => Picked?.Invoke(document, field, value, ScanLayer.Chip) : (Action)null);
+                bool differs = differ.Contains(i);
+                GameObject line = Line(UiText.Pc.Format("layers.chip.line", UiText.Pc.DocumentWord(chip[i].label), value), false, () =>
+                {
+                    if (PcInspect.Allows(this))
+                        ChipPicked?.Invoke(document, field, value, differs);
+                });
+                if (line != null && line.TryGetComponent(out Button pick))
+                    AppRow.Mark(line, AppTab.Documents, PickKeys.Hidden(document, field, ScanLayer.Chip), UiText.Pc.Get(EvidencePicks.HiddenLabelKey(ScanLayer.Chip)),
+                                UiText.Pc.DocumentWord(chip[i].label), value, pick);
             }
     }
 
-    /// <summary>A line of the layer; a glowing one, clicked, runs <paramref name="clicked"/> (logs the reading).</summary>
-    private void Line(string text, bool glows, Action clicked)
+    /// <summary>A line of the layer (returned; null when it cannot be made); a glowing one, clicked, runs <paramref name="clicked"/> (logs the reading).</summary>
+    private GameObject Line(string text, bool glows, Action clicked)
     {
         GameObject template = glows ? rowGlowTemplate : rowTemplate != null ? rowTemplate.gameObject : null;
         if (template == null || rows == null)
-            return;
+            return null;
         GameObject line = Instantiate(template, rows, false);
         line.SetActive(true);
         Transform child = line.transform.Find("Text");
@@ -223,6 +236,7 @@ public sealed class ScanLayerSwitch : MonoBehaviour
             button.onClick.AddListener(() => clicked()); // the desktop's mouse click is the press's one sound (BUG-21c)
         }
         _lines.Add(line);
+        return line;
     }
 
     /// <summary>A tab's selected mark.</summary>

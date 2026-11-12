@@ -18,7 +18,10 @@ using UnityEngine.UI;
 /// page scrolled, a pane resized) and hides while either box is out of its
 /// pane's view, redrawing only when what it draws moved (BUG-65j: nothing
 /// is rebuilt or allocated on a frame where nothing changed). Draws nothing
-/// by itself: MatchBoard says what to draw. Never a raycast target.
+/// by itself: MatchBoard says what to draw. Never a raycast target. On the
+/// PC's Lens screen (pointerLine off, dashResults on) a held value shows its
+/// outline only, a result is a dashed line, and no label sits on it (the
+/// answer plate says the answer).
 /// </summary>
 [RequireComponent(typeof(CanvasRenderer))]
 public sealed class MatchLines : MaskableGraphic
@@ -54,6 +57,12 @@ public sealed class MatchLines : MaskableGraphic
 
     /// <summary>True: a note's line (nothing logged) is dashed, as the PC draws it; false (the desk's line over the office, Saleh 2026-10-06): every result's line is solid, so a dashed line only ever means a value held, following the pointer.</summary>
     [SerializeField] private bool dashNotes = true;
+
+    /// <summary>True (the desk's): a held value draws a dashed line to the pointer. False (the PC's Lens screen): a held value shows its outline only.</summary>
+    [SerializeField] private bool pointerLine = true;
+
+    /// <summary>True (the PC's Lens screen): every result's line is dashed, whatever its look. False (the desk's): as dashNotes says.</summary>
+    [SerializeField] private bool dashResults;
 
     [Header("Geometry (desktop units)")]
     /// <summary>The line's width.</summary>
@@ -162,7 +171,7 @@ public sealed class MatchLines : MaskableGraphic
     {
         bool va = Visible(_a), vb = !_holding && Visible(_b);
         Vector2 pointer = default;
-        bool pointed = _holding && va && TryPointer(out pointer);
+        bool pointed = _holding && va && pointerLine && TryPointer(out pointer);
         int shape = (_holding ? 1 : 0) | (va ? 2 : 0) | (vb ? 4 : 0) | (pointed ? 8 : 0);
         Rect ra = va ? Local(_a) : default, rb = vb ? Local(_b) : default;
         bool moved = shape != _drawnShape || ra != _drawnA || rb != _drawnB || (pointed && pointer != _drawnPointer);
@@ -241,7 +250,7 @@ public sealed class MatchLines : MaskableGraphic
             Rect held = Local(_a);
             Color c = holdColour;
             Box(vh, held, c);
-            if (TryPointer(out Vector2 pointer))
+            if (pointerLine && TryPointer(out Vector2 pointer))
             {
                 Vector2 from = Anchor(held, pointer.x);
                 Curve(from, pointer);
@@ -258,7 +267,7 @@ public sealed class MatchLines : MaskableGraphic
         Color colour = Colour(_look);
         Vector2 p = Anchor(ra, rb.center.x), q = Anchor(rb, ra.center.x);
         Curve(p, q);
-        Stroke(vh, colour, (dashNotes && _look == FindingLook.Info) || IsHint);
+        Stroke(vh, colour, dashResults || (dashNotes && _look == FindingLook.Info) || IsHint);
         Box(vh, ra, colour);
         Box(vh, rb, colour);
         Dot(vh, p, colour);

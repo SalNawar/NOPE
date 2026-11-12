@@ -68,7 +68,10 @@ public sealed class CaseDocumentsPresenter
         _hardware = reachableDesk != null ? reachableDesk.Hardware : null;
         foreach (DocumentsView view in _views)
             if (view != null && view.Layers != null)
+            {
                 view.Layers.Picked += LogHidden;
+                view.Layers.ChipPicked += PickChip;
+            }
         if (_hardware != null)
         {
             _hardware.Picked += LogHidden;
@@ -341,6 +344,17 @@ public sealed class CaseDocumentsPresenter
         _compare.Clear();
         _compare.Select(EvidencePicks.ForHidden(document, row, value, layer, name), null);
         _compare.Select(EvidencePicks.ForField(document, row, name), null);
+    }
+
+    /// <summary>A chip line picked on the PC (inspect on): the chip's reading goes into the compare as one value, like a printed field; the clerk picks the print's box as the second (a chip that equals the print is no fault).</summary>
+    private void PickChip(int document, int field, string value, bool differs)
+    {
+        if (_compare == null || document < 0 || document >= _caseDocuments.Count)
+            return;
+        IReadOnlyList<DocumentField> fields = _caseDocuments[document].fields;
+        if (fields == null || field < 0 || field >= fields.Count || fields[field] == null)
+            return;
+        _compare.Select(EvidencePicks.ForHidden(document, new DocumentRow(field, fields[field]), value, ScanLayer.Chip, _caseDocuments[document].name, differs), null);
     }
 
     /// <summary>A held paper's row picked at the desk: it goes into the compare (the same pick as its scanned copy's row).</summary>

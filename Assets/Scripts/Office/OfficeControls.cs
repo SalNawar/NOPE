@@ -113,7 +113,7 @@ public sealed class OfficeControls : MonoBehaviour
             BackOut();
         if (kb == null)
             return;
-        if (kb.spaceKey.wasPressedThisFrame)
+        if (kb.spaceKey.wasPressedThisFrame && !State().PcOpen) // with the PC up, Space is the PC's inspect (DesktopKeyboard), never the desk's too
             Press(ControlKey.Inspect);
         if (kb.tabKey.wasPressedThisFrame)
             Press(ControlKey.Stamps);

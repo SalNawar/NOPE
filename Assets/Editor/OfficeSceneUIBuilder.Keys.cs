@@ -31,9 +31,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The card's keys column width (what they do takes the rest; a row is as tall as its text).</summary>
     private const float CardKeysWidth = 300f;
 
-    /// <summary>The search field's chip width (at the field's right end).</summary>
-    private const float SearchChipWidth = 420f;
-
     /// <summary>
     /// The F1 card (KB1, §3.4): a desktop window of DesktopConfigSO's card size
     /// whose body is a scrolling list of rows (the keys, bold, then what they
@@ -95,8 +92,7 @@ public static partial class OfficeSceneUIBuilder
     {
         Transform root = canvas.transform;
         DesktopConfigSO config = EnsureDesktopConfig();
-        Transform windowLayer = app.Window.transform.parent;
-        DesktopWindow card = Need(windowLayer, "ShortcutsWindow")?.GetComponent<DesktopWindow>();
+        DesktopWindow card = Need(root, "InvestigationUI/WindowLayer/ShortcutsWindow")?.GetComponent<DesktopWindow>(); // the Investigation window is on the Lens layer, not the window layer
         DesktopContextMenu menu = Need(root, "ContextMenu")?.GetComponent<DesktopContextMenu>();
         NotesWindow notes = root.GetComponentInChildren<NotesWindow>(true);
         OrdersWindow orders = root.GetComponentInChildren<OrdersWindow>(true);
@@ -155,13 +151,6 @@ public static partial class OfficeSceneUIBuilder
     {
         Transform win = app.Window.transform;
 
-        TMP_InputField search = Need(win, "AppBody/SearchDrawer/Panel/SearchField")?.GetComponent<TMP_InputField>();
-        SearchFieldChip chip = search != null ? BuildSearchChip(search, app.App) : null;
-
-        Transform quick = Need(win, "AppBody/SearchDrawer/Panel/QuickOpen");
-        SidebarEntryList pins = quick != null ? BuildQuickOpenList(quick, app.App, "Pinned", "app.sidebar.pinned", "app.pins.empty", 0.52f, 1f) : null;
-        SidebarEntryList recent = quick != null ? BuildQuickOpenList(quick, app.App, "Recent", "app.sidebar.recent", "app.recent.empty", 0.02f, 0.49f) : null;
-
         var zooms = new List<Object>();
         foreach (AppPane pane in win.GetComponentsInChildren<AppPane>(true))
             zooms.Add(BuildPaneZoom(pane));
@@ -169,82 +158,10 @@ public static partial class OfficeSceneUIBuilder
         AppFocusRing ring = BuildFocusRing(win, config);
 
         var so = new SerializedObject(app.App);
-        Wire(so, "searchField", search);
-        Wire(so, "searchChip", chip);
-        Wire(so, "pinsList", pins);
-        Wire(so, "recentList", recent);
         Wire(so, "focusRing", ring);
         SerializedArrays.Set(so, "zooms", zooms);
         Wire(so, "rowMenu", menu);
         so.ApplyModifiedProperties();
-    }
-
-    /// <summary>The search field's chip (CP3): a plate at the field's right end with its text and an X, hidden.</summary>
-    private static SearchFieldChip BuildSearchChip(TMP_InputField search, InvestigationApp app)
-    {
-        Transform box = search.transform;
-        Transform plate = Panel(box, "Chip", new Vector2(1f, 0.1f), new Vector2(1f, 0.9f), new Vector2(-SearchChipWidth / 2f - 4f, 0f), new Vector2(SearchChipWidth, 0f),
-                                XpFace, ThemeRoleId.Button);
-        TMP_Text label = Text(plate, "Label", "", PcType.Caption, TextAlignmentOptions.MidlineLeft, Vector2.zero, new Vector2(0.7f, 1f), Ink, ThemeRoleId.Button, fit: true);
-        label.textWrappingMode = TextWrappingModes.NoWrap;
-        label.overflowMode = TextOverflowModes.Ellipsis;
-        label.margin = new Vector4(8f, 0f, 4f, 0f);
-        label.raycastTarget = false;
-        Button remove = MakeButton(plate, "RemoveButton", null, new Vector2(0.72f, 0.1f), new Vector2(0.98f, 0.9f), null, ThemeRoleId.Button, "notes.remove");
-        SetAnchors(remove.transform, new Vector2(0.72f, 0.1f), new Vector2(0.98f, 0.9f));
-        ButtonLabel(remove, PcType.Caption, TextAlignmentOptions.Center, 2f);
-        plate.gameObject.SetActive(false);
-
-        SearchFieldChip chip = GetOrAdd<SearchFieldChip>(box.gameObject);
-        var so = new SerializedObject(chip);
-        Wire(so, "field", search);
-        Wire(so, "chip", plate.gameObject);
-        Wire(so, "chipLabel", label);
-        Wire(so, "removeButton", remove);
-        Wire(so, "app", app);
-        so.ApplyModifiedProperties();
-        return chip;
-    }
-
-    /// <summary>
-    /// A list of the search drawer's quick-open panel (IA9; PR1, PR2), between
-    /// <paramref name="bottom"/> and <paramref name="top"/> of the panel: its
-    /// heading (<paramref name="headingKey"/>), a scrolling list of jump rows
-    /// and its empty hint (<paramref name="hintKey"/>).
-    /// </summary>
-    private static SidebarEntryList BuildQuickOpenList(Transform panel, InvestigationApp app, string section, string headingKey, string hintKey,
-                                                       float bottom, float top)
-    {
-        TMP_Text heading = Text(panel, section + "Heading", null, PcType.Caption, TextAlignmentOptions.BottomLeft, new Vector2(0f, top), new Vector2(1f, top),
-                                WbMuted, ThemeRoleId.SurfaceMuted, headingKey, FontStyles.Bold, ThemeTextKind.Heading, true);
-        PlaceRect(heading.transform, new Vector2(0f, top), new Vector2(1f, top), new Vector2(PcSize.L, -40f), new Vector2(-PcSize.L, 0f));
-        heading.raycastTarget = false;
-        RectTransform rows = BuildScrollList(panel, section + "List", new Vector2(0f, bottom), new Vector2(1f, top), 2f, WbSurface, ThemeRoleId.Surface);
-        Transform box = rows.parent.parent;
-        PlaceRect(box, new Vector2(0f, bottom), new Vector2(1f, top), new Vector2(PcSize.S, 0f), new Vector2(-PcSize.S, -44f));
-        TMP_Text hint = Text(box, "EmptyHint", null, PcType.Caption, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, WbMuted,
-                             ThemeRoleId.SurfaceMuted, hintKey, FontStyles.Normal, ThemeTextKind.Body);
-        PlaceRect(hint.transform, Vector2.zero, Vector2.one, new Vector2(PcSize.M, PcSize.S), new Vector2(-PcSize.M, -PcSize.S));
-        Chrome(hint, PcType.Caption, true);
-        hint.raycastTarget = false;
-
-        Button row = BuildListRow(rows, "EntryTemplate");
-        TMP_Text label = row.transform.Find("Label").GetComponent<TMP_Text>();
-        SidebarEntryRow entry = GetOrAdd<SidebarEntryRow>(row.gameObject);
-        var soRow = new SerializedObject(entry);
-        Wire(soRow, "button", row);
-        Wire(soRow, "label", label);
-        soRow.ApplyModifiedProperties();
-        row.gameObject.SetActive(false);
-
-        SidebarEntryList list = GetOrAdd<SidebarEntryList>(box.gameObject);
-        var so = new SerializedObject(list);
-        Wire(so, "app", app);
-        Wire(so, "rowsRoot", rows);
-        Wire(so, "rowTemplate", entry);
-        Wire(so, "emptyHint", hint.gameObject);
-        so.ApplyModifiedProperties();
-        return list;
     }
 
     /// <summary>

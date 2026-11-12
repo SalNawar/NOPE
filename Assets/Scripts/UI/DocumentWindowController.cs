@@ -177,7 +177,7 @@ public sealed class DocumentWindowController : MonoBehaviour
     private void Pick(FormSlot slot)
     {
         DocumentField field = Field(slot);
-        if (_compare == null || field == null)
+        if (_compare == null || field == null || !PcInspect.Allows(this))
             return;
         _compare.Select(EvidencePicks.ForField(_index, new DocumentRow(slot.Field, field), _doc.DisplayName), null);
     }

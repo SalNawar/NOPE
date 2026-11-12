@@ -369,7 +369,7 @@ public static partial class OfficeSceneUIBuilder
     /// The desktop canvas's layers, bottom to top: the wallpaper, the idle
     /// line, the icons, the gameplay hosts (the investigation host holds the
     /// case chrome, the window layer and the compare dock), the taskbar, the
-    /// context menu, the Start menu.
+    /// Lens layer (the Investigation window), the context menu, the Start menu.
     /// </summary>
     private static void OrderDesktopLayers(Transform root)
     {
@@ -377,7 +377,7 @@ public static partial class OfficeSceneUIBuilder
         Transform icons = root.Find("DesktopIcons");
         if (idle != null && icons != null)
             icons.SetSiblingIndex(idle.GetSiblingIndex() + 1);
-        foreach (string top in new[] { "Taskbar", "ContextMenu", "StartMenu" })
+        foreach (string top in new[] { "Taskbar", "LensLayer", "ContextMenu", "StartMenu" }) // the Lens layer (the Investigation window) covers the taskbar
         {
             Transform t = root.Find(top);
             if (t != null)

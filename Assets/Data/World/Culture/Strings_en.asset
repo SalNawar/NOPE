@@ -1493,6 +1493,62 @@ MonoBehaviour:
     text: Inspect on or off
     gloss: 0
     tier: 1
+  - key: lens.home
+    text: "Home"
+    gloss: 0
+    tier: 1
+  - key: lens.findings.none
+    text: "No findings"
+    gloss: 0
+    tier: 1
+  - key: lens.findings.one
+    text: "1 finding"
+    gloss: 0
+    tier: 1
+  - key: lens.findings.many
+    text: "{0} findings"
+    gloss: 0
+    tier: 1
+  - key: lens.inspect
+    text: "Inspect"
+    gloss: 0
+    tier: 1
+  - key: lens.inspect.key
+    text: "Space"
+    gloss: 0
+    tier: 1
+  - key: lens.tag.here
+    text: "The next paper opens here"
+    gloss: 0
+    tier: 1
+  - key: lens.tag.other
+    text: "Select this side"
+    gloss: 0
+    tier: 1
+  - key: lens.empty
+    text: "Drop a paper here, or click a paper in the dock."
+    gloss: 0
+    tier: 1
+  - key: lens.pick.second
+    text: "Pick a second thing."
+    gloss: 0
+    tier: 1
+  - key: lens.answer.match
+    text: "Matching data"
+    gloss: 0
+    tier: 1
+  - key: lens.answer.differ
+    text: "Discrepancy"
+    gloss: 0
+    tier: 1
+  - key: lens.answer.none
+    text: "No relation"
+    gloss: 0
+    tier: 1
+  - key: lens.inspect.hint
+    text: "Press Space to inspect."
+    gloss: 0
+    tier: 1
   - key: keys.pick
     text: Pick the focused value
     gloss: 0
