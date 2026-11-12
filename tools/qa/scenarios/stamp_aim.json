@@ -5,7 +5,7 @@
   "steps": [
     {
       "op": "note",
-      "text": "STAMP R4 (docs/pending/STAMP.md) with the virtual mouse (P-SLOW, P-FAST, P-WOBBLE): day 12 (by the cheat jump, every item given), ten travellers. Each lays its papers in a pile on the mat in the office view, the passport last (on top), then works in the reading view: (b) on a 3-paper pile (travellers 1, 4, 5 and 6: the ones who lay 3 papers in the 21-day progression's day 12, since 2026-10-28; traveller 9 lays one), an accepted stroke with a re-grab 2 frames after the let-go (c<k>) and three refused tries on the pile (b<k>_i); with fewer papers, the rulebook is dragged over part of the passport and the accepted stroke with the re-grab lands at its edge (c<k>); (a) every traveller: the rulebook over the passport and a try 5-8 mm inside its edge (a<k>), within the 1 cm the recipe names. Pass, every aim.*: the stamp lands on the aimed document within 3 mm of the pointer's spot on it; an accepted stroke prints once in its verdict's ink and the die stops within 0.5 mm of the surface; a refused one prints nothing; a re-grab carries nothing mid-stroke. Then (d) on the eleventh traveller in the office view, ten let-gos each over the rack's box, the chip reader, the scanner and the bare desk (letGo.*: over a prop no stroke, no cue, the dater seats; over the desk the thump, the die on the plane, the 6 mm bounce; letGoCarry.*: the recipe's literal per-frame line). Needs StampRig's ops."
+      "text": "STAMP R4 (docs/pending/STAMP.md) with the virtual mouse (P-SLOW, P-FAST, P-WOBBLE): day 12 (by the cheat jump, every item given), ten travellers. Each lays its papers in a pile on the mat in the office view, the passport last (on top), then works in the reading view: (b) on a 3-paper pile (travellers 1, 4, 5 and 6: the ones who lay 3 papers in the 21-day progression's day 12, since 2026-10-28; traveller 9 lays one), an accepted stroke with a re-grab 2 frames after the let-go (c<k>) and three refused tries on the pile (b<k>_i); with fewer papers, the rulebook is dragged over part of the passport and the accepted stroke with the re-grab lands at its edge (c<k>); (a) every traveller: the rulebook over the passport and a try 5-8 mm inside its edge (a<k>), within the 1 cm the recipe names. Pass, every aim.*: the stamp lands on the aimed document within 3 mm of the pointer's spot on it; an accepted stroke prints once in its verdict's ink and the die stops within 0.5 mm of the surface; a refused one prints nothing; a re-grab carries nothing mid-stroke. Then (d) on the eleventh traveller in the office view, ten let-gos each over the rack's box, the chip reader, the scanner and the bare desk (letGo.*: over a prop no stroke, no cue, the dater seats; over the desk the thump, the die on the plane, the 6 mm bounce; letGoCarry.*: the recipe's literal per-frame line). Needs StampRig's ops. D66 (2026-11-12): the piles lie at x 0.6 of the office view, not 0.45: the 1.8 folder out of its pocket covers 0.45, and the papers under it slide aside (rule 1), so each passport now lies beside the folder, as the base's smaller folder left it. The let-go desk7 is at y 0.11, not 0.14: the 1.8 folder ends the run at x 849..1050, y 148..254 px of the office view (from the bottom), so 0.14 (151 px) lay on its near edge; 0.11 (119 px) is bare mat, as desk10 is."
     },
     {
       "op": "title"
@@ -61,7 +61,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t1"
     },
@@ -133,7 +133,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t2"
     },
@@ -176,7 +176,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t3"
     },
@@ -219,7 +219,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t4"
     },
@@ -291,7 +291,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t5"
     },
@@ -363,7 +363,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t6"
     },
@@ -435,7 +435,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t7"
     },
@@ -478,7 +478,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t8"
     },
@@ -521,7 +521,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t9"
     },
@@ -564,7 +564,7 @@
     },
     {
       "op": "stampStack",
-      "x2": 0.45,
+      "x2": 0.6,
       "y2": 0.1,
       "name": "t10"
     },
@@ -819,7 +819,7 @@
       "text": "Approved",
       "target": "desk",
       "x": 0.47,
-      "y": 0.14,
+      "y": 0.11,
       "path": "Slow",
       "name": "desk7"
     },

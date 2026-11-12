@@ -43,8 +43,8 @@ public sealed class PaperRealSizes
     /// <summary>A form or a permit (millimetres).</summary>
     public PaperMm form = new PaperMm(148f, 210f);
 
-    /// <summary>World metres per real metre on the desk (one scale for every paper): the folder's own scale, measured 0.92 (doc-legibility REPORT, 3.3).</summary>
-    public float realScale = 0.92f;
+    /// <summary>World metres per real metre on the desk (one scale for every paper): the folder's own scale, measured 0.92 (doc-legibility REPORT, 3.3), times 1.8 (D66, Saleh 2026-11-12: "Yes, grow 1.8x"; the builder grows the folder by the same 1.8, OfficeSceneUIBuilder.RulebookGrowth).</summary>
+    public float realScale = 1.656f;
 
     /// <summary>The lift's bars (cap height in screen pixels): every value at least valueCapPx, every label at least labelCapPx, while the paper still fits the frame.</summary>
     public float valueCapPx = 11f, labelCapPx = 8f;

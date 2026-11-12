@@ -10,8 +10,8 @@ using UnityEngine;
 /// </summary>
 public sealed partial class DeskDocument
 {
-    /// <summary>The paper's face mesh (the guide's rim is drawn round it).</summary>
-    public Renderer PaperFace => paperQuad;
+    /// <summary>The paper's face mesh as drawn (the guide's rim is drawn round it): a shut booklet's cover (one page high), else the face (D66: the rim of the open booklet framed empty mat over the shut passport).</summary>
+    public Renderer PaperFace => cover != null && cover.ShutFace != null ? cover.ShutFace : paperQuad;
 
     /// <summary>The extra box (made on first use) on the sheet.</summary>
     private BoxCollider _pad;

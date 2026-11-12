@@ -498,18 +498,21 @@ public sealed class GuideDirector : MonoBehaviour
         return null;
     }
 
-    /// <summary>The paper wearing the guide's rim now (HoverHighlighter.SetGuided).</summary>
+    /// <summary>The paper wearing the guide's rim now and the face it is drawn round (HoverHighlighter.SetGuided).</summary>
     private DeskDocument _guided;
+    private Renderer _guidedFace;
 
-    /// <summary>Puts the guide's rim on <paramref name="paper"/> (null: off), only when it changes.</summary>
+    /// <summary>Puts the guide's rim on <paramref name="paper"/> (null: off), round what it draws (DeskDocument.PaperFace: a booklet opened on the counter changes it), only when that changes.</summary>
     private void ShowRim(DeskDocument paper)
     {
-        if (paper == _guided)
+        Renderer face = paper != null ? paper.PaperFace : null;
+        if (paper == _guided && face == _guidedFace)
             return;
         _guided = paper;
+        _guidedFace = face;
         HoverHighlighter rim = FindFirstObjectByType<HoverHighlighter>();
         if (rim != null)
-            rim.SetGuided(paper != null ? paper.PaperFace : null, _camera);
+            rim.SetGuided(face, _camera);
     }
 
     private bool TryUi(string target, out RectTransform ui)

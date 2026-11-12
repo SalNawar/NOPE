@@ -155,8 +155,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The counter: the slim strip this deep (metres) at the desk's far edge along the office view, on the traveller's side (Saleh 2026-10-06: "reduce the size of the top counter line"; it was 0.14); a paper dropped there once the passport carries its verdict hands the papers back, before that it bounces back to the desk.</summary>
     [FormerlySerializedAs("handBackDepth"), Min(0.02f)] public float counterDepth = 0.05f;
 
-    /// <summary>How far nearer than the counter's far edge the papers handed over land (metres: their centres' row, DeskZones.CounterSpot); small papers there reach over the slim strip onto the desk.</summary>
-    [Min(0f)] public float counterSpotInset = 0.07f;
+    /// <summary>How far nearer than the counter's far edge the papers handed over land (metres: their centres' row, DeskZones.CounterSpot); small papers there reach over the slim strip onto the desk. 0.07 x 1.8 (D66: the papers grew 1.8 times; at 0.07 a passport or a form, 19 cm deep on the counter, passed the far edge under the counter's lip).</summary>
+    [Min(0f)] public float counterSpotInset = 0.126f;
 
     /// <summary>A document's scale on the counter (small: a share of its real size on the desk, readClose; PaperSizes.SheetScale: one world size per zone, whatever the view).</summary>
     [Range(0.2f, 1f)] public float counterScale = 0.6f;
