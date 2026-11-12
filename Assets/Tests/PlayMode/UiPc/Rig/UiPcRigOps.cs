@@ -687,6 +687,7 @@ public static class UiPcRigOps
             yield return ClickObject(runner, entry);
             yield return QaGame.Frames(6);
             opened++;
+            yield return LensHome(runner);
         }
         yield return runner.Input.Tap(Key.F1); // and the shortcut card, a window too
         yield return QaGame.Frames(5);
@@ -717,10 +718,22 @@ public static class UiPcRigOps
             DesktopWindow focused = manager.FocusedWindow;
             if (focused != null && ButtonOf(strip, focused) != null)
                 walked++;
+            yield return LensHome(runner);
         }
         runner.Assert("windows", Owner, counted && walked == waiting,
             $"{opened} apps opened from Start and the F1 card, {open} windows open; {shown} buttons + {waiting} behind the chevron; {overTray} over the tray; the chevron brought {walked}/{waiting} forward",
             "8 windows: labelled buttons plus \"» N\", nothing over the tray, the chevron brings each waiting window forward (BUG-21a)");
+    }
+
+    /// <summary>The Lens case screen covers the taskbar: while it shows, its Home key is clicked, so that the taskbar takes the next click (the window stays open behind the desktop).</summary>
+    private static IEnumerator LensHome(QaRunner runner)
+    {
+        InvestigationApp app = QaGame.Find<InvestigationApp>();
+        GameObject home = app != null && app.IsShowing ? QaGame.GameObjectAt("HomeButton") : null;
+        if (home == null)
+            yield break;
+        yield return ClickObject(runner, home.transform);
+        yield return QaGame.Frames(6);
     }
 
     /// <summary>The tray: the clock reads the shift clock (within a minute), the date line is today's, the CRT plate is not shown, and no credits are in the tray.</summary>
