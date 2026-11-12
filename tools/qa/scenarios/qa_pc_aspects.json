@@ -5,7 +5,7 @@
  "steps": [
   {
    "op": "note",
-   "text": "qa-pc (the night of 2026-11-07, v2): the cyberpunk PC (D2, D50) at four aspects (A1 1920x1080, A3 2560x1080, A4 1280x1024, A5 1920x1200): the desktop, each of the eight apps alone in front (a still and every text read at each aspect), the Notes window moved by its title bar, maximised and restored, minimised and restored, closed; the Investigation search drawer; the culture tint for greece and egypt; Reduced Motion (the open and close recorded with it). Measure only: findings go to BUGS.md, nothing is asserted here."
+   "text": "qa-pc (the night of 2026-11-07, v2): the cyberpunk PC (D2, D50) at four aspects (A1 1920x1080, A3 2560x1080, A4 1280x1024, A5 1920x1200): the desktop, each of the eight apps alone in front (the Investigation Lens screen covers the glass and has no title bar: its Home key minimises it, where the other apps use their Close button) (a still and every text read at each aspect), the Notes window moved by its title bar, maximised and restored, minimised and restored, closed; the culture tint for greece and egypt; Reduced Motion (the open and close recorded with it). Measure only: findings go to BUGS.md, nothing is asserted here."
   },
   {
    "op": "title"
@@ -233,39 +233,12 @@
    "f": 0.4
   },
   {
-   "op": "click",
-   "target": "SearchButton",
-   "direct": true
-  },
-  {
-   "op": "wait",
-   "f": 0.6
-  },
-  {
-   "op": "still",
-   "name": "qp_search"
-  },
-  {
-   "op": "qaTexts",
-   "name": "qp_search_A1",
-   "n": 0
-  },
-  {
-   "op": "key",
-   "key": "Escape"
-  },
-  {
-   "op": "wait",
-   "f": 0.4
-  },
-  {
    "op": "recStart",
    "name": "qp_close_investigation"
   },
   {
    "op": "click",
-   "target": "CloseBtn",
-   "direct": true
+   "target": "HomeButton"
   },
   {
    "op": "wait",
@@ -719,7 +692,6 @@
    "target": "Header",
    "x2": 0.3,
    "y2": 0.7,
-   
    "direct": true
   },
   {

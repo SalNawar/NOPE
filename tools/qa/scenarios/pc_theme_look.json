@@ -40,6 +40,8 @@
     { "op": "still", "name": "look_investigation" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "wait", "f": 0.4 },
+    { "op": "click", "target": "HomeButton" },
+    { "op": "wait", "f": 0.6 },
     { "op": "click", "target": "StartButton" },
     { "op": "wait", "f": 0.3 },
     { "op": "click", "target": "App_orders" },

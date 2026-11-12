@@ -5,7 +5,7 @@
  "steps": [
   {
    "op": "note",
-   "text": "pc-print-tabs (Saleh's playtest of 2026-11-07, item 5, still 6): a traveller's paper scanned and its copy open in the Investigation app's Papers view; the PRINT, UV and CHIP tabs lie in the paper toolbar row, no control over the copy. Day 12 with every item (the torch and the reader on the desk, so all three tabs show). The passport goes from the counter onto the desk (the top view), then onto the scanner by screen fraction (scanner_glow's drop); the scan opens the app on the Case board, so the Papers menu's first row (Menu_Papers, Row_0) opens the copy on the left page. Back to the office view, the PC on (Q): stills at 1920x1080 and 1280x1024, the tabs, the toolbar and the copy tracked in a short sequence at each. Measure: each tab's rect and the Page_0 rect (frames.tsv, tracked) do not intersect."
+   "text": "pc-print-tabs (Saleh's playtest of 2026-11-07, item 5, still 6): a traveller's paper scanned and its copy open in the Investigation app's Papers view; the PRINT, UV and CHIP tabs lie in the paper toolbar row, no control over the copy. Day 12 with every item (the torch and the reader on the desk, so all three tabs show). The passport goes from the counter onto the desk (the top view), then onto the scanner by screen fraction (scanner_glow's drop); the scan opens the Lens screen and puts the copy on its left side (the selected side is empty). Back to the office view, the PC on (Q): stills at 1920x1080 and 1280x1024, the tabs, the toolbar and the copy tracked in a short sequence at each. Measure: each tab's rect and the Page_0 rect (frames.tsv, tracked) do not intersect."
   },
   {
    "op": "title"
@@ -100,18 +100,6 @@
   {
    "op": "still",
    "name": "pc_after_scan"
-  },
-  {
-   "op": "click",
-   "target": "Menu_Papers"
-  },
-  {
-   "op": "wait",
-   "f": 0.5
-  },
-  {
-   "op": "click",
-   "target": "Row_0"
   },
   {
    "op": "wait",

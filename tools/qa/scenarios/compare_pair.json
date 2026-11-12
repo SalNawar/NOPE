@@ -3,7 +3,7 @@
   "owner": "compare-ui",
   "seed": 12345,
   "steps": [
-    { "op": "note", "text": "Item 14 (2026-11-08, compare-ui): day 1, inspect mode (SPACE), the traveller's face held (DeskInspect.TravellerClicked), then the passport's first box clicked: the pair's line stays on the office strip at top centre after the desk's line goes (SPACE leaves inspect), inside the PC (Q) the workbench's status line says the result, and the strip shows again once the PC closes; the stamp (DecideCorrectly) clears it." },
+    { "op": "note", "text": "Item 14 (2026-11-08, compare-ui): day 1, inspect mode (SPACE), the traveller's face held (DeskInspect.TravellerClicked), then the passport's first box clicked: the pair's line stays on the office strip at top centre after the desk's line goes (SPACE leaves inspect), inside the PC (Q) the Lens screen's answer plate says the result, and the strip shows again once the PC closes; the stamp (DecideCorrectly) clears it." },
     { "op": "title" },
     { "op": "res", "w": 1920, "h": 1080 },
     { "op": "newRun", "text": "Biscuit" },
