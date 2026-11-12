@@ -129,6 +129,8 @@ public sealed partial class InvestigationApp
         Inspecting = on;
         if (!on)
             ReleaseHold();
+        else if (toast != null)
+            toast.Hide(); // "Press Space to inspect." is done
         RefreshInspect();
     }
 

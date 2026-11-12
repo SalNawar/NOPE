@@ -3,7 +3,7 @@
   "owner": "pc-lens",
   "seed": 12345,
   "steps": [
-    {"op": "note", "text": "pc-lens (the Lens spec, section 2): inspect mode on the Lens case screen, day 12, the traveller's paper on the left and the Registry entry of its number (typed: DP-5601, seed 12345) on the right. Inspect off: a click on a field picks nothing and the notice says Press Space to inspect. Space: inspect on. A field on each side: the answer plate says Matching data or Discrepancy; then two fields of another kind: No relation. Esc clears the pick, Esc again ends inspect, a right-click takes one step back. The Registry: a number with no record, the No entry line and the ID of a paper give one finding (Discrepancy). At 1280x1024."},
+    {"op": "note", "text": "pc-lens (the Lens spec, section 2): inspect mode on the Lens case screen, day 12, the traveller's paper on the left and the Registry entry of its number (typed: DP-5601, seed 12345) on the right. Inspect off: a click on a field picks nothing and the notice says Press Space to inspect. Space: inspect on. A field on each side: the answer plate says Matching data or Discrepancy; then two fields of another kind: No relation. Esc clears the pick, Esc again ends inspect, a right-click takes one step back. The Registry: a number with no record (ZZ-9999, not the number of the paper), the No entry line and the ID of the paper give No relation and no finding (the finding comes only when the paper carries that number). At 1280x1024."},
     {"op": "title"},
     {"op": "res", "w": 1280, "h": 1024},
     {"op": "newRun", "text": "Biscuit"},
@@ -67,7 +67,7 @@
     {"op": "lensClick", "name": "no_entry", "text": "noentry"},
     {"op": "lensExpect", "name": "no_entry_held", "text": "pick=held"},
     {"op": "lensClick", "name": "paper_id", "text": "row:left:~(\bID\b|Displacement No|Number)"},
-    {"op": "lensExpect", "name": "no_record_finding", "text": "plate=differ new=1"},
+    {"op": "lensExpect", "name": "no_entry_other_number", "text": "plate=info new=0"},
     {"op": "still", "name": "lens_inspect_no_entry"},
     {"op": "key", "key": "Q"},
     {"op": "wait", "f": 0.8},
