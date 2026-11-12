@@ -3,7 +3,7 @@
 - **Status:** waits for Saleh's yes. No game code changed.
 - **Date:** 2026-11-12. **Branch:** `feat/pc-lens`, from `integrate/night-build` (d076619).
 - **Decision:** vault note `Decisions/2026-11-12 The PC case screen is Lens with drag and drop`.
-- **Reference for behaviour and look:** the prototype, route "1 Lens" (`E:/unity/NOPE-tools/design/pc_ui_1111/r5`).
+- **Reference for layout and behaviour:** the prototype, route "1 Lens" (`E:/unity/NOPE-tools/design/pc_ui_1111/r5`). The neon colours of the prototype are not the reference (Saleh, 2026-11-12: "Nothing in the office should have neon colors").
 - **Engineering level:** production grade for behaviour and tests, because it lands on main. Reuse first. No new art.
 
 ## 1. The screen
@@ -92,11 +92,13 @@ One gap comes from item 3. A traveller with no record needs a route to a finding
 |---|---|---|---|
 | 1 | The clerk types the record number, or the record comes with the scan | The clerk types it | It is the prototype. `RecordsView` does it today. The search is play, and it costs clock time. |
 | 2 | A tool shows its time cost, or it does not | It does not | The shift clock is real time. Each action costs time already. A shown cost is a new rule that needs balance. |
-| 3 | The neon colours for the whole PC, or for this screen only | The whole PC | The theme is one setting for the PC. The neon tokens exist in a theme asset. Home, Mail and Orders change colour only, not layout. One screen with its own theme needs new code and gives two colour sets in one PC. |
+
+Decided on 2026-11-12: the look. Saleh: "Nothing in the office should have neon colors". The Lens screen keeps the colours that the PC has today (his pick: "Colours of today"). No theme change is in this task.
 
 ## 5. Look and text size
 
-- Tokens of the PC theme: dark glass, cyan primary, one accent that follows the leading culture (the theme does this today), ink and muted ink.
+- No neon colours and no glow. The screen uses the tokens of the present PC theme with their present values (`PcTheme_Cyberpunk.asset`): a warm cream glass, dark teal ink, an amber accent that follows the leading culture.
+- The two sides use the deeper glass tone, so that a paper stands out from the ground. The selected side has a teal frame. The answer plate uses the theme tones for match, difference and note.
 - Few words, large type. Field value 31 units, field label 17 units, document title 30 units, dock label 19 units (the prototype sizes on the 1440 unit glass).
 - Target on the monitor: field values 18 px or more and labels 13 px or more, at 1920 x 1080 and at 1280 x 1024. The stills measure it.
 - Risk: the glass is 1120 x 840 px at 1920 x 1080 today. If a still fails the target at 1280 x 1024, the PC view camera must go nearer. That is a separate change and I ask first.
@@ -118,7 +120,7 @@ Worker agents are sonnet at medium effort. One opus agent verifies the code of B
 |---|---|---|
 | A | `LensSides` and the key map, with unit tests | No |
 | B | Screen code: the app wiring, the dock with drag and drop, inspect mode, the answer plate, the removals of 4.1 | No |
-| C | The Lens layout in the scene builder, the sizes, the theme setting | One batch run to build the scene |
+| C | The Lens layout in the scene builder and the sizes | One batch run to build the scene |
 | D | The scenarios and the stills (starts with C) | Yes |
 | E | `docs/FEATURES.md`, the report with stills, the vault | No |
 | F | The four test levels, one player build, the end to end run | Yes |
@@ -127,4 +129,4 @@ A, B and the code of C need no Unity. I ask for your go before the first Unity r
 
 ## 8. Out of scope
 
-Home, Orders, Mail and the other apps (layout). The Desk and Lamp concepts. New art. The removal of the hidden code. A change of the PC view camera.
+Home, Orders, Mail and the other apps. A change of the PC theme. The Desk and Lamp concepts. New art. The removal of the hidden code. A change of the PC view camera.
