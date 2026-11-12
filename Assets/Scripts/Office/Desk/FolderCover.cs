@@ -82,6 +82,9 @@ public sealed class FolderCover : MonoBehaviour
     /// <summary>True while the board lies over the right sheet or swings (the rows are hidden and take no clicks).</summary>
     public bool Shut => _shut;
 
+    /// <summary>True while the board swings open or lies open.</summary>
+    public bool Opened => _flip.State == CoverState.Opening || _flip.State == CoverState.Open;
+
     /// <summary>The spine's place across the face (its unit space).</summary>
     public float Spine => spine;
 
