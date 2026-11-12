@@ -426,7 +426,8 @@ public sealed class DeskController : MonoBehaviour
         DeskRect box = RestRect(_folderCorners, 8);
         Vector3 shift = at - rulebook.transform.position;
         var footprint = new DeskRect(box.CentreX + Vector3.Dot(shift, RestRight), box.CentreY + Vector3.Dot(shift, RestForward), box.Width, box.Height);
-        return Inward(footprint, at, Vector3.zero, true);
+        Vector3 held = Inward(footprint, at, Vector3.zero, true);
+        return held + OntoMat(held); // open, it is held with its spread on the mat, so a let-go never slides after (D66 rule 2)
     }
 
     /// <summary>
