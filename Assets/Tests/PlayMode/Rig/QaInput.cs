@@ -42,7 +42,7 @@ public sealed class QaInput : IDisposable
     private Key _held = Key.None;
     private bool _disposed;
 
-    /// <summary>Adds the virtual devices, makes them current and disables every other pointer and keyboard.</summary>
+    /// <summary>Adds the virtual devices, makes them current and disables every other pointer and keyboard (those that appear later too: OnDeviceChange).</summary>
     public QaInput()
     {
         Current?.Dispose();
@@ -55,10 +55,30 @@ public sealed class QaInput : IDisposable
         Keyboard = InputSystem.AddDevice<Keyboard>("QaKeyboard");
         Mouse.MakeCurrent();
         Keyboard.MakeCurrent();
+        InputSystem.onDeviceChange += OnDeviceChange;
         _background = InputSystem.settings.backgroundBehavior;
         InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
         Current = this;
         Set(new Vector2(Screen.width * 0.5f, 20f), false);
+    }
+
+    /// <summary>
+    /// A pointer or keyboard that appears while the run plays (a mouse that sends its first report, a remote session's pointer)
+    /// is disabled as the ones present at the start are, and the virtual devices are current again. Without this the new
+    /// device becomes Mouse.current, and code that reads Mouse.current (the switchboard's hand) no longer sees the virtual press.
+    /// </summary>
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (_disposed || device == Mouse || device == Keyboard || !(device is Pointer || device is Keyboard))
+            return;
+        if (change != InputDeviceChange.Added && change != InputDeviceChange.Reconnected && change != InputDeviceChange.Enabled)
+            return;
+        if (!_disabled.Contains(device))
+            _disabled.Add(device);
+        InputSystem.DisableDevice(device);
+        Mouse.MakeCurrent();
+        Keyboard.MakeCurrent();
+        Debug.Log($"[QaInput] A device appeared during the run and is disabled until the run ends: {device.name} ({change}).");
     }
 
     /// <summary>Puts the pointer at <paramref name="position"/> with the left button <paramref name="down"/> (seen by the game next frame).</summary>
@@ -120,6 +140,7 @@ public sealed class QaInput : IDisposable
         if (_disposed)
             return;
         _disposed = true;
+        InputSystem.onDeviceChange -= OnDeviceChange;
         if (Mouse != null && Mouse.added)
             InputSystem.RemoveDevice(Mouse);
         if (Keyboard != null && Keyboard.added)
